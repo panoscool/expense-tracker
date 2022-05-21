@@ -9,6 +9,7 @@ import Typography from '@mui/material/Typography';
 import { styled, alpha } from '@mui/material/styles';
 import { useState } from 'react';
 import NavDrawer from './nav-drawer';
+import useAppState from '../hooks/use-app-state';
 
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
   backdropFilter: 'blur(20px)',
@@ -16,6 +17,7 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
 }));
 
 const Navbar: React.FC = () => {
+  const { logout } = useAppState();
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -79,7 +81,7 @@ const Navbar: React.FC = () => {
           open={Boolean(anchorEl)}
           onClose={handleClose}
         >
-          <MenuItem onClick={handleClose}>Profile</MenuItem>
+          <MenuItem onClick={logout}>Logout</MenuItem>
           <MenuItem onClick={handleClose}>My account</MenuItem>
         </Menu>
       </Toolbar>

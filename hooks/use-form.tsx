@@ -17,15 +17,6 @@ const useForm = (schema: AnyObjectSchema, initState: any = {}) => {
       .catch((err: { inner: React.SetStateAction<Error[]> }) => setErrors(err.inner));
   }, [schema, values]);
 
-  const onChange = (event: React.ChangeEvent<HTMLInputElement>, inputName: string) => {
-    const { type, checked, value } = event.target;
-
-    setValues({
-      ...values,
-      [inputName]: type === 'checkbox' ? checked : value,
-    });
-  };
-
   const onBlur = (inputName: string) => {
     setTouched({ ...touched, [inputName]: true });
   };
@@ -57,7 +48,7 @@ const useForm = (schema: AnyObjectSchema, initState: any = {}) => {
     return touchedPath ? error : undefined;
   };
 
-  return { values, setValues, onChange, onBlur, hasError, canSubmit };
+  return { values, setValues, onBlur, hasError, canSubmit };
 };
 
 export default useForm;

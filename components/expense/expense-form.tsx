@@ -5,23 +5,23 @@ import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import { styled } from '@mui/material/styles';
-import DateField from '../date-field';
+import DateField from '../shared/date-field';
 import CalculatorDialog from '../calculator/calculator-dialog';
 import CalculateOutlinedIcon from '@mui/icons-material/CalculateOutlined';
 import useForm from '../../hooks/use-form';
-import { expenseSchema } from '../../utils/expense-schema';
+import { expenseSchema } from '../../lib/utils/yup-schema';
 import InputAdornment from '@mui/material/InputAdornment';
 import { useState } from 'react';
 
 const Form = styled('form')`
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 1rem;
 `;
 
 const ExpenseForm: React.FC<{ cancel: () => void }> = ({ cancel }) => {
   const [openCalculator, setOpenCalculator] = useState(false);
-  const { values, setValues, onChange, onBlur, hasError, canSubmit } = useForm(expenseSchema, {
+  const { values, setValues, onBlur, hasError, canSubmit } = useForm(expenseSchema, {
     date: new Date(),
     account: '',
     category: '',
@@ -31,7 +31,7 @@ const ExpenseForm: React.FC<{ cancel: () => void }> = ({ cancel }) => {
   });
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onChange(event, event.target.name);
+    setValues({ ...values, [event.target.name]: event.target.value });
   };
 
   const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
@@ -94,6 +94,7 @@ const ExpenseForm: React.FC<{ cancel: () => void }> = ({ cancel }) => {
           <MenuItem value="category">Category</MenuItem>
         </TextField>
         <TextField
+          type="number"
           name="amount"
           label="Amount"
           value={values.amount || ''}

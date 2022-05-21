@@ -1,9 +1,9 @@
+import groupBy from 'lodash/groupBy';
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import data from '../data';
-import groupBy from 'lodash/groupBy';
 import ExpenseCard from '../components/expense/expense-card';
 import ExpenseDialog from '../components/expense/expense-dialog';
+import data from '../data';
 
 const Home: NextPage = () => {
   const groupedByDay: any = groupBy(data, 'date');

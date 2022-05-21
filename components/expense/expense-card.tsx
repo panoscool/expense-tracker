@@ -12,8 +12,8 @@ import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import { Fragment } from 'react';
-import { formatCurrency } from '../../utils/number-formatter';
-import CategoryIcon from '../category-icon';
+import { formatCurrency } from '../../lib/utils/number-formatter';
+import CategoryIcon from '../shared/category-icon';
 
 const TotalAmount = styled(Typography)`
   padding-right: 24px;

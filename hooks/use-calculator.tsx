@@ -1,5 +1,5 @@
 import { Reducer, useReducer } from 'react';
-import { evaluate } from '../utils/calculator-operations';
+import { evaluate } from '../lib/utils/calculator-operations';
 
 export enum Actions {
   ADD_DIGIT = 'ADD_DIGIT',
