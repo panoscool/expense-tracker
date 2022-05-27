@@ -1,16 +1,24 @@
-import { model, Schema, Model, Document, models } from 'mongoose';
+import { model, Schema, Model, Document, models, SchemaTypes } from 'mongoose';
 
-interface ICategory extends Document {
+export interface ICategory extends Document {
   _id: string;
   user_id: string;
-  label: string;
+  labels: string[];
 }
 
-const CategorySchema: Schema = new Schema({
-  _id: { type: String, required: true, auto: false },
-  user_id: { type: String, required: true },
-  label: { type: String, required: true },
-});
+const CategorySchema: Schema = new Schema(
+  {
+    _id: { type: String, required: true, auto: false },
+    user_id: { type: SchemaTypes.ObjectId, ref: 'User', required: true },
+    labels: [{ type: String, required: true, trim: true, unique: true }],
+  },
+  {
+    timestamps: {
+      createdAt: 'created_at',
+      updatedAt: 'updated_at',
+    },
+  },
+);
 
 const Category: Model<ICategory> = models.Category || model('Category', CategorySchema);
 

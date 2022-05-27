@@ -2,6 +2,8 @@ import groupBy from 'lodash/groupBy';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import ExpenseCard from '../components/expense/expense-card';
+import AccountDialog from '../components/account/account-dialog';
+import CategoryDialog from '../components/category/category-dialog';
 import ExpenseDialog from '../components/expense/expense-dialog';
 import data from '../data';
 
@@ -18,6 +20,8 @@ const Home: NextPage = () => {
       </Head>
 
       <main>
+        <AccountDialog />
+        <CategoryDialog />
         <ExpenseDialog />
         {days.map((day, index) => (
           <ExpenseCard key={index} day={day} />

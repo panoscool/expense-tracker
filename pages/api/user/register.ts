@@ -5,6 +5,7 @@ import { AuthResponse } from '../../../lib/types/api';
 import dbConnect from '../../../lib/utils/db-connect';
 import validate from '../validate';
 import { registerSchema } from '../../../lib/utils/yup-schema';
+import { setCookie } from '../set-cookie';
 
 async function getHashedPassword(text: string) {
   const saltRounds = 10;
@@ -13,7 +14,7 @@ async function getHashedPassword(text: string) {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<AuthResponse>) {
   if (req.method !== 'POST') {
-    return res.status(405).end();
+    return res.status(405).end('Method not allowed');
   }
 
   try {
@@ -22,7 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     const errors = await validate(registerSchema, req.body);
 
     if (errors) {
-      return res.status(400).json({ message: errors });
+      return res.status(400).json({ error: errors });
     }
 
     const { name, email, password } = req.body;
@@ -30,7 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
-      return res.status(400).json({ message: `User with ${email} already exists` });
+      return res.status(400).json({ error: `User with ${email} already exists` });
     }
 
     const hashedPassword = await getHashedPassword(password);
@@ -41,9 +42,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       password: hashedPassword,
     });
 
+    await setCookie(req, res, user._id);
+
     res.status(200).json({ id: user._id, name: user.name, email: user.email });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).end((err as Error)?.message || 'Internal server error');
   }
 }

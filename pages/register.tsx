@@ -27,11 +27,12 @@ const Form = styled('form')(({ theme }) => ({
 }));
 
 const Register: NextPage = () => {
-  const { loading, error, fetchData } = useFetch('/login');
+  const [, fetchData, loading, error] = useFetch('/', 'auth');
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(registerSchema, {
     name: '',
     email: '',
     password: '',
+    confirmPassword: '',
   });
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,7 +47,11 @@ const Register: NextPage = () => {
     event.preventDefault();
 
     if (canSubmit()) {
-      await fetchData('POST', '/user/register', values);
+      await fetchData('POST', '/user/register', {
+        name: values.name,
+        email: values.email,
+        password: values.password,
+      });
     }
   };
 
@@ -97,6 +102,16 @@ const Register: NextPage = () => {
               onBlur={handleBlur}
               error={!!hasError('password')}
               helperText={hasError('password')?.message}
+            />
+            <TextField
+              type="password"
+              name="confirmPassword"
+              label="Confirm Password"
+              value={values.confirmPassword || ''}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              error={!!hasError('confirmPassword')}
+              helperText={hasError('confirmPassword')?.message}
             />
 
             <Button type="submit" variant="contained">

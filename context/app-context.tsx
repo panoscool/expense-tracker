@@ -29,7 +29,7 @@ const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [auth, setAuth] = useState<Auth | null>(null);
 
   const logout = () => {
-    fetchData('POST', '/auth/logout')
+    fetchData('POST', '/user/logout')
       .then(() => {
         store.remove('auth');
         setAuth(null);
@@ -40,11 +40,15 @@ const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   };
 
   useEffect(() => {
-    setAuth({
-      id: authData?.id,
-      name: authData?.name,
-      email: authData?.email,
-    });
+    if (authData?.id) {
+      setAuth({
+        id: authData?.id,
+        name: authData?.name,
+        email: authData?.email,
+      });
+    } else {
+      setAuth(null);
+    }
   }, [authData?.email, authData?.name, authData?.id]);
 
   const contextValues = {

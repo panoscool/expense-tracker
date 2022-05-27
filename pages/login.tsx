@@ -27,7 +27,7 @@ const Form = styled('form')(({ theme }) => ({
 }));
 
 const Login: NextPage = () => {
-  const { loading, error, fetchData } = useFetch('/', 'auth');
+  const [, fetchData, , error] = useFetch('/', 'auth');
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(loginSchema, {
     email: '',
     password: '',

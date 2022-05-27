@@ -11,7 +11,11 @@ import CalculateOutlinedIcon from '@mui/icons-material/CalculateOutlined';
 import useForm from '../../hooks/use-form';
 import { expenseSchema } from '../../lib/utils/yup-schema';
 import InputAdornment from '@mui/material/InputAdornment';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import apiRequest from '../../lib/utils/axios';
+import useFetch from '../../hooks/use-fetch';
+import { IAccount } from '../../lib/models/account';
+import { ICategory } from '../../lib/models/category';
 
 const Form = styled('form')`
   display: flex;
@@ -20,6 +24,9 @@ const Form = styled('form')`
 `;
 
 const ExpenseForm: React.FC<{ cancel: () => void }> = ({ cancel }) => {
+  const [accounts, fetchAccounts, accountLoading, accountError] = useFetch();
+  const [categories, fetchCategories, categoryLoading, categoryError] = useFetch();
+
   const [openCalculator, setOpenCalculator] = useState(false);
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(expenseSchema, {
     date: new Date(),
@@ -29,6 +36,11 @@ const ExpenseForm: React.FC<{ cancel: () => void }> = ({ cancel }) => {
     note: '',
     description: '',
   });
+
+  useEffect(() => {
+    fetchAccounts('GET', '/account');
+    fetchCategories('GET', '/category');
+  }, [fetchAccounts, fetchCategories]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [event.target.name]: event.target.value });
@@ -50,7 +62,7 @@ const ExpenseForm: React.FC<{ cancel: () => void }> = ({ cancel }) => {
     event.preventDefault();
 
     if (canSubmit()) {
-      console.log('submit', values);
+      apiRequest('POST', '/expense', values);
     }
   };
 
@@ -79,7 +91,12 @@ const ExpenseForm: React.FC<{ cancel: () => void }> = ({ cancel }) => {
           error={!!hasError('account')}
           helperText={hasError('account')?.message}
         >
-          <MenuItem value="account">Account</MenuItem>
+          <MenuItem value="">None</MenuItem>
+          {accounts?.map((account: IAccount) => (
+            <MenuItem key={account._id} value={account._id}>
+              {account.name}
+            </MenuItem>
+          ))}
         </TextField>
         <TextField
           select
@@ -91,7 +108,12 @@ const ExpenseForm: React.FC<{ cancel: () => void }> = ({ cancel }) => {
           error={!!hasError('category')}
           helperText={hasError('category')?.message}
         >
-          <MenuItem value="category">Category</MenuItem>
+          <MenuItem value="">None</MenuItem>
+          {categories?.map((category: ICategory) => (
+            <MenuItem key={category._id} value={category._id}>
+              {category.name}
+            </MenuItem>
+          ))}
         </TextField>
         <TextField
           type="number"

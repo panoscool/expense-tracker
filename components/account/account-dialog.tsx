@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import { useState } from 'react';
-import ExpenseForm from './expense-form';
+import AccountForm from './account-form';
 
 const ExpenseDialog: React.FC = () => {
   const [open, setOpen] = useState(false);
@@ -15,12 +15,12 @@ const ExpenseDialog: React.FC = () => {
   return (
     <div>
       <Button color="secondary" startIcon={<AddRoundedIcon />} onClick={toggleOpen}>
-        Add Expense
+        Add Account
       </Button>
 
       <Dialog open={open}>
-        <Box padding={2}>
-          <ExpenseForm cancel={toggleOpen} />
+        <Box padding={3}>
+          <AccountForm cancel={toggleOpen} />
         </Box>
       </Dialog>
     </div>

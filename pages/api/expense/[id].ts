@@ -1,32 +1,85 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import Expense from '../../../lib/models/expense';
+import dbConnect from '../../../lib/utils/db-connect';
+import { authenticated, getDecodedUserId, hasAccess } from '../authenticated';
 
-const getExpense = async (req: NextApiRequest, res: NextApiResponse<any>) => {
+const getExpense = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const expense = await Expense.findById(req.query.id);
+    const expense = await Expense.findById(req.query.id).populate('user_id', 'name');
+
+    if (!expense) {
+      return res.status(200).json({ error: 'Expense not found' });
+    }
+
     res.status(200).json(expense);
   } catch (err) {
-    res.status(500).json({ message: 'Internal server error' });
+    console.error(err);
+    res.status(500).end((err as Error)?.message || 'Internal server error');
   }
 };
 
-const updateExpense = async (req: NextApiRequest, res: NextApiResponse<any>) => {
+const updateExpense = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    await Expense.findByIdAndUpdate(req.query.id, req.body);
+    const userId = (await getDecodedUserId(req, res)) as string;
+    const expense = await Expense.findById(req.query.id);
+
+    if (!expense) {
+      return res.status(200).json({ error: 'Expense not found' });
+    }
+
+    const authorized = await hasAccess(userId, expense?.user_id);
+
+    if (!authorized) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const { date, account_id, category, amount, note, description } = req.body;
+
+    await expense.updateOne({
+      date,
+      account_id,
+      category,
+      amount,
+      note,
+      description,
+    });
+
+    const updatedExpense = await Expense.findById(req.query.id);
+
+    res.status(200).json(updatedExpense);
   } catch (err) {
-    res.status(500).json({ message: 'Internal server error' });
+    console.error(err);
+    res.status(500).end((err as Error)?.message || 'Internal server error');
   }
 };
 
-const deleteExpense = async (req: NextApiRequest, res: NextApiResponse<any>) => {
+const deleteExpense = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    await Expense.findByIdAndDelete(req.query.id);
+    const userId = (await getDecodedUserId(req, res)) as string;
+    const expense = await Expense.findById(req.query.id);
+
+    if (!expense) {
+      return res.status(200).json({ error: 'Expense not found' });
+    }
+
+    const authorized = await hasAccess(userId, expense?.user_id);
+
+    if (!authorized) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    await expense.delete();
+
+    res.status(200).json({ message: 'Ok' });
   } catch (err) {
-    res.status(500).json({ message: 'Internal server error' });
+    console.error(err);
+    res.status(500).end((err as Error)?.message || 'Internal server error');
   }
 };
 
-export default function handler(req: NextApiRequest, res: NextApiResponse<any>) {
+export default authenticated(async function handler(req: NextApiRequest, res: NextApiResponse) {
+  await dbConnect();
+
   switch (req.method) {
     case 'GET':
       return getExpense(req, res);
@@ -35,6 +88,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any>) 
     case 'DELETE':
       return deleteExpense(req, res);
     default:
-      return res.status(405).end();
+      return res.status(405).end('Method not allowed');
   }
-}
+});

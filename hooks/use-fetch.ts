@@ -20,12 +20,12 @@ const useFetch = (redirect?: string, persist?: string) => {
           store.set(persist, response);
         }
 
-        if (redirect) {
+        if (redirect && response) {
           router.push(redirect);
         }
       } catch (err) {
         console.error(err);
-        setError((err as Error)?.message);
+        setError(err as string);
       } finally {
         setLoading(false);
       }
@@ -33,7 +33,7 @@ const useFetch = (redirect?: string, persist?: string) => {
     [persist, redirect, router],
   );
 
-  return { data, error, loading, setError, fetchData };
+  return [data, fetchData, loading, error, setError];
 };
 
 export default useFetch;

@@ -18,7 +18,7 @@ const HTTPERROR = (err: AxiosError) => Promise.reject(err);
 
 HTTP.interceptors.response.use(HTTPOK, HTTPERROR);
 
-export const apiRequest = (method: any, path: string, params?: any): Promise<any> => {
+const apiRequest = (method: any, path: string, params?: any): Promise<any> => {
   const headers = {};
 
   return HTTP({
