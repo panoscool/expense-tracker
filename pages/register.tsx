@@ -47,11 +47,7 @@ const Register: NextPage = () => {
     event.preventDefault();
 
     if (canSubmit()) {
-      await fetchData('POST', '/user/register', {
-        name: values.name,
-        email: values.email,
-        password: values.password,
-      });
+      await fetchData('POST', '/user/register', values);
     }
   };
 

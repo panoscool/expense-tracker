@@ -18,8 +18,7 @@ const Form = styled('form')`
 const ExpenseForm: React.FC<{ cancel: () => void }> = ({ cancel }) => {
   const [openCalculator, setOpenCalculator] = useState(false);
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(categorySchema, {
-    name: '',
-    description: '',
+    label: '',
   });
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,24 +53,13 @@ const ExpenseForm: React.FC<{ cancel: () => void }> = ({ cancel }) => {
 
       <Form onSubmit={handleSubmit}>
         <TextField
-          name="name"
-          label="Name"
-          value={values.name || ''}
+          name="label"
+          label="Category"
+          value={values.label || ''}
           onChange={handleChange}
           onBlur={handleBlur}
-          error={!!hasError('name')}
-          helperText={hasError('name')?.message}
-        />
-        <TextField
-          name="description"
-          label="Description"
-          multiline
-          rows={3}
-          value={values.description || ''}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          error={!!hasError('description')}
-          helperText={hasError('description')?.message}
+          error={!!hasError('label')}
+          helperText={hasError('label')?.message}
         />
 
         <Box display="flex" alignSelf="flex-end" gap={2}>

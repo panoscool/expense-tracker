@@ -2,8 +2,8 @@ import { model, Schema, Model, Document, SchemaTypes, models } from 'mongoose';
 
 export interface IExpense extends Document {
   _id: string;
-  user_id: string;
-  account_id: string;
+  user: string;
+  account: string;
   category: string;
   date: Date;
   amount: number;
@@ -14,8 +14,8 @@ export interface IExpense extends Document {
 const ExpenseSchema: Schema = new Schema(
   {
     _id: { type: String, required: true, auto: false },
-    user_id: { type: SchemaTypes.ObjectId, ref: 'User', required: true },
-    account_id: { type: String, required: true },
+    user: { type: SchemaTypes.ObjectId, ref: 'User', required: true },
+    account: { type: String, required: true },
     category: { type: String, required: true },
     date: { type: Date, required: true },
     amount: { type: Number, required: true },

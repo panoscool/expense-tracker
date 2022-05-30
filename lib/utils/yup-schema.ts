@@ -32,7 +32,7 @@ export const categorySchema = yup.object({
 
 export const expenseSchema = yup.object({
   date: yup.date().typeError('Value should be a date').required('Date is required'),
-  account_id: yup.string().required('Account is required'),
+  account: yup.string().required('Account is required'),
   category: yup.string().required('Category is required'),
   amount: yup.number().typeError('Value is not a number').required('Amount is required'),
   note: yup.string().trim().nullable(),

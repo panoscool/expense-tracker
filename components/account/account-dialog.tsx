@@ -1,11 +1,11 @@
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import { ListItemIcon, ListItemText, MenuItem } from '@mui/material';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import { useState } from 'react';
 import AccountForm from './account-form';
 
-const ExpenseDialog: React.FC = () => {
+const AccountDialog: React.FC = () => {
   const [open, setOpen] = useState(false);
 
   const toggleOpen = () => {
@@ -14,9 +14,12 @@ const ExpenseDialog: React.FC = () => {
 
   return (
     <div>
-      <Button color="secondary" startIcon={<AddRoundedIcon />} onClick={toggleOpen}>
-        Add Account
-      </Button>
+      <MenuItem onClick={toggleOpen}>
+        <ListItemIcon>
+          <AddRoundedIcon />
+        </ListItemIcon>
+        <ListItemText primary="Add Account" />
+      </MenuItem>
 
       <Dialog open={open}>
         <Box padding={3}>
@@ -27,4 +30,4 @@ const ExpenseDialog: React.FC = () => {
   );
 };
 
-export default ExpenseDialog;
+export default AccountDialog;

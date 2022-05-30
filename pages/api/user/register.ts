@@ -1,9 +1,12 @@
 import { hash } from 'bcrypt';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { v4 as uuidv4 } from 'uuid';
+import Account from '../../../lib/models/account';
+import Category from '../../../lib/models/category';
 import User from '../../../lib/models/user';
 import { AuthResponse } from '../../../lib/types/api';
 import dbConnect from '../../../lib/utils/db-connect';
-import validate from '../validate';
+import validate from '../../../lib/utils/validate';
 import { registerSchema } from '../../../lib/utils/yup-schema';
 import { setCookie } from '../set-cookie';
 
@@ -40,6 +43,30 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       name,
       email,
       password: hashedPassword,
+    });
+
+    await Account.create({
+      _id: uuidv4(),
+      user: user._id,
+      name: 'Default',
+      users: [user._id],
+      description: 'Default account',
+    });
+
+    await Category.create({
+      _id: uuidv4(),
+      user: user._id,
+      labels: [
+        'supermarket',
+        'transportation',
+        'health',
+        'shopping',
+        'gift',
+        'leisure',
+        'beauty',
+        'bills',
+        'other',
+      ],
     });
 
     await setCookie(req, res, user._id);

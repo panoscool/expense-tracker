@@ -1,6 +1,9 @@
+import { useRouter } from 'next/router';
 import { createContext, useEffect, useState } from 'react';
 import store from 'store';
 import useFetch from '../hooks/use-fetch';
+import { IAccount } from '../lib/models/account';
+import { ICategory } from '../lib/models/category';
 
 type Auth = {
   id: string;
@@ -11,33 +14,30 @@ type Auth = {
 interface AppState {
   auth: Auth | null;
   setAuth: React.Dispatch<React.SetStateAction<Auth | null>>;
-  logout: () => void;
+  modal: string | null;
+  setModal: React.Dispatch<React.SetStateAction<string | null>>;
+  accounts: IAccount[] | null;
+  categories: ICategory | null;
 }
 
 const initState: AppState = {
   auth: null,
   setAuth: () => {},
-  logout: () => {},
+  modal: null,
+  setModal: () => {},
+  accounts: null,
+  categories: null,
 };
 
 export const AppContext = createContext(initState);
 
 const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const authData: Auth = store.get('auth', null);
-
-  const { fetchData } = useFetch('/login');
   const [auth, setAuth] = useState<Auth | null>(null);
+  const [modal, setModal] = useState<string | null>(null);
 
-  const logout = () => {
-    fetchData('POST', '/user/logout')
-      .then(() => {
-        store.remove('auth');
-        setAuth(null);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  };
+  const [accounts, fetchAccounts] = useFetch();
+  const [categories, fetchCategories] = useFetch();
 
   useEffect(() => {
     if (authData?.id) {
@@ -51,12 +51,22 @@ const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     }
   }, [authData?.email, authData?.name, authData?.id]);
 
+  useEffect(() => {
+    if (auth) {
+      fetchAccounts('GET', '/account');
+      fetchCategories('GET', '/category');
+    }
+  }, [auth, fetchAccounts, fetchCategories]);
+
   const contextValues = {
     auth,
+    modal,
+    accounts,
+    categories,
   };
   const contextFunctions = {
     setAuth,
-    logout,
+    setModal,
   };
 
   return (

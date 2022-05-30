@@ -5,13 +5,13 @@ import dbConnect from '../../../lib/utils/db-connect';
 import { cleanLabel } from '../../../lib/utils/format-text';
 import { categorySchema } from '../../../lib/utils/yup-schema';
 import { authenticated, getDecodedUserId } from '../authenticated';
-import validate from '../validate';
+import validate from '../../../lib/utils/validate';
 
 const getCategories = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const userId = await getDecodedUserId(req, res);
 
-    const categories = await Category.find({ user_id: userId });
+    const categories = await Category.findOne({ user: userId });
 
     res.status(200).json(categories);
   } catch (err) {
@@ -32,7 +32,7 @@ const addCategory = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const category = await Category.create({
       _id: uuidv4(),
-      user_id: userId,
+      user: userId,
       labels: [cleanLabel(req.body.label)],
     });
 

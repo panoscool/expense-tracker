@@ -2,7 +2,7 @@ import { model, Schema, Model, Document, models, SchemaTypes } from 'mongoose';
 
 export interface IAccount extends Document {
   _id: string;
-  user_id: string;
+  user: string;
   name: string;
   users: string[];
   description: string;
@@ -11,7 +11,7 @@ export interface IAccount extends Document {
 const AccountSchema: Schema = new Schema(
   {
     _id: { type: String, required: true, auto: false },
-    user_id: { type: SchemaTypes.ObjectId, ref: 'User', required: true },
+    user: { type: SchemaTypes.ObjectId, ref: 'User', required: true },
     name: { type: String, required: true, trim: true },
     users: [{ type: SchemaTypes.ObjectId, ref: 'User' }],
     description: { type: String, required: false },

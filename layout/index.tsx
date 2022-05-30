@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import { Fragment } from 'react';
 import useAppState from '../hooks/use-app-state';
-import Navbar from './navbar';
+import Navbar from './top-bar';
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { auth } = useAppState();

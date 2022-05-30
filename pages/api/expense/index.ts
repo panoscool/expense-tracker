@@ -5,19 +5,15 @@ import Expense from '../../../lib/models/expense';
 import dbConnect from '../../../lib/utils/db-connect';
 import { expenseSchema } from '../../../lib/utils/yup-schema';
 import { authenticated, getDecodedUserId } from '../authenticated';
-import validate from '../validate';
+import validate from '../../../lib/utils/validate';
 
 const getExpenses = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const accountId = await Account.findById(req.query.id);
 
-    const expenses = await Expense.find({ account_id: accountId })
-      .populate('user_id', 'name')
-      .exec();
-
-    expenses.sort((a, b) => {
-      return a.date.getTime() - b.date.getTime();
-    });
+    const expenses = await Expense.find({ account: accountId })
+      .sort({ date: 'desc' })
+      .populate('user', 'name');
 
     res.status(200).json(expenses);
   } catch (err) {
@@ -36,13 +32,13 @@ const addExpense = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const userId = await getDecodedUserId(req, res);
 
-    const { date, account_id, category, amount, note, description } = req.body;
+    const { date, account, category, amount, note, description } = req.body;
 
     const expense = await Expense.create({
       _id: uuidv4(),
-      user_id: userId,
+      user: userId,
+      account: account,
       date,
-      account_id,
       category,
       amount,
       note,

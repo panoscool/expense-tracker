@@ -1,21 +1,20 @@
+import CalculateOutlinedIcon from '@mui/icons-material/CalculateOutlined';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
 import MenuItem from '@mui/material/MenuItem';
 import { styled } from '@mui/material/styles';
-import DateField from '../shared/date-field';
-import CalculatorDialog from '../calculator/calculator-dialog';
-import CalculateOutlinedIcon from '@mui/icons-material/CalculateOutlined';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import { useState } from 'react';
+import useAppState from '../../hooks/use-app-state';
 import useForm from '../../hooks/use-form';
-import { expenseSchema } from '../../lib/utils/yup-schema';
-import InputAdornment from '@mui/material/InputAdornment';
-import { useEffect, useState } from 'react';
-import apiRequest from '../../lib/utils/axios';
-import useFetch from '../../hooks/use-fetch';
 import { IAccount } from '../../lib/models/account';
-import { ICategory } from '../../lib/models/category';
+import apiRequest from '../../lib/utils/axios';
+import { expenseSchema } from '../../lib/utils/yup-schema';
+import CalculatorDialog from '../calculator/calculator-dialog';
+import DateField from '../shared/date-field';
 
 const Form = styled('form')`
   display: flex;
@@ -23,10 +22,8 @@ const Form = styled('form')`
   gap: 1rem;
 `;
 
-const ExpenseForm: React.FC<{ cancel: () => void }> = ({ cancel }) => {
-  const [accounts, fetchAccounts, accountLoading, accountError] = useFetch();
-  const [categories, fetchCategories, categoryLoading, categoryError] = useFetch();
-
+const ExpenseForm: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+  const { accounts, categories } = useAppState();
   const [openCalculator, setOpenCalculator] = useState(false);
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(expenseSchema, {
     date: new Date(),
@@ -36,11 +33,6 @@ const ExpenseForm: React.FC<{ cancel: () => void }> = ({ cancel }) => {
     note: '',
     description: '',
   });
-
-  useEffect(() => {
-    fetchAccounts('GET', '/account');
-    fetchCategories('GET', '/category');
-  }, [fetchAccounts, fetchCategories]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [event.target.name]: event.target.value });
@@ -63,6 +55,7 @@ const ExpenseForm: React.FC<{ cancel: () => void }> = ({ cancel }) => {
 
     if (canSubmit()) {
       apiRequest('POST', '/expense', values);
+      onClose();
     }
   };
 
@@ -109,9 +102,9 @@ const ExpenseForm: React.FC<{ cancel: () => void }> = ({ cancel }) => {
           helperText={hasError('category')?.message}
         >
           <MenuItem value="">None</MenuItem>
-          {categories?.map((category: ICategory) => (
-            <MenuItem key={category._id} value={category._id}>
-              {category.name}
+          {categories?.labels?.map((label: string) => (
+            <MenuItem key={label} value={label} sx={{ textTransform: 'capitalize' }}>
+              {label}
             </MenuItem>
           ))}
         </TextField>
@@ -156,7 +149,7 @@ const ExpenseForm: React.FC<{ cancel: () => void }> = ({ cancel }) => {
         />
 
         <Box display="flex" alignSelf="flex-end" gap={2}>
-          <Button color="primary" onClick={cancel}>
+          <Button color="primary" onClick={onClose}>
             Cancel
           </Button>
           <Button type="submit" variant="contained" color="secondary">

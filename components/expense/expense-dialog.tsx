@@ -5,10 +5,11 @@ import Dialog from '@mui/material/Dialog';
 import { useState } from 'react';
 import ExpenseForm from './expense-form';
 
-const ExpenseDialog: React.FC = () => {
+const ExpenseDialog: React.FC<{ getExpenses: () => void }> = ({ getExpenses }) => {
   const [open, setOpen] = useState(false);
 
   const toggleOpen = () => {
+    getExpenses();
     setOpen(!open);
   };
 
@@ -20,7 +21,7 @@ const ExpenseDialog: React.FC = () => {
 
       <Dialog open={open}>
         <Box padding={2}>
-          <ExpenseForm cancel={toggleOpen} />
+          <ExpenseForm onClose={toggleOpen} />
         </Box>
       </Dialog>
     </div>

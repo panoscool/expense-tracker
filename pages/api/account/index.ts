@@ -5,7 +5,7 @@ import User from '../../../lib/models/user';
 import dbConnect from '../../../lib/utils/db-connect';
 import { accountSchema } from '../../../lib/utils/yup-schema';
 import { authenticated, getDecodedUserId } from '../authenticated';
-import validate from '../validate';
+import validate from '../../../lib/utils/validate';
 
 const getAccounts = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
@@ -15,7 +15,7 @@ const getAccounts = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.query.shared) {
       accounts = await Account.find({ users: userId }).populate('users', 'name email');
     } else {
-      accounts = await Account.find({ user_id: userId });
+      accounts = await Account.find({ user: userId });
     }
 
     res.status(200).json(accounts);
@@ -39,7 +39,7 @@ const addAccount = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const account = await Account.create({
       _id: uuidv4(),
-      user_id: userId,
+      user: userId,
       name,
       users: [userId],
       description,

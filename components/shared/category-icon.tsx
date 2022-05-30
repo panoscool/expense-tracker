@@ -6,6 +6,7 @@ import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import CardGiftcardOutlinedIcon from '@mui/icons-material/CardGiftcardOutlined';
 import InterestsOutlinedIcon from '@mui/icons-material/InterestsOutlined';
 import CategoryOutlinedIcon from '@mui/icons-material/CategoryOutlined';
+import GirlOutlinedIcon from '@mui/icons-material/GirlOutlined';
 
 const CategoryIcon: React.FC<{ icon: string }> = ({ icon }) => {
   const component: Record<string, JSX.Element> = {
@@ -16,6 +17,7 @@ const CategoryIcon: React.FC<{ icon: string }> = ({ icon }) => {
     gift: <CardGiftcardOutlinedIcon />,
     leisure: <InterestsOutlinedIcon />,
     bills: <MoneyOffOutlinedIcon />,
+    beauty: <GirlOutlinedIcon />,
   };
 
   return component[icon] ? component[icon] : <CategoryOutlinedIcon />;

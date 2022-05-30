@@ -5,7 +5,7 @@ import User from '../../../lib/models/user';
 import dbConnect from '../../../lib/utils/db-connect';
 import { accountSchema } from '../../../lib/utils/yup-schema';
 import { authenticated, hasAccess, getDecodedUserId } from '../authenticated';
-import validate from '../validate';
+import validate from '../../../lib/utils/validate';
 
 const getAccount = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
@@ -38,7 +38,7 @@ const updateAccount = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(200).json({ error: 'Account not found' });
     }
 
-    const authorized = await hasAccess(userId, account?.user_id);
+    const authorized = await hasAccess(userId, account?.user);
 
     if (!authorized) {
       return res.status(401).json({ error: 'Unauthorized' });
@@ -59,8 +59,13 @@ const updateAccount = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const user = await User.findOne({ email });
 
+    // if user.id is equal to account.user, then user is the owner of the account and cannot remove himself
+    if (user?._id?.toString() === account.user.toString()) {
+      return res.status(400).json({ error: 'Cannot remove yourself from the account' });
+    }
+
     // if user does not exist in the account users array and email provided, add it
-    if (user && !account.users.includes(user._id) && !req.query.email) {
+    if (user && !account.users.includes(user._id)) {
       await account.updateOne({
         $push: {
           users: user._id,
@@ -69,7 +74,7 @@ const updateAccount = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     // if user exists in the account users array and email is in query, remove it
-    if (user && req.query.email) {
+    if (user && account.users.includes(user._id)) {
       await account.updateOne({
         $pull: {
           users: user._id,
@@ -95,7 +100,7 @@ const deleteAccount = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(200).json({ error: 'Account not found' });
     }
 
-    const authorized = await hasAccess(userId, account?.user_id);
+    const authorized = await hasAccess(userId, account?.user);
 
     if (!authorized) {
       return res.status(401).json({ error: 'Unauthorized' });

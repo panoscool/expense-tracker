@@ -3,6 +3,8 @@ import Category from '../../../lib/models/category';
 import Expense from '../../../lib/models/expense';
 import dbConnect from '../../../lib/utils/db-connect';
 import { cleanLabel } from '../../../lib/utils/format-text';
+import validate from '../../../lib/utils/validate';
+import { categorySchema } from '../../../lib/utils/yup-schema';
 import { authenticated, getDecodedUserId, hasAccess } from '../authenticated';
 
 const getCategory = async (req: NextApiRequest, res: NextApiResponse<any>) => {
@@ -14,7 +16,7 @@ const getCategory = async (req: NextApiRequest, res: NextApiResponse<any>) => {
       return res.status(200).json({ error: 'Category not found' });
     }
 
-    const authorized = await hasAccess(userId, category?.user_id);
+    const authorized = await hasAccess(userId, category?.user);
 
     if (!authorized) {
       return res.status(401).json({ error: 'Unauthorized' });
@@ -36,10 +38,16 @@ const updateCategory = async (req: NextApiRequest, res: NextApiResponse<any>) =>
       return res.status(200).json({ error: 'Category not found' });
     }
 
-    const authorized = await hasAccess(userId, category?.user_id);
+    const authorized = await hasAccess(userId, category?.user);
 
     if (!authorized) {
       return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const errors = await validate(categorySchema, req.body);
+
+    if (errors) {
+      return res.status(400).json({ error: errors });
     }
 
     if (category.labels.includes(req.body.label)) {
@@ -69,7 +77,7 @@ const deleteCategory = async (req: NextApiRequest, res: NextApiResponse<any>) =>
       return res.status(200).json({ error: 'Category not found' });
     }
 
-    const authorized = await hasAccess(userId, category?.user_id);
+    const authorized = await hasAccess(userId, category?.user);
 
     if (!authorized) {
       return res.status(401).json({ error: 'Unauthorized' });

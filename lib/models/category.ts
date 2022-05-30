@@ -2,14 +2,14 @@ import { model, Schema, Model, Document, models, SchemaTypes } from 'mongoose';
 
 export interface ICategory extends Document {
   _id: string;
-  user_id: string;
+  user: string;
   labels: string[];
 }
 
 const CategorySchema: Schema = new Schema(
   {
     _id: { type: String, required: true, auto: false },
-    user_id: { type: SchemaTypes.ObjectId, ref: 'User', required: true },
+    user: { type: SchemaTypes.ObjectId, ref: 'User', required: true },
     labels: [{ type: String, required: true, trim: true, unique: true }],
   },
   {

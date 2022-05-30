@@ -1,11 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import Expense from '../../../lib/models/expense';
 import dbConnect from '../../../lib/utils/db-connect';
+import validate from '../../../lib/utils/validate';
+import { expenseSchema } from '../../../lib/utils/yup-schema';
 import { authenticated, getDecodedUserId, hasAccess } from '../authenticated';
 
 const getExpense = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const expense = await Expense.findById(req.query.id).populate('user_id', 'name');
+    const expense = await Expense.findById(req.query.id).populate('user', 'name');
 
     if (!expense) {
       return res.status(200).json({ error: 'Expense not found' });
@@ -27,17 +29,23 @@ const updateExpense = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(200).json({ error: 'Expense not found' });
     }
 
-    const authorized = await hasAccess(userId, expense?.user_id);
+    const authorized = await hasAccess(userId, expense?.user);
 
     if (!authorized) {
       return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    const { date, account_id, category, amount, note, description } = req.body;
+    const errors = await validate(expenseSchema, req.body);
+
+    if (errors) {
+      return res.status(400).json({ error: errors });
+    }
+
+    const { date, account, category, amount, note, description } = req.body;
 
     await expense.updateOne({
+      account,
       date,
-      account_id,
       category,
       amount,
       note,
@@ -62,7 +70,7 @@ const deleteExpense = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(200).json({ error: 'Expense not found' });
     }
 
-    const authorized = await hasAccess(userId, expense?.user_id);
+    const authorized = await hasAccess(userId, expense?.user);
 
     if (!authorized) {
       return res.status(401).json({ error: 'Unauthorized' });
