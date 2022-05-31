@@ -27,7 +27,7 @@ const Form = styled('form')(({ theme }) => ({
 }));
 
 const Register: NextPage = () => {
-  const [, fetchData, loading, error] = useFetch('/', 'auth');
+  const [, fetchData, , error] = useFetch('/', 'auth');
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(registerSchema, {
     name: '',
     email: '',

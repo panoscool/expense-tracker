@@ -4,9 +4,9 @@ import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import useAppState from '../../hooks/use-app-state';
+import useFetch from '../../hooks/use-fetch';
 import useForm from '../../hooks/use-form';
 import useIsDesktop from '../../hooks/use-is-desktop';
-import apiRequest from '../../lib/utils/axios';
 import { categorySchema } from '../../lib/utils/yup-schema';
 
 const Form = styled('form')`
@@ -18,6 +18,7 @@ const Form = styled('form')`
 const CategoryForm: React.FC = () => {
   const { setModal } = useAppState();
   const { isDesktop } = useIsDesktop();
+  const [, createCategory, , error] = useFetch();
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(categorySchema, {
     label: '',
   });
@@ -34,11 +35,11 @@ const CategoryForm: React.FC = () => {
     setModal(null);
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (canSubmit()) {
-      apiRequest('POST', '/category', values);
+      await createCategory('POST', '/category', values);
       handleCloseModal();
     }
   };
@@ -46,7 +47,10 @@ const CategoryForm: React.FC = () => {
   return (
     <Box m={2} p={2} minWidth={isDesktop ? 320 : 'auto'}>
       <Box mb={3}>
-        <Typography variant="h6">Add Category</Typography>
+        <Typography gutterBottom variant="h6">
+          Add Category
+        </Typography>
+        <Typography color="error">{JSON.stringify(error)}</Typography>
       </Box>
 
       <Form onSubmit={handleSubmit}>

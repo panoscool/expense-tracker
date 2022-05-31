@@ -9,11 +9,11 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { useEffect, useState } from 'react';
 import useAppState from '../../hooks/use-app-state';
+import useFetch from '../../hooks/use-fetch';
 import useForm from '../../hooks/use-form';
 import useIsDesktop from '../../hooks/use-is-desktop';
 import { IAccount } from '../../lib/models/account';
 import { IExpense } from '../../lib/models/expense';
-import apiRequest from '../../lib/utils/axios';
 import { expenseSchema } from '../../lib/utils/yup-schema';
 import CalculatorDialog from '../calculator/calculator-dialog';
 import DateField from '../shared/date-field';
@@ -33,6 +33,7 @@ const ExpenseForm: React.FC<Props> = ({ getExpenses, selectedExpense }) => {
   const { isDesktop } = useIsDesktop();
   const { accounts, categories, setModal } = useAppState();
   const [openCalculator, setOpenCalculator] = useState(false);
+  const [, createExpense, , error] = useFetch();
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(expenseSchema, {
     date: new Date(),
     account: '',
@@ -68,13 +69,13 @@ const ExpenseForm: React.FC<Props> = ({ getExpenses, selectedExpense }) => {
     setModal(null);
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (canSubmit()) {
       selectedExpense
-        ? apiRequest('PUT', `/expense/${values?._id}`, values)
-        : apiRequest('POST', '/expense', values);
+        ? await createExpense('PUT', `/expense/${values?._id}`, values)
+        : await createExpense('POST', '/expense', values);
 
       getExpenses();
       setModal(null);
@@ -84,7 +85,10 @@ const ExpenseForm: React.FC<Props> = ({ getExpenses, selectedExpense }) => {
   return (
     <Box m={2} p={2} minWidth={isDesktop ? 320 : 'auto'}>
       <Box mb={2}>
-        <Typography variant="h6">Add Expense</Typography>
+        <Typography gutterBottom variant="h6">
+          Add Expense
+        </Typography>
+        <Typography color="error">{JSON.stringify(error)}</Typography>
       </Box>
 
       <Form onSubmit={handleSubmit}>
