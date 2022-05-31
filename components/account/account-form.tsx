@@ -3,11 +3,10 @@ import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { useState } from 'react';
+import useAppState from '../../hooks/use-app-state';
 import useForm from '../../hooks/use-form';
 import apiRequest from '../../lib/utils/axios';
 import { accountSchema } from '../../lib/utils/yup-schema';
-import CalculatorDialog from '../calculator/calculator-dialog';
 
 const Form = styled('form')`
   display: flex;
@@ -15,8 +14,8 @@ const Form = styled('form')`
   gap: 1rem;
 `;
 
-const ExpenseForm: React.FC<{ cancel: () => void }> = ({ cancel }) => {
-  const [openCalculator, setOpenCalculator] = useState(false);
+const AccountForm: React.FC = () => {
+  const { setModal } = useAppState();
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(accountSchema, {
     name: '',
     description: '',
@@ -31,12 +30,8 @@ const ExpenseForm: React.FC<{ cancel: () => void }> = ({ cancel }) => {
     onBlur(event.target.name);
   };
 
-  const handleConfirmCalculation = (currentOperand: string | null) => {
-    setValues({ ...values, amount: currentOperand });
-  };
-
-  const toggleOpenCalculator = () => {
-    setOpenCalculator(!openCalculator);
+  const handleCloseModal = () => {
+    setModal(null);
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -44,6 +39,7 @@ const ExpenseForm: React.FC<{ cancel: () => void }> = ({ cancel }) => {
 
     if (canSubmit()) {
       apiRequest('POST', '/account', values);
+      handleCloseModal();
     }
   };
 
@@ -89,7 +85,7 @@ const ExpenseForm: React.FC<{ cancel: () => void }> = ({ cancel }) => {
         />
 
         <Box display="flex" alignSelf="flex-end" gap={2}>
-          <Button color="primary" onClick={cancel}>
+          <Button color="primary" onClick={handleCloseModal}>
             Cancel
           </Button>
           <Button type="submit" variant="contained" color="secondary">
@@ -97,14 +93,8 @@ const ExpenseForm: React.FC<{ cancel: () => void }> = ({ cancel }) => {
           </Button>
         </Box>
       </Form>
-
-      <CalculatorDialog
-        open={openCalculator}
-        onClose={toggleOpenCalculator}
-        onConfirm={handleConfirmCalculation}
-      />
     </Box>
   );
 };
 
-export default ExpenseForm;
+export default AccountForm;

@@ -11,12 +11,7 @@ const getAccounts = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const userId = await getDecodedUserId(req, res);
 
-    let accounts: IAccount[] = [];
-    if (req.query.shared) {
-      accounts = await Account.find({ users: userId }).populate('users', 'name email');
-    } else {
-      accounts = await Account.find({ user: userId });
-    }
+    const accounts = await Account.find({ users: userId }).populate('users', 'name email');
 
     res.status(200).json(accounts);
   } catch (err) {

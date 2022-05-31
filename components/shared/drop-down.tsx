@@ -23,11 +23,11 @@ const DropDown: React.FC<Props> = ({ children, id, icon }) => {
     <div>
       <IconButton
         size="large"
-        color="inherit"
         aria-haspopup="true"
         aria-expanded={Boolean(anchorEl) ? 'true' : undefined}
         aria-controls={Boolean(anchorEl) ? `menu-${id || 'dropdown'}` : undefined}
         onClick={handleMenu}
+        sx={{ color: '#fff' }}
       >
         {icon}
       </IconButton>

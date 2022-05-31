@@ -8,28 +8,57 @@ const theme = createTheme({
       white: '#fff',
     },
     primary: {
-      main: grey[900],
+      light: grey[100],
+      main: grey[300],
+      dark: grey[500],
+      contrastText: '#333',
     },
     secondary: {
-      main: purple[800],
+      light: purple[300],
+      main: purple[500],
+      dark: purple[700],
+      contrastText: '#fff',
     },
     error: {
+      light: red.A200,
       main: red.A400,
+      dark: red.A700,
+      contrastText: '#fff',
     },
     warning: {
-      main: yellow.A700,
+      light: yellow.A200,
+      main: yellow.A400,
+      dark: yellow.A700,
+      contrastText: '#fff',
     },
     info: {
-      main: blue.A100,
+      light: blue.A200,
+      main: blue.A400,
+      dark: blue.A700,
+      contrastText: '#fff',
     },
     success: {
       main: green.A400,
     },
+    contrastThreshold: 3,
+    tonalOffset: 0.2,
   },
   components: {
     MuiTextField: {
       defaultProps: {
         size: 'small',
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: ({ ownerState, theme }) => ({
+          ...(ownerState.variant !== 'text' && {
+            borderRadius: '20px',
+          }),
+        }),
+      },
+      defaultProps: {
+        disableElevation: true,
       },
     },
   },

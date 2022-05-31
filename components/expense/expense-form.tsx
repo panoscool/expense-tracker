@@ -7,10 +7,11 @@ import MenuItem from '@mui/material/MenuItem';
 import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useAppState from '../../hooks/use-app-state';
 import useForm from '../../hooks/use-form';
 import { IAccount } from '../../lib/models/account';
+import { IExpense } from '../../lib/models/expense';
 import apiRequest from '../../lib/utils/axios';
 import { expenseSchema } from '../../lib/utils/yup-schema';
 import CalculatorDialog from '../calculator/calculator-dialog';
@@ -22,8 +23,13 @@ const Form = styled('form')`
   gap: 1rem;
 `;
 
-const ExpenseForm: React.FC<{ onClose: () => void }> = ({ onClose }) => {
-  const { accounts, categories } = useAppState();
+type Props = {
+  getExpenses: () => void;
+  selectedExpense: IExpense | null;
+};
+
+const ExpenseForm: React.FC<Props> = ({ getExpenses, selectedExpense }) => {
+  const { accounts, categories, setModal } = useAppState();
   const [openCalculator, setOpenCalculator] = useState(false);
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(expenseSchema, {
     date: new Date(),
@@ -33,6 +39,12 @@ const ExpenseForm: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     note: '',
     description: '',
   });
+
+  useEffect(() => {
+    if (selectedExpense) {
+      setValues(selectedExpense);
+    }
+  }, [selectedExpense, setValues]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [event.target.name]: event.target.value });
@@ -50,12 +62,19 @@ const ExpenseForm: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     setOpenCalculator(!openCalculator);
   };
 
+  const handleCloseModal = () => {
+    setModal(null);
+  };
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (canSubmit()) {
-      apiRequest('POST', '/expense', values);
-      onClose();
+      selectedExpense
+        ? apiRequest('PUT', `/expense/${values?._id}`, values)
+        : apiRequest('POST', '/expense', values);
+      getExpenses();
+      setModal(null);
     }
   };
 
@@ -149,7 +168,7 @@ const ExpenseForm: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         />
 
         <Box display="flex" alignSelf="flex-end" gap={2}>
-          <Button color="primary" onClick={onClose}>
+          <Button color="primary" variant="contained" onClick={handleCloseModal}>
             Cancel
           </Button>
           <Button type="submit" variant="contained" color="secondary">

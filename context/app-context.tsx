@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router';
 import { createContext, useEffect, useState } from 'react';
 import store from 'store';
 import useFetch from '../hooks/use-fetch';
@@ -56,7 +55,7 @@ const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       fetchAccounts('GET', '/account');
       fetchCategories('GET', '/category');
     }
-  }, [auth, fetchAccounts, fetchCategories]);
+  }, [auth, fetchAccounts, fetchCategories, modal]);
 
   const contextValues = {
     auth,

@@ -63,7 +63,7 @@ const TotalPerDay = ({ days, dates }: Props) => {
         labels: {
           show: false,
           formatter: function (val: number) {
-            return val.toFixed(0);
+            return val.toFixed(2);
           },
         },
       },
@@ -74,9 +74,6 @@ const TotalPerDay = ({ days, dates }: Props) => {
       },
       legend: {
         show: true,
-      },
-      fill: {
-        colors: ['#2E93fA', '#66DA26', '#546E7A', '#E91E63', '#FF9800'],
       },
     },
   };

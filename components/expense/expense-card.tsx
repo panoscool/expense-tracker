@@ -12,6 +12,7 @@ import ListItemText from '@mui/material/ListItemText';
 import { alpha, styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { format, parseISO } from 'date-fns';
+import { useRouter } from 'next/router';
 import { Fragment } from 'react';
 import { IExpense } from '../../lib/models/expense';
 import { formatCurrency } from '../../lib/utils/number-formatter';
@@ -22,8 +23,20 @@ const TotalAmount = styled(Typography)`
   padding-right: 24px;
 `;
 
-const ExpenseCard: React.FC<{ day: IExpense[]; date: string }> = ({ day, date }) => {
+type Props = {
+  day: IExpense[];
+  date: string;
+  onSelectExpense: (expense: IExpense) => void;
+  onOpenModal: (modal: string) => void;
+};
+
+const ExpenseCard: React.FC<Props> = ({ day, date, onSelectExpense, onOpenModal }) => {
   if (!day.length) return null;
+
+  const handleExpenseClick = (expense: IExpense) => {
+    onSelectExpense(expense);
+    onOpenModal('expense-form');
+  };
 
   const formattedDate = (fmt: string) => {
     return format(parseISO(date), fmt);
@@ -55,14 +68,14 @@ const ExpenseCard: React.FC<{ day: IExpense[]; date: string }> = ({ day, date })
       <Divider />
       <CardContent>
         <List disablePadding>
-          {day.map((d: any, index: number) => (
+          {day.map((d: IExpense, index: number) => (
             <Fragment key={index}>
-              <ListItem disableGutters>
+              <ListItem disableGutters onClick={() => handleExpenseClick(d)}>
                 <ListItemButton>
                   <ListItemIcon>
                     <CategoryIcon icon={d.category} />
                   </ListItemIcon>
-                  <ListItemText primary={d.note} secondary={d.user.name} />
+                  <ListItemText primary={d.note} secondary={(d.user as any).name} />
                   <ListItemSecondaryAction>{formatCurrency(d.amount)}</ListItemSecondaryAction>
                 </ListItemButton>
               </ListItem>
