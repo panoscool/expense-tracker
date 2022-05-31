@@ -51,7 +51,7 @@ const Expenses: React.FC = () => {
       <Box mt={8} mb={2}>
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Typography variant="h6">{currentMonth}</Typography>
-          <Button color="secondary" startIcon={<AddRoundedIcon />} onClick={handleOpenModal}>
+          <Button color="primary" startIcon={<AddRoundedIcon />} onClick={handleOpenModal}>
             Add Expense
           </Button>
         </Box>
@@ -68,9 +68,7 @@ const Expenses: React.FC = () => {
       ))}
 
       <Dialog open={modalOpen}>
-        <Box padding={2}>
-          <ExpenseForm getExpenses={getExpenses} selectedExpense={selectedExpense} />
-        </Box>
+        <ExpenseForm getExpenses={getExpenses} selectedExpense={selectedExpense} />
       </Dialog>
 
       <Loading loading={loading} />

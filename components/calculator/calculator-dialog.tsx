@@ -31,8 +31,12 @@ const CalculatorDialog: React.FC<CalculatorDialogProps> = ({ open, onClose, onCo
         />
       </Box>
       <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
-        <Button onClick={handleConfirm}>Done</Button>
+        <Button color="inherit" onClick={onClose}>
+          Cancel
+        </Button>
+        <Button color="inherit" onClick={handleConfirm}>
+          Done
+        </Button>
       </DialogActions>
     </Dialog>
   );

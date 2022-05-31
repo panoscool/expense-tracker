@@ -5,6 +5,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import useAppState from '../../hooks/use-app-state';
 import useForm from '../../hooks/use-form';
+import useIsDesktop from '../../hooks/use-is-desktop';
 import apiRequest from '../../lib/utils/axios';
 import { categorySchema } from '../../lib/utils/yup-schema';
 
@@ -16,6 +17,7 @@ const Form = styled('form')`
 
 const CategoryForm: React.FC = () => {
   const { setModal } = useAppState();
+  const { isDesktop } = useIsDesktop();
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(categorySchema, {
     label: '',
   });
@@ -42,7 +44,7 @@ const CategoryForm: React.FC = () => {
   };
 
   return (
-    <Box>
+    <Box m={2} p={2} minWidth={isDesktop ? 320 : 'auto'}>
       <Box mb={3}>
         <Typography variant="h6">Add Category</Typography>
       </Box>
@@ -58,11 +60,11 @@ const CategoryForm: React.FC = () => {
           helperText={hasError('label')?.message}
         />
 
-        <Box display="flex" alignSelf="flex-end" gap={2}>
-          <Button color="primary" onClick={handleCloseModal}>
+        <Box display="flex" alignSelf="center" gap={2} mt={3}>
+          <Button variant="contained" color="secondary" onClick={handleCloseModal}>
             Cancel
           </Button>
-          <Button type="submit" variant="contained" color="secondary">
+          <Button type="submit" variant="contained" color="primary">
             Submit
           </Button>
         </Box>

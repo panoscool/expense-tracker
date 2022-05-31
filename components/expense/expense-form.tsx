@@ -10,6 +10,7 @@ import Typography from '@mui/material/Typography';
 import { useEffect, useState } from 'react';
 import useAppState from '../../hooks/use-app-state';
 import useForm from '../../hooks/use-form';
+import useIsDesktop from '../../hooks/use-is-desktop';
 import { IAccount } from '../../lib/models/account';
 import { IExpense } from '../../lib/models/expense';
 import apiRequest from '../../lib/utils/axios';
@@ -29,6 +30,7 @@ type Props = {
 };
 
 const ExpenseForm: React.FC<Props> = ({ getExpenses, selectedExpense }) => {
+  const { isDesktop } = useIsDesktop();
   const { accounts, categories, setModal } = useAppState();
   const [openCalculator, setOpenCalculator] = useState(false);
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(expenseSchema, {
@@ -73,13 +75,14 @@ const ExpenseForm: React.FC<Props> = ({ getExpenses, selectedExpense }) => {
       selectedExpense
         ? apiRequest('PUT', `/expense/${values?._id}`, values)
         : apiRequest('POST', '/expense', values);
+
       getExpenses();
       setModal(null);
     }
   };
 
   return (
-    <Box>
+    <Box m={2} p={2} minWidth={isDesktop ? 320 : 'auto'}>
       <Box mb={2}>
         <Typography variant="h6">Add Expense</Typography>
       </Box>
@@ -167,11 +170,11 @@ const ExpenseForm: React.FC<Props> = ({ getExpenses, selectedExpense }) => {
           helperText={hasError('description')?.message}
         />
 
-        <Box display="flex" alignSelf="flex-end" gap={2}>
-          <Button color="primary" variant="contained" onClick={handleCloseModal}>
+        <Box display="flex" alignSelf="center" gap={2} mt={3}>
+          <Button variant="contained" color="secondary" onClick={handleCloseModal}>
             Cancel
           </Button>
-          <Button type="submit" variant="contained" color="secondary">
+          <Button type="submit" variant="contained" color="primary">
             Submit
           </Button>
         </Box>

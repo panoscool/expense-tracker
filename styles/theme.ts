@@ -8,16 +8,16 @@ const theme = createTheme({
       white: '#fff',
     },
     primary: {
-      light: grey[100],
-      main: grey[300],
-      dark: grey[500],
-      contrastText: '#333',
-    },
-    secondary: {
       light: purple[300],
       main: purple[500],
       dark: purple[700],
       contrastText: '#fff',
+    },
+    secondary: {
+      light: grey[100],
+      main: grey[300],
+      dark: grey[500],
+      contrastText: '#333',
     },
     error: {
       light: red.A200,

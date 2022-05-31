@@ -9,10 +9,10 @@ const CalculatorGrid = styled('div')(({ theme }) => ({
   display: 'inline-grid',
   gridTemplateColumns: 'repeat(4, 4rem)',
   gridTemplateRows: 'minmax(5rem, auto) repeat(5, 3rem)',
-  boxShadow: `inset 0px 0px 1px 1px ${alpha(theme.palette.primary.main, 0.1)}`,
+  boxShadow: `inset 0px 0px 1px 1px ${alpha(theme.palette.common.black, 0.1)}`,
 
   '& > *': {
-    boxShadow: `inset 0px 0px 1px 1px ${alpha(theme.palette.secondary.main, 0.1)}`,
+    boxShadow: `inset 0px 0px 1px 1px ${alpha(theme.palette.common.black, 0.1)}`,
   },
 }));
 

@@ -11,7 +11,11 @@ const DigitButton: React.FC<DigitButtonProps> = ({ dispatch, digit }) => {
     dispatch({ type: Actions.ADD_DIGIT, payload: { digit } });
   };
 
-  return <Button onClick={handleClick}>{digit}</Button>;
+  return (
+    <Button color="inherit" onClick={handleClick}>
+      {digit}
+    </Button>
+  );
 };
 
 export default DigitButton;

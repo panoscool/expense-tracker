@@ -57,13 +57,13 @@ const ExpenseCard: React.FC<Props> = ({ day, date, onSelectExpense, onOpenModal 
           </Avatar>
         }
         action={
-          <TotalAmount variant="h6" color="secondary">
+          <TotalAmount variant="h6" color="primary">
             {formatCurrency(totalAmount)}
           </TotalAmount>
         }
         title={formattedDate('EEEE')}
         subheader={formattedDate('MMMM yyyy')}
-        sx={{ backgroundColor: (theme) => alpha(theme.palette.primary.main, 0.05) }}
+        sx={{ backgroundColor: (theme) => alpha(theme.palette.primary.main, 0.03) }}
       />
       <Divider />
       <CardContent>

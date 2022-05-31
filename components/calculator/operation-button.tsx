@@ -11,7 +11,11 @@ const OperationButton: React.FC<OperationButtonProps> = ({ dispatch, operation }
     dispatch({ type: Actions.OPERATION, payload: { operation } });
   };
 
-  return <Button onClick={handleClick}>{operation}</Button>;
+  return (
+    <Button color="inherit" onClick={handleClick}>
+      {operation}
+    </Button>
+  );
 };
 
 export default OperationButton;

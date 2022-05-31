@@ -21,10 +21,8 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       </Container>
 
       <Dialog open={modalOpen}>
-        <Box padding={3}>
-          {modal === 'account-form' && <AccountForm />}
-          {modal === 'category-form' && <CategoryForm />}
-        </Box>
+        {modal === 'account-form' && <AccountForm />}
+        {modal === 'category-form' && <CategoryForm />}
       </Dialog>
     </Fragment>
   );
