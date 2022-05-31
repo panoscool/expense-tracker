@@ -52,7 +52,7 @@ const AccountForm: React.FC = () => {
         <Typography gutterBottom variant="h6">
           Add Account
         </Typography>
-        <Typography color="error">{JSON.stringify(error)}</Typography>
+        <Typography color="error">{error}</Typography>
       </Box>
 
       <Form onSubmit={handleSubmit}>

@@ -1,5 +1,6 @@
 import useAppState from './use-app-state';
 import useFetch from './use-fetch';
+import store from 'store';
 
 const useLogout = () => {
   const { setAuth } = useAppState();

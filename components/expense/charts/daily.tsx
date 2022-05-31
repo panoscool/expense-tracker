@@ -67,14 +67,6 @@ const TotalPerDay = ({ days, dates }: Props) => {
           },
         },
       },
-      tooltip: {
-        x: {
-          format: 'dd MMM yyyy',
-        },
-      },
-      legend: {
-        show: true,
-      },
     },
   };
 

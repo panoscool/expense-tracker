@@ -50,7 +50,7 @@ const CategoryForm: React.FC = () => {
         <Typography gutterBottom variant="h6">
           Add Category
         </Typography>
-        <Typography color="error">{JSON.stringify(error)}</Typography>
+        <Typography color="error">{error}</Typography>
       </Box>
 
       <Form onSubmit={handleSubmit}>

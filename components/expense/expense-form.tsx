@@ -88,7 +88,7 @@ const ExpenseForm: React.FC<Props> = ({ getExpenses, selectedExpense }) => {
         <Typography gutterBottom variant="h6">
           Add Expense
         </Typography>
-        <Typography color="error">{JSON.stringify(error)}</Typography>
+        <Typography color="error">{error}</Typography>
       </Box>
 
       <Form onSubmit={handleSubmit}>

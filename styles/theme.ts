@@ -1,5 +1,5 @@
+import { blue, green, grey, red, yellow } from '@mui/material/colors';
 import { createTheme, responsiveFontSizes } from '@mui/material/styles';
-import { red, blue, yellow, green, grey, purple } from '@mui/material/colors';
 
 const theme = createTheme({
   palette: {
@@ -8,9 +8,9 @@ const theme = createTheme({
       white: '#fff',
     },
     primary: {
-      light: purple[300],
-      main: purple[500],
-      dark: purple[700],
+      light: blue[500],
+      main: blue[700],
+      dark: blue[900],
       contrastText: '#fff',
     },
     secondary: {
@@ -29,16 +29,19 @@ const theme = createTheme({
       light: yellow.A200,
       main: yellow.A400,
       dark: yellow.A700,
-      contrastText: '#fff',
+      contrastText: '#333',
     },
     info: {
-      light: blue.A200,
-      main: blue.A400,
-      dark: blue.A700,
-      contrastText: '#fff',
+      light: grey.A100,
+      main: grey.A200,
+      dark: grey.A400,
+      contrastText: '#333',
     },
     success: {
+      light: green.A200,
       main: green.A400,
+      dark: green.A700,
+      contrastText: '#333',
     },
     contrastThreshold: 3,
     tonalOffset: 0.2,

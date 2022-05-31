@@ -12,7 +12,6 @@ import ListItemText from '@mui/material/ListItemText';
 import { alpha, styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { format, parseISO } from 'date-fns';
-import { useRouter } from 'next/router';
 import { Fragment } from 'react';
 import { IExpense } from '../../lib/models/expense';
 import { formatCurrency } from '../../lib/utils/number-formatter';
@@ -63,7 +62,7 @@ const ExpenseCard: React.FC<Props> = ({ day, date, onSelectExpense, onOpenModal 
         }
         title={formattedDate('EEEE')}
         subheader={formattedDate('MMMM yyyy')}
-        sx={{ backgroundColor: (theme) => alpha(theme.palette.primary.main, 0.03) }}
+        sx={{ backgroundColor: (theme) => alpha(theme.palette.primary.main, 0.05) }}
       />
       <Divider />
       <CardContent>

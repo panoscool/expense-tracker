@@ -15,8 +15,11 @@ const DropDown: React.FC<Props> = ({ children, id, icon }) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => {
-    setAnchorEl(null);
+  const handleClose = (event: React.MouseEvent<HTMLElement>) => {
+    // close menu when clicking any of the children
+    if (anchorEl && event.target !== anchorEl) {
+      setAnchorEl(null);
+    }
   };
 
   return (
@@ -36,6 +39,7 @@ const DropDown: React.FC<Props> = ({ children, id, icon }) => {
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleClose}
+        onClick={handleClose}
       >
         {children}
       </Menu>
