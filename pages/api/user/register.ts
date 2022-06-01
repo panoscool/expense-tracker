@@ -4,18 +4,17 @@ import { v4 as uuidv4 } from 'uuid';
 import Account from '../../../lib/models/account';
 import Category from '../../../lib/models/category';
 import User from '../../../lib/models/user';
-import { AuthResponse } from '../../../lib/types/api';
 import dbConnect from '../../../lib/utils/db-connect';
 import validate from '../../../lib/utils/validate';
 import { registerSchema } from '../../../lib/utils/yup-schema';
-import { setCookie } from '../set-cookie';
+import { setAccessToken } from '../authenticated';
 
 async function getHashedPassword(text: string) {
   const saltRounds = 10;
   return hash(text, saltRounds);
 }
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse<AuthResponse>) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
     return res.status(405).end('Method not allowed');
   }
@@ -69,9 +68,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       ],
     });
 
-    await setCookie(req, res, user._id);
+    const token = await setAccessToken(user);
 
-    res.status(200).json({ id: user._id, name: user.name, email: user.email });
+    res.status(200).json(token);
   } catch (err) {
     console.error(err);
     res.status(500).end((err as Error)?.message || 'Internal server error');

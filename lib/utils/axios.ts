@@ -1,4 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
+import store from 'store';
+
+const accessToken = store.get('auth');
 
 const HTTP = axios.create({
   timeout: 30000,
@@ -19,7 +22,9 @@ const HTTPERROR = (err: AxiosError) => Promise.reject(err);
 HTTP.interceptors.response.use(HTTPOK, HTTPERROR);
 
 const apiRequest = (method: any, path: string, params?: any): Promise<any> => {
-  const headers = {};
+  const headers = {
+    Authorization: accessToken,
+  };
 
   return HTTP({
     baseURL: process.env.NEXT_PUBLIC_API_URL || '/api',

@@ -12,17 +12,16 @@ import Typography from '@mui/material/Typography';
 import { useRouter } from 'next/router';
 import DropDown from '../components/shared/drop-down';
 import useAppState from '../hooks/use-app-state';
-import useLogout from '../hooks/use-logout';
 import { IAccount } from '../lib/models/account';
+import store from 'store';
 
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
   backdropFilter: 'blur(20px)',
-  backgroundColor: alpha(theme.palette.common.black, 0.8),
+  backgroundColor: alpha(theme.palette.common.black, 0.7),
 }));
 
 const Topbar: React.FC = () => {
   const router = useRouter();
-  const { logout } = useLogout();
   const { accounts, categories, setModal } = useAppState();
 
   const handleAccountSelect = (id: string) => () => {
@@ -33,12 +32,18 @@ const Topbar: React.FC = () => {
     router.push(`/?category_id=${id}`);
   };
 
+  const handleLogout = () => {
+    store.remove('auth');
+    router.push('/login');
+  };
+
   return (
     <StyledAppBar position="sticky">
       <Toolbar>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: '#fff' }}>
           Expenses
         </Typography>
+
         <DropDown icon={<AccountBalanceWalletIcon />} id="account">
           {accounts?.map((account: IAccount) => (
             <MenuItem key={account._id} onClick={handleAccountSelect(account._id)}>
@@ -52,6 +57,7 @@ const Topbar: React.FC = () => {
             <ListItemText primary="Add Account" />
           </MenuItem>
         </DropDown>
+
         <DropDown icon={<ClassIcon />} id="category">
           {categories?.labels.map((label: string) => (
             <MenuItem
@@ -69,8 +75,9 @@ const Topbar: React.FC = () => {
             <ListItemText primary="Add Category" />
           </MenuItem>
         </DropDown>
+
         <DropDown icon={<AccountCircleIcon />} id="user">
-          <MenuItem onClick={logout}>Logout</MenuItem>
+          <MenuItem onClick={handleLogout}>Logout</MenuItem>
         </DropDown>
       </Toolbar>
     </StyledAppBar>
