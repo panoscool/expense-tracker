@@ -6,9 +6,10 @@ import useAppState from '../hooks/use-app-state';
 import Navbar from './top-bar';
 import AccountForm from '../components/account/account-form';
 import CategoryForm from '../components/category/category-form';
+import Loading from '../components/shared/loading';
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { auth, modal } = useAppState();
+  const { auth, modal, loading } = useAppState();
 
   const modalOpen = modal === 'account-form' || modal === 'category-form';
 
@@ -26,6 +27,8 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           {modal === 'category-form' && <CategoryForm />}
         </Dialog>
       )}
+
+      <Loading loading={loading} />
     </Fragment>
   );
 };

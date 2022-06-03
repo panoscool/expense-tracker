@@ -2,6 +2,10 @@ import { Box, Button, TextField, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import type { NextPage } from 'next';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import NextLink from '../components/shared/next-link';
+import useAppState from '../hooks/use-app-state';
 import useFetch from '../hooks/use-fetch';
 import useForm from '../hooks/use-form';
 import { loginSchema } from '../lib/utils/yup-schema';
@@ -27,11 +31,19 @@ const Form = styled('form')(({ theme }) => ({
 }));
 
 const Login: NextPage = () => {
+  const router = useRouter();
+  const { auth, loading } = useAppState();
   const [, fetchData, , error] = useFetch('/', 'auth');
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(loginSchema, {
     email: '',
     password: '',
   });
+
+  useEffect(() => {
+    if (!loading && auth?.id) {
+      router.push('/');
+    }
+  }, [auth?.id, loading, router]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [event.target.name]: event.target.value });
@@ -48,6 +60,10 @@ const Login: NextPage = () => {
       await fetchData('POST', '/user/login', values);
     }
   };
+
+  if (loading || auth?.id) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <div>
@@ -92,6 +108,10 @@ const Login: NextPage = () => {
               Login
             </Button>
           </Form>
+
+          <Typography>
+            Don&apos;t have account? <NextLink href="/register">Register</NextLink>
+          </Typography>
         </Wrapper>
       </main>
     </div>

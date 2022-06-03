@@ -6,6 +6,7 @@ type NextLinkProps = {
   href: LinkProps['href'];
   children: React.ReactNode;
   type?: 'button';
+  style?: React.CSSProperties;
 };
 
 const NextLink: React.FC<NextLinkProps> = ({ type, href, children, ...props }) => {

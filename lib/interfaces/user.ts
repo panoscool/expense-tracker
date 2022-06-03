@@ -9,3 +9,13 @@ export interface User {
   name: string;
   email: string;
 }
+
+export interface DecodedToken {
+  sub: string;
+  name: string;
+  email: string;
+}
+
+export interface Auth extends Partial<User> {
+  id: string;
+}

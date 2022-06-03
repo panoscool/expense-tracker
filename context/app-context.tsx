@@ -4,18 +4,7 @@ import store from 'store';
 import useFetch from '../hooks/use-fetch';
 import { Account } from '../lib/interfaces/account';
 import { Category } from '../lib/interfaces/category';
-
-type Auth = {
-  id: string;
-  name: string;
-  email: string;
-};
-
-type DecodedToken = {
-  sub: string;
-  name: string;
-  email: string;
-};
+import { Auth, DecodedToken } from '../lib/interfaces/user';
 
 interface AppState {
   auth: Auth | null;
@@ -24,6 +13,7 @@ interface AppState {
   setModal: React.Dispatch<React.SetStateAction<string | null>>;
   accounts: Account[] | null;
   categories: Category | null;
+  loading: boolean;
 }
 
 const initState: AppState = {
@@ -33,6 +23,7 @@ const initState: AppState = {
   setModal: () => {},
   accounts: null,
   categories: null,
+  loading: false,
 };
 
 export const AppContext = createContext(initState);
@@ -43,6 +34,7 @@ const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   const [auth, setAuth] = useState<Auth | null>(null);
   const [modal, setModal] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const [accounts, fetchAccounts] = useFetch();
   const [categories, fetchCategories] = useFetch();
@@ -54,8 +46,10 @@ const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         name: authData?.name,
         email: authData?.email,
       });
+      setLoading(false);
     } else {
       setAuth(null);
+      setLoading(false);
     }
   }, [authData?.email, authData?.name, authData?.sub]);
 
@@ -69,6 +63,7 @@ const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const contextValues = {
     auth,
     modal,
+    loading,
     accounts,
     categories,
   };

@@ -1,4 +1,4 @@
-import { Expense } from '../interfaces/expense';
+import { Expense, ExpensesPerUser } from '../interfaces/expense';
 
 export const getTotalExpenses = (expenses: Expense[]) => {
   return expenses.reduce((acc, curr) => {
@@ -64,7 +64,7 @@ export const getPayableAmountPerUser = (expenses: Expense[]) => {
   const highestUsers = getUsersWithHighestExpenses(expenses);
   const averageExpenses = getAverageExpensesPerUser(expenses);
 
-  const expensesPerUser = [];
+  const expensesPerUser: ExpensesPerUser[] = [];
 
   for (const userId in userExpenses) {
     const foundUser = expenses.find((expense) => expense.user._id === userId);

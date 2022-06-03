@@ -10,3 +10,9 @@ export interface Expense {
   description: string;
   user: User;
 }
+
+export interface ExpensesPerUser {
+  id: string;
+  name: string | undefined;
+  amount: number;
+}
