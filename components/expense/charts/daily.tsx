@@ -3,15 +3,15 @@ import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import React from 'react';
 import Chart from 'react-apexcharts';
-import { IExpense } from '../../../lib/models/expense';
+import { Expense } from '../../../lib/interfaces/expense';
 
 type Props = {
-  days: IExpense[][];
+  days: Expense[][];
   dates: string[];
 };
 
 const TotalPerDay = ({ days, dates }: Props) => {
-  const totalPerDay = days.map((day: IExpense[]) => {
+  const totalPerDay = days.map((day: Expense[]) => {
     return day.reduce((acc, curr) => acc + curr.amount, 0);
   });
 

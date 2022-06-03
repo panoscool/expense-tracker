@@ -12,8 +12,9 @@ import Typography from '@mui/material/Typography';
 import { useRouter } from 'next/router';
 import DropDown from '../components/shared/drop-down';
 import useAppState from '../hooks/use-app-state';
-import { IAccount } from '../lib/models/account';
+import { Account } from '../lib/interfaces/account';
 import store from 'store';
+import CategoryIcon from '../components/shared/category-icon';
 
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
   backdropFilter: 'blur(20px)',
@@ -45,7 +46,7 @@ const Topbar: React.FC = () => {
         </Typography>
 
         <DropDown icon={<AccountBalanceWalletIcon />} id="account">
-          {accounts?.map((account: IAccount) => (
+          {accounts?.map((account: Account) => (
             <MenuItem key={account._id} onClick={handleAccountSelect(account._id)}>
               {account.name}
             </MenuItem>
@@ -65,7 +66,10 @@ const Topbar: React.FC = () => {
               sx={{ textTransform: 'capitalize' }}
               onClick={handleCategorySelect(label)}
             >
-              {label}
+              <ListItemIcon>
+                <CategoryIcon icon={label} />
+              </ListItemIcon>
+              <ListItemText primary={label} />
             </MenuItem>
           ))}
           <MenuItem onClick={() => setModal('category-form')}>

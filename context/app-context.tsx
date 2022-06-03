@@ -1,9 +1,9 @@
 import { createContext, useEffect, useState } from 'react';
+import jwt_decode from 'jwt-decode';
 import store from 'store';
 import useFetch from '../hooks/use-fetch';
-import { IAccount } from '../lib/models/account';
-import { ICategory } from '../lib/models/category';
-import jwt_decode from 'jwt-decode';
+import { Account } from '../lib/interfaces/account';
+import { Category } from '../lib/interfaces/category';
 
 type Auth = {
   id: string;
@@ -22,8 +22,8 @@ interface AppState {
   setAuth: React.Dispatch<React.SetStateAction<Auth | null>>;
   modal: string | null;
   setModal: React.Dispatch<React.SetStateAction<string | null>>;
-  accounts: IAccount[] | null;
-  categories: ICategory | null;
+  accounts: Account[] | null;
+  categories: Category | null;
 }
 
 const initState: AppState = {
@@ -60,11 +60,11 @@ const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   }, [authData?.email, authData?.name, authData?.sub]);
 
   useEffect(() => {
-    if (auth) {
+    if (auth?.id) {
       fetchAccounts('GET', '/account');
       fetchCategories('GET', '/category');
     }
-  }, [auth, fetchAccounts, fetchCategories, modal]);
+  }, [auth?.id, fetchAccounts, fetchCategories, modal]);
 
   const contextValues = {
     auth,

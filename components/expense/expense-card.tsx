@@ -13,7 +13,7 @@ import { alpha, styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { format, parseISO } from 'date-fns';
 import { Fragment } from 'react';
-import { IExpense } from '../../lib/models/expense';
+import { Expense } from '../../lib/interfaces/expense';
 import { formatCurrency } from '../../lib/utils/number-formatter';
 import { stringToColor } from '../../lib/utils/string-to-color';
 import CategoryIcon from '../shared/category-icon';
@@ -23,16 +23,16 @@ const TotalAmount = styled(Typography)`
 `;
 
 type Props = {
-  day: IExpense[];
+  day: Expense[];
   date: string;
-  onSelectExpense: (expense: IExpense) => void;
+  onSelectExpense: (expense: Expense) => void;
   onOpenModal: (modal: string) => void;
 };
 
 const ExpenseCard: React.FC<Props> = ({ day, date, onSelectExpense, onOpenModal }) => {
   if (!day.length) return null;
 
-  const handleExpenseClick = (expense: IExpense) => {
+  const handleExpenseClick = (expense: Expense) => {
     onSelectExpense(expense);
     onOpenModal('expense-form');
   };
@@ -43,7 +43,7 @@ const ExpenseCard: React.FC<Props> = ({ day, date, onSelectExpense, onOpenModal 
 
   const totalAmount = day.reduce((acc, expense) => acc + expense.amount, 0);
 
-  function stringAvatar(dayString: string) {
+  function avatarColor(dayString: string) {
     return { sx: { bgcolor: stringToColor(dayString) } };
   }
 
@@ -51,7 +51,7 @@ const ExpenseCard: React.FC<Props> = ({ day, date, onSelectExpense, onOpenModal 
     <Card variant="outlined" sx={{ mb: 1 }}>
       <CardHeader
         avatar={
-          <Avatar aria-label="day" {...stringAvatar(formattedDate('EEEE'))}>
+          <Avatar aria-label="day" {...avatarColor(formattedDate('EEEE'))}>
             {formattedDate('dd')}
           </Avatar>
         }
@@ -64,18 +64,26 @@ const ExpenseCard: React.FC<Props> = ({ day, date, onSelectExpense, onOpenModal 
         subheader={formattedDate('MMMM yyyy')}
         sx={{ backgroundColor: (theme) => alpha(theme.palette.primary.main, 0.05) }}
       />
+
       <Divider />
+
       <CardContent>
         <List disablePadding>
-          {day.map((d: IExpense, index: number) => (
+          {day.map((expense: Expense, index: number) => (
             <Fragment key={index}>
-              <ListItem disableGutters onClick={() => handleExpenseClick(d)}>
+              <ListItem disableGutters onClick={() => handleExpenseClick(expense)}>
                 <ListItemButton>
                   <ListItemIcon>
-                    <CategoryIcon icon={d.category} />
+                    <CategoryIcon icon={expense.category} />
                   </ListItemIcon>
-                  <ListItemText primary={d.note} secondary={(d.user as any).name} />
-                  <ListItemSecondaryAction>{formatCurrency(d.amount)}</ListItemSecondaryAction>
+                  <ListItemText
+                    primary={expense.note}
+                    secondary={expense.user.name}
+                    sx={{ textTransform: 'capitalize' }}
+                  />
+                  <ListItemSecondaryAction>
+                    {formatCurrency(expense.amount)}
+                  </ListItemSecondaryAction>
                 </ListItemButton>
               </ListItem>
               {index === day.length - 1 ? null : <Divider component="li" />}

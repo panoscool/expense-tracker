@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { v4 as uuidv4 } from 'uuid';
-import Account, { IAccount } from '../../../lib/models/account';
+import Account from '../../../lib/models/account';
 import User from '../../../lib/models/user';
 import dbConnect from '../../../lib/utils/db-connect';
 import { accountSchema } from '../../../lib/utils/yup-schema';

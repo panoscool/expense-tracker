@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { parseISO, startOfMonth, endOfMonth } from 'date-fns';
 import { v4 as uuidv4 } from 'uuid';
 import Account from '../../../lib/models/account';
 import Expense from '../../../lib/models/expense';
@@ -11,7 +12,13 @@ const getExpenses = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const accountId = await Account.findById(req.query.id);
 
-    const expenses = await Expense.find({ account: accountId })
+    const monthStart = startOfMonth(parseISO(req.query.date as string));
+    const monthEnd = endOfMonth(parseISO(req.query.date as string));
+
+    const expenses = await Expense.find({
+      account: accountId,
+      date: { $gte: monthStart, $lte: monthEnd },
+    })
       .sort({ date: 'desc' })
       .populate('user', 'name');
 

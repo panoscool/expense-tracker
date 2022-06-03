@@ -2,6 +2,8 @@ import CalculateOutlinedIcon from '@mui/icons-material/CalculateOutlined';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemIcon from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import MenuItem from '@mui/material/MenuItem';
 import { styled } from '@mui/material/styles';
@@ -12,11 +14,12 @@ import useAppState from '../../hooks/use-app-state';
 import useFetch from '../../hooks/use-fetch';
 import useForm from '../../hooks/use-form';
 import useIsDesktop from '../../hooks/use-is-desktop';
-import { IAccount } from '../../lib/models/account';
-import { IExpense } from '../../lib/models/expense';
+import { Account } from '../../lib/interfaces/account';
+import { Expense } from '../../lib/interfaces/expense';
 import { expenseSchema } from '../../lib/utils/yup-schema';
 import CalculatorDialog from '../calculator/calculator-dialog';
 import DateField from '../shared/date-field';
+import CategoryIcon from '../shared/category-icon';
 
 const Form = styled('form')`
   display: flex;
@@ -24,28 +27,57 @@ const Form = styled('form')`
   gap: 1rem;
 `;
 
+const SelectField = styled(TextField)(({ theme }) => ({
+  '& .MuiSelect-select': {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  '& .MuiListItemText-root': {
+    marginTop: 0,
+    marginBottom: 0,
+  },
+
+  '& .MuiIconButton-root': {
+    paddingTop: 0,
+    paddingBottom: 0,
+
+    '& .MuiSvgIcon-root': {
+      paddingTop: 0,
+      paddingBottom: 0,
+      fontSize: '1rem',
+    },
+  },
+}));
+
 type Props = {
   getExpenses: () => void;
-  selectedExpense: IExpense | null;
+  setSelectedExpense: (expense: Expense | null) => void;
+  selectedExpense: Expense | null;
 };
 
-const ExpenseForm: React.FC<Props> = ({ getExpenses, selectedExpense }) => {
+const initialValues = {
+  date: new Date(),
+  account: '',
+  category: '',
+  amount: '',
+  note: '',
+  description: '',
+};
+
+const ExpenseForm: React.FC<Props> = ({ getExpenses, setSelectedExpense, selectedExpense }) => {
   const { isDesktop } = useIsDesktop();
   const { accounts, categories, setModal } = useAppState();
   const [openCalculator, setOpenCalculator] = useState(false);
   const [, createExpense, , error] = useFetch();
-  const { values, setValues, onBlur, hasError, canSubmit } = useForm(expenseSchema, {
-    date: new Date(),
-    account: '',
-    category: '',
-    amount: '',
-    note: '',
-    description: '',
-  });
+  const { values, setValues, onBlur, hasError, canSubmit } = useForm(expenseSchema, initialValues);
 
   useEffect(() => {
     if (selectedExpense) {
       setValues(selectedExpense);
+    } else {
+      setValues(initialValues);
     }
   }, [selectedExpense, setValues]);
 
@@ -66,6 +98,7 @@ const ExpenseForm: React.FC<Props> = ({ getExpenses, selectedExpense }) => {
   };
 
   const handleCloseModal = () => {
+    setSelectedExpense(null);
     setModal(null);
   };
 
@@ -78,6 +111,7 @@ const ExpenseForm: React.FC<Props> = ({ getExpenses, selectedExpense }) => {
         : await createExpense('POST', '/expense', values);
 
       getExpenses();
+      setSelectedExpense(null);
       setModal(null);
     }
   };
@@ -111,13 +145,13 @@ const ExpenseForm: React.FC<Props> = ({ getExpenses, selectedExpense }) => {
           helperText={hasError('account')?.message}
         >
           <MenuItem value="">None</MenuItem>
-          {accounts?.map((account: IAccount) => (
+          {accounts?.map((account: Account) => (
             <MenuItem key={account._id} value={account._id}>
               {account.name}
             </MenuItem>
           ))}
         </TextField>
-        <TextField
+        <SelectField
           select
           name="category"
           label="Category"
@@ -129,11 +163,14 @@ const ExpenseForm: React.FC<Props> = ({ getExpenses, selectedExpense }) => {
         >
           <MenuItem value="">None</MenuItem>
           {categories?.labels?.map((label: string) => (
-            <MenuItem key={label} value={label} sx={{ textTransform: 'capitalize' }}>
-              {label}
+            <MenuItem key={label} value={label}>
+              <ListItemIcon disableRipple edge="start">
+                <CategoryIcon icon={label} />
+              </ListItemIcon>
+              <ListItemText primary={label} sx={{ textTransform: 'capitalize' }} />
             </MenuItem>
           ))}
-        </TextField>
+        </SelectField>
         <TextField
           type="number"
           name="amount"

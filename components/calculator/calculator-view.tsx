@@ -9,10 +9,10 @@ const CalculatorGrid = styled('div')(({ theme }) => ({
   display: 'inline-grid',
   gridTemplateColumns: 'repeat(4, 4rem)',
   gridTemplateRows: 'minmax(5rem, auto) repeat(5, 3rem)',
-  boxShadow: `inset 0px 0px 1px 1px ${alpha(theme.palette.common.black, 0.1)}`,
+  boxShadow: `inset 0px 0px 1px 1px ${alpha(theme.palette.common.black, 0.15)}`,
 
   '& > *': {
-    boxShadow: `inset 0px 0px 1px 1px ${alpha(theme.palette.common.black, 0.1)}`,
+    boxShadow: `inset 0px 0px 1px 1px ${alpha(theme.palette.common.black, 0.15)}`,
   },
 }));
 
@@ -74,8 +74,12 @@ const CalculatorView: React.FC<CalculatorViewProps> = (props) => {
         <CurrentOperand>{formatOperand(currentOperand as string)}</CurrentOperand>
       </Output>
 
-      <ButtonSpan onClick={handleClear}>AC</ButtonSpan>
-      <Button onClick={handleDelete}>DEL</Button>
+      <ButtonSpan color="inherit" onClick={handleClear}>
+        AC
+      </ButtonSpan>
+      <Button color="inherit" onClick={handleDelete}>
+        DEL
+      </Button>
       <OperationButton operation="÷" dispatch={dispatch} />
       <DigitButton digit="1" dispatch={dispatch} />
       <DigitButton digit="2" dispatch={dispatch} />
@@ -91,7 +95,9 @@ const CalculatorView: React.FC<CalculatorViewProps> = (props) => {
       <OperationButton operation="-" dispatch={dispatch} />
       <DigitButton digit="." dispatch={dispatch} />
       <DigitButton digit="0" dispatch={dispatch} />
-      <ButtonSpan onClick={handleEvaluate}>=</ButtonSpan>
+      <ButtonSpan color="inherit" onClick={handleEvaluate}>
+        =
+      </ButtonSpan>
     </CalculatorGrid>
   );
 };

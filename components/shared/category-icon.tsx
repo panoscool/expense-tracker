@@ -5,22 +5,22 @@ import MoneyOffOutlinedIcon from '@mui/icons-material/MoneyOffOutlined';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import CardGiftcardOutlinedIcon from '@mui/icons-material/CardGiftcardOutlined';
 import InterestsOutlinedIcon from '@mui/icons-material/InterestsOutlined';
-import CategoryOutlinedIcon from '@mui/icons-material/CategoryOutlined';
-import GirlOutlinedIcon from '@mui/icons-material/GirlOutlined';
+import MoodOutlinedIcon from '@mui/icons-material/MoodOutlined';
+import ReceiptOutlinedIcon from '@mui/icons-material/ReceiptOutlined';
 
 const CategoryIcon: React.FC<{ icon: string }> = ({ icon }) => {
   const component: Record<string, JSX.Element> = {
-    supermarket: <ShoppingCartOutlinedIcon />,
     transportation: <EmojiTransportationOutlinedIcon />,
-    health: <HealthAndSafetyOutlinedIcon />,
+    entertainment: <InterestsOutlinedIcon />,
+    supermarket: <ShoppingCartOutlinedIcon />,
     shopping: <ShoppingBagOutlinedIcon />,
-    gift: <CardGiftcardOutlinedIcon />,
-    leisure: <InterestsOutlinedIcon />,
     bills: <MoneyOffOutlinedIcon />,
-    beauty: <GirlOutlinedIcon />,
+    beauty: <MoodOutlinedIcon />,
+    health: <HealthAndSafetyOutlinedIcon />,
+    gift: <CardGiftcardOutlinedIcon />,
   };
 
-  return component[icon] ? component[icon] : <CategoryOutlinedIcon />;
+  return component[icon] ? component[icon] : <ReceiptOutlinedIcon />;
 };
 
 export default CategoryIcon;
