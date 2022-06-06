@@ -79,6 +79,9 @@ const AccountForm: React.FC = () => {
 
         <Typography variant="h6">Share account</Typography>
         <Typography variant="body2">Add the user email to share the account with</Typography>
+        <Typography variant="caption">
+          * The user should be registered with the same email
+        </Typography>
 
         <TextField
           name="email"

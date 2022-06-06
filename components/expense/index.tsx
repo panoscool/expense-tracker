@@ -12,6 +12,7 @@ import ExpenseForm from './expense-form';
 import useAppState from '../../hooks/use-app-state';
 import { Expense } from '../../lib/interfaces/expense';
 import DateField from '../shared/date-field';
+import EmptyList from '../shared/empty-list';
 
 const DailyGraph = dynamic(() => import('./charts/daily'), { ssr: false });
 
@@ -49,6 +50,8 @@ const Expenses: React.FC = () => {
 
   const modalOpen = modal === 'expense-form';
 
+  if (loading) return <Loading loading={loading} />;
+
   return (
     <div>
       <DailyGraph days={days} dates={dates} />
@@ -67,15 +70,19 @@ const Expenses: React.FC = () => {
         </Box>
         <Divider />
       </Box>
-      {days?.map((day, index) => (
-        <ExpenseCard
-          key={index}
-          date={dates[index]}
-          day={day}
-          onOpenModal={setModal}
-          onSelectExpense={handleSelectExpense}
-        />
-      ))}
+      {days?.length > 0 ? (
+        days?.map((day, index) => (
+          <ExpenseCard
+            key={index}
+            date={dates[index]}
+            day={day}
+            onOpenModal={setModal}
+            onSelectExpense={handleSelectExpense}
+          />
+        ))
+      ) : (
+        <EmptyList />
+      )}
 
       <Dialog open={modalOpen}>
         <ExpenseForm
@@ -84,8 +91,6 @@ const Expenses: React.FC = () => {
           setSelectedExpense={setSelectedExpense}
         />
       </Dialog>
-
-      <Loading loading={loading} />
     </div>
   );
 };

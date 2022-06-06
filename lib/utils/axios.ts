@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import store from 'store';
 
-const accessToken = store.get('auth');
+const accessToken = store.get('auth', null);
 
 const HTTP = axios.create({
   timeout: 30000,

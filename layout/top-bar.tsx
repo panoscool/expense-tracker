@@ -1,5 +1,5 @@
-import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import AccountBalanceWalletRoundedIcon from '@mui/icons-material/AccountBalanceWalletRounded';
+import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import AppBar from '@mui/material/AppBar';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -42,7 +42,7 @@ const Topbar: React.FC = () => {
           </NextLink>
         </Typography>
 
-        <DropDown icon={<AccountBalanceWalletIcon />} id="account">
+        <DropDown icon={<AccountBalanceWalletRoundedIcon />} id="account">
           {accounts?.map((account: Account) => (
             <MenuItem key={account._id} onClick={handleAccountSelect(account._id)}>
               {account.name}
@@ -56,7 +56,7 @@ const Topbar: React.FC = () => {
           </MenuItem>
         </DropDown>
 
-        <DropDown icon={<AccountCircleIcon />} id="user">
+        <DropDown icon={<AccountCircleRoundedIcon />} id="user">
           <MenuItem onClick={handleLogout}>Logout</MenuItem>
         </DropDown>
       </Toolbar>

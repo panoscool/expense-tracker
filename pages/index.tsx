@@ -5,10 +5,15 @@ import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemButton from '@mui/material/ListItemButton';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import LockOpenOutlinedIcon from '@mui/icons-material/LockOpenOutlined';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -56,9 +61,24 @@ const Home: NextPage = () => {
 
             <List>
               {accounts?.map((account) => (
-                <ListItem key={account._id} onClick={handleAccountSelect(account._id)}>
+                <ListItem
+                  disablePadding
+                  key={account._id}
+                  onClick={handleAccountSelect(account._id)}
+                >
                   <ListItemButton>
-                    <ListItemText primary={account.name} />
+                    <ListItemIcon>
+                      {account.users.length > 1 ? <LockOpenOutlinedIcon /> : <LockOutlinedIcon />}
+                    </ListItemIcon>
+                    <ListItemText primary={account.name} secondary={account.description} />
+                    <ListItemSecondaryAction>
+                      <IconButton>
+                        <VisibilityOutlinedIcon />
+                      </IconButton>
+                      <IconButton>
+                        <EditRoundedIcon />
+                      </IconButton>
+                    </ListItemSecondaryAction>
                   </ListItemButton>
                 </ListItem>
               ))}
@@ -77,7 +97,7 @@ const Home: NextPage = () => {
 
             <List>
               {categories?.labels.map((label) => (
-                <ListItem key={label} disablePadding>
+                <ListItem disablePadding key={label}>
                   <ListItemButton>
                     <ListItemIcon>
                       <CategoryIcon icon={label} />

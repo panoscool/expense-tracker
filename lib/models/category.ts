@@ -10,7 +10,7 @@ const CategorySchema: Schema = new Schema(
   {
     _id: { type: String, required: true, auto: false },
     user: { type: SchemaTypes.ObjectId, ref: 'User', required: true },
-    labels: [{ type: String, required: true, trim: true, unique: true }],
+    labels: [{ type: String, required: true, trim: true }],
   },
   {
     timestamps: {

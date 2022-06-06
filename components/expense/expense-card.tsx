@@ -30,14 +30,12 @@ type Props = {
 };
 
 const ExpenseCard: React.FC<Props> = ({ day, date, onSelectExpense, onOpenModal }) => {
-  if (!day.length) return null;
-
   const handleExpenseClick = (expense: Expense) => {
     onSelectExpense(expense);
     onOpenModal('expense-form');
   };
 
-  const formattedDate = (fmt: string) => {
+  const formatDate = (fmt: string) => {
     return format(parseISO(date), fmt);
   };
 
@@ -51,8 +49,8 @@ const ExpenseCard: React.FC<Props> = ({ day, date, onSelectExpense, onOpenModal 
     <Card variant="outlined" sx={{ mb: 1 }}>
       <CardHeader
         avatar={
-          <Avatar aria-label="day" {...avatarColor(formattedDate('EEEE'))}>
-            {formattedDate('dd')}
+          <Avatar aria-label="day" {...avatarColor(formatDate('EEEE'))}>
+            {formatDate('dd')}
           </Avatar>
         }
         action={
@@ -60,8 +58,8 @@ const ExpenseCard: React.FC<Props> = ({ day, date, onSelectExpense, onOpenModal 
             {formatCurrency(totalAmount)}
           </TotalAmount>
         }
-        title={formattedDate('EEEE')}
-        subheader={formattedDate('MMMM yyyy')}
+        title={formatDate('EEEE')}
+        subheader={formatDate('MMMM yyyy')}
         sx={{ backgroundColor: (theme) => alpha(theme.palette.primary.main, 0.05) }}
       />
 
