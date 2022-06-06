@@ -3,7 +3,7 @@ import { useState, useCallback } from 'react';
 import apiRequest from '../lib/utils/axios';
 import store from 'store';
 
-const useFetch = (redirect?: string, persist?: string) => {
+const useFetch = (redirect?: string, persist?: string, reload?: boolean) => {
   const router = useRouter();
   const [data, setData] = useState<any>();
   const [error, setError] = useState<string | null>(null);
@@ -23,6 +23,10 @@ const useFetch = (redirect?: string, persist?: string) => {
         if (redirect && response) {
           router.push(redirect);
         }
+
+        if (reload && response) {
+          window?.location?.reload();
+        }
       } catch (err) {
         console.error(err);
         setError(err as string);
@@ -30,7 +34,7 @@ const useFetch = (redirect?: string, persist?: string) => {
         setLoading(false);
       }
     },
-    [persist, redirect, router],
+    [persist, redirect, reload, router],
   );
 
   return [data, fetchData, loading, error, setError];

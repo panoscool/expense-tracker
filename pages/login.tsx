@@ -4,6 +4,7 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
+import Loading from '../components/shared/loading';
 import NextLink from '../components/shared/next-link';
 import useAppState from '../hooks/use-app-state';
 import useFetch from '../hooks/use-fetch';
@@ -33,7 +34,7 @@ const Form = styled('form')(({ theme }) => ({
 const Login: NextPage = () => {
   const router = useRouter();
   const { auth, loading } = useAppState();
-  const [, fetchData, , error] = useFetch('/', 'auth');
+  const [, fetchData, loginLoading, error] = useFetch('/', 'auth', true);
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(loginSchema, {
     email: '',
     password: '',
@@ -114,6 +115,8 @@ const Login: NextPage = () => {
           </Typography>
         </Wrapper>
       </main>
+
+      <Loading loading={loginLoading} />
     </div>
   );
 };

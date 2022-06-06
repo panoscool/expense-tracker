@@ -22,9 +22,11 @@ const HTTPERROR = (err: AxiosError) => Promise.reject(err);
 HTTP.interceptors.response.use(HTTPOK, HTTPERROR);
 
 const apiRequest = (method: any, path: string, params?: any): Promise<any> => {
-  const headers = {
-    Authorization: accessToken,
-  };
+  const headers: any = {};
+
+  if (accessToken) {
+    headers.Authorization = accessToken;
+  }
 
   return HTTP({
     baseURL: process.env.NEXT_PUBLIC_API_URL || '/api',
