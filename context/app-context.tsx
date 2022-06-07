@@ -12,6 +12,7 @@ interface AppState {
   setModal: React.Dispatch<React.SetStateAction<string | null>>;
   accounts: Account[] | null;
   loading: boolean;
+  getAccounts: () => Promise<void>;
 }
 
 const initState: AppState = {
@@ -21,6 +22,7 @@ const initState: AppState = {
   setModal: () => {},
   accounts: null,
   loading: false,
+  getAccounts: () => Promise.resolve(),
 };
 
 export const AppContext = createContext(initState);
@@ -68,6 +70,7 @@ const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const contextFunctions = {
     setAuth,
     setModal,
+    getAccounts,
   };
 
   return (

@@ -1,6 +1,8 @@
 import AccountBalanceWalletRoundedIcon from '@mui/icons-material/AccountBalanceWalletRounded';
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
+import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import AppBar from '@mui/material/AppBar';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
@@ -22,7 +24,7 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
 
 const Topbar: React.FC = () => {
   const router = useRouter();
-  const { accounts, setModal } = useAppState();
+  const { auth, accounts, setModal } = useAppState();
 
   const handleAccountSelect = (id: string) => () => {
     router.push(`/expenses/?account_id=${id}`);
@@ -57,7 +59,18 @@ const Topbar: React.FC = () => {
         </DropDown>
 
         <DropDown icon={<AccountCircleRoundedIcon />} id="user">
-          <MenuItem onClick={handleLogout}>Logout</MenuItem>
+          <MenuItem disabled>
+            <ListItemIcon>
+              <PersonRoundedIcon />
+            </ListItemIcon>
+            <ListItemText primary={auth?.name} sx={{ textTransform: 'capitalize' }} />
+          </MenuItem>
+          <MenuItem onClick={handleLogout}>
+            <ListItemIcon>
+              <ExitToAppRoundedIcon />
+            </ListItemIcon>
+            <ListItemText primary="Logout" />
+          </MenuItem>
         </DropDown>
       </Toolbar>
     </StyledAppBar>

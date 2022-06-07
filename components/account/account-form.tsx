@@ -3,10 +3,12 @@ import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import { useEffect } from 'react';
 import useAppState from '../../hooks/use-app-state';
 import useFetch from '../../hooks/use-fetch';
 import useForm from '../../hooks/use-form';
 import useIsDesktop from '../../hooks/use-is-desktop';
+import { Account, AccountCreate } from '../../lib/interfaces/account';
 import { accountSchema } from '../../lib/utils/yup-schema';
 
 const Form = styled('form')`
@@ -15,15 +17,31 @@ const Form = styled('form')`
   gap: 1rem;
 `;
 
-const AccountForm: React.FC = () => {
+type Props = {
+  selectedAccount?: Account | null;
+  closeModal?: () => void;
+  getAccounts?: () => void;
+};
+
+const initialValues: AccountCreate = {
+  name: '',
+  description: '',
+  email: '',
+};
+
+const AccountForm: React.FC<Props> = ({ selectedAccount, closeModal, getAccounts }) => {
   const { setModal } = useAppState();
   const { isDesktop } = useIsDesktop();
   const [, createAccount, , error] = useFetch();
-  const { values, setValues, onBlur, hasError, canSubmit } = useForm(accountSchema, {
-    name: '',
-    description: '',
-    email: '',
-  });
+  const { values, setValues, onBlur, hasError, canSubmit } = useForm(accountSchema, initialValues);
+
+  useEffect(() => {
+    if (selectedAccount) {
+      setValues(selectedAccount);
+    } else {
+      setValues(initialValues);
+    }
+  }, [selectedAccount, setValues]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [event.target.name]: event.target.value });
@@ -35,6 +53,8 @@ const AccountForm: React.FC = () => {
 
   const handleCloseModal = () => {
     setModal(null);
+    getAccounts?.();
+    closeModal?.();
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {

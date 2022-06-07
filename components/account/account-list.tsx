@@ -1,27 +1,45 @@
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Tooltip from '@mui/material/Tooltip';
-import IconButton from '@mui/material/IconButton';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import LockOpenOutlinedIcon from '@mui/icons-material/LockOpenOutlined';
-import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
-import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import EditRoundedIcon from '@mui/icons-material/EditRounded';
+import LockOpenOutlinedIcon from '@mui/icons-material/LockOpenOutlined';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import Box from '@mui/material/Box';
+import Dialog from '@mui/material/Dialog';
+import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
 import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import ListItemText from '@mui/material/ListItemText';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 import useAppState from '../../hooks/use-app-state';
+import AccountForm from './account-form';
+import { Account } from '../../lib/interfaces/account';
 
 const AccountList = () => {
   const router = useRouter();
-  const { accounts } = useAppState();
+  const { accounts, getAccounts, setModal } = useAppState();
+  const [showForm, setShowForm] = useState(false);
+  const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
 
   const handleAccountSelect = (id: string) => () => {
     router.push(`/expenses/?account_id=${id}`);
+  };
+
+  const handleAccountEdit = (account: Account) => (e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    setSelectedAccount(account);
+    setShowForm(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowForm(false);
+    setSelectedAccount(null);
   };
 
   return (
@@ -29,7 +47,7 @@ const AccountList = () => {
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Typography variant="h6">Accounts</Typography>
         <Tooltip title="Add account">
-          <IconButton>
+          <IconButton onClick={() => setModal('account-form')}>
             <AddRoundedIcon />
           </IconButton>
         </Tooltip>
@@ -47,7 +65,7 @@ const AccountList = () => {
                 <IconButton>
                   <VisibilityOutlinedIcon />
                 </IconButton>
-                <IconButton>
+                <IconButton onClick={handleAccountEdit(account)}>
                   <EditRoundedIcon />
                 </IconButton>
               </ListItemSecondaryAction>
@@ -55,6 +73,14 @@ const AccountList = () => {
           </ListItem>
         ))}
       </List>
+
+      <Dialog open={showForm}>
+        <AccountForm
+          selectedAccount={selectedAccount}
+          closeModal={handleCloseModal}
+          getAccounts={getAccounts}
+        />
+      </Dialog>
     </Box>
   );
 };

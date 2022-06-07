@@ -9,13 +9,13 @@ import MenuItem from '@mui/material/MenuItem';
 import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import useAppState from '../../hooks/use-app-state';
 import useFetch from '../../hooks/use-fetch';
 import useForm from '../../hooks/use-form';
 import useIsDesktop from '../../hooks/use-is-desktop';
 import { Account } from '../../lib/interfaces/account';
-import { Expense } from '../../lib/interfaces/expense';
+import { Expense, ExpenseCreate } from '../../lib/interfaces/expense';
 import { expenseSchema } from '../../lib/utils/yup-schema';
 import CalculatorDialog from '../calculator/calculator-dialog';
 import DateField from '../shared/date-field';
@@ -57,29 +57,36 @@ type Props = {
   selectedExpense: Expense | null;
 };
 
-const initialValues = {
+const initialValues: ExpenseCreate = {
   date: new Date(),
   account: '',
   category: '',
-  amount: '',
+  amount: 0,
   note: '',
   description: '',
 };
 
 const ExpenseForm: React.FC<Props> = ({ getExpenses, setSelectedExpense, selectedExpense }) => {
   const { isDesktop } = useIsDesktop();
-  const { accounts, categories, setModal } = useAppState();
+  const { accounts, setModal } = useAppState();
   const [openCalculator, setOpenCalculator] = useState(false);
   const [, createExpense, , error] = useFetch();
+  const [categories, fetchCategories, , categoryError] = useFetch();
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(expenseSchema, initialValues);
 
+  const getCategories = useCallback(async () => {
+    await fetchCategories('GET', '/category');
+  }, [fetchCategories]);
+
   useEffect(() => {
+    getCategories();
+
     if (selectedExpense) {
       setValues(selectedExpense);
     } else {
       setValues(initialValues);
     }
-  }, [selectedExpense, setValues]);
+  }, [getCategories, selectedExpense, setValues]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [event.target.name]: event.target.value });
@@ -122,7 +129,7 @@ const ExpenseForm: React.FC<Props> = ({ getExpenses, setSelectedExpense, selecte
         <Typography gutterBottom variant="h6">
           Add Expense
         </Typography>
-        <Typography color="error">{error}</Typography>
+        <Typography color="error">{error || categoryError}</Typography>
       </Box>
 
       <Form onSubmit={handleSubmit}>
