@@ -8,8 +8,6 @@ import { Auth, DecodedToken } from '../lib/interfaces/user';
 interface AppState {
   auth: Auth | null;
   setAuth: React.Dispatch<React.SetStateAction<Auth | null>>;
-  modal: string | null;
-  setModal: React.Dispatch<React.SetStateAction<string | null>>;
   accounts: Account[] | null;
   loading: boolean;
   getAccounts: () => Promise<void>;
@@ -18,8 +16,6 @@ interface AppState {
 const initState: AppState = {
   auth: null,
   setAuth: () => {},
-  modal: null,
-  setModal: () => {},
   accounts: null,
   loading: false,
   getAccounts: () => Promise.resolve(),
@@ -32,7 +28,6 @@ const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const authData: DecodedToken | null = authToken ? jwt_decode(authToken) : null;
 
   const [auth, setAuth] = useState<Auth | null>(null);
-  const [modal, setModal] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   const [accounts, fetchAccounts] = useFetch();
@@ -59,17 +54,15 @@ const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     if (auth?.id) {
       getAccounts();
     }
-  }, [auth?.id, modal, getAccounts]);
+  }, [auth?.id, getAccounts]);
 
   const contextValues = {
     auth,
-    modal,
     loading,
     accounts,
   };
   const contextFunctions = {
     setAuth,
-    setModal,
     getAccounts,
   };
 

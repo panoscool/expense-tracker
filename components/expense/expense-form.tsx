@@ -52,9 +52,9 @@ const SelectField = styled(TextField)(({ theme }) => ({
 }));
 
 type Props = {
-  getExpenses: () => void;
-  setSelectedExpense: (expense: Expense | null) => void;
   selectedExpense: Expense | null;
+  closeModal: () => void;
+  getExpenses: () => void;
 };
 
 const initialValues: ExpenseCreate = {
@@ -66,9 +66,9 @@ const initialValues: ExpenseCreate = {
   description: '',
 };
 
-const ExpenseForm: React.FC<Props> = ({ getExpenses, setSelectedExpense, selectedExpense }) => {
+const ExpenseForm: React.FC<Props> = ({ selectedExpense, closeModal, getExpenses }) => {
   const { isDesktop } = useIsDesktop();
-  const { accounts, setModal } = useAppState();
+  const { accounts } = useAppState();
   const [openCalculator, setOpenCalculator] = useState(false);
   const [, createExpense, , error] = useFetch();
   const [categories, fetchCategories, , categoryError] = useFetch();
@@ -105,8 +105,8 @@ const ExpenseForm: React.FC<Props> = ({ getExpenses, setSelectedExpense, selecte
   };
 
   const handleCloseModal = () => {
-    setSelectedExpense(null);
-    setModal(null);
+    setValues(initialValues);
+    closeModal();
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -118,8 +118,7 @@ const ExpenseForm: React.FC<Props> = ({ getExpenses, setSelectedExpense, selecte
         : await createExpense('POST', '/expense', values);
 
       getExpenses();
-      setSelectedExpense(null);
-      setModal(null);
+      handleCloseModal();
     }
   };
 

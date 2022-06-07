@@ -22,7 +22,7 @@ import { Account } from '../../lib/interfaces/account';
 
 const AccountList = () => {
   const router = useRouter();
-  const { accounts, getAccounts, setModal } = useAppState();
+  const { accounts, getAccounts } = useAppState();
   const [showForm, setShowForm] = useState(false);
   const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
 
@@ -37,6 +37,10 @@ const AccountList = () => {
     setShowForm(true);
   };
 
+  const handleOpenModal = () => {
+    setShowForm(true);
+  };
+
   const handleCloseModal = () => {
     setShowForm(false);
     setSelectedAccount(null);
@@ -47,7 +51,7 @@ const AccountList = () => {
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Typography variant="h6">Accounts</Typography>
         <Tooltip title="Add account">
-          <IconButton onClick={() => setModal('account-form')}>
+          <IconButton onClick={handleOpenModal}>
             <AddRoundedIcon />
           </IconButton>
         </Tooltip>

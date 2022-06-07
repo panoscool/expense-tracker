@@ -26,13 +26,11 @@ type Props = {
   day: Expense[];
   date: string;
   onSelectExpense: (expense: Expense) => void;
-  onOpenModal: (modal: string) => void;
 };
 
-const ExpenseCard: React.FC<Props> = ({ day, date, onSelectExpense, onOpenModal }) => {
+const ExpenseCard: React.FC<Props> = ({ day, date, onSelectExpense }) => {
   const handleExpenseClick = (expense: Expense) => {
     onSelectExpense(expense);
-    onOpenModal('expense-form');
   };
 
   const formatDate = (fmt: string) => {

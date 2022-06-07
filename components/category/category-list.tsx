@@ -1,20 +1,24 @@
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
+import Dialog from '@mui/material/Dialog';
+import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import ListItemButton from '@mui/material/ListItemButton';
-import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import AddRoundedIcon from '@mui/icons-material/AddRounded';
-import CategoryIcon from '../shared/category-icon';
-import { useCallback, useEffect } from 'react';
+import Typography from '@mui/material/Typography';
+import { useCallback, useEffect, useState } from 'react';
 import useFetch from '../../hooks/use-fetch';
+import CategoryIcon from '../shared/category-icon';
 import Loading from '../shared/loading';
+import CategoryForm from './category-form';
 
 const CategoryList = () => {
   const [categories, fetchCategories, loadingCategories, error] = useFetch();
+  const [showForm, setShowForm] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const getCategories = useCallback(async () => {
     await fetchCategories('GET', '/category');
@@ -24,6 +28,22 @@ const CategoryList = () => {
     getCategories();
   }, [getCategories]);
 
+  const handleCategoryEdit = (category: string) => (e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    setSelectedCategory(category);
+    setShowForm(true);
+  };
+
+  const handleOpenModal = () => {
+    setShowForm(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowForm(false);
+    setSelectedCategory(null);
+  };
+
   return (
     <Box>
       <Typography color="error">{error}</Typography>
@@ -31,7 +51,7 @@ const CategoryList = () => {
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Typography variant="h6">Categories</Typography>
         <Tooltip title="Add category">
-          <IconButton>
+          <IconButton onClick={handleOpenModal}>
             <AddRoundedIcon />
           </IconButton>
         </Tooltip>
@@ -39,7 +59,7 @@ const CategoryList = () => {
 
       <List>
         {categories?.labels.map((label: string) => (
-          <ListItem disablePadding key={label}>
+          <ListItem disablePadding key={label} onClick={handleCategoryEdit(label)}>
             <ListItemButton>
               <ListItemIcon>
                 <CategoryIcon icon={label} />
@@ -49,6 +69,14 @@ const CategoryList = () => {
           </ListItem>
         ))}
       </List>
+
+      <Dialog open={showForm}>
+        <CategoryForm
+          selectedCategory={selectedCategory}
+          closeModal={handleCloseModal}
+          getCategories={getCategories}
+        />
+      </Dialog>
 
       <Loading loading={loadingCategories} />
     </Box>

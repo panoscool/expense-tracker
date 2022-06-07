@@ -4,7 +4,6 @@ import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { useEffect } from 'react';
-import useAppState from '../../hooks/use-app-state';
 import useFetch from '../../hooks/use-fetch';
 import useForm from '../../hooks/use-form';
 import useIsDesktop from '../../hooks/use-is-desktop';
@@ -18,9 +17,9 @@ const Form = styled('form')`
 `;
 
 type Props = {
-  selectedAccount?: Account | null;
-  closeModal?: () => void;
-  getAccounts?: () => void;
+  selectedAccount: Account | null;
+  closeModal: () => void;
+  getAccounts: () => void;
 };
 
 const initialValues: AccountCreate = {
@@ -30,7 +29,6 @@ const initialValues: AccountCreate = {
 };
 
 const AccountForm: React.FC<Props> = ({ selectedAccount, closeModal, getAccounts }) => {
-  const { setModal } = useAppState();
   const { isDesktop } = useIsDesktop();
   const [, createAccount, , error] = useFetch();
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(accountSchema, initialValues);
@@ -52,16 +50,19 @@ const AccountForm: React.FC<Props> = ({ selectedAccount, closeModal, getAccounts
   };
 
   const handleCloseModal = () => {
-    setModal(null);
-    getAccounts?.();
-    closeModal?.();
+    setValues(initialValues);
+    closeModal();
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (canSubmit()) {
-      await createAccount('POST', '/account', values);
+      selectedAccount
+        ? await createAccount('PUT', `/account/${values?._id}`, values)
+        : await createAccount('POST', '/account', values);
+
+      getAccounts();
       handleCloseModal();
     }
   };

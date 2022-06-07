@@ -1,17 +1,12 @@
 import Box from '@mui/material/Box';
-import Dialog from '@mui/material/Dialog';
 import Container from '@mui/material/Container';
 import { Fragment } from 'react';
+import Loading from '../components/shared/loading';
 import useAppState from '../hooks/use-app-state';
 import Navbar from './top-bar';
-import AccountForm from '../components/account/account-form';
-import CategoryForm from '../components/category/category-form';
-import Loading from '../components/shared/loading';
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { auth, modal, loading } = useAppState();
-
-  const modalOpen = modal === 'account-form' || modal === 'category-form';
+  const { auth, loading } = useAppState();
 
   return (
     <Fragment>
@@ -20,13 +15,6 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       <Container maxWidth="lg">
         <Box my={4}>{children}</Box>
       </Container>
-
-      {auth && (
-        <Dialog open={modalOpen}>
-          {modal === 'account-form' && <AccountForm />}
-          {modal === 'category-form' && <CategoryForm />}
-        </Dialog>
-      )}
 
       <Loading loading={loading} />
     </Fragment>

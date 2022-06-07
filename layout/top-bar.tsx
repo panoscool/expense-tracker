@@ -1,6 +1,5 @@
 import AccountBalanceWalletRoundedIcon from '@mui/icons-material/AccountBalanceWalletRounded';
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
-import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import AppBar from '@mui/material/AppBar';
@@ -24,7 +23,7 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
 
 const Topbar: React.FC = () => {
   const router = useRouter();
-  const { auth, accounts, setModal } = useAppState();
+  const { auth, accounts } = useAppState();
 
   const handleAccountSelect = (id: string) => () => {
     router.push(`/expenses/?account_id=${id}`);
@@ -50,12 +49,6 @@ const Topbar: React.FC = () => {
               {account.name}
             </MenuItem>
           ))}
-          <MenuItem onClick={() => setModal('account-form')}>
-            <ListItemIcon>
-              <AddRoundedIcon />
-            </ListItemIcon>
-            <ListItemText primary="Add Account" />
-          </MenuItem>
         </DropDown>
 
         <DropDown icon={<AccountCircleRoundedIcon />} id="user">

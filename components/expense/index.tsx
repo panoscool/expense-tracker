@@ -1,27 +1,26 @@
-import { Box, Divider, Dialog, Button, Typography } from '@mui/material';
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import { Box, Button, Dialog, Divider, Typography } from '@mui/material';
 import { format } from 'date-fns';
 import groupBy from 'lodash/groupBy';
-import { useCallback, useEffect, useState } from 'react';
-import useFetch from '../../hooks/use-fetch';
-import Loading from '../shared/loading';
-import ExpenseCard from './expense-card';
-import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import ExpenseForm from './expense-form';
-import useAppState from '../../hooks/use-app-state';
+import { useCallback, useEffect, useState } from 'react';
+import useFetch from '../../hooks/use-fetch';
 import { Expense } from '../../lib/interfaces/expense';
 import DateField from '../shared/date-field';
 import EmptyList from '../shared/empty-list';
+import Loading from '../shared/loading';
+import ExpenseCard from './expense-card';
+import ExpenseForm from './expense-form';
 
 const DailyGraph = dynamic(() => import('./charts/daily'), { ssr: false });
 
 const Expenses: React.FC = () => {
   const router = useRouter();
-  const { modal, setModal } = useAppState();
   const [selectedDate, setSelectedDate] = useState({ date: new Date() });
   const [expenses, fetchExpenses, loading, error] = useFetch();
   const [selectedExpense, setSelectedExpense] = useState<Expense | null>(null);
+  const [showForm, setShowForm] = useState(false);
 
   const getExpenses = useCallback(async () => {
     if (router.query.account_id) {
@@ -36,19 +35,23 @@ const Expenses: React.FC = () => {
     getExpenses();
   }, [getExpenses]);
 
-  const handleOpenModal = () => {
-    setModal('expense-form');
+  const handleExpenseEdit = (expense: Expense) => {
+    setSelectedExpense(expense);
+    setShowForm(true);
   };
 
-  const handleSelectExpense = (expense: Expense) => {
-    setSelectedExpense(expense);
+  const handleOpenModal = () => {
+    setShowForm(true);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedExpense(null);
+    setShowForm(false);
   };
 
   const groupedByDay = groupBy(expenses, (expense) => format(new Date(expense.date), 'yyyy-MM-dd'));
   const dates = Object.keys(groupedByDay);
   const days = dates.map((day) => groupedByDay[day]);
-
-  const modalOpen = modal === 'expense-form';
 
   if (loading) return <Loading loading={loading} />;
 
@@ -78,19 +81,18 @@ const Expenses: React.FC = () => {
             key={index}
             date={dates[index]}
             day={day}
-            onOpenModal={setModal}
-            onSelectExpense={handleSelectExpense}
+            onSelectExpense={handleExpenseEdit}
           />
         ))
       ) : (
         <EmptyList />
       )}
 
-      <Dialog open={modalOpen}>
+      <Dialog open={showForm}>
         <ExpenseForm
-          getExpenses={getExpenses}
           selectedExpense={selectedExpense}
-          setSelectedExpense={setSelectedExpense}
+          closeModal={handleCloseModal}
+          getExpenses={getExpenses}
         />
       </Dialog>
     </div>
