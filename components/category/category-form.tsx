@@ -55,6 +55,8 @@ const CategoryForm: React.FC<Props> = ({ selectedCategory, closeModal, getCatego
     if (canSubmit()) {
       await createCategory('POST', '/category', values);
 
+      // TODO: handle update category
+
       getCategories();
       handleCloseModal();
     }

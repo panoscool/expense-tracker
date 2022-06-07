@@ -3,7 +3,7 @@ import { parseISO, startOfMonth, endOfMonth } from 'date-fns';
 import { v4 as uuidv4 } from 'uuid';
 import Account from '../../../lib/models/account';
 import Expense from '../../../lib/models/expense';
-import dbConnect from '../../../lib/utils/db-connect';
+import dbConnect from '../../../lib/config/db-connect';
 import { expenseSchema } from '../../../lib/utils/yup-schema';
 import { authenticated, getDecodedUserId } from '../authenticated';
 import validate from '../../../lib/utils/validate';

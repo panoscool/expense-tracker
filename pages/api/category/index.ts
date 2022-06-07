@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { v4 as uuidv4 } from 'uuid';
 import Category from '../../../lib/models/category';
-import dbConnect from '../../../lib/utils/db-connect';
+import dbConnect from '../../../lib/config/db-connect';
 import { cleanLabel } from '../../../lib/utils/format-text';
 import { categorySchema } from '../../../lib/utils/yup-schema';
 import { authenticated, getDecodedUserId } from '../authenticated';

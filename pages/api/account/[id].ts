@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import Account from '../../../lib/models/account';
 import Expense from '../../../lib/models/expense';
 import User from '../../../lib/models/user';
-import dbConnect from '../../../lib/utils/db-connect';
+import dbConnect from '../../../lib/config/db-connect';
 import { accountSchema } from '../../../lib/utils/yup-schema';
 import { authenticated, hasAccess, getDecodedUserId } from '../authenticated';
 import validate from '../../../lib/utils/validate';
@@ -61,10 +61,10 @@ const updateAccount = async (req: NextApiRequest, res: NextApiResponse) => {
 
     // if user.id is equal to account.user, then user is the owner of the account and cannot remove himself
     if (user?._id?.toString() === account.user.toString()) {
-      return res.status(400).json({ error: 'Cannot remove yourself from the account' });
+      return res.status(400).json({ error: 'You cannot remove yourself from the account' });
     }
 
-    // if user does not exist in the account users array and email provided, add it
+    // if user does not exist in the account users array add it
     if (user && !account.users.includes(user._id)) {
       await account.updateOne({
         $push: {
@@ -73,7 +73,7 @@ const updateAccount = async (req: NextApiRequest, res: NextApiResponse) => {
       });
     }
 
-    // if user exists in the account users array and email is in query, remove it
+    // if user exists in the account users array remove it
     if (user && account.users.includes(user._id)) {
       await account.updateOne({
         $pull: {

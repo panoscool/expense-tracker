@@ -1,7 +1,7 @@
 import { compare } from 'bcrypt';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import User from '../../../lib/models/user';
-import dbConnect from '../../../lib/utils/db-connect';
+import dbConnect from '../../../lib/config/db-connect';
 import { setAccessToken } from '../authenticated';
 
 async function checkHashedPassword(text: string, hash: string) {

@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { v4 as uuidv4 } from 'uuid';
 import Account from '../../../lib/models/account';
 import User from '../../../lib/models/user';
-import dbConnect from '../../../lib/utils/db-connect';
+import dbConnect from '../../../lib/config/db-connect';
 import { accountSchema } from '../../../lib/utils/yup-schema';
 import { authenticated, getDecodedUserId } from '../authenticated';
 import validate from '../../../lib/utils/validate';
@@ -41,6 +41,10 @@ const addAccount = async (req: NextApiRequest, res: NextApiResponse) => {
     });
 
     const user = await User.findOne({ email });
+
+    if (user?._id === account.user) {
+      return res.status(400).json({ error: 'You cannot add yourself as a user' });
+    }
 
     if (user) {
       await account.updateOne({

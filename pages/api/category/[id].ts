@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import Category from '../../../lib/models/category';
 import Expense from '../../../lib/models/expense';
-import dbConnect from '../../../lib/utils/db-connect';
+import dbConnect from '../../../lib/config/db-connect';
 import { cleanLabel } from '../../../lib/utils/format-text';
 import validate from '../../../lib/utils/validate';
 import { categorySchema } from '../../../lib/utils/yup-schema';

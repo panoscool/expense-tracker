@@ -19,11 +19,13 @@ import { useState } from 'react';
 import useAppState from '../../hooks/use-app-state';
 import AccountForm from './account-form';
 import { Account } from '../../lib/interfaces/account';
+import AccountUsers from './account-users';
 
 const AccountList = () => {
   const router = useRouter();
   const { accounts, getAccounts } = useAppState();
   const [showForm, setShowForm] = useState(false);
+  const [showUsers, setShowUsers] = useState(false);
   const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
 
   const handleAccountSelect = (id: string) => () => {
@@ -46,6 +48,18 @@ const AccountList = () => {
     setSelectedAccount(null);
   };
 
+  const handleOpenUsers = (account: Account) => (e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    setSelectedAccount(account);
+    setShowUsers(true);
+  };
+
+  const handleCloseUsers = () => {
+    setSelectedAccount(null);
+    setShowUsers(false);
+  };
+
   return (
     <Box>
       <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -66,7 +80,7 @@ const AccountList = () => {
               </ListItemIcon>
               <ListItemText primary={account.name} secondary={account.description} />
               <ListItemSecondaryAction>
-                <IconButton>
+                <IconButton onClick={handleOpenUsers(account)}>
                   <VisibilityOutlinedIcon />
                 </IconButton>
                 <IconButton onClick={handleAccountEdit(account)}>
@@ -85,6 +99,8 @@ const AccountList = () => {
           getAccounts={getAccounts}
         />
       </Dialog>
+
+      <AccountUsers account={selectedAccount} open={showUsers} onClose={handleCloseUsers} />
     </Box>
   );
 };

@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { useState, useCallback } from 'react';
-import apiRequest from '../lib/utils/axios';
+import apiRequest from '../lib/config/axios';
 import store from 'store';
 
 const useFetch = (redirect?: string, persist?: string, reload?: boolean) => {
