@@ -6,6 +6,7 @@ import { cleanLabel } from '../../../lib/utils/format-text';
 import validate from '../../../lib/utils/validate';
 import { categorySchema } from '../../../lib/utils/yup-schema';
 import { authenticated, getDecodedUserId, hasAccess } from '../authenticated';
+import Account from '../../../lib/models/account';
 
 const getCategory = async (req: NextApiRequest, res: NextApiResponse<any>) => {
   try {
@@ -71,6 +72,7 @@ const updateCategory = async (req: NextApiRequest, res: NextApiResponse<any>) =>
 const deleteCategory = async (req: NextApiRequest, res: NextApiResponse<any>) => {
   try {
     const userId = (await getDecodedUserId(req, res)) as string;
+    const account = await Account.findOne({ user: userId });
     const category = await Category.findById(req.query.id);
 
     if (!category) {
@@ -83,10 +85,13 @@ const deleteCategory = async (req: NextApiRequest, res: NextApiResponse<any>) =>
       return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    // find all expenses with this category and update them to uncategorized
-    await Expense.updateMany({ category: req.body.label }, { category: 'uncategorized' });
+    // find all expenses with this category and update them to other
+    await Expense.updateMany(
+      { account: account, category: cleanLabel(req.body.label) },
+      { category: 'other' },
+    );
 
-    // delete only the category label inside the category labels array
+    // delete only the req.body.label inside the category labels array
     await category.updateOne({
       labels: category.labels.filter((label) => label !== cleanLabel(req.body.label)),
     });

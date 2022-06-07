@@ -1,1 +1,3 @@
-export const cleanLabel = (label: string) => label.toLowerCase().trim();
+export const cleanLabel = (label: string) => {
+  return label?.toLowerCase().trim();
+};

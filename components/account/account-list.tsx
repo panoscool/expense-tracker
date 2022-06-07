@@ -3,10 +3,13 @@ import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import LockOpenOutlinedIcon from '@mui/icons-material/LockOpenOutlined';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
+import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import Box from '@mui/material/Box';
 import Dialog from '@mui/material/Dialog';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
+import MenuItem from '@mui/material/MenuItem';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -15,18 +18,23 @@ import ListItemText from '@mui/material/ListItemText';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import useAppState from '../../hooks/use-app-state';
 import AccountForm from './account-form';
 import { Account } from '../../lib/interfaces/account';
 import AccountUsers from './account-users';
+import DropDown from '../shared/drop-down';
+import { Theme } from '@mui/material/styles';
+import useFetch from '../../hooks/use-fetch';
 
 const AccountList = () => {
   const router = useRouter();
+  const id = useId();
   const { accounts, getAccounts } = useAppState();
   const [showForm, setShowForm] = useState(false);
   const [showUsers, setShowUsers] = useState(false);
   const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
+  const [, deleteAccount, , error] = useFetch();
 
   const handleAccountSelect = (id: string) => () => {
     router.push(`/expenses/?account_id=${id}`);
@@ -37,6 +45,15 @@ const AccountList = () => {
 
     setSelectedAccount(account);
     setShowForm(true);
+  };
+
+  const handleAccountDelete = (account: Account) => async (e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    if (window.confirm(`Are you sure you want to delete ${account.name}?`)) {
+      await deleteAccount('DELETE', `/account/${account._id}`);
+      getAccounts();
+    }
   };
 
   const handleOpenModal = () => {
@@ -60,8 +77,14 @@ const AccountList = () => {
     setShowUsers(false);
   };
 
+  function deleteColor() {
+    return { sx: { color: (theme: Theme) => theme.palette.error.main } };
+  }
+
   return (
     <Box>
+      <Typography color="error">{error}</Typography>
+
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Typography variant="h6">Accounts</Typography>
         <Tooltip title="Add account">
@@ -79,13 +102,27 @@ const AccountList = () => {
                 {account.users.length > 1 ? <LockOpenOutlinedIcon /> : <LockOutlinedIcon />}
               </ListItemIcon>
               <ListItemText primary={account.name} secondary={account.description} />
-              <ListItemSecondaryAction>
-                <IconButton onClick={handleOpenUsers(account)}>
-                  <VisibilityOutlinedIcon />
-                </IconButton>
-                <IconButton onClick={handleAccountEdit(account)}>
-                  <EditRoundedIcon />
-                </IconButton>
+              <ListItemSecondaryAction sx={{ display: 'flex' }}>
+                <div>
+                  <IconButton onClick={handleOpenUsers(account)}>
+                    <VisibilityOutlinedIcon />
+                  </IconButton>
+                </div>
+
+                <DropDown icon={<MoreVertRoundedIcon />} id={id}>
+                  <MenuItem onClick={handleAccountEdit(account)}>
+                    <ListItemIcon>
+                      <EditRoundedIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText primary="Edit" />
+                  </MenuItem>
+                  <MenuItem onClick={handleAccountDelete(account)}>
+                    <ListItemIcon {...deleteColor()}>
+                      <DeleteRoundedIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText primary="Delete" {...deleteColor()} />
+                  </MenuItem>
+                </DropDown>
               </ListItemSecondaryAction>
             </ListItemButton>
           </ListItem>
@@ -100,7 +137,12 @@ const AccountList = () => {
         />
       </Dialog>
 
-      <AccountUsers account={selectedAccount} open={showUsers} onClose={handleCloseUsers} />
+      <AccountUsers
+        accountId={selectedAccount?._id}
+        open={showUsers}
+        onClose={handleCloseUsers}
+        getAccounts={getAccounts}
+      />
     </Box>
   );
 };

@@ -12,20 +12,48 @@ import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import ListItemText from '@mui/material/ListItemText';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import Typography from '@mui/material/Typography';
-import { Account } from '../../lib/interfaces/account';
+import { useCallback, useEffect } from 'react';
+import useFetch from '../../hooks/use-fetch';
+import { User } from '../../lib/interfaces/user';
 
 type Props = {
-  account: Account | null;
+  accountId: string | undefined;
   open: boolean;
   onClose: () => void;
+  getAccounts: () => void;
 };
 
-const AccountUsers: React.FC<Props> = ({ account, open, onClose }) => {
+const AccountUsers: React.FC<Props> = ({ accountId, open, onClose, getAccounts }) => {
+  const [account, fetchAccount, , error] = useFetch();
+
+  const getAccount = useCallback(async () => {
+    await fetchAccount('GET', `/account/${accountId}`);
+  }, [accountId, fetchAccount]);
+
+  useEffect(() => {
+    if (accountId) {
+      getAccount();
+    }
+  }, [accountId, getAccount]);
+
+  const handleDeleteUser = (email: string) => async () => {
+    await fetchAccount('PUT', `/account/${accountId}`, {
+      name: account.name,
+      description: account.description,
+      email: email,
+    });
+
+    getAccount();
+    getAccounts();
+  };
+
   if (!account) return null;
 
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogContent sx={{ minWidth: 360 }}>
+        <Typography color="error">{error}</Typography>
+
         <Box mb={2}>
           <Typography variant="h6">{account.name}</Typography>
           <Typography gutterBottom variant="body2">
@@ -38,12 +66,12 @@ const AccountUsers: React.FC<Props> = ({ account, open, onClose }) => {
         {account.users.length > 1 ? (
           <List subheader={<ListSubheader disableGutters>Shared with:</ListSubheader>}>
             {account.users
-              .filter((u) => u._id !== account.user)
-              .map((user) => (
+              .filter((u: User) => u._id !== account.user)
+              .map((user: User) => (
                 <ListItem key={user._id} disablePadding>
                   <ListItemText primary={user.name} secondary={user.email} />
                   <ListItemSecondaryAction>
-                    <IconButton edge="end" aria-label="delete">
+                    <IconButton edge="end" onClick={handleDeleteUser(user.email)}>
                       <DeleteRoundedIcon />
                     </IconButton>
                   </ListItemSecondaryAction>

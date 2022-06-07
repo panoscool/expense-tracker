@@ -3,7 +3,6 @@ import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { useEffect } from 'react';
 import useFetch from '../../hooks/use-fetch';
 import useForm from '../../hooks/use-form';
 import useIsDesktop from '../../hooks/use-is-desktop';
@@ -16,25 +15,17 @@ const Form = styled('form')`
 `;
 
 type Props = {
-  selectedCategory: string | null;
+  categoryId: string | undefined;
   closeModal: () => void;
   getCategories: () => void;
 };
 
-const CategoryForm: React.FC<Props> = ({ selectedCategory, closeModal, getCategories }) => {
+const CategoryForm: React.FC<Props> = ({ categoryId, closeModal, getCategories }) => {
   const { isDesktop } = useIsDesktop();
   const [, createCategory, , error] = useFetch();
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(categorySchema, {
     label: '',
   });
-
-  useEffect(() => {
-    if (selectedCategory) {
-      setValues({ label: selectedCategory });
-    } else {
-      setValues({ label: '' });
-    }
-  }, [selectedCategory, setValues]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [event.target.name]: event.target.value });
@@ -53,12 +44,10 @@ const CategoryForm: React.FC<Props> = ({ selectedCategory, closeModal, getCatego
     event.preventDefault();
 
     if (canSubmit()) {
-      await createCategory('POST', '/category', values);
+      await createCategory('PUT', `/category/${categoryId}`, values);
 
-      // TODO: handle update category
-
+      setValues({ label: '' });
       getCategories();
-      handleCloseModal();
     }
   };
 

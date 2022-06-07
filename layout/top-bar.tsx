@@ -10,6 +10,7 @@ import { alpha, styled } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { useRouter } from 'next/router';
+import { useId } from 'react';
 import store from 'store';
 import DropDown from '../components/shared/drop-down';
 import NextLink from '../components/shared/next-link';
@@ -23,6 +24,7 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
 
 const Topbar: React.FC = () => {
   const router = useRouter();
+  const id = useId();
   const { auth, accounts } = useAppState();
 
   const handleAccountSelect = (id: string) => () => {
@@ -43,7 +45,7 @@ const Topbar: React.FC = () => {
           </NextLink>
         </Typography>
 
-        <DropDown icon={<AccountBalanceWalletRoundedIcon />} id="account">
+        <DropDown icon={<AccountBalanceWalletRoundedIcon />} id={id} btnSize="large">
           {accounts?.map((account: Account) => (
             <MenuItem key={account._id} onClick={handleAccountSelect(account._id)}>
               {account.name}
@@ -51,7 +53,7 @@ const Topbar: React.FC = () => {
           ))}
         </DropDown>
 
-        <DropDown icon={<AccountCircleRoundedIcon />} id="user">
+        <DropDown icon={<AccountCircleRoundedIcon />} id={id} btnSize="large">
           <MenuItem disabled>
             <ListItemIcon>
               <PersonRoundedIcon />

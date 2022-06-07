@@ -6,16 +6,21 @@ type Props = {
   children: React.ReactNode;
   icon: React.ReactNode;
   id?: string;
+  btnSize?: 'small' | 'medium' | 'large';
 };
 
-const DropDown: React.FC<Props> = ({ children, id, icon }) => {
+const DropDown: React.FC<Props> = ({ children, id, icon, btnSize }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
+
     setAnchorEl(event.currentTarget);
   };
 
   const handleClose = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
+
     // close menu when clicking any of the children
     if (anchorEl && event.target !== anchorEl) {
       setAnchorEl(null);
@@ -25,12 +30,12 @@ const DropDown: React.FC<Props> = ({ children, id, icon }) => {
   return (
     <div>
       <IconButton
-        size="large"
+        size={btnSize}
         aria-haspopup="true"
         aria-expanded={Boolean(anchorEl) ? 'true' : undefined}
         aria-controls={Boolean(anchorEl) ? `menu-${id || 'dropdown'}` : undefined}
         onClick={handleMenu}
-        sx={{ color: '#fff' }}
+        color="inherit"
       >
         {icon}
       </IconButton>
