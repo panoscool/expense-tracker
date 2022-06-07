@@ -1,4 +1,4 @@
-import { Box, Divider, Dialog, Button } from '@mui/material';
+import { Box, Divider, Dialog, Button, Typography } from '@mui/material';
 import { format } from 'date-fns';
 import groupBy from 'lodash/groupBy';
 import { useCallback, useEffect, useState } from 'react';
@@ -20,12 +20,12 @@ const Expenses: React.FC = () => {
   const router = useRouter();
   const { modal, setModal } = useAppState();
   const [selectedDate, setSelectedDate] = useState({ date: new Date() });
-  const [expenses, fetchExpenses, loading] = useFetch();
+  const [expenses, fetchExpenses, loading, error] = useFetch();
   const [selectedExpense, setSelectedExpense] = useState<Expense | null>(null);
 
-  const getExpenses = useCallback(() => {
+  const getExpenses = useCallback(async () => {
     if (router.query.account_id) {
-      fetchExpenses(
+      await fetchExpenses(
         'GET',
         `/expense/?id=${router.query.account_id}&date=${format(selectedDate.date, 'yyyy-MM-dd')}`,
       );
@@ -54,6 +54,8 @@ const Expenses: React.FC = () => {
 
   return (
     <div>
+      <Typography color="error">{error}</Typography>
+
       <DailyGraph days={days} dates={dates} />
       <Box mt={8} mb={2}>
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>

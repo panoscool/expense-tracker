@@ -1,14 +1,13 @@
-import { Button, TextField, Typography, Box } from '@mui/material';
+import { Box, Button, TextField, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import Loading from '../components/shared/loading';
 import NextLink from '../components/shared/next-link';
-import useAppState from '../hooks/use-app-state';
 import useFetch from '../hooks/use-fetch';
 import useForm from '../hooks/use-form';
+import useProtectedRoute from '../hooks/use-protected-route';
 import { registerSchema } from '../lib/utils/yup-schema';
 
 const Wrapper = styled(Box)`
@@ -32,8 +31,7 @@ const Form = styled('form')(({ theme }) => ({
 }));
 
 const Register: NextPage = () => {
-  const router = useRouter();
-  const { auth, loading } = useAppState();
+  const { auth, loading, checkAuthState } = useProtectedRoute(false);
   const [, fetchData, registerLoading, error] = useFetch('/', 'auth', true);
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(registerSchema, {
     name: '',
@@ -43,10 +41,8 @@ const Register: NextPage = () => {
   });
 
   useEffect(() => {
-    if (!loading && auth?.id) {
-      router.push('/');
-    }
-  }, [auth?.id, loading, router]);
+    checkAuthState('/');
+  }, [checkAuthState]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [event.target.name]: event.target.value });
@@ -64,7 +60,7 @@ const Register: NextPage = () => {
     }
   };
 
-  if (loading || auth?.id) {
+  if (loading || auth) {
     return <p>Loading...</p>;
   }
 

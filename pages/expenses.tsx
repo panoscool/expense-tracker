@@ -1,19 +1,15 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import Expenses from '../components/expense';
-import useAppState from '../hooks/use-app-state';
+import useProtectedRoute from '../hooks/use-protected-route';
 
 const Home: NextPage = () => {
-  const router = useRouter();
-  const { auth, loading } = useAppState();
+  const { auth, loading, checkAuthState } = useProtectedRoute(true);
 
   useEffect(() => {
-    if (!loading && !auth?.id) {
-      router.push('/login');
-    }
-  }, [auth?.id, loading, router]);
+    checkAuthState('/login');
+  }, [checkAuthState]);
 
   if (loading || !auth?.id) {
     return <p>Loading...</p>;

@@ -25,7 +25,7 @@ const useFetch = (redirect?: string, persist?: string, reload?: boolean) => {
         }
 
         if (reload && response) {
-          window?.location?.reload();
+          router.reload();
         }
       } catch (err) {
         console.error(err);

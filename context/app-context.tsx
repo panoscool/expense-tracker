@@ -1,9 +1,8 @@
-import { createContext, useEffect, useState } from 'react';
 import jwt_decode from 'jwt-decode';
+import { createContext, useCallback, useEffect, useState } from 'react';
 import store from 'store';
 import useFetch from '../hooks/use-fetch';
 import { Account } from '../lib/interfaces/account';
-import { Category } from '../lib/interfaces/category';
 import { Auth, DecodedToken } from '../lib/interfaces/user';
 
 interface AppState {
@@ -12,7 +11,6 @@ interface AppState {
   modal: string | null;
   setModal: React.Dispatch<React.SetStateAction<string | null>>;
   accounts: Account[] | null;
-  categories: Category | null;
   loading: boolean;
 }
 
@@ -22,7 +20,6 @@ const initState: AppState = {
   modal: null,
   setModal: () => {},
   accounts: null,
-  categories: null,
   loading: false,
 };
 
@@ -37,7 +34,10 @@ const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [loading, setLoading] = useState<boolean>(true);
 
   const [accounts, fetchAccounts] = useFetch();
-  const [categories, fetchCategories] = useFetch();
+
+  const getAccounts = useCallback(async () => {
+    await fetchAccounts('GET', '/account');
+  }, [fetchAccounts]);
 
   useEffect(() => {
     if (authData?.sub) {
@@ -55,17 +55,15 @@ const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   useEffect(() => {
     if (auth?.id) {
-      fetchAccounts('GET', '/account');
-      fetchCategories('GET', '/category');
+      getAccounts();
     }
-  }, [auth?.id, fetchAccounts, fetchCategories, modal]);
+  }, [auth?.id, modal, getAccounts]);
 
   const contextValues = {
     auth,
     modal,
     loading,
     accounts,
-    categories,
   };
   const contextFunctions = {
     setAuth,
