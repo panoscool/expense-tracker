@@ -29,7 +29,7 @@ const initialValues: AccountCreate = {
 };
 
 const AccountForm: React.FC<Props> = ({ selectedAccount, closeModal, getAccounts }) => {
-  const { isDesktop } = useIsDesktop();
+  const isDesktop = useIsDesktop();
   const [, createAccount, , error] = useFetch();
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(accountSchema, initialValues);
 
@@ -63,7 +63,8 @@ const AccountForm: React.FC<Props> = ({ selectedAccount, closeModal, getAccounts
         : await createAccount('POST', '/account', values);
 
       getAccounts();
-      handleCloseModal();
+
+      selectedAccount == null && handleCloseModal();
     }
   };
 

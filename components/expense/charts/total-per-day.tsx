@@ -1,6 +1,7 @@
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
+import { format, parseISO } from 'date-fns';
 import React from 'react';
 import Chart from 'react-apexcharts';
 import { Expense } from '../../../lib/interfaces/expense';
@@ -25,17 +26,17 @@ const TotalPerDay = ({ days, dates }: Props) => {
     options: {
       chart: {
         toolbar: {
-          show: false,
+          show: true,
         },
       },
       grid: {
-        show: false,
-        padding: {
-          top: 0,
-          right: 0,
-          bottom: 0,
-          left: -10,
-        },
+        show: true,
+        // padding: {
+        //   top: 0,
+        //   right: 0,
+        //   bottom: 0,
+        //   left: -10,
+        // },
       },
       dataLabels: {
         enabled: false,
@@ -46,13 +47,16 @@ const TotalPerDay = ({ days, dates }: Props) => {
       },
       xaxis: {
         labels: {
-          show: false,
+          show: true,
+          formatter: function (val: string) {
+            return val ? format(parseISO(val), 'dd/MMM') : '';
+          },
         },
         axisBorder: {
-          show: false,
+          show: true,
         },
         axisTicks: {
-          show: false,
+          show: true,
         },
         tooltip: {
           enabled: false,
@@ -61,7 +65,7 @@ const TotalPerDay = ({ days, dates }: Props) => {
       },
       yaxis: {
         labels: {
-          show: false,
+          show: true,
           formatter: function (val: number) {
             return val.toFixed(2);
           },
@@ -70,10 +74,14 @@ const TotalPerDay = ({ days, dates }: Props) => {
       tooltip: {
         theme: 'light',
       },
+      legend: {
+        show: true,
+      },
+      noData: {
+        text: 'No data available',
+      },
     },
   };
-
-  if (!days?.length) return null;
 
   return (
     <Card variant="outlined">
@@ -81,7 +89,7 @@ const TotalPerDay = ({ days, dates }: Props) => {
       <CardContent>
         <Chart
           type="area"
-          height="180px"
+          height="240px"
           series={chartConfig.series}
           options={chartConfig.options}
         />

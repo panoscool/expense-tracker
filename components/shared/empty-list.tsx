@@ -7,7 +7,7 @@ const EmptyList: React.FC<{ msg?: string }> = ({ msg }) => {
     <Box display="flex" alignContent="center" justifyContent="center" gap={1}>
       <SearchRoundedIcon color="disabled" />
       <Typography variant="body1" color="textSecondary">
-        {msg || 'No results found!'}
+        {msg || 'No data available'}
       </Typography>
     </Box>
   );

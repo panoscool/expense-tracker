@@ -21,7 +21,7 @@ type Props = {
 };
 
 const CategoryForm: React.FC<Props> = ({ categoryId, closeModal, getCategories }) => {
-  const { isDesktop } = useIsDesktop();
+  const isDesktop = useIsDesktop();
   const [, createCategory, , error] = useFetch();
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(categorySchema, {
     label: '',

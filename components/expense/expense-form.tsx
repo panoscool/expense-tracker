@@ -67,7 +67,7 @@ const initialValues: ExpenseCreate = {
 };
 
 const ExpenseForm: React.FC<Props> = ({ selectedExpense, closeModal, getExpenses }) => {
-  const { isDesktop } = useIsDesktop();
+  const isDesktop = useIsDesktop();
   const { accounts } = useAppState();
   const [openCalculator, setOpenCalculator] = useState(false);
   const [, createExpense, , error] = useFetch();
