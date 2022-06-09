@@ -1,5 +1,5 @@
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
-import { Box, Button, Dialog, Divider, Typography, Grid } from '@mui/material';
+import { Box, Button, Dialog, Divider, Grid, Typography } from '@mui/material';
 import { format } from 'date-fns';
 import groupBy from 'lodash/groupBy';
 import dynamic from 'next/dynamic';
@@ -8,17 +8,12 @@ import { useCallback, useEffect, useState } from 'react';
 import useFetch from '../../hooks/use-fetch';
 import useIsDesktop from '../../hooks/use-is-desktop';
 import { Expense } from '../../lib/interfaces/expense';
-import {
-  getPayableAmountPerUser,
-  getTotalAmountPerUser,
-  getTotalExpenses,
-  getUsersWithHighestExpenses,
-} from '../../lib/utils/expense-calculations';
 import DateField from '../shared/date-field';
 import EmptyList from '../shared/empty-list';
 import Loading from '../shared/loading';
 import ExpenseCard from './expense-card';
 import ExpenseForm from './expense-form';
+import UserPayable from './user-payable';
 
 const TotalPerDay = dynamic(() => import('./charts/total-per-day'), { ssr: false });
 const TotalPerUser = dynamic(() => import('./charts/total-per-user'), { ssr: false });
@@ -64,18 +59,11 @@ const Expenses: React.FC = () => {
 
   if (loading) return <Loading loading={loading} />;
 
-  console.log(
-    getUsersWithHighestExpenses(expenses || []),
-    getPayableAmountPerUser(expenses || []),
-    getTotalExpenses(expenses || []),
-    getTotalAmountPerUser(expenses || []),
-  );
-
   return (
     <div>
       <Typography color="error">{error}</Typography>
 
-      <Grid container spacing={1}>
+      <Grid container spacing={1} sx={{ mb: 2 }}>
         {isDesktop && (
           <Grid item xs={12} md={9}>
             <TotalPerDay days={days} dates={dates} />
@@ -86,6 +74,8 @@ const Expenses: React.FC = () => {
           <TotalPerUser expenses={expenses} />
         </Grid>
       </Grid>
+
+      <UserPayable expenses={expenses} />
 
       <Box mt={8} mb={2}>
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>

@@ -77,7 +77,7 @@ const AccountForm: React.FC<Props> = ({ selectedAccount, closeModal, getAccounts
         <Typography color="error">{error}</Typography>
       </Box>
 
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit} noValidate>
         <TextField
           name="name"
           label="Name"

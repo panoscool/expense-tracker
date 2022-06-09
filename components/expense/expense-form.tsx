@@ -131,7 +131,7 @@ const ExpenseForm: React.FC<Props> = ({ selectedExpense, closeModal, getExpenses
         <Typography color="error">{error || categoryError}</Typography>
       </Box>
 
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit} noValidate>
         <DateField
           label="Date"
           value={values.date}
@@ -168,7 +168,7 @@ const ExpenseForm: React.FC<Props> = ({ selectedExpense, closeModal, getExpenses
           helperText={hasError('category')?.message}
         >
           <MenuItem value="">None</MenuItem>
-          {categories?.labels?.map((label: string) => (
+          {categories?.labels.map((label: string) => (
             <MenuItem key={label} value={label}>
               <ListItemIcon disableRipple edge="start">
                 <CategoryIcon icon={label} />

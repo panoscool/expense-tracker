@@ -5,6 +5,7 @@ import { format, parseISO } from 'date-fns';
 import React from 'react';
 import Chart from 'react-apexcharts';
 import { Expense } from '../../../lib/interfaces/expense';
+import { formatCurrency } from '../../../lib/utils/number-formatter';
 
 type Props = {
   days: Expense[][];
@@ -31,12 +32,6 @@ const TotalPerDay = ({ days, dates }: Props) => {
       },
       grid: {
         show: true,
-        // padding: {
-        //   top: 0,
-        //   right: 0,
-        //   bottom: 0,
-        //   left: -10,
-        // },
       },
       dataLabels: {
         enabled: false,
@@ -44,6 +39,12 @@ const TotalPerDay = ({ days, dates }: Props) => {
       stroke: {
         show: true,
         width: 1,
+      },
+      tooltip: {
+        theme: 'light',
+      },
+      legend: {
+        show: true,
       },
       xaxis: {
         labels: {
@@ -67,15 +68,9 @@ const TotalPerDay = ({ days, dates }: Props) => {
         labels: {
           show: true,
           formatter: function (val: number) {
-            return val.toFixed(2);
+            return formatCurrency(val);
           },
         },
-      },
-      tooltip: {
-        theme: 'light',
-      },
-      legend: {
-        show: true,
       },
       noData: {
         text: 'No data available',

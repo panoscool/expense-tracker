@@ -19,13 +19,13 @@ const getExpenses = async (req: NextApiRequest, res: NextApiResponse) => {
       account: accountId,
       date: { $gte: monthStart, $lte: monthEnd },
     })
-      .sort({ date: 'desc' })
+      .sort({ date: 'asc' })
       .populate('user', 'name');
 
     res.status(200).json(expenses);
   } catch (err) {
     console.error(err);
-    res.status(500).end((err as Error)?.message || 'Internal server error');
+    res.status(500).end(err || 'Internal server error');
   }
 };
 
@@ -55,7 +55,7 @@ const addExpense = async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(200).json(expense);
   } catch (err) {
     console.error(err);
-    res.status(500).end((err as Error)?.message || 'Internal server error');
+    res.status(500).end(err || 'Internal server error');
   }
 };
 

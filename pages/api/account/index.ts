@@ -16,7 +16,7 @@ const getAccounts = async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(200).json(accounts);
   } catch (err) {
     console.error(err);
-    res.status(500).end((err as Error)?.message || 'Internal server error');
+    res.status(500).end(err || 'Internal server error');
   }
 };
 
@@ -57,7 +57,7 @@ const addAccount = async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(200).json(account);
   } catch (err) {
     console.error(err);
-    res.status(500).end((err as Error)?.message || 'Internal server error');
+    res.status(500).end(err || 'Internal server error');
   }
 };
 

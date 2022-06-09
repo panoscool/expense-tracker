@@ -4,6 +4,7 @@ import CardHeader from '@mui/material/CardHeader';
 import Chart from 'react-apexcharts';
 import { Expense } from '../../../lib/interfaces/expense';
 import { getTotalAmountPerUser } from '../../../lib/utils/expense-calculations';
+import { formatCurrency } from '../../../lib/utils/number-formatter';
 import { stringToColor } from '../../../lib/utils/string-to-color';
 
 type Props = {
@@ -50,7 +51,9 @@ const TotalPerUser: React.FC<Props> = ({ expenses }) => {
                 showAlways: true,
                 label: 'Total',
                 formatter: function (w: any) {
-                  return w.globals.seriesTotals.reduce((a: number, b: number) => a + b, 0);
+                  const val = w.globals.seriesTotals.reduce((a: number, b: number) => a + b, 0);
+
+                  return formatCurrency(val);
                 },
               },
             },
@@ -65,6 +68,14 @@ const TotalPerUser: React.FC<Props> = ({ expenses }) => {
       },
       tooltip: {
         enabled: true,
+      },
+      yaxis: {
+        labels: {
+          show: true,
+          formatter: function (val: number) {
+            return formatCurrency(val);
+          },
+        },
       },
       noData: {
         text: 'No data available',

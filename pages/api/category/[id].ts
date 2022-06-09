@@ -26,7 +26,7 @@ const getCategory = async (req: NextApiRequest, res: NextApiResponse<any>) => {
     res.status(200).json(category);
   } catch (err) {
     console.error(err);
-    res.status(500).end((err as Error)?.message || 'Internal server error');
+    res.status(500).end(err || 'Internal server error');
   }
 };
 
@@ -65,7 +65,7 @@ const updateCategory = async (req: NextApiRequest, res: NextApiResponse<any>) =>
     res.status(200).json(updatedCategories);
   } catch (err) {
     console.error(err);
-    res.status(500).end((err as Error)?.message || 'Internal server error');
+    res.status(500).end(err || 'Internal server error');
   }
 };
 
@@ -99,7 +99,7 @@ const deleteCategory = async (req: NextApiRequest, res: NextApiResponse<any>) =>
     res.status(200).json({ message: 'Ok' });
   } catch (err) {
     console.error(err);
-    res.status(500).end((err as Error)?.message || 'Internal server error');
+    res.status(500).end(err || 'Internal server error');
   }
 };
 

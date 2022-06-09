@@ -35,6 +35,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(200).json(token);
   } catch (err) {
     console.error(err);
-    res.status(500).end((err as Error)?.message || 'Internal server error');
+    res.status(500).end(err || 'Internal server error');
   }
 }

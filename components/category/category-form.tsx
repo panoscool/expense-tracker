@@ -60,7 +60,7 @@ const CategoryForm: React.FC<Props> = ({ categoryId, closeModal, getCategories }
         <Typography color="error">{error}</Typography>
       </Box>
 
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit} noValidate>
         <TextField
           name="label"
           label="Category"

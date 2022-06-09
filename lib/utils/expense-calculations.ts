@@ -1,12 +1,12 @@
-import { Expense, ExpensesPerUser } from '../interfaces/expense';
+import { Expense } from '../interfaces/expense';
 
-export const getTotalExpenses = (expenses: Expense[]) => {
+export const getTotalExpenses = (expenses: Expense[]): number => {
   return expenses.reduce((acc, curr) => {
     return acc + curr.amount;
   }, 0);
 };
 
-export const getTotalUsers = (expenses: Expense[]) => {
+export const getTotalUsers = (expenses: Expense[]): number => {
   const users = expenses.reduce((acc: any, expense) => {
     if (acc[expense.user._id]) {
       acc[expense.user._id] += 1;
@@ -19,7 +19,7 @@ export const getTotalUsers = (expenses: Expense[]) => {
   return Object.keys(users).length;
 };
 
-export const getTotalAmountPerUser = (expenses: Expense[]) => {
+export const getTotalAmountPerUser = (expenses: Expense[]): { [key: string]: number } => {
   const userExpenses = expenses.reduce((acc: any, expense) => {
     if (acc[expense.user._id]) {
       acc[expense.user._id] += expense.amount;
@@ -32,57 +32,23 @@ export const getTotalAmountPerUser = (expenses: Expense[]) => {
   return userExpenses;
 };
 
-export const getUsersWithHighestExpenses = (expenses: Expense[]) => {
-  const userExpenses = getTotalAmountPerUser(expenses);
-  let highestAmount = 0;
-  let highestUsers: string[] = [];
-
-  for (const userId in userExpenses) {
-    if (userExpenses[userId] > highestAmount) {
-      highestAmount = userExpenses[userId];
-      highestUsers = [userId];
-    } else if (userExpenses[userId] === highestAmount) {
-      highestUsers.push(userId);
-    }
-  }
-
-  return highestUsers;
-};
-
-export const getAverageExpensesPerUser = (expenses: Expense[]) => {
+export const getAverageExpensesPerUser = (expenses: Expense[]): number => {
   const totalExpenses = getTotalExpenses(expenses);
   const numberOfUsers = getTotalUsers(expenses);
 
   return totalExpenses / numberOfUsers;
 };
 
-// remove the user or users with the highest (equal) amount,
-// find for each user the amount to pay to the highest user or users
-
-export const getPayableAmountPerUser = (expenses: Expense[]) => {
+export const getPayableAmountPerUser = (expenses: Expense[]): { [key: string]: number } => {
   const userExpenses = getTotalAmountPerUser(expenses);
-  const highestUsers = getUsersWithHighestExpenses(expenses);
   const averageExpenses = getAverageExpensesPerUser(expenses);
 
-  const expensesPerUser: ExpensesPerUser[] = [];
+  // get the amount each user has to pay in order the expenses to split equally
 
-  for (const userId in userExpenses) {
-    const foundUser = expenses.find((expense) => expense.user._id === userId);
+  const payableAmountPerUser = Object.keys(userExpenses).reduce((acc: any, userId) => {
+    acc[userId] = averageExpenses - userExpenses[userId];
+    return acc;
+  }, {});
 
-    if (highestUsers.length <= 1 && !highestUsers.includes(userId)) {
-      expensesPerUser.push({
-        id: userId,
-        name: foundUser?.user.name,
-        amount: averageExpenses - userExpenses[userId],
-      });
-    } else if (highestUsers.length > 1 && !highestUsers.includes(userId)) {
-      expensesPerUser.push({
-        id: userId,
-        name: foundUser?.user.name,
-        amount: (averageExpenses - userExpenses[userId]) / highestUsers.length,
-      });
-    }
-  }
-
-  return expensesPerUser;
+  return payableAmountPerUser;
 };
