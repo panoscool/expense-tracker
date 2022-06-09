@@ -1,41 +1,39 @@
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import axios from 'axios';
 import store from 'store';
 
-const accessToken = store.get('auth', null);
-
-const HTTP = axios.create({
-  timeout: 30000,
-  responseType: 'json',
-  validateStatus: (status) => status >= 200,
+const axiosInstance = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_URL || '/api',
+  headers: {},
+  withCredentials: true,
 });
 
-const HTTPOK = (res: AxiosResponse) => {
-  if (res.data?.error) {
-    return Promise.reject(res.data?.error);
-  }
+axiosInstance.interceptors.request.use(
+  function (config) {
+    const accessToken = store.get('auth', null);
 
-  return Promise.resolve(res.data);
-};
+    if (accessToken) {
+      config.headers = { Authorization: accessToken };
+    }
+    return config;
+  },
+  function (error) {
+    return Promise.reject(error);
+  },
+);
 
-const HTTPERROR = (err: AxiosError) => Promise.reject(err);
+axiosInstance.interceptors.response.use(
+  function (response) {
+    // Any status code that lie within the range of 2xx cause this function to trigger
+    if (response.data?.error) {
+      return Promise.reject(response.data.error);
+    }
 
-HTTP.interceptors.response.use(HTTPOK, HTTPERROR);
+    return response.data;
+  },
+  function (error) {
+    // Any status codes that falls outside the range of 2xx cause this function to trigger
+    return Promise.reject(error.response.data.error);
+  },
+);
 
-const apiRequest = (method: any, path: string, params?: any): Promise<any> => {
-  const headers: any = {};
-
-  if (accessToken) {
-    headers.Authorization = accessToken;
-  }
-
-  return HTTP({
-    baseURL: process.env.NEXT_PUBLIC_API_URL || '/api',
-    method,
-    headers,
-    url: path,
-    data: method !== 'GET' ? params : undefined,
-    params: method === 'GET' ? params : undefined,
-  });
-};
-
-export default apiRequest;
+export default axiosInstance;

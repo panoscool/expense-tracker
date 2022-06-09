@@ -1,22 +1,21 @@
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import Box from '@mui/material/Box';
 import Dialog from '@mui/material/Dialog';
 import IconButton from '@mui/material/IconButton';
-import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import ListItemText from '@mui/material/ListItemText';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { useCallback, useEffect, useState } from 'react';
 import useFetch from '../../hooks/use-fetch';
-import { Category } from '../../lib/interfaces/category';
+import { defaultCategories } from '../../lib/config/default-values';
 import CategoryIcon from '../shared/category-icon';
 import Loading from '../shared/loading';
 import CategoryForm from './category-form';
-import { defaultCategories } from '../../lib/config/default-values';
 
 const CategoryList = () => {
   const [categories, fetchCategories, loadingCategories, error] = useFetch();
@@ -30,10 +29,6 @@ const CategoryList = () => {
   useEffect(() => {
     getCategories();
   }, [getCategories]);
-
-  const handleCategoryEdit = () => {
-    setShowForm(true);
-  };
 
   const handleOpenModal = () => {
     setShowForm(true);

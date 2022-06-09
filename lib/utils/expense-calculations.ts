@@ -40,13 +40,13 @@ export const getAverageExpensesPerUser = (expenses: Expense[]): number => {
 };
 
 export const getPayableAmountPerUser = (expenses: Expense[]): { [key: string]: number } => {
-  const userExpenses = getTotalAmountPerUser(expenses);
-  const averageExpenses = getAverageExpensesPerUser(expenses);
+  const payedAmount = getTotalAmountPerUser(expenses);
+  const averageAmount = getAverageExpensesPerUser(expenses);
 
   // get the amount each user has to pay in order the expenses to split equally
 
-  const payableAmountPerUser = Object.keys(userExpenses).reduce((acc: any, userId) => {
-    acc[userId] = averageExpenses - userExpenses[userId];
+  const payableAmountPerUser = Object.keys(payedAmount).reduce((acc: any, userId) => {
+    acc[userId] = payedAmount[userId] - averageAmount;
     return acc;
   }, {});
 

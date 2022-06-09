@@ -3,17 +3,17 @@ import { useState, useCallback } from 'react';
 import apiRequest from '../lib/config/axios';
 import store from 'store';
 
-const useFetch = (redirect?: string, persist?: string, reload?: boolean) => {
+const useFetch = (redirect?: string, persist?: string) => {
   const router = useRouter();
   const [data, setData] = useState<any>();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
   const fetchData = useCallback(
-    async (method: string, url: string, params?: any) => {
+    async (method: string, url: string, data?: any) => {
       try {
         setLoading(true);
-        const response = await apiRequest(method, url, params);
+        const response = await apiRequest(url, { method, data });
         setData(response);
 
         if (persist && response) {
@@ -23,10 +23,6 @@ const useFetch = (redirect?: string, persist?: string, reload?: boolean) => {
         if (redirect && response) {
           router.push(redirect);
         }
-
-        if (reload && response) {
-          router.reload();
-        }
       } catch (err) {
         console.error(err);
         setError(err as string);
@@ -34,7 +30,7 @@ const useFetch = (redirect?: string, persist?: string, reload?: boolean) => {
         setLoading(false);
       }
     },
-    [persist, redirect, reload, router],
+    [persist, redirect, router],
   );
 
   return [data, fetchData, loading, error, setError];

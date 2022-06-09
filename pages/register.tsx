@@ -32,7 +32,7 @@ const Form = styled('form')(({ theme }) => ({
 
 const Register: NextPage = () => {
   const { auth, loading, checkAuthState } = useProtectedRoute(false);
-  const [, fetchData, registerLoading, error] = useFetch('/', 'auth', true);
+  const [, fetchData, registerLoading, error] = useFetch('/', 'auth');
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(registerSchema, {
     name: '',
     email: '',

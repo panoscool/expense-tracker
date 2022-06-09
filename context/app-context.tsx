@@ -51,10 +51,10 @@ const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   }, [authData?.email, authData?.name, authData?.sub]);
 
   useEffect(() => {
-    if (auth?.id) {
+    if (authData?.sub) {
       getAccounts();
     }
-  }, [auth?.id, getAccounts]);
+  }, [authData?.sub, getAccounts]);
 
   const contextValues = {
     auth,
