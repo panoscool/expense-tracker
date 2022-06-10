@@ -1,10 +1,10 @@
 import AccountBalanceWalletRoundedIcon from '@mui/icons-material/AccountBalanceWalletRounded';
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
-import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
-import Button from '@mui/material/Button';
 import AppBar from '@mui/material/AppBar';
+import Button from '@mui/material/Button';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
@@ -12,13 +12,12 @@ import { alpha, styled } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { useRouter } from 'next/router';
-import { useId } from 'react';
 import store from 'store';
 import DropDown from '../components/shared/drop-down';
 import NextLink from '../components/shared/next-link';
 import useAppState from '../hooks/use-app-state';
-import { Account } from '../lib/interfaces/account';
 import useIsDesktop from '../hooks/use-is-desktop';
+import { Account } from '../lib/interfaces/account';
 
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
   backdropFilter: 'blur(20px)',
@@ -27,7 +26,6 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
 
 const Topbar: React.FC = () => {
   const router = useRouter();
-  const id = useId();
   const isDesktop = useIsDesktop();
   const { auth, accounts, setModal } = useAppState();
 
@@ -63,10 +61,9 @@ const Topbar: React.FC = () => {
         </Button>
 
         <DropDown
-          id={id}
+          label="Accounts"
           btnSize={isDesktop ? 'small' : 'large'}
           btnType={isDesktop ? 'text' : 'icon'}
-          label="Accounts"
           icon={<AccountBalanceWalletRoundedIcon />}
         >
           {accounts?.map((account: Account) => (
@@ -76,7 +73,7 @@ const Topbar: React.FC = () => {
           ))}
         </DropDown>
 
-        <DropDown icon={<AccountCircleRoundedIcon />} id={id} btnSize="large">
+        <DropDown icon={<AccountCircleRoundedIcon />} btnSize="large" btnType="icon">
           <MenuItem disabled>
             <ListItemIcon>
               <PersonRoundedIcon />

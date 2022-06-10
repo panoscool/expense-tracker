@@ -1,35 +1,34 @@
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import LockOpenOutlinedIcon from '@mui/icons-material/LockOpenOutlined';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
-import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import Box from '@mui/material/Box';
 import Dialog from '@mui/material/Dialog';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
-import MenuItem from '@mui/material/MenuItem';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import ListItemText from '@mui/material/ListItemText';
+import MenuItem from '@mui/material/MenuItem';
+import { Theme } from '@mui/material/styles';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { useRouter } from 'next/router';
-import { useId, useState } from 'react';
+import { useState } from 'react';
 import useAppState from '../../hooks/use-app-state';
-import AccountForm from './account-form';
-import { Account } from '../../lib/interfaces/account';
-import AccountUsers from './account-users';
-import DropDown from '../shared/drop-down';
-import { Theme } from '@mui/material/styles';
 import useFetch from '../../hooks/use-fetch';
+import { Account } from '../../lib/interfaces/account';
+import DropDown from '../shared/drop-down';
+import AccountForm from './account-form';
+import AccountUsers from './account-users';
 
 const AccountList = () => {
   const router = useRouter();
-  const id = useId();
   const { accounts, getAccounts } = useAppState();
   const [showForm, setShowForm] = useState(false);
   const [showUsers, setShowUsers] = useState(false);
@@ -109,7 +108,7 @@ const AccountList = () => {
                   </IconButton>
                 </div>
 
-                <DropDown icon={<MoreVertRoundedIcon />} id={id}>
+                <DropDown icon={<MoreVertRoundedIcon />} btnType="icon">
                   <MenuItem onClick={handleAccountEdit(account)}>
                     <ListItemIcon>
                       <EditRoundedIcon fontSize="small" />
