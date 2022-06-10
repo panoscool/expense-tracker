@@ -38,8 +38,10 @@ const CategoryList = () => {
   };
 
   const handleDeleteCategory = (label: string) => async () => {
-    await deleteCategory('DELETE', `/category/${categories._id}`, { label });
-    getCategories();
+    if (window.confirm(`Are you sure you want to delete ${label}?`)) {
+      await deleteCategory('DELETE', `/category/${categories._id}`, { label });
+      getCategories();
+    }
   };
 
   return (

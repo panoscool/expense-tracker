@@ -18,6 +18,7 @@ import DropDown from '../components/shared/drop-down';
 import NextLink from '../components/shared/next-link';
 import useAppState from '../hooks/use-app-state';
 import { Account } from '../lib/interfaces/account';
+import useIsDesktop from '../hooks/use-is-desktop';
 
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
   backdropFilter: 'blur(20px)',
@@ -27,6 +28,7 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
 const Topbar: React.FC = () => {
   const router = useRouter();
   const id = useId();
+  const isDesktop = useIsDesktop();
   const { auth, accounts, setModal } = useAppState();
 
   const handleAccountSelect = (id: string) => () => {
@@ -51,14 +53,19 @@ const Topbar: React.FC = () => {
           </NextLink>
         </Typography>
 
-        <Button color="inherit" startIcon={<AddRoundedIcon />} onClick={handleAddExpense}>
-          Add Expense
+        <Button
+          color="inherit"
+          size={isDesktop ? 'small' : 'medium'}
+          startIcon={<AddRoundedIcon />}
+          onClick={handleAddExpense}
+        >
+          Expense
         </Button>
 
         <DropDown
           id={id}
-          btnSize="large"
-          btnType="text"
+          btnSize={isDesktop ? 'small' : 'large'}
+          btnType={isDesktop ? 'text' : 'icon'}
           label="Accounts"
           icon={<AccountBalanceWalletRoundedIcon />}
         >
