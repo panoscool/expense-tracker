@@ -5,7 +5,7 @@ import { User } from './user';
 export type ExpenseCreate = InferType<typeof expenseSchema>;
 
 export interface Expense {
-  id: string;
+  _id: string;
   date: string;
   account: string;
   category: string;

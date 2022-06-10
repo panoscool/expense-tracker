@@ -1,68 +1,38 @@
-import AddRoundedIcon from '@mui/icons-material/AddRounded';
-import { Box, Button, Dialog, Divider, Grid, Typography } from '@mui/material';
+import FilterAltRoundedIcon from '@mui/icons-material/FilterAltRounded';
+import { Box, Button, Divider, Grid } from '@mui/material';
 import { format } from 'date-fns';
 import groupBy from 'lodash/groupBy';
 import dynamic from 'next/dynamic';
-import { useRouter } from 'next/router';
-import { useCallback, useEffect, useState } from 'react';
-import useFetch from '../../hooks/use-fetch';
+import { useEffect, useState } from 'react';
+import useAppState from '../../hooks/use-app-state';
 import useIsDesktop from '../../hooks/use-is-desktop';
-import { Expense } from '../../lib/interfaces/expense';
 import DateField from '../shared/date-field';
 import EmptyList from '../shared/empty-list';
-import Loading from '../shared/loading';
 import ExpenseCard from './expense-card';
-import ExpenseForm from './expense-form';
 import UserPayable from './user-payable';
 
 const TotalPerDay = dynamic(() => import('./charts/total-per-day'), { ssr: false });
 const TotalPerUser = dynamic(() => import('./charts/total-per-user'), { ssr: false });
 
 const Expenses: React.FC = () => {
-  const router = useRouter();
   const isDesktop = useIsDesktop();
+  const { loading, expenses, getExpenses, modal, setModal } = useAppState();
   const [selectedDate, setSelectedDate] = useState({ date: new Date() });
-  const [expenses, fetchExpenses, loading, error] = useFetch();
-  const [selectedExpense, setSelectedExpense] = useState<Expense | null>(null);
-  const [showForm, setShowForm] = useState(false);
-
-  const getExpenses = useCallback(async () => {
-    if (router.query.account_id) {
-      await fetchExpenses(
-        'GET',
-        `/expense/?id=${router.query.account_id}&date=${format(selectedDate.date, 'yyyy-MM-dd')}`,
-      );
-    }
-  }, [fetchExpenses, router.query.account_id, selectedDate.date]);
 
   useEffect(() => {
-    getExpenses();
-  }, [getExpenses]);
+    getExpenses(`date=${format(selectedDate.date, 'yyyy-MM-dd')}`);
+  }, [getExpenses, selectedDate.date]);
 
-  const handleExpenseEdit = (expense: Expense) => {
-    setSelectedExpense(expense);
-    setShowForm(true);
-  };
-
-  const handleOpenModal = () => {
-    setShowForm(true);
-  };
-
-  const handleCloseModal = () => {
-    setSelectedExpense(null);
-    setShowForm(false);
+  const handleExpenseEdit = (id: string) => {
+    setModal({ open: 'expense-form', params: id });
   };
 
   const groupedByDay = groupBy(expenses, (expense) => format(new Date(expense.date), 'yyyy-MM-dd'));
   const dates = Object.keys(groupedByDay);
   const days = dates.map((day) => groupedByDay[day]);
 
-  if (loading) return <Loading loading={loading} />;
-
   return (
     <div>
-      <Typography color="error">{error}</Typography>
-
       <Grid container spacing={1} sx={{ mb: 2 }}>
         {isDesktop && (
           <Grid item xs={12} md={9}>
@@ -71,11 +41,11 @@ const Expenses: React.FC = () => {
         )}
 
         <Grid item xs={12} md={3}>
-          <TotalPerUser expenses={expenses} />
+          <TotalPerUser expenses={expenses || []} />
         </Grid>
       </Grid>
 
-      <UserPayable expenses={expenses} />
+      <UserPayable expenses={expenses || []} />
 
       <Box mt={8} mb={2}>
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
@@ -86,8 +56,8 @@ const Expenses: React.FC = () => {
             value={selectedDate.date}
             onChange={setSelectedDate}
           />
-          <Button color="primary" startIcon={<AddRoundedIcon />} onClick={handleOpenModal}>
-            Add Expense
+          <Button color="inherit" startIcon={<FilterAltRoundedIcon />}>
+            Filter
           </Button>
         </Box>
         <Divider />
@@ -104,14 +74,6 @@ const Expenses: React.FC = () => {
       ) : (
         <EmptyList />
       )}
-
-      <Dialog open={showForm}>
-        <ExpenseForm
-          selectedExpense={selectedExpense}
-          closeModal={handleCloseModal}
-          getExpenses={getExpenses}
-        />
-      </Dialog>
     </div>
   );
 };

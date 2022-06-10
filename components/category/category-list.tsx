@@ -14,11 +14,10 @@ import { useCallback, useEffect, useState } from 'react';
 import useFetch from '../../hooks/use-fetch';
 import { defaultCategories } from '../../lib/config/default-values';
 import CategoryIcon from '../shared/category-icon';
-import Loading from '../shared/loading';
 import CategoryForm from './category-form';
 
 const CategoryList = () => {
-  const [categories, fetchCategories, loadingCategories, error] = useFetch();
+  const [categories, fetchCategories, , error] = useFetch();
   const [, deleteCategory, , deleteError] = useFetch();
   const [showForm, setShowForm] = useState(false);
 
@@ -82,8 +81,6 @@ const CategoryList = () => {
           getCategories={getCategories}
         />
       </Dialog>
-
-      <Loading loading={loadingCategories} />
     </Box>
   );
 };

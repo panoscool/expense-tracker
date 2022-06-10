@@ -1,7 +1,9 @@
 import AccountBalanceWalletRoundedIcon from '@mui/icons-material/AccountBalanceWalletRounded';
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
+import Button from '@mui/material/Button';
 import AppBar from '@mui/material/AppBar';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
@@ -25,10 +27,14 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
 const Topbar: React.FC = () => {
   const router = useRouter();
   const id = useId();
-  const { auth, accounts } = useAppState();
+  const { auth, accounts, setModal } = useAppState();
 
   const handleAccountSelect = (id: string) => () => {
     router.push(`/expenses/?account_id=${id}`);
+  };
+
+  const handleAddExpense = () => {
+    setModal({ open: 'expense-form' });
   };
 
   const handleLogout = () => {
@@ -45,7 +51,17 @@ const Topbar: React.FC = () => {
           </NextLink>
         </Typography>
 
-        <DropDown icon={<AccountBalanceWalletRoundedIcon />} id={id} btnSize="large">
+        <Button color="inherit" startIcon={<AddRoundedIcon />} onClick={handleAddExpense}>
+          Add Expense
+        </Button>
+
+        <DropDown
+          id={id}
+          btnSize="large"
+          btnType="text"
+          label="Accounts"
+          icon={<AccountBalanceWalletRoundedIcon />}
+        >
           {accounts?.map((account: Account) => (
             <MenuItem key={account._id} onClick={handleAccountSelect(account._id)}>
               {account.name}

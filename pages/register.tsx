@@ -3,7 +3,6 @@ import { styled } from '@mui/material/styles';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useEffect } from 'react';
-import Loading from '../components/shared/loading';
 import NextLink from '../components/shared/next-link';
 import useFetch from '../hooks/use-fetch';
 import useForm from '../hooks/use-form';
@@ -32,7 +31,7 @@ const Form = styled('form')(({ theme }) => ({
 
 const Register: NextPage = () => {
   const { auth, loading, checkAuthState } = useProtectedRoute(false);
-  const [, fetchData, registerLoading, error] = useFetch('/', 'auth');
+  const [, fetchData, , error] = useFetch('/', 'auth');
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(registerSchema, {
     name: '',
     email: '',
@@ -133,8 +132,6 @@ const Register: NextPage = () => {
           </Typography>
         </Wrapper>
       </main>
-
-      <Loading loading={registerLoading} />
     </div>
   );
 };

@@ -25,12 +25,12 @@ const TotalAmount = styled(Typography)`
 type Props = {
   day: Expense[];
   date: string;
-  onSelectExpense: (expense: Expense) => void;
+  onSelectExpense: (id: string) => void;
 };
 
 const ExpenseCard: React.FC<Props> = ({ day, date, onSelectExpense }) => {
   const handleExpenseClick = (expense: Expense) => {
-    onSelectExpense(expense);
+    onSelectExpense(expense._id);
   };
 
   const formatDate = (fmt: string) => {
