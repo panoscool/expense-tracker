@@ -69,9 +69,9 @@ const CalculatorView: React.FC<CalculatorViewProps> = (props) => {
     <CalculatorGrid>
       <Output>
         <PreviousOperand>
-          {formatOperand(previousOperand as string)} {operation}
+          {formatOperand(previousOperand)} {operation}
         </PreviousOperand>
-        <CurrentOperand>{formatOperand(currentOperand as string)}</CurrentOperand>
+        <CurrentOperand>{formatOperand(currentOperand)}</CurrentOperand>
       </Output>
 
       <ButtonSpan color="inherit" onClick={handleClear}>

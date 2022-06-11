@@ -5,15 +5,13 @@ import Expenses from '../components/expense';
 import useProtectedRoute from '../hooks/use-protected-route';
 
 const Home: NextPage = () => {
-  const { auth, loading, checkAuthState } = useProtectedRoute(true);
+  const { auth, checkAuthState } = useProtectedRoute(true);
 
   useEffect(() => {
     checkAuthState('/login');
   }, [checkAuthState]);
 
-  if (loading || !auth?.id) {
-    return <p>Loading...</p>;
-  }
+  if (!auth?.id) return null;
 
   return (
     <div>

@@ -12,7 +12,7 @@ export const formatCurrency = (value: number): string => {
   return CURRENCY_FORMATTER.format(value);
 };
 
-export const formatOperand = (operand: string): string | undefined => {
+export const formatOperand = (operand: string | null): string | undefined => {
   if (operand == null) return;
 
   const [integer, decimal] = operand.split('.');

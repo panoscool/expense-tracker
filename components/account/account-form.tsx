@@ -8,6 +8,7 @@ import useFetch from '../../hooks/use-fetch';
 import useForm from '../../hooks/use-form';
 import useIsDesktop from '../../hooks/use-is-desktop';
 import { Account, AccountCreate } from '../../lib/interfaces/account';
+import { getDialogWidth } from '../../lib/utils/common-breakpoints';
 import { accountSchema } from '../../lib/utils/yup-schema';
 
 const Form = styled('form')`
@@ -69,7 +70,7 @@ const AccountForm: React.FC<Props> = ({ selectedAccount, closeModal, getAccounts
   };
 
   return (
-    <Box m={2} p={2} minWidth={isDesktop ? 320 : 'auto'}>
+    <Box m={2} p={2} minWidth={getDialogWidth(isDesktop)}>
       <Box mb={2}>
         <Typography gutterBottom variant="h6">
           Add Account

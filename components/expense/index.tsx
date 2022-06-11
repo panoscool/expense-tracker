@@ -16,7 +16,7 @@ const TotalPerUser = dynamic(() => import('./charts/total-per-user'), { ssr: fal
 
 const Expenses: React.FC = () => {
   const isDesktop = useIsDesktop();
-  const { loading, expenses, getExpenses, modal, setModal } = useAppState();
+  const { expenses, getExpenses, modal, setModal } = useAppState();
   const [selectedDate, setSelectedDate] = useState({ date: new Date() });
 
   useEffect(() => {
@@ -56,7 +56,7 @@ const Expenses: React.FC = () => {
             value={selectedDate.date}
             onChange={setSelectedDate}
           />
-          <Button color="inherit" startIcon={<FilterAltRoundedIcon />}>
+          <Button color="inherit" startIcon={<FilterAltRoundedIcon />} disabled>
             Filter
           </Button>
         </Box>

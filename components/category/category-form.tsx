@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography';
 import useFetch from '../../hooks/use-fetch';
 import useForm from '../../hooks/use-form';
 import useIsDesktop from '../../hooks/use-is-desktop';
+import { getDialogWidth } from '../../lib/utils/common-breakpoints';
 import { categorySchema } from '../../lib/utils/yup-schema';
 
 const Form = styled('form')`
@@ -52,7 +53,7 @@ const CategoryForm: React.FC<Props> = ({ categoryId, closeModal, getCategories }
   };
 
   return (
-    <Box m={2} p={2} minWidth={isDesktop ? 320 : 'auto'}>
+    <Box m={2} p={2} minWidth={getDialogWidth(isDesktop)}>
       <Box mb={3}>
         <Typography gutterBottom variant="h6">
           Add Category

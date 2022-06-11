@@ -15,6 +15,8 @@ import Typography from '@mui/material/Typography';
 import { useCallback, useEffect } from 'react';
 import useFetch from '../../hooks/use-fetch';
 import { User } from '../../lib/interfaces/user';
+import useIsDesktop from '../../hooks/use-is-desktop';
+import { getDialogWidth } from '../../lib/utils/common-breakpoints';
 
 type Props = {
   accountId: string | undefined;
@@ -24,6 +26,7 @@ type Props = {
 };
 
 const AccountUsers: React.FC<Props> = ({ accountId, open, onClose, getAccounts }) => {
+  const isDesktop = useIsDesktop();
   const [account, fetchAccount, , error] = useFetch();
 
   const getAccount = useCallback(async () => {
@@ -51,7 +54,7 @@ const AccountUsers: React.FC<Props> = ({ accountId, open, onClose, getAccounts }
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogContent sx={{ minWidth: 360 }}>
+      <DialogContent sx={{ minWidth: getDialogWidth(isDesktop) }}>
         <Typography color="error">{error}</Typography>
 
         <Box mb={2}>

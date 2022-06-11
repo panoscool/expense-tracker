@@ -1,13 +1,15 @@
 import CalculateOutlinedIcon from '@mui/icons-material/CalculateOutlined';
+import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemIcon from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
 import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
+import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { useCallback, useEffect, useState } from 'react';
 import useAppState from '../../hooks/use-app-state';
@@ -16,10 +18,11 @@ import useForm from '../../hooks/use-form';
 import useIsDesktop from '../../hooks/use-is-desktop';
 import { Account } from '../../lib/interfaces/account';
 import { ExpenseCreate } from '../../lib/interfaces/expense';
+import { getDialogWidth } from '../../lib/utils/common-breakpoints';
 import { expenseSchema } from '../../lib/utils/yup-schema';
 import CalculatorDialog from '../calculator/calculator-dialog';
-import DateField from '../shared/date-field';
 import CategoryIcon from '../shared/category-icon';
+import DateField from '../shared/date-field';
 
 const Form = styled('form')`
   display: flex;
@@ -109,6 +112,13 @@ const ExpenseForm: React.FC = () => {
     setModal(null);
   };
 
+  const handleDeleteExpense = async () => {
+    await fetchExpense('DELETE', `/expense/${modal?.params}`);
+
+    getExpenses();
+    handleCloseModal();
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -123,11 +133,22 @@ const ExpenseForm: React.FC = () => {
   };
 
   return (
-    <Box m={2} p={2} minWidth={isDesktop ? 320 : 'auto'}>
-      <Box mb={2}>
-        <Typography gutterBottom variant="h6">
-          Add Expense
-        </Typography>
+    <Box m={2} p={2} minWidth={getDialogWidth(isDesktop)}>
+      <Box mb={4}>
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+          <Typography gutterBottom variant="h6">
+            Add Expense
+          </Typography>
+
+          {modal?.params && (
+            <Tooltip title="Delete expense">
+              <IconButton color="error" onClick={handleDeleteExpense}>
+                <DeleteRoundedIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+        </Box>
+
         <Typography color="error">{error || categoryError || expenseError}</Typography>
       </Box>
 
@@ -170,7 +191,7 @@ const ExpenseForm: React.FC = () => {
           <MenuItem value="">None</MenuItem>
           {categories?.labels.map((label: string) => (
             <MenuItem key={label} value={label}>
-              <ListItemIcon disableRipple edge="start">
+              <ListItemIcon>
                 <CategoryIcon icon={label} />
               </ListItemIcon>
               <ListItemText primary={label} sx={{ textTransform: 'capitalize' }} />

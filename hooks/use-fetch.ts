@@ -15,6 +15,8 @@ const useFetch = (redirect?: string, persist?: string) => {
     async (method: string, url: string, data?: any) => {
       try {
         setLoading(true);
+        setError(null);
+
         const response = await apiRequest(url, { method, data });
         setData(response);
 
