@@ -4,10 +4,12 @@ import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { useEffect } from 'react';
-import useFetch from '../../hooks/use-fetch';
+import useAppContext from '../../hooks/use-app-context';
+import useAppState from '../../hooks/use-app-state';
 import useForm from '../../hooks/use-form';
 import useIsDesktop from '../../hooks/use-is-desktop';
 import { Account, AccountCreate } from '../../lib/interfaces/account';
+import { createAccount, getAccounts, updateAccount } from '../../lib/services/account';
 import { getDialogWidth } from '../../lib/utils/common-breakpoints';
 import { accountSchema } from '../../lib/utils/yup-schema';
 
@@ -20,7 +22,6 @@ const Form = styled('form')`
 type Props = {
   selectedAccount: Account | null;
   closeModal: () => void;
-  getAccounts: () => void;
 };
 
 const initialValues: AccountCreate = {
@@ -29,9 +30,10 @@ const initialValues: AccountCreate = {
   email: '',
 };
 
-const AccountForm: React.FC<Props> = ({ selectedAccount, closeModal, getAccounts }) => {
+const AccountForm: React.FC<Props> = ({ selectedAccount, closeModal }) => {
   const isDesktop = useIsDesktop();
-  const [, createAccount, , error] = useFetch();
+  const { appDispatch } = useAppContext();
+  const { error, dispatch } = useAppState();
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(accountSchema, initialValues);
 
   useEffect(() => {
@@ -60,10 +62,10 @@ const AccountForm: React.FC<Props> = ({ selectedAccount, closeModal, getAccounts
 
     if (canSubmit()) {
       selectedAccount
-        ? await createAccount('PUT', `/account/${values?._id}`, values)
-        : await createAccount('POST', '/account', values);
+        ? await updateAccount(dispatch, values)
+        : await createAccount(dispatch, values);
 
-      getAccounts();
+      getAccounts(appDispatch);
 
       selectedAccount == null && handleCloseModal();
     }

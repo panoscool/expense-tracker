@@ -1,53 +1,56 @@
+import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
 import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import ListSubheader from '@mui/material/ListSubheader';
 import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import ListItemText from '@mui/material/ListItemText';
-import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
+import ListSubheader from '@mui/material/ListSubheader';
 import Typography from '@mui/material/Typography';
-import { useCallback, useEffect } from 'react';
-import useFetch from '../../hooks/use-fetch';
-import { User } from '../../lib/interfaces/user';
+import { useEffect } from 'react';
+import useAppContext from '../../hooks/use-app-context';
+import useAppState from '../../hooks/use-app-state';
 import useIsDesktop from '../../hooks/use-is-desktop';
+import { User } from '../../lib/interfaces/user';
+import { getAccount, getAccounts, updateAccount } from '../../lib/services/account';
 import { getDialogWidth } from '../../lib/utils/common-breakpoints';
 
 type Props = {
   accountId: string | undefined;
   open: boolean;
   onClose: () => void;
-  getAccounts: () => void;
 };
 
-const AccountUsers: React.FC<Props> = ({ accountId, open, onClose, getAccounts }) => {
+const AccountUsers: React.FC<Props> = ({ accountId, open, onClose }) => {
   const isDesktop = useIsDesktop();
-  const [account, fetchAccount, , error] = useFetch();
-
-  const getAccount = useCallback(async () => {
-    await fetchAccount('GET', `/account/${accountId}`);
-  }, [accountId, fetchAccount]);
+  const { appDispatch } = useAppContext();
+  const { error, account, dispatch } = useAppState();
 
   useEffect(() => {
     if (accountId) {
-      getAccount();
+      getAccount(dispatch, accountId);
     }
-  }, [accountId, getAccount]);
+  }, [accountId, dispatch]);
 
   const handleDeleteUser = (email: string) => async () => {
-    await fetchAccount('PUT', `/account/${accountId}`, {
-      name: account.name,
-      description: account.description,
-      email: email,
-    });
+    if (window.confirm(`Are you sure you want to delete the user ${email}?`)) {
+      if (account) {
+        await updateAccount(dispatch, {
+          id: account._id,
+          name: account.name,
+          description: account.description,
+          email: email,
+        });
 
-    getAccount();
-    getAccounts();
+        getAccount(dispatch, account._id);
+        getAccounts(appDispatch);
+      }
+    }
   };
 
   if (!account) return null;

@@ -59,10 +59,6 @@ const updateAccount = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const user = await User.findOne({ email });
 
-    if (!user) {
-      return res.status(200).json({ error: 'User not found' });
-    }
-
     // if user.id is equal to account.user, then user is the owner of the account and cannot remove himself
     if (user?._id?.toString() === account.user.toString()) {
       return res.status(400).json({ error: 'You cannot remove yourself from the account' });

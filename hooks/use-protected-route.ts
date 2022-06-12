@@ -19,7 +19,7 @@ const useProtectedRoute = (reqAuth: boolean) => {
     [auth, loading, reqAuth, router],
   );
 
-  return { auth, loading, checkAuthState };
+  return { auth, checkAuthState };
 };
 
 export default useProtectedRoute;

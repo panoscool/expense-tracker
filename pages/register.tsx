@@ -2,11 +2,15 @@ import { Box, Button, TextField, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import type { NextPage } from 'next';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { useEffect } from 'react';
+import Loading from '../components/shared/loading';
 import NextLink from '../components/shared/next-link';
-import useFetch from '../hooks/use-fetch';
+import useAppState, { Actions } from '../hooks/use-app-state';
 import useForm from '../hooks/use-form';
 import useProtectedRoute from '../hooks/use-protected-route';
+import apiRequest from '../lib/config/axios';
+import { storeSetAuth } from '../lib/config/store';
 import { registerSchema } from '../lib/utils/yup-schema';
 
 const Wrapper = styled(Box)`
@@ -30,8 +34,9 @@ const Form = styled('form')(({ theme }) => ({
 }));
 
 const Register: NextPage = () => {
-  const { auth, loading, checkAuthState } = useProtectedRoute(false);
-  const [, fetchData, , error] = useFetch('/', 'auth');
+  const router = useRouter();
+  const { auth, checkAuthState } = useProtectedRoute(false);
+  const { loading, error, dispatch } = useAppState();
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(registerSchema, {
     name: '',
     email: '',
@@ -55,7 +60,13 @@ const Register: NextPage = () => {
     event.preventDefault();
 
     if (canSubmit()) {
-      await fetchData('POST', '/user/register', values);
+      try {
+        const data: any = await apiRequest('POST', '/user/register', values);
+        storeSetAuth(data as string);
+        router.push('/');
+      } catch (error) {
+        dispatch({ type: Actions.SET_ERROR, payload: { error } });
+      }
     }
   };
 
@@ -131,6 +142,8 @@ const Register: NextPage = () => {
             You have account? <NextLink href="/login">Login</NextLink>
           </Typography>
         </Wrapper>
+
+        <Loading loading={loading} />
       </main>
     </div>
   );

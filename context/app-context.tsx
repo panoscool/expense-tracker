@@ -1,105 +1,69 @@
-import { format } from 'date-fns';
-import jwt_decode from 'jwt-decode';
 import { useRouter } from 'next/router';
-import { createContext, useCallback, useEffect, useState } from 'react';
-import store from 'store';
-import useFetch from '../hooks/use-fetch';
+import { createContext, useEffect } from 'react';
+import useAppState, { Actions } from '../hooks/use-app-state';
+import { storeGetAuth } from '../lib/config/store';
 import { Account } from '../lib/interfaces/account';
 import { Expense } from '../lib/interfaces/expense';
 import { Auth, DecodedToken } from '../lib/interfaces/user';
+import { getAccounts } from '../lib/services/account';
+import { getExpenses } from '../lib/services/expense';
 
 interface AppState {
   auth: Auth | null;
-  setAuth: React.Dispatch<React.SetStateAction<Auth | null>>;
   loading: boolean;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   modal: { open: string; params?: string } | null;
-  setModal: React.Dispatch<React.SetStateAction<{ open: string; params?: string } | null>>;
   accounts: Account[] | null;
-  getAccounts: () => Promise<void>;
   expenses: Expense[] | null;
-  getExpenses: (params?: string) => Promise<void>;
+  appDispatch: React.Dispatch<any>;
 }
 
 const initState: AppState = {
   auth: null,
-  setAuth: () => {},
   loading: false,
-  setLoading: () => {},
   modal: null,
-  setModal: () => {},
   accounts: null,
-  getAccounts: () => Promise.resolve(),
   expenses: null,
-  getExpenses: () => Promise.resolve(),
+  appDispatch: () => {},
 };
 
 export const AppContext = createContext(initState);
 
 const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const authToken: string = store.get('auth', null);
-  const authData: DecodedToken | null = authToken ? jwt_decode(authToken) : null;
-
   const router = useRouter();
-  const [auth, setAuth] = useState<Auth | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [modal, setModal] = useState<{ open: string; params?: string } | null>(null);
+  const { user, accounts, expenses, modal, loading, dispatch } = useAppState();
 
-  const [accounts, fetchAccounts] = useFetch();
-  const [expenses, fetchExpenses] = useFetch();
-
-  const getAccounts = useCallback(async () => {
-    if (authData?.sub) {
-      await fetchAccounts('GET', '/account');
-    }
-  }, [authData?.sub, fetchAccounts]);
-
-  const getExpenses = useCallback(
-    async (params?: string) => {
-      if (router.query.account_id) {
-        const defaultParams = `date=${format(new Date(), 'yyyy-MM-dd')}`;
-
-        await fetchExpenses(
-          'GET',
-          `/expense/?id=${router.query.account_id}&${params || defaultParams}`,
-        );
-      }
-    },
-    [fetchExpenses, router.query.account_id],
-  );
+  const authData: DecodedToken | null = storeGetAuth();
 
   useEffect(() => {
     if (authData?.sub) {
-      setAuth({
-        id: authData?.sub,
-        name: authData?.name,
-        email: authData?.email,
+      dispatch({
+        type: Actions.SET_AUTH,
+        payload: { user: { id: authData?.sub, name: authData?.name, email: authData?.email } },
       });
-      setLoading(false);
     } else {
-      setAuth(null);
-      setLoading(false);
+      dispatch({ type: Actions.CLEAR_AUTH });
     }
-  }, [authData?.email, authData?.name, authData?.sub]);
+  }, [authData?.email, authData?.name, authData?.sub, dispatch]);
 
   useEffect(() => {
-    getAccounts();
-    getExpenses();
-  }, [getAccounts, getExpenses]);
+    if (authData?.sub) {
+      getAccounts(dispatch);
+
+      if (router.query.account_id) {
+        getExpenses(dispatch);
+      }
+    }
+  }, [authData?.sub, dispatch, router.query.account_id]);
 
   const contextValues = {
-    auth,
+    auth: user,
     loading,
     modal,
     accounts,
     expenses,
   };
   const contextFunctions = {
-    setAuth,
-    setLoading,
-    setModal,
-    getAccounts,
-    getExpenses,
+    appDispatch: dispatch,
   };
 
   return (

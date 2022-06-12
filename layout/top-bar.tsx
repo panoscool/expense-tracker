@@ -12,10 +12,10 @@ import { alpha, styled } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { useRouter } from 'next/router';
-import store from 'store';
 import DropDown from '../components/shared/drop-down';
 import NextLink from '../components/shared/next-link';
 import useAppContext from '../hooks/use-app-context';
+import { Actions } from '../hooks/use-app-state';
 import useIsDesktop from '../hooks/use-is-desktop';
 import { Account } from '../lib/interfaces/account';
 
@@ -27,18 +27,18 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
 const Topbar: React.FC = () => {
   const router = useRouter();
   const isDesktop = useIsDesktop();
-  const { auth, accounts, setModal } = useAppContext();
+  const { auth, accounts, appDispatch } = useAppContext();
 
   const handleAccountSelect = (id: string) => () => {
     router.push(`/expenses/?account_id=${id}`);
   };
 
   const handleAddExpense = () => {
-    setModal({ open: 'expense-form' });
+    appDispatch({ type: Actions.SET_MODAL, payload: { open: 'expense-form' } });
   };
 
   const handleLogout = () => {
-    store.remove('auth');
+    appDispatch({ type: Actions.CLEAR_AUTH });
     router.push('/login');
   };
 

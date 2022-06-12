@@ -37,4 +37,8 @@ axiosInstance.interceptors.response.use(
   },
 );
 
-export default axiosInstance;
+const apiRequest = (method: string, url: string, data?: any) => {
+  return axiosInstance(url, { method, data });
+};
+
+export default apiRequest;

@@ -10,24 +10,21 @@ import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import ListItemText from '@mui/material/ListItemText';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-import { useCallback, useEffect, useState } from 'react';
-import useFetch from '../../hooks/use-fetch';
+import { useEffect, useState } from 'react';
+import useAppState from '../../hooks/use-app-state';
 import { defaultCategories } from '../../lib/config/default-values';
+import { deleteCategory, getCategories } from '../../lib/services/category';
 import CategoryIcon from '../shared/category-icon';
+import Loading from '../shared/loading';
 import CategoryForm from './category-form';
 
 const CategoryList = () => {
-  const [categories, fetchCategories, , error] = useFetch();
-  const [, deleteCategory, , deleteError] = useFetch();
   const [showForm, setShowForm] = useState(false);
-
-  const getCategories = useCallback(async () => {
-    await fetchCategories('GET', '/category');
-  }, [fetchCategories]);
+  const { categories, loading, error, dispatch } = useAppState();
 
   useEffect(() => {
-    getCategories();
-  }, [getCategories]);
+    getCategories(dispatch);
+  }, [dispatch]);
 
   const handleOpenModal = () => {
     setShowForm(true);
@@ -39,14 +36,16 @@ const CategoryList = () => {
 
   const handleDeleteCategory = (label: string) => async () => {
     if (window.confirm(`Are you sure you want to delete ${label}?`)) {
-      await deleteCategory('DELETE', `/category/${categories._id}`, { label });
-      getCategories();
+      if (categories) {
+        await deleteCategory(dispatch, { id: categories?._id, label });
+        getCategories(dispatch);
+      }
     }
   };
 
   return (
     <Box>
-      <Typography color="error">{error || deleteError}</Typography>
+      <Typography color="error">{error}</Typography>
 
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Typography variant="h6">Categories</Typography>
@@ -80,9 +79,11 @@ const CategoryList = () => {
         <CategoryForm
           categoryId={categories?._id}
           closeModal={handleCloseModal}
-          getCategories={getCategories}
+          getCategories={() => getCategories(dispatch)}
         />
       </Dialog>
+
+      <Loading loading={loading} />
     </Box>
   );
 };

@@ -21,19 +21,20 @@ import Typography from '@mui/material/Typography';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import useAppContext from '../../hooks/use-app-context';
-import useFetch from '../../hooks/use-fetch';
+import useAppState from '../../hooks/use-app-state';
 import { Account } from '../../lib/interfaces/account';
+import { deleteAccount, getAccounts } from '../../lib/services/account';
 import DropDown from '../shared/drop-down';
 import AccountForm from './account-form';
 import AccountUsers from './account-users';
 
 const AccountList = () => {
   const router = useRouter();
-  const { accounts, getAccounts } = useAppContext();
+  const { error, dispatch } = useAppState();
+  const { accounts, appDispatch } = useAppContext();
   const [showForm, setShowForm] = useState(false);
   const [showUsers, setShowUsers] = useState(false);
   const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
-  const [, deleteAccount, , error] = useFetch();
 
   const handleAccountSelect = (id: string) => () => {
     router.push(`/expenses/?account_id=${id}`);
@@ -50,8 +51,8 @@ const AccountList = () => {
     e.stopPropagation();
 
     if (window.confirm(`Are you sure you want to delete ${account.name}?`)) {
-      await deleteAccount('DELETE', `/account/${account._id}`);
-      getAccounts();
+      await deleteAccount(dispatch, account._id);
+      getAccounts(appDispatch);
     }
   };
 
@@ -129,19 +130,10 @@ const AccountList = () => {
       </List>
 
       <Dialog open={showForm}>
-        <AccountForm
-          selectedAccount={selectedAccount}
-          closeModal={handleCloseModal}
-          getAccounts={getAccounts}
-        />
+        <AccountForm selectedAccount={selectedAccount} closeModal={handleCloseModal} />
       </Dialog>
 
-      <AccountUsers
-        accountId={selectedAccount?._id}
-        open={showUsers}
-        onClose={handleCloseUsers}
-        getAccounts={getAccounts}
-      />
+      <AccountUsers accountId={selectedAccount?._id} open={showUsers} onClose={handleCloseUsers} />
     </Box>
   );
 };

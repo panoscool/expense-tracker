@@ -11,13 +11,21 @@ import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import useAppContext from '../../hooks/use-app-context';
-import useFetch from '../../hooks/use-fetch';
+import useAppState, { Actions } from '../../hooks/use-app-state';
 import useForm from '../../hooks/use-form';
 import useIsDesktop from '../../hooks/use-is-desktop';
 import { Account } from '../../lib/interfaces/account';
 import { ExpenseCreate } from '../../lib/interfaces/expense';
+import { getCategories } from '../../lib/services/category';
+import {
+  createExpense,
+  deleteExpense,
+  getExpense,
+  getExpenses,
+  updateExpense,
+} from '../../lib/services/expense';
 import { getDialogWidth } from '../../lib/utils/common-breakpoints';
 import { expenseSchema } from '../../lib/utils/yup-schema';
 import CalculatorDialog from '../calculator/calculator-dialog';
@@ -65,31 +73,26 @@ const initialValues: ExpenseCreate = {
 
 const ExpenseForm: React.FC = () => {
   const isDesktop = useIsDesktop();
-  const { accounts, getExpenses, modal, setModal } = useAppContext();
+  const { accounts, modal, appDispatch } = useAppContext();
+  const { expense, categories, error, dispatch } = useAppState();
   const [openCalculator, setOpenCalculator] = useState(false);
-  const [, createExpense, , error] = useFetch();
-  const [, fetchExpense, , expenseError] = useFetch();
-  const [categories, fetchCategories, , categoryError] = useFetch();
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(expenseSchema, initialValues);
 
-  const getCategories = useCallback(async () => {
-    await fetchCategories('GET', '/category');
-  }, [fetchCategories]);
-
-  const getExpense = useCallback(async () => {
-    const expense = await fetchExpense('GET', `/expense/${modal?.params}`);
-    setValues(expense);
-  }, [fetchExpense, modal?.params, setValues]);
-
   useEffect(() => {
-    getCategories();
+    getCategories(dispatch);
 
     if (modal?.params) {
-      getExpense();
+      getExpense(dispatch, modal.params);
     } else {
       setValues(initialValues);
     }
-  }, [getCategories, getExpense, modal?.params, setValues]);
+  }, [dispatch, modal?.params, setValues]);
+
+  useEffect(() => {
+    if (expense) {
+      setValues(expense);
+    }
+  }, [expense, setValues]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [event.target.name]: event.target.value });
@@ -109,25 +112,24 @@ const ExpenseForm: React.FC = () => {
 
   const handleCloseModal = () => {
     setValues(initialValues);
-    setModal(null);
+    appDispatch({ type: Actions.SET_MODAL, payload: null });
   };
 
   const handleDeleteExpense = async () => {
-    await fetchExpense('DELETE', `/expense/${modal?.params}`);
-
-    getExpenses();
-    handleCloseModal();
+    if (modal?.params) {
+      await deleteExpense(dispatch, modal.params);
+      getExpenses(appDispatch);
+      handleCloseModal();
+    }
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (canSubmit()) {
-      modal?.params
-        ? await createExpense('PUT', `/expense/${values?._id}`, values)
-        : await createExpense('POST', '/expense', values);
+      modal?.params ? await updateExpense(dispatch, values) : await createExpense(dispatch, values);
 
-      getExpenses();
+      getExpenses(appDispatch);
       handleCloseModal();
     }
   };
@@ -149,7 +151,7 @@ const ExpenseForm: React.FC = () => {
           )}
         </Box>
 
-        <Typography color="error">{error || categoryError || expenseError}</Typography>
+        <Typography color="error">{error}</Typography>
       </Box>
 
       <Form onSubmit={handleSubmit} noValidate>
