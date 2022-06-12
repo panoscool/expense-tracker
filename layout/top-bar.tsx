@@ -15,7 +15,7 @@ import { useRouter } from 'next/router';
 import store from 'store';
 import DropDown from '../components/shared/drop-down';
 import NextLink from '../components/shared/next-link';
-import useAppState from '../hooks/use-app-state';
+import useAppContext from '../hooks/use-app-context';
 import useIsDesktop from '../hooks/use-is-desktop';
 import { Account } from '../lib/interfaces/account';
 
@@ -27,7 +27,7 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
 const Topbar: React.FC = () => {
   const router = useRouter();
   const isDesktop = useIsDesktop();
-  const { auth, accounts, setModal } = useAppState();
+  const { auth, accounts, setModal } = useAppContext();
 
   const handleAccountSelect = (id: string) => () => {
     router.push(`/expenses/?account_id=${id}`);

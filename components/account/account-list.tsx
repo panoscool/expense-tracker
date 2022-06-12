@@ -20,7 +20,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import useAppState from '../../hooks/use-app-state';
+import useAppContext from '../../hooks/use-app-context';
 import useFetch from '../../hooks/use-fetch';
 import { Account } from '../../lib/interfaces/account';
 import DropDown from '../shared/drop-down';
@@ -29,7 +29,7 @@ import AccountUsers from './account-users';
 
 const AccountList = () => {
   const router = useRouter();
-  const { accounts, getAccounts } = useAppState();
+  const { accounts, getAccounts } = useAppContext();
   const [showForm, setShowForm] = useState(false);
   const [showUsers, setShowUsers] = useState(false);
   const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);

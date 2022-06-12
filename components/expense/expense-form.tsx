@@ -12,7 +12,7 @@ import TextField from '@mui/material/TextField';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { useCallback, useEffect, useState } from 'react';
-import useAppState from '../../hooks/use-app-state';
+import useAppContext from '../../hooks/use-app-context';
 import useFetch from '../../hooks/use-fetch';
 import useForm from '../../hooks/use-form';
 import useIsDesktop from '../../hooks/use-is-desktop';
@@ -65,7 +65,7 @@ const initialValues: ExpenseCreate = {
 
 const ExpenseForm: React.FC = () => {
   const isDesktop = useIsDesktop();
-  const { accounts, getExpenses, modal, setModal } = useAppState();
+  const { accounts, getExpenses, modal, setModal } = useAppContext();
   const [openCalculator, setOpenCalculator] = useState(false);
   const [, createExpense, , error] = useFetch();
   const [, fetchExpense, , expenseError] = useFetch();

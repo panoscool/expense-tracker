@@ -3,11 +3,11 @@ import { useRouter } from 'next/router';
 import { useState, useCallback } from 'react';
 import apiRequest from '../lib/config/axios';
 import store from 'store';
-import useAppState from './use-app-state';
+import useAppContext from './use-app-context';
 
 const useFetch = (redirect?: string, persist?: string) => {
   const router = useRouter();
-  const { loading, setLoading } = useAppState();
+  const { loading, setLoading } = useAppContext();
   const [data, setData] = useState<any>();
   const [error, setError] = useState<string | null>(null);
 

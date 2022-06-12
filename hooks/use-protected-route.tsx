@@ -1,10 +1,10 @@
 import { useRouter } from 'next/router';
 import { useCallback } from 'react';
-import useAppState from './use-app-state';
+import useAppContext from './use-app-context';
 
 const useProtectedRoute = (reqAuth: boolean) => {
   const router = useRouter();
-  const { auth, loading } = useAppState();
+  const { auth, loading } = useAppContext();
 
   const checkAuthState = useCallback(
     (redirectUrl: string) => {

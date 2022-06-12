@@ -4,7 +4,7 @@ import { format } from 'date-fns';
 import groupBy from 'lodash/groupBy';
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
-import useAppState from '../../hooks/use-app-state';
+import useAppContext from '../../hooks/use-app-context';
 import useIsDesktop from '../../hooks/use-is-desktop';
 import DateField from '../shared/date-field';
 import EmptyList from '../shared/empty-list';
@@ -16,7 +16,7 @@ const TotalPerUser = dynamic(() => import('./charts/total-per-user'), { ssr: fal
 
 const Expenses: React.FC = () => {
   const isDesktop = useIsDesktop();
-  const { expenses, getExpenses, modal, setModal } = useAppState();
+  const { expenses, getExpenses, modal, setModal } = useAppContext();
   const [selectedDate, setSelectedDate] = useState({ date: new Date() });
 
   useEffect(() => {
