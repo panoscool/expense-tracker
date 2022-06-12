@@ -3,13 +3,12 @@ import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import useAppState from '../../hooks/use-app-state';
+import useAppContext from '../../hooks/use-app-context';
 import useForm from '../../hooks/use-form';
 import useIsDesktop from '../../hooks/use-is-desktop';
 import { createCategory } from '../../lib/services/category';
 import { getDialogWidth } from '../../lib/utils/common-breakpoints';
 import { categorySchema } from '../../lib/utils/yup-schema';
-import Loading from '../shared/loading';
 
 const Form = styled('form')`
   display: flex;
@@ -25,7 +24,7 @@ type Props = {
 
 const CategoryForm: React.FC<Props> = ({ categoryId, closeModal, getCategories }) => {
   const isDesktop = useIsDesktop();
-  const { loading, error, dispatch } = useAppState();
+  const { error, dispatch } = useAppContext();
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(categorySchema, {
     label: '',
   });
@@ -85,8 +84,6 @@ const CategoryForm: React.FC<Props> = ({ categoryId, closeModal, getCategories }
           </Button>
         </Box>
       </Form>
-
-      <Loading loading={loading} />
     </Box>
   );
 };

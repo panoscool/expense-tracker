@@ -4,13 +4,13 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import Loading from '../components/shared/loading';
 import NextLink from '../components/shared/next-link';
-import useAppState, { Actions } from '../hooks/use-app-state';
+import useAppContext from '../hooks/use-app-context';
 import useForm from '../hooks/use-form';
 import useProtectedRoute from '../hooks/use-protected-route';
 import apiRequest from '../lib/config/axios';
 import { storeSetAuth } from '../lib/config/store';
+import { setError, setLoading } from '../lib/services/helpers';
 import { loginSchema } from '../lib/utils/yup-schema';
 
 const Wrapper = styled(Box)`
@@ -35,8 +35,8 @@ const Form = styled('form')(({ theme }) => ({
 
 const Login: NextPage = () => {
   const router = useRouter();
-  const { auth, checkAuthState } = useProtectedRoute(false);
-  const { loading, error, dispatch } = useAppState();
+  const { authenticated, checkAuthState } = useProtectedRoute(false);
+  const { error, dispatch } = useAppContext();
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(loginSchema, {
     email: '',
     password: '',
@@ -59,19 +59,19 @@ const Login: NextPage = () => {
 
     if (canSubmit()) {
       try {
-        dispatch({ type: Actions.SET_LOADING, payload: { loading: true } });
+        setLoading(dispatch, true);
         const data: any = await apiRequest('POST', '/user/login', values);
         storeSetAuth(data as string);
         router.push('/');
       } catch (error) {
-        dispatch({ type: Actions.SET_AUTH, payload: { error } });
+        setError(dispatch, error as string);
+      } finally {
+        setLoading(dispatch, false);
       }
     }
   };
 
-  if (loading || auth) {
-    return <p>Loading...</p>;
-  }
+  if (authenticated) return null;
 
   return (
     <div>
@@ -121,8 +121,6 @@ const Login: NextPage = () => {
             Don&apos;t have account? <NextLink href="/register">Register</NextLink>
           </Typography>
         </Wrapper>
-
-        <Loading loading={loading} />
       </main>
     </div>
   );

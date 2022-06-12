@@ -15,9 +15,9 @@ import { useRouter } from 'next/router';
 import DropDown from '../components/shared/drop-down';
 import NextLink from '../components/shared/next-link';
 import useAppContext from '../hooks/use-app-context';
-import { Actions } from '../hooks/use-app-state';
 import useIsDesktop from '../hooks/use-is-desktop';
 import { Account } from '../lib/interfaces/account';
+import { logout, setModal } from '../lib/services/helpers';
 
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
   backdropFilter: 'blur(20px)',
@@ -27,19 +27,18 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
 const Topbar: React.FC = () => {
   const router = useRouter();
   const isDesktop = useIsDesktop();
-  const { auth, accounts, appDispatch } = useAppContext();
+  const { auth, accounts, dispatch } = useAppContext();
 
   const handleAccountSelect = (id: string) => () => {
     router.push(`/expenses/?account_id=${id}`);
   };
 
   const handleAddExpense = () => {
-    appDispatch({ type: Actions.SET_MODAL, payload: { open: 'expense-form' } });
+    setModal(dispatch, { open: 'expense-form' });
   };
 
   const handleLogout = () => {
-    appDispatch({ type: Actions.CLEAR_AUTH });
-    router.push('/login');
+    logout(dispatch);
   };
 
   return (

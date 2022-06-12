@@ -11,16 +11,15 @@ import ListItemText from '@mui/material/ListItemText';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { useEffect, useState } from 'react';
-import useAppState from '../../hooks/use-app-state';
+import useAppContext from '../../hooks/use-app-context';
 import { defaultCategories } from '../../lib/config/default-values';
 import { deleteCategory, getCategories } from '../../lib/services/category';
 import CategoryIcon from '../shared/category-icon';
-import Loading from '../shared/loading';
 import CategoryForm from './category-form';
 
 const CategoryList = () => {
   const [showForm, setShowForm] = useState(false);
-  const { categories, loading, error, dispatch } = useAppState();
+  const { categories, error, dispatch } = useAppContext();
 
   useEffect(() => {
     getCategories(dispatch);
@@ -82,8 +81,6 @@ const CategoryList = () => {
           getCategories={() => getCategories(dispatch)}
         />
       </Dialog>
-
-      <Loading loading={loading} />
     </Box>
   );
 };

@@ -1,49 +1,56 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useRouter } from 'next/router';
 import { createContext, useEffect } from 'react';
-import useAppState, { Actions } from '../hooks/use-app-state';
+import useAppState from '../hooks/use-app-state';
 import { storeGetAuth } from '../lib/config/store';
-import { Account } from '../lib/interfaces/account';
-import { Expense } from '../lib/interfaces/expense';
-import { Auth, DecodedToken } from '../lib/interfaces/user';
+import { AppContextType } from '../lib/interfaces/common';
+import { DecodedToken } from '../lib/interfaces/user';
 import { getAccounts } from '../lib/services/account';
 import { getExpenses } from '../lib/services/expense';
+import { login, logout } from '../lib/services/helpers';
 
-interface AppState {
-  auth: Auth | null;
-  loading: boolean;
-  modal: { open: string; params?: string } | null;
-  accounts: Account[] | null;
-  expenses: Expense[] | null;
-  appDispatch: React.Dispatch<any>;
-}
-
-const initState: AppState = {
+const initState: AppContextType = {
   auth: null,
   loading: false,
+  error: null,
   modal: null,
   accounts: null,
+  account: null,
   expenses: null,
-  appDispatch: () => {},
+  expense: null,
+  categories: null,
+  notifications: [],
+  dispatch: () => {},
 };
 
 export const AppContext = createContext(initState);
 
 const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const router = useRouter();
-  const { user, accounts, expenses, modal, loading, dispatch } = useAppState();
-
   const authData: DecodedToken | null = storeGetAuth();
+
+  const { state, dispatch } = useAppState();
+
+  const {
+    user,
+    accounts,
+    account,
+    expenses,
+    expense,
+    categories,
+    modal,
+    loading,
+    error,
+    notifications,
+  } = state;
 
   useEffect(() => {
     if (authData?.sub) {
-      dispatch({
-        type: Actions.SET_AUTH,
-        payload: { user: { id: authData?.sub, name: authData?.name, email: authData?.email } },
-      });
+      login(dispatch, authData);
     } else {
-      dispatch({ type: Actions.CLEAR_AUTH });
+      logout(dispatch);
     }
-  }, [authData?.email, authData?.name, authData?.sub, dispatch]);
+  }, [authData?.sub, dispatch]);
 
   useEffect(() => {
     if (authData?.sub) {
@@ -58,12 +65,17 @@ const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const contextValues = {
     auth: user,
     loading,
+    error,
     modal,
     accounts,
+    account,
     expenses,
+    expense,
+    categories,
+    notifications,
   };
   const contextFunctions = {
-    appDispatch: dispatch,
+    dispatch,
   };
 
   return (

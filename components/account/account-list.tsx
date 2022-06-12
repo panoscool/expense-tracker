@@ -21,7 +21,6 @@ import Typography from '@mui/material/Typography';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import useAppContext from '../../hooks/use-app-context';
-import useAppState from '../../hooks/use-app-state';
 import { Account } from '../../lib/interfaces/account';
 import { deleteAccount, getAccounts } from '../../lib/services/account';
 import DropDown from '../shared/drop-down';
@@ -30,8 +29,7 @@ import AccountUsers from './account-users';
 
 const AccountList = () => {
   const router = useRouter();
-  const { error, dispatch } = useAppState();
-  const { accounts, appDispatch } = useAppContext();
+  const { accounts, error, dispatch } = useAppContext();
   const [showForm, setShowForm] = useState(false);
   const [showUsers, setShowUsers] = useState(false);
   const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
@@ -52,7 +50,7 @@ const AccountList = () => {
 
     if (window.confirm(`Are you sure you want to delete ${account.name}?`)) {
       await deleteAccount(dispatch, account._id);
-      getAccounts(appDispatch);
+      getAccounts(dispatch);
     }
   };
 

@@ -13,7 +13,6 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { useEffect, useState } from 'react';
 import useAppContext from '../../hooks/use-app-context';
-import useAppState, { Actions } from '../../hooks/use-app-state';
 import useForm from '../../hooks/use-form';
 import useIsDesktop from '../../hooks/use-is-desktop';
 import { Account } from '../../lib/interfaces/account';
@@ -26,6 +25,7 @@ import {
   getExpenses,
   updateExpense,
 } from '../../lib/services/expense';
+import { setModal } from '../../lib/services/helpers';
 import { getDialogWidth } from '../../lib/utils/common-breakpoints';
 import { expenseSchema } from '../../lib/utils/yup-schema';
 import CalculatorDialog from '../calculator/calculator-dialog';
@@ -73,9 +73,8 @@ const initialValues: ExpenseCreate = {
 
 const ExpenseForm: React.FC = () => {
   const isDesktop = useIsDesktop();
-  const { accounts, modal, appDispatch } = useAppContext();
-  const { expense, categories, error, dispatch } = useAppState();
   const [openCalculator, setOpenCalculator] = useState(false);
+  const { accounts, expense, categories, modal, error, dispatch } = useAppContext();
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(expenseSchema, initialValues);
 
   useEffect(() => {
@@ -112,13 +111,13 @@ const ExpenseForm: React.FC = () => {
 
   const handleCloseModal = () => {
     setValues(initialValues);
-    appDispatch({ type: Actions.SET_MODAL, payload: null });
+    setModal(dispatch, null);
   };
 
   const handleDeleteExpense = async () => {
     if (modal?.params) {
       await deleteExpense(dispatch, modal.params);
-      getExpenses(appDispatch);
+      getExpenses(dispatch);
       handleCloseModal();
     }
   };
@@ -129,7 +128,7 @@ const ExpenseForm: React.FC = () => {
     if (canSubmit()) {
       modal?.params ? await updateExpense(dispatch, values) : await createExpense(dispatch, values);
 
-      getExpenses(appDispatch);
+      getExpenses(dispatch);
       handleCloseModal();
     }
   };

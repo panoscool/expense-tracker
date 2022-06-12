@@ -7,13 +7,13 @@ import CategoryList from '../components/category/category-list';
 import useProtectedRoute from '../hooks/use-protected-route';
 
 const Home: NextPage = () => {
-  const { auth, checkAuthState } = useProtectedRoute(true);
+  const { authenticated, checkAuthState } = useProtectedRoute(true);
 
   useEffect(() => {
     checkAuthState('/login');
   }, [checkAuthState]);
 
-  if (!auth?.id) return null;
+  if (!authenticated) return null;
 
   return (
     <div>

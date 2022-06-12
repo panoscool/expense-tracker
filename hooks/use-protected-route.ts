@@ -1,25 +1,35 @@
 import { useRouter } from 'next/router';
-import { useCallback } from 'react';
-import useAppContext from './use-app-context';
+import { useCallback, useEffect, useState } from 'react';
+import { storeGetAuth } from '../lib/config/store';
+import { DecodedToken } from '../lib/interfaces/user';
 
 const useProtectedRoute = (reqAuth: boolean) => {
   const router = useRouter();
-  const { auth, loading } = useAppContext();
+  const [authenticated, setAuthenticated] = useState(false);
+  const authData: DecodedToken | null = storeGetAuth();
+
+  useEffect(() => {
+    if (authData) {
+      setAuthenticated(true);
+    } else {
+      setAuthenticated(false);
+    }
+  }, [authData]);
 
   const checkAuthState = useCallback(
     (redirectUrl: string) => {
-      if (!loading && reqAuth && (auth == undefined || auth == null)) {
+      if (reqAuth && (authData == undefined || authData == null)) {
         router.push(redirectUrl);
       }
-      if (!loading && !reqAuth && auth) {
+      if (!reqAuth && authData) {
         router.push(redirectUrl);
       }
     },
 
-    [auth, loading, reqAuth, router],
+    [authData, reqAuth, router],
   );
 
-  return { auth, checkAuthState };
+  return { authenticated, checkAuthState };
 };
 
 export default useProtectedRoute;

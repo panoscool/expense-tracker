@@ -4,13 +4,13 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import Loading from '../components/shared/loading';
 import NextLink from '../components/shared/next-link';
-import useAppState, { Actions } from '../hooks/use-app-state';
+import useAppContext from '../hooks/use-app-context';
 import useForm from '../hooks/use-form';
 import useProtectedRoute from '../hooks/use-protected-route';
 import apiRequest from '../lib/config/axios';
 import { storeSetAuth } from '../lib/config/store';
+import { setError, setLoading } from '../lib/services/helpers';
 import { registerSchema } from '../lib/utils/yup-schema';
 
 const Wrapper = styled(Box)`
@@ -35,8 +35,8 @@ const Form = styled('form')(({ theme }) => ({
 
 const Register: NextPage = () => {
   const router = useRouter();
-  const { auth, checkAuthState } = useProtectedRoute(false);
-  const { loading, error, dispatch } = useAppState();
+  const { authenticated, checkAuthState } = useProtectedRoute(false);
+  const { error, dispatch } = useAppContext();
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(registerSchema, {
     name: '',
     email: '',
@@ -61,18 +61,19 @@ const Register: NextPage = () => {
 
     if (canSubmit()) {
       try {
+        setLoading(dispatch, true);
         const data: any = await apiRequest('POST', '/user/register', values);
         storeSetAuth(data as string);
         router.push('/');
       } catch (error) {
-        dispatch({ type: Actions.SET_ERROR, payload: { error } });
+        setError(dispatch, error as string);
+      } finally {
+        setLoading(dispatch, false);
       }
     }
   };
 
-  if (loading || auth) {
-    return <p>Loading...</p>;
-  }
+  if (authenticated) return null;
 
   return (
     <div>
@@ -142,8 +143,6 @@ const Register: NextPage = () => {
             You have account? <NextLink href="/login">Login</NextLink>
           </Typography>
         </Wrapper>
-
-        <Loading loading={loading} />
       </main>
     </div>
   );

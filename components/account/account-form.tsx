@@ -5,7 +5,6 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { useEffect } from 'react';
 import useAppContext from '../../hooks/use-app-context';
-import useAppState from '../../hooks/use-app-state';
 import useForm from '../../hooks/use-form';
 import useIsDesktop from '../../hooks/use-is-desktop';
 import { Account, AccountCreate } from '../../lib/interfaces/account';
@@ -32,8 +31,7 @@ const initialValues: AccountCreate = {
 
 const AccountForm: React.FC<Props> = ({ selectedAccount, closeModal }) => {
   const isDesktop = useIsDesktop();
-  const { appDispatch } = useAppContext();
-  const { error, dispatch } = useAppState();
+  const { error, dispatch } = useAppContext();
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(accountSchema, initialValues);
 
   useEffect(() => {
@@ -65,7 +63,7 @@ const AccountForm: React.FC<Props> = ({ selectedAccount, closeModal }) => {
         ? await updateAccount(dispatch, values)
         : await createAccount(dispatch, values);
 
-      getAccounts(appDispatch);
+      getAccounts(dispatch);
 
       selectedAccount == null && handleCloseModal();
     }

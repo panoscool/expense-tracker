@@ -14,7 +14,6 @@ import ListSubheader from '@mui/material/ListSubheader';
 import Typography from '@mui/material/Typography';
 import { useEffect } from 'react';
 import useAppContext from '../../hooks/use-app-context';
-import useAppState from '../../hooks/use-app-state';
 import useIsDesktop from '../../hooks/use-is-desktop';
 import { User } from '../../lib/interfaces/user';
 import { getAccount, getAccounts, updateAccount } from '../../lib/services/account';
@@ -28,8 +27,7 @@ type Props = {
 
 const AccountUsers: React.FC<Props> = ({ accountId, open, onClose }) => {
   const isDesktop = useIsDesktop();
-  const { appDispatch } = useAppContext();
-  const { error, account, dispatch } = useAppState();
+  const { error, account, dispatch } = useAppContext();
 
   useEffect(() => {
     if (accountId) {
@@ -48,7 +46,7 @@ const AccountUsers: React.FC<Props> = ({ accountId, open, onClose }) => {
         });
 
         getAccount(dispatch, account._id);
-        getAccounts(appDispatch);
+        getAccounts(dispatch);
       }
     }
   };

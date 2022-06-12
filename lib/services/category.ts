@@ -1,5 +1,6 @@
-import { Actions } from '../../hooks/use-app-state';
 import apiRequest from '../config/axios';
+import { Actions } from '../interfaces/common';
+import { enqueueNotification, setError, setLoading } from './helpers';
 
 type Category = {
   id: string;
@@ -8,32 +9,46 @@ type Category = {
 
 export const getCategories = async (dispatch: React.Dispatch<any>) => {
   try {
-    dispatch({ type: Actions.SET_LOADING, payload: { loading: true } });
+    setLoading(dispatch, true);
+    setError(dispatch, null);
+
     const data = await apiRequest('GET', '/category');
     dispatch({ type: Actions.SET_CATEGORIES, payload: { categories: data } });
   } catch (error) {
-    dispatch({ type: Actions.SET_ERROR, payload: { error } });
+    setError(dispatch, error as string);
   }
 };
 
 export const createCategory = async (dispatch: React.Dispatch<any>, data: Category) => {
   try {
-    dispatch({ type: Actions.SET_LOADING, payload: { loading: true } });
+    setLoading(dispatch, true);
+    setError(dispatch, null);
+
     await apiRequest('PUT', `/category/${data.id}`, { label: data.label });
+
+    enqueueNotification(dispatch, 'Category created', 'success');
   } catch (error) {
-    dispatch({ type: Actions.SET_ERROR, payload: { error } });
+    setError(dispatch, error as string);
+    enqueueNotification(dispatch, 'Category failed to create', 'error');
   } finally {
-    dispatch({ type: Actions.SET_LOADING, payload: { loading: false } });
+    setLoading(dispatch, false);
   }
 };
 
 export const deleteCategory = async (dispatch: React.Dispatch<any>, data: Category) => {
   try {
-    dispatch({ type: Actions.SET_LOADING, payload: { loading: true } });
+    setLoading(dispatch, true);
+    setError(dispatch, null);
+
+    dispatch({ type: Actions.SET_ERROR, payload: { error: null } });
+
     await apiRequest('DELETE', `/category/${data.id}`, { label: data.label });
+
+    enqueueNotification(dispatch, 'Category deleted', 'success');
   } catch (error) {
-    dispatch({ type: Actions.SET_ERROR, payload: { error } });
+    setError(dispatch, error as string);
+    enqueueNotification(dispatch, 'Category failed to delete', 'error');
   } finally {
-    dispatch({ type: Actions.SET_LOADING, payload: { loading: false } });
+    setLoading(dispatch, false);
   }
 };

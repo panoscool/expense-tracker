@@ -5,9 +5,9 @@ import groupBy from 'lodash/groupBy';
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 import useAppContext from '../../hooks/use-app-context';
-import { Actions } from '../../hooks/use-app-state';
 import useIsDesktop from '../../hooks/use-is-desktop';
 import { getExpenses } from '../../lib/services/expense';
+import { setModal } from '../../lib/services/helpers';
 import DateField from '../shared/date-field';
 import EmptyList from '../shared/empty-list';
 import ExpenseCard from './expense-card';
@@ -18,15 +18,15 @@ const TotalPerUser = dynamic(() => import('./charts/total-per-user'), { ssr: fal
 
 const Expenses: React.FC = () => {
   const isDesktop = useIsDesktop();
-  const { expenses, appDispatch } = useAppContext();
+  const { expenses, dispatch } = useAppContext();
   const [selectedDate, setSelectedDate] = useState({ date: new Date() });
 
   useEffect(() => {
-    getExpenses(appDispatch, `date=${format(selectedDate.date, 'yyyy-MM-dd')}`);
-  }, [appDispatch, selectedDate.date]);
+    getExpenses(dispatch, `date=${format(selectedDate.date, 'yyyy-MM-dd')}`);
+  }, [dispatch, selectedDate.date]);
 
   const handleExpenseEdit = (id: string) => {
-    appDispatch({ type: Actions.SET_MODAL, payload: { open: 'expense-form', params: id } });
+    setModal(dispatch, { open: 'expense-form', params: id });
   };
 
   const groupedByDay = groupBy(expenses, (expense) => format(new Date(expense.date), 'yyyy-MM-dd'));
