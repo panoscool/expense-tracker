@@ -22,7 +22,7 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import useAppContext from '../../hooks/use-app-context';
 import { Account } from '../../lib/interfaces/account';
-import { deleteAccount, getAccounts } from '../../lib/services/account';
+import { deleteAccount } from '../../lib/services/account';
 import DropDown from '../shared/drop-down';
 import AccountForm from './account-form';
 import AccountUsers from './account-users';
@@ -50,7 +50,6 @@ const AccountList = () => {
 
     if (window.confirm(`Are you sure you want to delete ${account.name}?`)) {
       await deleteAccount(dispatch, account._id);
-      getAccounts(dispatch);
     }
   };
 

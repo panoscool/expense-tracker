@@ -51,13 +51,15 @@ const updateCategory = async (req: NextApiRequest, res: NextApiResponse<any>) =>
       return res.status(400).json({ error: errors });
     }
 
-    if (category.labels.includes(req.body.label)) {
+    const label = cleanLabel(req.body.label);
+
+    if (category.labels.includes(label)) {
       return res.status(200).json({ error: 'Category already exists' });
     }
 
     // update the labels array with the new label if it is not already in the array
     await category.updateOne({
-      labels: [...category.labels, cleanLabel(req.body.label)],
+      labels: [...category.labels, label],
     });
 
     const updatedCategories = await Category.findById(req.query.id);
@@ -85,15 +87,14 @@ const deleteCategory = async (req: NextApiRequest, res: NextApiResponse<any>) =>
       return res.status(401).json({ error: 'Unauthorized' });
     }
 
+    const label = cleanLabel(req.body.label);
+
     // find all expenses with this category and update them to other
-    await Expense.updateMany(
-      { account: account, category: cleanLabel(req.body.label) },
-      { category: 'other' },
-    );
+    await Expense.updateMany({ account: account, category: label }, { category: 'other' });
 
     // delete only the req.body.label inside the category labels array
     await category.updateOne({
-      labels: category.labels.filter((label) => label !== cleanLabel(req.body.label)),
+      labels: category.labels.filter((lbl) => lbl !== label),
     });
 
     res.status(200).json({ message: 'Ok' });

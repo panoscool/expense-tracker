@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import CalculateOutlinedIcon from '@mui/icons-material/CalculateOutlined';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import Box from '@mui/material/Box';
@@ -22,7 +23,6 @@ import {
   createExpense,
   deleteExpense,
   getExpense,
-  getExpenses,
   updateExpense,
 } from '../../lib/services/expense';
 import { setModal } from '../../lib/services/helpers';
@@ -82,16 +82,13 @@ const ExpenseForm: React.FC = () => {
 
     if (modal?.params) {
       getExpense(dispatch, modal.params);
-    } else {
-      setValues(initialValues);
-    }
-  }, [dispatch, modal?.params, setValues]);
-
-  useEffect(() => {
-    if (expense) {
       setValues(expense);
     }
-  }, [expense, setValues]);
+
+    return () => {
+      setValues(initialValues);
+    };
+  }, [dispatch, expense?._id, modal?.params, setValues]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [event.target.name]: event.target.value });
@@ -110,14 +107,12 @@ const ExpenseForm: React.FC = () => {
   };
 
   const handleCloseModal = () => {
-    setValues(initialValues);
     setModal(dispatch, null);
   };
 
   const handleDeleteExpense = async () => {
     if (modal?.params) {
       await deleteExpense(dispatch, modal.params);
-      getExpenses(dispatch);
       handleCloseModal();
     }
   };

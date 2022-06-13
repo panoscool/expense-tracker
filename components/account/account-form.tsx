@@ -37,9 +37,11 @@ const AccountForm: React.FC<Props> = ({ selectedAccount, closeModal }) => {
   useEffect(() => {
     if (selectedAccount) {
       setValues(selectedAccount);
-    } else {
-      setValues(initialValues);
     }
+
+    return () => {
+      setValues(initialValues);
+    };
   }, [selectedAccount, setValues]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,11 +52,6 @@ const AccountForm: React.FC<Props> = ({ selectedAccount, closeModal }) => {
     onBlur(event.target.name);
   };
 
-  const handleCloseModal = () => {
-    setValues(initialValues);
-    closeModal();
-  };
-
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -63,7 +60,7 @@ const AccountForm: React.FC<Props> = ({ selectedAccount, closeModal }) => {
         ? await updateAccount(dispatch, values)
         : await createAccount(dispatch, values);
 
-      selectedAccount == null && handleCloseModal();
+      selectedAccount == null && closeModal();
     }
   };
 
@@ -114,7 +111,7 @@ const AccountForm: React.FC<Props> = ({ selectedAccount, closeModal }) => {
         />
 
         <Box display="flex" alignSelf="center" gap={2} mt={3}>
-          <Button variant="contained" color="secondary" onClick={handleCloseModal}>
+          <Button variant="contained" color="secondary" onClick={closeModal}>
             Cancel
           </Button>
           <Button type="submit" variant="contained" color="primary">
