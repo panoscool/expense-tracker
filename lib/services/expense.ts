@@ -45,6 +45,7 @@ export const createExpense = async (dispatch: React.Dispatch<any>, data: Expense
     const response = await apiRequest('POST', '/expense', data);
     dispatch({ type: Actions.SET_EXPENSE, payload: { expense: response } });
 
+    getExpenses(dispatch);
     enqueueNotification(dispatch, 'Expense created', 'success');
   } catch (error) {
     setError(dispatch, error as string);
@@ -62,6 +63,7 @@ export const updateExpense = async (dispatch: React.Dispatch<any>, data: Expense
     const response = await apiRequest('PUT', `/expense/${data._id}`, data);
     dispatch({ type: Actions.SET_EXPENSE, payload: { expense: response } });
 
+    getExpenses(dispatch);
     enqueueNotification(dispatch, 'Expense updated', 'success');
   } catch (error) {
     setError(dispatch, error as string);
@@ -78,6 +80,7 @@ export const deleteExpense = async (dispatch: React.Dispatch<any>, id: string) =
 
     await apiRequest('DELETE', `/expense/${id}`);
 
+    getExpenses(dispatch);
     enqueueNotification(dispatch, 'Expense deleted', 'success');
   } catch (error) {
     setError(dispatch, error as string);

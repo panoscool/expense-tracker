@@ -29,7 +29,7 @@ import AccountUsers from './account-users';
 
 const AccountList = () => {
   const router = useRouter();
-  const { accounts, error, dispatch } = useAppContext();
+  const { accounts, dispatch } = useAppContext();
   const [showForm, setShowForm] = useState(false);
   const [showUsers, setShowUsers] = useState(false);
   const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
@@ -81,8 +81,6 @@ const AccountList = () => {
 
   return (
     <Box>
-      <Typography color="error">{error}</Typography>
-
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Typography variant="h6">Accounts</Typography>
         <Tooltip title="Add account">

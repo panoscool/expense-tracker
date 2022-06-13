@@ -16,7 +16,7 @@ import { useEffect } from 'react';
 import useAppContext from '../../hooks/use-app-context';
 import useIsDesktop from '../../hooks/use-is-desktop';
 import { User } from '../../lib/interfaces/user';
-import { getAccount, getAccounts, updateAccount } from '../../lib/services/account';
+import { getAccount, updateAccount } from '../../lib/services/account';
 import { getDialogWidth } from '../../lib/utils/common-breakpoints';
 
 type Props = {
@@ -27,7 +27,7 @@ type Props = {
 
 const AccountUsers: React.FC<Props> = ({ accountId, open, onClose }) => {
   const isDesktop = useIsDesktop();
-  const { error, account, dispatch } = useAppContext();
+  const { account, dispatch } = useAppContext();
 
   useEffect(() => {
     if (accountId) {
@@ -44,7 +44,6 @@ const AccountUsers: React.FC<Props> = ({ accountId, open, onClose }) => {
         });
 
         getAccount(dispatch, account._id);
-        getAccounts(dispatch);
       }
     }
   };
@@ -54,8 +53,6 @@ const AccountUsers: React.FC<Props> = ({ accountId, open, onClose }) => {
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogContent sx={{ minWidth: getDialogWidth(isDesktop) }}>
-        <Typography color="error">{error}</Typography>
-
         <Box mb={2}>
           <Typography variant="h6">{account.name}</Typography>
           <Typography gutterBottom variant="body2">

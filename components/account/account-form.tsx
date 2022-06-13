@@ -8,7 +8,7 @@ import useAppContext from '../../hooks/use-app-context';
 import useForm from '../../hooks/use-form';
 import useIsDesktop from '../../hooks/use-is-desktop';
 import { Account, AccountCreate } from '../../lib/interfaces/account';
-import { createAccount, getAccounts, updateAccount } from '../../lib/services/account';
+import { createAccount, updateAccount } from '../../lib/services/account';
 import { getDialogWidth } from '../../lib/utils/common-breakpoints';
 import { accountSchema } from '../../lib/utils/yup-schema';
 
@@ -31,7 +31,7 @@ const initialValues: AccountCreate = {
 
 const AccountForm: React.FC<Props> = ({ selectedAccount, closeModal }) => {
   const isDesktop = useIsDesktop();
-  const { error, dispatch } = useAppContext();
+  const { dispatch } = useAppContext();
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(accountSchema, initialValues);
 
   useEffect(() => {
@@ -63,8 +63,6 @@ const AccountForm: React.FC<Props> = ({ selectedAccount, closeModal }) => {
         ? await updateAccount(dispatch, values)
         : await createAccount(dispatch, values);
 
-      getAccounts(dispatch);
-
       selectedAccount == null && handleCloseModal();
     }
   };
@@ -75,7 +73,6 @@ const AccountForm: React.FC<Props> = ({ selectedAccount, closeModal }) => {
         <Typography gutterBottom variant="h6">
           Add Account
         </Typography>
-        <Typography color="error">{error}</Typography>
       </Box>
 
       <Form onSubmit={handleSubmit} noValidate>

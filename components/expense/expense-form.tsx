@@ -74,7 +74,7 @@ const initialValues: ExpenseCreate = {
 const ExpenseForm: React.FC = () => {
   const isDesktop = useIsDesktop();
   const [openCalculator, setOpenCalculator] = useState(false);
-  const { accounts, expense, categories, modal, error, dispatch } = useAppContext();
+  const { accounts, expense, categories, modal, dispatch } = useAppContext();
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(expenseSchema, initialValues);
 
   useEffect(() => {
@@ -128,29 +128,24 @@ const ExpenseForm: React.FC = () => {
     if (canSubmit()) {
       modal?.params ? await updateExpense(dispatch, values) : await createExpense(dispatch, values);
 
-      getExpenses(dispatch);
       handleCloseModal();
     }
   };
 
   return (
     <Box m={2} p={2} minWidth={getDialogWidth(isDesktop)}>
-      <Box mb={4}>
-        <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Typography gutterBottom variant="h6">
-            Add Expense
-          </Typography>
+      <Box mb={4} display="flex" justifyContent="space-between" alignItems="center">
+        <Typography gutterBottom variant="h6">
+          Add Expense
+        </Typography>
 
-          {modal?.params && (
-            <Tooltip title="Delete expense">
-              <IconButton color="error" onClick={handleDeleteExpense}>
-                <DeleteRoundedIcon />
-              </IconButton>
-            </Tooltip>
-          )}
-        </Box>
-
-        <Typography color="error">{error}</Typography>
+        {modal?.params && (
+          <Tooltip title="Delete expense">
+            <IconButton color="error" onClick={handleDeleteExpense}>
+              <DeleteRoundedIcon />
+            </IconButton>
+          </Tooltip>
+        )}
       </Box>
 
       <Form onSubmit={handleSubmit} noValidate>

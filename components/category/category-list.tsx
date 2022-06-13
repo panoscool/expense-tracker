@@ -19,7 +19,7 @@ import CategoryForm from './category-form';
 
 const CategoryList = () => {
   const [showForm, setShowForm] = useState(false);
-  const { categories, error, dispatch } = useAppContext();
+  const { categories, dispatch } = useAppContext();
 
   useEffect(() => {
     getCategories(dispatch);
@@ -37,15 +37,12 @@ const CategoryList = () => {
     if (window.confirm(`Are you sure you want to delete ${label}?`)) {
       if (categories) {
         await deleteCategory(dispatch, { id: categories?._id, label });
-        getCategories(dispatch);
       }
     }
   };
 
   return (
     <Box>
-      <Typography color="error">{error}</Typography>
-
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Typography variant="h6">Categories</Typography>
         <Tooltip title="Add category">
@@ -75,11 +72,7 @@ const CategoryList = () => {
       </List>
 
       <Dialog open={showForm}>
-        <CategoryForm
-          categoryId={categories?._id}
-          closeModal={handleCloseModal}
-          getCategories={() => getCategories(dispatch)}
-        />
+        <CategoryForm categoryId={categories?._id} closeModal={handleCloseModal} />
       </Dialog>
     </Box>
   );

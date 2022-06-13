@@ -31,48 +31,36 @@ const reducer: Reducer<AppState, { type: Actions; payload?: any }> = (state, { t
       return {
         ...state,
         user: null,
-        loading: false,
-        error: null,
       };
 
     case Actions.SET_ACCOUNTS:
       return {
         ...state,
         accounts: payload.accounts,
-        loading: false,
-        error: null,
       };
 
     case Actions.SET_ACCOUNT:
       return {
         ...state,
         account: payload.account,
-        loading: false,
-        error: null,
       };
 
     case Actions.SET_EXPENSES:
       return {
         ...state,
         expenses: payload.expenses,
-        loading: false,
-        error: null,
       };
 
     case Actions.SET_EXPENSE:
       return {
         ...state,
         expense: payload.expense,
-        loading: false,
-        error: null,
       };
 
     case Actions.SET_CATEGORIES:
       return {
         ...state,
         categories: payload.categories,
-        loading: false,
-        error: null,
       };
 
     case Actions.SET_MODAL:

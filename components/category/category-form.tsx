@@ -19,12 +19,11 @@ const Form = styled('form')`
 type Props = {
   categoryId: string | undefined;
   closeModal: () => void;
-  getCategories: () => void;
 };
 
-const CategoryForm: React.FC<Props> = ({ categoryId, closeModal, getCategories }) => {
+const CategoryForm: React.FC<Props> = ({ categoryId, closeModal }) => {
   const isDesktop = useIsDesktop();
-  const { error, dispatch } = useAppContext();
+  const { dispatch } = useAppContext();
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(categorySchema, {
     label: '',
   });
@@ -50,7 +49,6 @@ const CategoryForm: React.FC<Props> = ({ categoryId, closeModal, getCategories }
         await createCategory(dispatch, { id: categoryId, label: values.label });
 
         setValues({ label: '' });
-        getCategories();
       }
     }
   };
@@ -61,7 +59,6 @@ const CategoryForm: React.FC<Props> = ({ categoryId, closeModal, getCategories }
         <Typography gutterBottom variant="h6">
           Add Category
         </Typography>
-        <Typography color="error">{error}</Typography>
       </Box>
 
       <Form onSubmit={handleSubmit} noValidate>
