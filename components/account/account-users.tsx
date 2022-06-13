@@ -39,9 +39,7 @@ const AccountUsers: React.FC<Props> = ({ accountId, open, onClose }) => {
     if (window.confirm(`Are you sure you want to delete the user ${email}?`)) {
       if (account) {
         await updateAccount(dispatch, {
-          id: account._id,
-          name: account.name,
-          description: account.description,
+          ...account,
           email: email,
         });
 
