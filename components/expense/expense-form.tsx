@@ -18,7 +18,6 @@ import useForm from '../../hooks/use-form';
 import useIsDesktop from '../../hooks/use-is-desktop';
 import { Account } from '../../lib/interfaces/account';
 import { ExpenseCreate } from '../../lib/interfaces/expense';
-import { getCategories } from '../../lib/services/category';
 import {
   createExpense,
   deleteExpense,
@@ -78,16 +77,17 @@ const ExpenseForm: React.FC = () => {
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(expenseSchema, initialValues);
 
   useEffect(() => {
-    getCategories(dispatch);
-
     if (modal?.params) {
       getExpense(dispatch, modal.params);
+    }
+
+    if (expense?._id) {
       setValues(expense);
     }
 
-    return () => {
+    if (!modal?.params) {
       setValues(initialValues);
-    };
+    }
   }, [dispatch, expense?._id, modal?.params, setValues]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

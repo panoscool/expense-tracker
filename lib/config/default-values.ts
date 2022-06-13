@@ -17,7 +17,7 @@ export const defaultCategories: string[] = [
 
 export const defaultAccount = (user: User) => ({
   user: user._id,
-  name: 'Default',
+  name: 'Personal',
   users: [user._id],
-  description: 'Default account',
+  description: 'Default personal account',
 });

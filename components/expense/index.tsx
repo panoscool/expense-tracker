@@ -67,7 +67,7 @@ const Expenses: React.FC = () => {
         <Divider />
       </Box>
       {days?.length > 0 ? (
-        days?.map((day, index) => (
+        days.map((day, index) => (
           <ExpenseCard
             key={index}
             date={dates[index]}

@@ -10,20 +10,16 @@ import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import ListItemText from '@mui/material/ListItemText';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import useAppContext from '../../hooks/use-app-context';
 import { defaultCategories } from '../../lib/config/default-values';
-import { deleteCategory, getCategories } from '../../lib/services/category';
+import { deleteCategory } from '../../lib/services/category';
 import CategoryIcon from '../shared/category-icon';
 import CategoryForm from './category-form';
 
 const CategoryList = () => {
   const [showForm, setShowForm] = useState(false);
   const { categories, dispatch } = useAppContext();
-
-  useEffect(() => {
-    getCategories(dispatch);
-  }, [dispatch]);
 
   const handleOpenModal = () => {
     setShowForm(true);

@@ -58,8 +58,8 @@ const AccountList = () => {
   };
 
   const handleCloseModal = () => {
-    setShowForm(false);
     setSelectedAccount(null);
+    setShowForm(false);
   };
 
   const handleOpenUsers = (account: Account) => (e: React.MouseEvent) => {

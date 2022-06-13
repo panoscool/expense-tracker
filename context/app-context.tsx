@@ -6,6 +6,7 @@ import { storeGetAuth } from '../lib/config/store';
 import { AppContextType } from '../lib/interfaces/common';
 import { DecodedToken } from '../lib/interfaces/user';
 import { getAccounts } from '../lib/services/account';
+import { getCategories } from '../lib/services/category';
 import { getExpenses } from '../lib/services/expense';
 import { login, logout } from '../lib/services/helpers';
 
@@ -55,6 +56,7 @@ const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   useEffect(() => {
     if (authData?.sub) {
       getAccounts(dispatch);
+      getCategories(dispatch);
 
       if (router.query.account_id) {
         getExpenses(dispatch);
