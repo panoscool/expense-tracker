@@ -7,7 +7,7 @@ import { enqueueNotification, setError, setLoading } from './helpers';
 
 export const getExpenses = async (dispatch: React.Dispatch<any>, params?: string) => {
   try {
-    setLoading(dispatch, false);
+    setLoading(dispatch, true);
 
     const defaultParams = `date=${format(new Date(), 'yyyy-MM-dd')}`;
 
@@ -26,7 +26,7 @@ export const getExpenses = async (dispatch: React.Dispatch<any>, params?: string
 
 export const getExpense = async (dispatch: React.Dispatch<any>, id: string) => {
   try {
-    setLoading(dispatch, false);
+    setLoading(dispatch, true);
 
     const response = await apiRequest('GET', `/expense/${id}`);
     dispatch({ type: Actions.SET_EXPENSE, payload: { expense: response } });
@@ -39,7 +39,7 @@ export const getExpense = async (dispatch: React.Dispatch<any>, id: string) => {
 
 export const createExpense = async (dispatch: React.Dispatch<any>, data: ExpenseCreate) => {
   try {
-    setLoading(dispatch, false);
+    setLoading(dispatch, true);
     setError(dispatch, null);
 
     const response = await apiRequest('POST', '/expense', data);
@@ -57,7 +57,7 @@ export const createExpense = async (dispatch: React.Dispatch<any>, data: Expense
 
 export const updateExpense = async (dispatch: React.Dispatch<any>, data: Expense) => {
   try {
-    setLoading(dispatch, false);
+    setLoading(dispatch, true);
     setError(dispatch, null);
 
     const response = await apiRequest('PUT', `/expense/${data._id}`, data);
@@ -75,7 +75,7 @@ export const updateExpense = async (dispatch: React.Dispatch<any>, data: Expense
 
 export const deleteExpense = async (dispatch: React.Dispatch<any>, id: string) => {
   try {
-    setLoading(dispatch, false);
+    setLoading(dispatch, true);
     setError(dispatch, null);
 
     await apiRequest('DELETE', `/expense/${id}`);

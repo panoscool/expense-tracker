@@ -56,12 +56,14 @@ const CategoryList = () => {
             </ListItemIcon>
             <ListItemText primary={label} sx={{ textTransform: 'capitalize' }} />
             <ListItemSecondaryAction>
-              <IconButton
-                disabled={defaultCategories.includes(label)}
-                onClick={handleDeleteCategory(label)}
-              >
-                <DeleteRoundedIcon />
-              </IconButton>
+              {!defaultCategories.includes(label) && (
+                <IconButton
+                  disabled={defaultCategories.includes(label)}
+                  onClick={handleDeleteCategory(label)}
+                >
+                  <DeleteRoundedIcon />
+                </IconButton>
+              )}
             </ListItemSecondaryAction>
           </ListItem>
         ))}
