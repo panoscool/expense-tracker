@@ -8,6 +8,7 @@ import useAppContext from '../../hooks/use-app-context';
 import useIsDesktop from '../../hooks/use-is-desktop';
 import { getExpenses } from '../../lib/services/expense';
 import { setModal } from '../../lib/services/helpers';
+import { getTotalUsers } from '../../lib/utils/expense-calculations';
 import DateField from '../shared/date-field';
 import EmptyList from '../shared/empty-list';
 import ExpenseCard from './expense-card';
@@ -32,6 +33,7 @@ const Expenses: React.FC = () => {
   const groupedByDay = groupBy(expenses, (expense) => format(new Date(expense.date), 'yyyy-MM-dd'));
   const dates = Object.keys(groupedByDay);
   const days = dates.map((day) => groupedByDay[day]);
+  const totalUsers = getTotalUsers(expenses || []);
 
   return (
     <div>
@@ -47,7 +49,7 @@ const Expenses: React.FC = () => {
         </Grid>
       </Grid>
 
-      <UserPayable expenses={expenses || []} />
+      {totalUsers > 1 && <UserPayable expenses={expenses || []} />}
 
       <Box mt={8} mb={2}>
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
