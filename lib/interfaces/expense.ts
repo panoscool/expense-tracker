@@ -20,3 +20,9 @@ export interface ExpensesPerUser {
   name: string | undefined;
   amount: number;
 }
+
+export interface ExpensesFilters {
+  date: Date;
+  user_id: string | null;
+  category: string | null;
+}

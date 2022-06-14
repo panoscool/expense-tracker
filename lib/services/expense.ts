@@ -1,19 +1,24 @@
-import { format } from 'date-fns';
 import router from 'next/router';
 import apiRequest from '../config/axios';
 import { Actions } from '../interfaces/common';
 import { Expense, ExpenseCreate } from '../interfaces/expense';
+import { buildParams } from '../utils/url-params';
 import { enqueueNotification, setError, setLoading } from './helpers';
 
-export const getExpenses = async (dispatch: React.Dispatch<any>, params?: string) => {
+type ExpensesFilters = {
+  date: string;
+  user_id: string | null;
+  category: string | null;
+};
+
+export const getExpenses = async (dispatch: React.Dispatch<any>, params?: ExpensesFilters) => {
   try {
     setLoading(dispatch, true);
-
-    const defaultParams = `date=${format(new Date(), 'yyyy-MM-dd')}`;
+    const formattedParams = params ? buildParams(params) : '';
 
     const response = await apiRequest(
       'GET',
-      `/expense/?id=${router.query.account_id}&${params || defaultParams}`,
+      `/expense/?account_id=${router.query.account_id}&${formattedParams}`,
     );
 
     dispatch({ type: Actions.SET_EXPENSES, payload: { expenses: response } });

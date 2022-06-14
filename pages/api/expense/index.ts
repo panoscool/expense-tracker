@@ -10,17 +10,23 @@ import validate from '../../../lib/utils/validate';
 
 const getExpenses = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const accountId = await Account.findById(req.query.id);
+    const accountId = await Account.findById(req.query.account_id);
 
-    const monthStart = startOfMonth(parseISO(req.query.date as string));
-    const monthEnd = endOfMonth(parseISO(req.query.date as string));
+    const { date, user_id, category } = req.query;
 
-    const expenses = await Expense.find({
-      account: accountId,
-      date: { $gte: monthStart, $lte: monthEnd },
-    })
-      .sort({ date: 'asc' })
-      .populate('user', 'name');
+    const monthStart = startOfMonth(parseISO(date as string));
+    const monthEnd = endOfMonth(parseISO(date as string));
+
+    let filters: any = { account: accountId, date: { $gte: monthStart, $lte: monthEnd } };
+
+    if (user_id) {
+      filters = { ...filters, user: user_id };
+    }
+    if (category) {
+      filters = { ...filters, category };
+    }
+
+    const expenses = await Expense.find(filters).sort({ date: 'asc' }).populate('user', 'name');
 
     res.status(200).json(expenses);
   } catch (err) {

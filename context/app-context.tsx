@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useRouter } from 'next/router';
 import { createContext, useEffect } from 'react';
 import useAppState from '../hooks/use-app-state';
 import { storeGetAuth } from '../lib/config/store';
@@ -7,7 +6,6 @@ import { AppContextType } from '../lib/interfaces/common';
 import { DecodedToken } from '../lib/interfaces/user';
 import { getAccounts } from '../lib/services/account';
 import { getCategories } from '../lib/services/category';
-import { getExpenses } from '../lib/services/expense';
 import { login, logout } from '../lib/services/helpers';
 
 const initState: AppContextType = {
@@ -27,7 +25,6 @@ const initState: AppContextType = {
 export const AppContext = createContext(initState);
 
 const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const router = useRouter();
   const authData: DecodedToken | null = storeGetAuth();
 
   const { state, dispatch } = useAppState();
@@ -57,12 +54,8 @@ const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     if (authData?.sub) {
       getAccounts(dispatch);
       getCategories(dispatch);
-
-      if (router.query.account_id) {
-        getExpenses(dispatch);
-      }
     }
-  }, [authData?.sub, dispatch, router.query.account_id]);
+  }, [authData?.sub, dispatch]);
 
   const contextValues = {
     auth: user,

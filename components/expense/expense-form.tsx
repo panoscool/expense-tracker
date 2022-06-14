@@ -30,36 +30,13 @@ import { expenseSchema } from '../../lib/utils/yup-schema';
 import CalculatorDialog from '../calculator/calculator-dialog';
 import CategoryIcon from '../shared/category-icon';
 import DateField from '../shared/date-field';
+import IconTextField from '../shared/IconTextField';
 
 const Form = styled('form')`
   display: flex;
   flex-direction: column;
   gap: 1rem;
 `;
-
-const SelectField = styled(TextField)(({ theme }) => ({
-  '& .MuiSelect-select': {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  '& .MuiListItemText-root': {
-    marginTop: 0,
-    marginBottom: 0,
-  },
-
-  '& .MuiIconButton-root': {
-    paddingTop: 0,
-    paddingBottom: 0,
-
-    '& .MuiSvgIcon-root': {
-      paddingTop: 0,
-      paddingBottom: 0,
-      fontSize: '1rem',
-    },
-  },
-}));
 
 const initialValues: ExpenseCreate = {
   date: new Date(),
@@ -169,8 +146,7 @@ const ExpenseForm: React.FC = () => {
             </MenuItem>
           ))}
         </TextField>
-        <SelectField
-          select
+        <IconTextField
           name="category"
           label="Category"
           value={values.category || ''}
@@ -188,7 +164,7 @@ const ExpenseForm: React.FC = () => {
               <ListItemText primary={label} sx={{ textTransform: 'capitalize' }} />
             </MenuItem>
           ))}
-        </SelectField>
+        </IconTextField>
         <TextField
           type="number"
           name="amount"

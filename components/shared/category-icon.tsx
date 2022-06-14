@@ -11,19 +11,24 @@ import ElectricBoltOutlinedIcon from '@mui/icons-material/ElectricBoltOutlined';
 import ReceiptOutlinedIcon from '@mui/icons-material/ReceiptOutlined';
 import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
 
-const CategoryIcon: React.FC<{ icon: string }> = ({ icon }) => {
+type Props = {
+  icon: string;
+  size?: 'small' | 'medium' | 'large';
+};
+
+const CategoryIcon: React.FC<Props> = ({ icon, size }) => {
   const component: Record<string, JSX.Element> = {
-    transportation: <EmojiTransportationOutlinedIcon />,
-    entertainment: <InterestsOutlinedIcon />,
-    supermarket: <ShoppingCartOutlinedIcon />,
-    shopping: <ShoppingBagOutlinedIcon />,
-    water: <WaterOutlinedIcon />,
-    electricity: <ElectricBoltOutlinedIcon />,
-    telecommunication: <LocalPhoneOutlinedIcon />,
-    education: <SchoolOutlinedIcon />,
-    beauty: <MoodOutlinedIcon />,
-    health: <HealthAndSafetyOutlinedIcon />,
-    gift: <CardGiftcardOutlinedIcon />,
+    transportation: <EmojiTransportationOutlinedIcon fontSize={size} />,
+    entertainment: <InterestsOutlinedIcon fontSize={size} />,
+    supermarket: <ShoppingCartOutlinedIcon fontSize={size} />,
+    shopping: <ShoppingBagOutlinedIcon fontSize={size} />,
+    water: <WaterOutlinedIcon fontSize={size} />,
+    electricity: <ElectricBoltOutlinedIcon fontSize={size} />,
+    telecommunication: <LocalPhoneOutlinedIcon fontSize={size} />,
+    education: <SchoolOutlinedIcon fontSize={size} />,
+    beauty: <MoodOutlinedIcon fontSize={size} />,
+    health: <HealthAndSafetyOutlinedIcon fontSize={size} />,
+    gift: <CardGiftcardOutlinedIcon fontSize={size} />,
   };
 
   return component[icon] ? component[icon] : <ReceiptOutlinedIcon />;
