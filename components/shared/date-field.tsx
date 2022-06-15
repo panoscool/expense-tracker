@@ -11,12 +11,13 @@ type DateFieldProps = {
   helperText?: string;
   error?: boolean;
   format?: string;
+  disableFuture?: boolean;
   onChange: React.Dispatch<any>;
   onBlur?: (inputName: string) => void;
 };
 
 const DateField: React.FC<DateFieldProps> = (props) => {
-  const { label, value, views, helperText, error, format, onChange, onBlur } = props;
+  const { label, value, views, helperText, error, format, disableFuture, onChange, onBlur } = props;
 
   const setValue = (date: Date | null) => {
     onChange((prevState: any) => ({ ...prevState, date }));
@@ -25,7 +26,7 @@ const DateField: React.FC<DateFieldProps> = (props) => {
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <DatePicker
-        disableFuture
+        disableFuture={disableFuture}
         inputFormat={format || 'dd/MM/yyyy'}
         views={views}
         label={label}

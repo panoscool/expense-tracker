@@ -51,6 +51,7 @@ const ExpenseFilters: React.FC<Props> = (props) => {
       </TextField>
       {filterBy === 'date' && (
         <DateField
+          disableFuture
           views={['year', 'month']}
           format="MMMM yyyy"
           label="Date"

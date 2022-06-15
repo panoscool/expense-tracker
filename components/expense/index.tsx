@@ -72,7 +72,7 @@ const Expenses: React.FC = () => {
       {totalUsers > 1 && <UserPayable expenses={expenses || []} />}
 
       <Box mt={8} mb={2}>
-        <Box display="flex" justifyContent="space-between" alignItems="center">
+        <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap">
           <ExpenseFilters
             filterBy={filterBy}
             account={account}
