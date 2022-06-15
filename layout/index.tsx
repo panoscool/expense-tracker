@@ -1,23 +1,39 @@
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import Box from '@mui/material/Box';
-import Dialog from '@mui/material/Dialog';
 import Container from '@mui/material/Container';
-import { SnackbarProvider } from 'notistack';
+import Dialog from '@mui/material/Dialog';
+import IconButton from '@mui/material/IconButton';
+import { SnackbarKey, SnackbarProvider } from 'notistack';
+import { useRef } from 'react';
 import ExpenseForm from '../components/expense/expense-form';
 import Loading from '../components/shared/loading';
 import useAppContext from '../hooks/use-app-context';
-import Navbar from './top-bar';
 import Notifier from './notifier';
+import Navbar from './top-bar';
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const notistackRef: any = useRef(null);
   const { auth, loading, modal } = useAppContext();
+
+  const onClickDismiss = (key: SnackbarKey) => () => {
+    if (notistackRef.current) {
+      notistackRef.current.closeSnackbar(key);
+    }
+  };
 
   return (
     <SnackbarProvider
+      ref={notistackRef}
       maxSnack={2}
       preventDuplicate
       autoHideDuration={2500}
       disableWindowBlurListener
       anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      action={(key) => (
+        <IconButton color="inherit" onClick={onClickDismiss(key)}>
+          <CloseRoundedIcon />
+        </IconButton>
+      )}
     >
       {auth && <Navbar />}
 
