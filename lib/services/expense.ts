@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import router from 'next/router';
 import apiRequest from '../config/axios';
 import { Actions } from '../interfaces/common';
@@ -15,10 +16,11 @@ export const getExpenses = async (dispatch: React.Dispatch<any>, params?: Expens
   try {
     setLoading(dispatch, true);
     const formattedParams = params ? buildParams(params) : '';
+    const defaultParams = `date=${format(new Date(), 'yyyy-MM-dd')}`;
 
     const response = await apiRequest(
       'GET',
-      `/expense/?account_id=${router.query.account_id}&${formattedParams}`,
+      `/expense/?account_id=${router.query.account_id}&${formattedParams || defaultParams}`,
     );
 
     dispatch({ type: Actions.SET_EXPENSES, payload: { expenses: response } });
