@@ -17,13 +17,16 @@ const getExpenses = async (req: NextApiRequest, res: NextApiResponse) => {
     const monthStart = startOfMonth(parseISO(date as string));
     const monthEnd = endOfMonth(parseISO(date as string));
 
-    let filters: any = { account: accountId, date: { $gte: monthStart, $lte: monthEnd } };
+    let filters: any = { account: accountId };
 
+    if (date) {
+      filters.date = { $gte: monthStart, $lte: monthEnd };
+    }
     if (user_id) {
-      filters = { ...filters, user: user_id };
+      filters.user = user_id;
     }
     if (category) {
-      filters = { ...filters, category };
+      filters.category = category;
     }
 
     const expenses = await Expense.find(filters).sort({ date: 'asc' }).populate('user', 'name');

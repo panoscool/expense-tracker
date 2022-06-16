@@ -1,5 +1,7 @@
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import Box from '@mui/material/Box';
+import Alert from '@mui/material/Alert';
+import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -10,6 +12,7 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import ListItemText from '@mui/material/ListItemText';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListSubheader from '@mui/material/ListSubheader';
 import Typography from '@mui/material/Typography';
 import { useEffect } from 'react';
@@ -18,6 +21,8 @@ import useIsDesktop from '../../hooks/use-is-desktop';
 import { User } from '../../lib/interfaces/user';
 import { getAccount, updateAccount } from '../../lib/services/account';
 import { getDialogWidth } from '../../lib/utils/common-breakpoints';
+import { getInitials } from '../../lib/utils/get-initials';
+import { stringToColor } from '../../lib/utils/string-to-color';
 
 type Props = {
   accountId: string | undefined;
@@ -48,7 +53,19 @@ const AccountUsers: React.FC<Props> = ({ accountId, open, onClose }) => {
     }
   };
 
+  function stringAvatar(id: string, name: string) {
+    return {
+      sx: {
+        bgcolor: stringToColor(id),
+      },
+      children: getInitials(name),
+    };
+  }
+
   if (!account) return null;
+
+  const accountOwner = account?.users.find((u) => u._id === account.user);
+  const sharedWith = account?.users.filter((u) => u._id !== account.user);
 
   return (
     <Dialog open={open} onClose={onClose}>
@@ -62,20 +79,25 @@ const AccountUsers: React.FC<Props> = ({ accountId, open, onClose }) => {
           <Divider />
         </Box>
 
+        <Alert severity="info" variant="filled" sx={{ mb: 3 }}>
+          Owner: {accountOwner?.name}
+        </Alert>
+
         {account.users.length > 1 ? (
-          <List subheader={<ListSubheader disableGutters>Shared with:</ListSubheader>}>
-            {account.users
-              .filter((u: User) => u._id !== account.user)
-              .map((user: User) => (
-                <ListItem key={user._id} disablePadding>
-                  <ListItemText primary={user.name} secondary={user.email} />
-                  <ListItemSecondaryAction>
-                    <IconButton edge="end" onClick={handleDeleteUser(user.email)}>
-                      <DeleteRoundedIcon />
-                    </IconButton>
-                  </ListItemSecondaryAction>
-                </ListItem>
-              ))}
+          <List subheader={<ListSubheader>Shared with:</ListSubheader>}>
+            {sharedWith.map((user: User) => (
+              <ListItem key={user._id} disablePadding>
+                <ListItemAvatar>
+                  <Avatar {...stringAvatar(user._id, user.name)} />
+                </ListItemAvatar>
+                <ListItemText primary={user.name} secondary={user.email} />
+                <ListItemSecondaryAction>
+                  <IconButton edge="end" onClick={handleDeleteUser(user.email)}>
+                    <DeleteRoundedIcon />
+                  </IconButton>
+                </ListItemSecondaryAction>
+              </ListItem>
+            ))}
           </List>
         ) : (
           <Typography variant="caption">This account is not shared with any user.</Typography>

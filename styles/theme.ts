@@ -33,9 +33,9 @@ const theme = createTheme({
       contrastText: '#333',
     },
     info: {
-      light: grey.A100,
-      main: grey.A200,
-      dark: grey.A400,
+      light: grey.A200,
+      main: grey.A400,
+      dark: grey.A700,
       contrastText: '#333',
     },
     success: {
@@ -63,6 +63,24 @@ const theme = createTheme({
       },
       defaultProps: {
         disableElevation: true,
+      },
+    },
+    MuiAlert: {
+      styleOverrides: {
+        root: ({ ownerState, theme }) => ({
+          ...(ownerState.severity === 'info' && {
+            color: theme.palette.getContrastText(theme.palette.info.main),
+          }),
+          ...(ownerState.severity === 'warning' && {
+            color: theme.palette.getContrastText(theme.palette.warning.main),
+          }),
+          ...(ownerState.severity === 'error' && {
+            color: theme.palette.getContrastText(theme.palette.error.main),
+          }),
+          ...(ownerState.severity === 'success' && {
+            color: theme.palette.getContrastText(theme.palette.success.main),
+          }),
+        }),
       },
     },
   },

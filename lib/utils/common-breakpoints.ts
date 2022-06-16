@@ -1,3 +1,3 @@
 export const getDialogWidth = (isDesktop: boolean) => {
-  return isDesktop ? 360 : 'auto';
+  return isDesktop ? 360 : '300px';
 };
