@@ -21,7 +21,7 @@ export const getDecodedUserId = async (req: NextApiRequest, res: NextApiResponse
     }
   } catch (err) {
     console.error(err);
-    return res.status(401).json({ error: 'Unauthorized' });
+    return res.status(401).json({ error: 'Not authenticated' });
   }
 };
 
@@ -32,13 +32,13 @@ export const hasAccess = async (userId?: string, userEntityId?: string) => {
 export const authenticated =
   (fn: NextApiHandler) => async (req: NextApiRequest, res: NextApiResponse<any>) => {
     try {
-      const decoded = verify(req.headers.authorization!, process.env.JWT_SECRET!);
+      const userId = await getDecodedUserId(req, res);
 
-      if (decoded) {
+      if (userId) {
         return await fn(req, res);
       }
     } catch (err) {
       console.error(err);
-      return res.status(401).json({ error: 'Unauthorized' });
+      return res.status(400).json({ error: 'Not authenticated' });
     }
   };

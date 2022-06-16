@@ -10,9 +10,9 @@ import validate from '../../../lib/utils/validate';
 
 const getExpenses = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const accountId = await Account.findById(req.query.account_id);
+    const { account_id, date, user_id, category } = req.query;
 
-    const { date, user_id, category } = req.query;
+    const accountId = await Account.findById(account_id);
 
     const monthStart = startOfMonth(parseISO(date as string));
     const monthEnd = endOfMonth(parseISO(date as string));
