@@ -1,5 +1,5 @@
 import axios from 'axios';
-import store from 'store';
+import { storeGetAuth } from './store';
 
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || '/api',
@@ -10,10 +10,10 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   function (config) {
-    const accessToken = store.get('auth', null);
+    const accessToken = storeGetAuth();
 
     if (accessToken) {
-      config.headers = { Authorization: accessToken };
+      config.headers = { Authorization: `Bearer ${accessToken}` };
     }
     return config;
   },

@@ -32,7 +32,7 @@ const updateExpense = async (req: NextApiRequest, res: NextApiResponse) => {
     const authorized = await hasAccess(userId, expense?.user);
 
     if (!authorized) {
-      return res.status(401).json({ error: 'Unauthorized' });
+      return res.status(401).json({ error: 'Unauthorized access' });
     }
 
     const errors = await validate(expenseSchema, req.body);
@@ -73,7 +73,7 @@ const deleteExpense = async (req: NextApiRequest, res: NextApiResponse) => {
     const authorized = await hasAccess(userId, expense?.user);
 
     if (!authorized) {
-      return res.status(401).json({ error: 'Unauthorized' });
+      return res.status(401).json({ error: 'Unauthorized access' });
     }
 
     await expense.delete();

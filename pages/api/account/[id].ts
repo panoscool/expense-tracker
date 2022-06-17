@@ -19,7 +19,7 @@ const getAccount = async (req: NextApiRequest, res: NextApiResponse) => {
     const isUserInAccount = account.users.some((user: any) => user._id?.toString() === userId);
 
     if (!isUserInAccount) {
-      return res.status(401).json({ error: 'Unauthorized' });
+      return res.status(401).json({ error: 'Unauthorized access' });
     }
 
     res.status(200).json(account);
@@ -41,7 +41,7 @@ const updateAccount = async (req: NextApiRequest, res: NextApiResponse) => {
     const authorized = await hasAccess(userId, account?.user);
 
     if (!authorized) {
-      return res.status(401).json({ error: 'Unauthorized' });
+      return res.status(401).json({ error: 'Unauthorized access' });
     }
 
     const errors = await validate(accountSchema, req.body);
@@ -103,7 +103,7 @@ const deleteAccount = async (req: NextApiRequest, res: NextApiResponse) => {
     const authorized = await hasAccess(userId, account?.user);
 
     if (!authorized) {
-      return res.status(401).json({ error: 'Unauthorized' });
+      return res.status(401).json({ error: 'Unauthorized access' });
     }
 
     // delete all expenses associated with the account
