@@ -30,7 +30,7 @@ import { expenseSchema } from '../../lib/utils/yup-schema';
 import CalculatorDialog from '../calculator/calculator-dialog';
 import CategoryIcon from '../shared/category-icon';
 import DateField from '../shared/date-field';
-import IconTextField from '../shared/IconTextField';
+import IconSelectField from '../shared/IconSelectField';
 
 const Form = styled('form')`
   display: flex;
@@ -146,7 +146,7 @@ const ExpenseForm: React.FC = () => {
             </MenuItem>
           ))}
         </TextField>
-        <IconTextField
+        <IconSelectField
           name="category"
           label="Category"
           value={values.category || ''}
@@ -164,7 +164,7 @@ const ExpenseForm: React.FC = () => {
               <ListItemText primary={label} sx={{ textTransform: 'capitalize' }} />
             </MenuItem>
           ))}
-        </IconTextField>
+        </IconSelectField>
         <TextField
           type="number"
           name="amount"

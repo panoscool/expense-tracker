@@ -22,7 +22,7 @@ const TotalPerUser = dynamic(() => import('./charts/total-per-user'), { ssr: fal
 const Expenses: React.FC = () => {
   const router = useRouter();
   const isDesktop = useIsDesktop();
-  const { account, expenses, categories, dispatch } = useAppContext();
+  const { loading, account, expenses, categories, dispatch } = useAppContext();
   const [filterBy, setFilterBy] = useState<string>('date');
   const [state, setState] = useState<ExpensesFilters>({
     date: new Date(),
@@ -86,7 +86,7 @@ const Expenses: React.FC = () => {
         </Box>
         <Divider />
       </Box>
-      {days?.length > 0 ? (
+      {!loading && days?.length > 0 ? (
         days.map((day, index) => (
           <ExpenseCard
             key={index}

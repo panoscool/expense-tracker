@@ -4,7 +4,7 @@ import { Account } from '../../lib/interfaces/account';
 import { Category } from '../../lib/interfaces/category';
 import CategoryIcon from '../shared/category-icon';
 import DateField from '../shared/date-field';
-import IconTextField from '../shared/IconTextField';
+import IconSelectField from '../shared/IconSelectField';
 import { ExpensesFilters } from '../../lib/interfaces/expense';
 
 type Props = {
@@ -77,7 +77,7 @@ const ExpenseFilters: React.FC<Props> = (props) => {
         </TextField>
       )}
       {filterBy === 'category' && (
-        <IconTextField
+        <IconSelectField
           name="category"
           label="Category"
           value={state.category || ''}
@@ -98,7 +98,7 @@ const ExpenseFilters: React.FC<Props> = (props) => {
               <ListItemText primary={label} sx={{ textTransform: 'capitalize' }} />
             </MenuItem>
           ))}
-        </IconTextField>
+        </IconSelectField>
       )}
     </Box>
   );

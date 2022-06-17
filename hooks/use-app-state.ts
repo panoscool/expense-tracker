@@ -17,22 +17,6 @@ const initState: AppState = {
 
 const reducer: Reducer<AppState, { type: Actions; payload?: any }> = (state, { type, payload }) => {
   switch (type) {
-    case Actions.SET_AUTH:
-      return {
-        ...state,
-        user: payload.user,
-        loading: false,
-        error: null,
-      };
-
-    case Actions.CLEAR_AUTH:
-      storeClearAuth();
-
-      return {
-        ...state,
-        user: null,
-      };
-
     case Actions.SET_ACCOUNTS:
       return {
         ...state,
@@ -94,6 +78,22 @@ const reducer: Reducer<AppState, { type: Actions; payload?: any }> = (state, { t
           (notification) => notification.options.key !== payload.key,
         ),
       };
+
+    case Actions.SET_AUTH:
+      return {
+        ...state,
+        user: payload.user,
+        loading: false,
+        error: null,
+      };
+
+    case Actions.CLEAR_AUTH:
+      storeClearAuth();
+
+      return initState;
+
+    default:
+      return state;
   }
 };
 

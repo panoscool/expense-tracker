@@ -23,12 +23,12 @@ export const getDecodedUserId = async (req: NextApiRequest, res: NextApiResponse
     }
   } catch (err) {
     console.error(err);
-    return res.status(401).json({ error: 'Not authenticated' });
+    return res.status(400).json({ error: 'Not authenticated' });
   }
 };
 
-export const hasAccess = async (userId?: string, userEntityId?: string) => {
-  return userId === userEntityId?.toString();
+export const hasAccess = async (userId?: string, entityUserId?: string) => {
+  return userId === entityUserId?.toString();
 };
 
 export const authenticated =
@@ -41,6 +41,6 @@ export const authenticated =
       }
     } catch (err) {
       console.error(err);
-      return res.status(400).json({ error: 'Not authenticated' });
+      return res.status(400).json({ error: 'Failed to authenticate' });
     }
   };

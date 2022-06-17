@@ -41,7 +41,7 @@ type Props = {
   sx?: React.CSSProperties;
 };
 
-const IconTextField: React.FC<Props> = (props) => {
+const IconSelectField: React.FC<Props> = (props) => {
   const { children, label, value, name, error, helperText, onChange, onBlur, sx } = props;
 
   return (
@@ -61,4 +61,4 @@ const IconTextField: React.FC<Props> = (props) => {
   );
 };
 
-export default IconTextField;
+export default IconSelectField;
