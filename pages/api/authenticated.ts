@@ -3,9 +3,11 @@ import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
 import { IUser } from '../../lib/models/user';
 
 export const setAccessToken = async (user: IUser) => {
+  const secret = process.env.JWT_SECRET || '';
   const expires = 1000 * 60 * 60 * 24 * 7;
   const claims = { sub: user._id, name: user.name, email: user.email };
-  const accessToken = sign(claims, process.env.JWT_SECRET!, {
+
+  const accessToken = sign(claims, secret, {
     expiresIn: expires,
   });
 
@@ -15,8 +17,9 @@ export const setAccessToken = async (user: IUser) => {
 export const getDecodedUserId = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const [_, token] = req.headers.authorization?.split(' ') || [];
+    const secret = process.env.JWT_SECRET || '';
 
-    const decoded = verify(token, process.env.JWT_SECRET!);
+    const decoded = verify(token, secret);
 
     if (decoded) {
       return decoded.sub;
@@ -33,14 +36,11 @@ export const hasAccess = async (userId?: string, entityUserId?: string) => {
 
 export const authenticated =
   (fn: NextApiHandler) => async (req: NextApiRequest, res: NextApiResponse<any>) => {
-    try {
-      const userId = await getDecodedUserId(req, res);
+    const userId = await getDecodedUserId(req, res);
 
-      if (userId) {
-        return await fn(req, res);
-      }
-    } catch (err) {
-      console.error(err);
-      return res.status(400).json({ error: 'Failed to authenticate' });
+    if (userId) {
+      return await fn(req, res);
     }
+
+    return res.status(400).json({ error: 'Authentication failed' });
   };
