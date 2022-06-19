@@ -12,12 +12,10 @@ const getExpenses = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const { account_id, date, user_id, category } = req.query;
 
-    const accountId = await Account.findById(account_id);
-
     const monthStart = startOfMonth(parseISO(date as string));
     const monthEnd = endOfMonth(parseISO(date as string));
 
-    let filters: any = { account: accountId };
+    let filters: any = { account: account_id };
 
     if (date) {
       filters.date = { $gte: monthStart, $lte: monthEnd };
