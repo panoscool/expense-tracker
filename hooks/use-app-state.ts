@@ -20,30 +20,35 @@ const reducer: Reducer<AppState, { type: Actions; payload?: any }> = (state, { t
     case Actions.SET_ACCOUNTS:
       return {
         ...state,
+        loading: false,
         accounts: payload.accounts,
       };
 
     case Actions.SET_ACCOUNT:
       return {
         ...state,
+        loading: false,
         account: payload.account,
       };
 
     case Actions.SET_EXPENSES:
       return {
         ...state,
+        loading: false,
         expenses: payload.expenses,
       };
 
     case Actions.SET_EXPENSE:
       return {
         ...state,
+        loading: false,
         expense: payload.expense,
       };
 
     case Actions.SET_CATEGORIES:
       return {
         ...state,
+        loading: false,
         categories: payload.categories,
       };
 
@@ -62,6 +67,7 @@ const reducer: Reducer<AppState, { type: Actions; payload?: any }> = (state, { t
     case Actions.SET_ERROR:
       return {
         ...state,
+        loading: false,
         error: payload.error,
       };
 
@@ -82,9 +88,8 @@ const reducer: Reducer<AppState, { type: Actions; payload?: any }> = (state, { t
     case Actions.SET_AUTH:
       return {
         ...state,
-        user: payload.user,
         loading: false,
-        error: null,
+        user: payload.user,
       };
 
     case Actions.CLEAR_AUTH:

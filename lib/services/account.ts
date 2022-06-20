@@ -15,7 +15,6 @@ export const getAccounts = async (dispatch: React.Dispatch<any>) => {
     dispatch({ type: Actions.SET_ACCOUNTS, payload: { accounts: data } });
   } catch (error) {
     setError(dispatch, error as string);
-  } finally {
     setLoading(dispatch, false);
   }
 };
@@ -28,7 +27,6 @@ export const getAccount = async (dispatch: React.Dispatch<any>, id: string) => {
     dispatch({ type: Actions.SET_ACCOUNT, payload: { account: data } });
   } catch (error) {
     setError(dispatch, error as string);
-  } finally {
     setLoading(dispatch, false);
   }
 };

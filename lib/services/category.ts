@@ -15,7 +15,6 @@ export const getCategories = async (dispatch: React.Dispatch<any>) => {
     dispatch({ type: Actions.SET_CATEGORIES, payload: { categories: data } });
   } catch (error) {
     setError(dispatch, error as string);
-  } finally {
     setLoading(dispatch, false);
   }
 };

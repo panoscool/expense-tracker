@@ -2,7 +2,7 @@ import { model, Schema, Model, Document, models, SchemaTypes } from 'mongoose';
 
 export interface ICategory extends Document {
   _id: string;
-  user: string;
+  user: Document['_id'];
   labels: string[];
 }
 

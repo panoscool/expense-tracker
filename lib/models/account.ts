@@ -1,8 +1,8 @@
-import { model, Schema, Model, Document, models, SchemaTypes } from 'mongoose';
+import { Document, model, Model, models, Schema, SchemaTypes } from 'mongoose';
 
 export interface IAccount extends Document {
   _id: string;
-  user: string;
+  user: Document['_id'];
   name: string;
   users: string[];
   description: string;

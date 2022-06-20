@@ -26,7 +26,6 @@ export const getExpenses = async (dispatch: React.Dispatch<any>, params?: Expens
     dispatch({ type: Actions.SET_EXPENSES, payload: { expenses: response } });
   } catch (error) {
     setError(dispatch, error as string);
-  } finally {
     setLoading(dispatch, false);
   }
 };
@@ -39,7 +38,6 @@ export const getExpense = async (dispatch: React.Dispatch<any>, id: string) => {
     dispatch({ type: Actions.SET_EXPENSE, payload: { expense: response } });
   } catch (error) {
     setError(dispatch, error as string);
-  } finally {
     setLoading(dispatch, false);
   }
 };
