@@ -45,15 +45,10 @@ const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   useEffect(() => {
     if (authData?.sub) {
       login(dispatch, authData);
-    } else {
-      logout(dispatch);
-    }
-  }, [authData?.sub, dispatch]);
-
-  useEffect(() => {
-    if (authData?.sub) {
       getAccounts(dispatch);
       getCategories(dispatch);
+    } else {
+      logout(dispatch);
     }
   }, [authData?.sub, dispatch]);
 
