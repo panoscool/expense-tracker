@@ -14,7 +14,7 @@ const getExpenses = async (req: NextApiRequest, res: NextApiResponse) => {
     const { account_id, date, user_id, category } = req.query;
 
     const userId = await getDecodedUserId(req, res);
-    const user = await User.findOne({ _id: userId });
+    const user = await User.findById(userId); // this is to initialize the User model for populate, otherwise userId can be used directly
     const account = await Account.findOne({ _id: account_id });
 
     if (!user || !account || !account.users.includes(userId as string)) {

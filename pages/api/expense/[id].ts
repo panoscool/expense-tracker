@@ -4,13 +4,23 @@ import dbConnect from '../../../lib/config/db-connect';
 import validate from '../../../lib/utils/validate';
 import { expenseSchema } from '../../../lib/utils/yup-schema';
 import { authenticated, getDecodedUserId, hasAccess } from '../authenticated';
+import User from '../../../lib/models/user';
+import Account from '../../../lib/models/account';
 
 const getExpense = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
+    const userId = await getDecodedUserId(req, res);
+    const user = await User.findById(userId); // this is to initialize the User model for populate, otherwise userId can be used directly
     const expense = await Expense.findById(req.query.id).populate('user', 'name');
 
     if (!expense) {
       return res.status(200).json({ error: 'Expense not found' });
+    }
+
+    const account = await Account.findOne({ _id: expense.account });
+
+    if (!user || !account || !account.users.includes(userId as string)) {
+      return res.status(401).send({ error: 'Not authorized' });
     }
 
     res.status(200).json(expense);

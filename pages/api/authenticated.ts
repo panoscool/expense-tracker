@@ -35,7 +35,7 @@ export const hasAccess = async (userId?: string, entityUserId?: string) => {
 };
 
 export const authenticated =
-  (fn: NextApiHandler) => async (req: NextApiRequest, res: NextApiResponse<any>) => {
+  (fn: NextApiHandler) => async (req: NextApiRequest, res: NextApiResponse) => {
     const userId = await getDecodedUserId(req, res);
 
     if (userId) {
