@@ -26,7 +26,7 @@ export const getDecodedUserId = async (req: NextApiRequest, res: NextApiResponse
     }
   } catch (err) {
     console.error(err);
-    return res.status(400).json({ error: 'Not authenticated' });
+    return res.status(400).send({ error: 'Not authenticated' });
   }
 };
 
@@ -42,5 +42,5 @@ export const authenticated =
       return await fn(req, res);
     }
 
-    return res.status(400).json({ error: 'Authentication failed' });
+    return res.status(400).send({ error: 'Authentication failed' });
   };

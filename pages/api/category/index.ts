@@ -16,7 +16,7 @@ const getCategories = async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(200).json(categories);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).send({ error: 'Internal server error' });
   }
 };
 
@@ -25,7 +25,7 @@ const addCategory = async (req: NextApiRequest, res: NextApiResponse) => {
     const errors = await validate(categorySchema, req.body);
 
     if (errors) {
-      return res.status(400).json({ error: errors });
+      return res.status(400).send({ error: errors });
     }
 
     const userId = await getDecodedUserId(req, res);
@@ -39,7 +39,7 @@ const addCategory = async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(200).json(category);
   } catch (err) {
     console.error(err);
-    res.status(500).end(err || 'Internal server error');
+    res.status(500).send(err || 'Internal server error');
   }
 };
 
@@ -52,6 +52,6 @@ export default authenticated(async function handler(req: NextApiRequest, res: Ne
     case 'POST':
       return await addCategory(req, res);
     default:
-      return res.status(405).end('Method not allowed');
+      return res.status(405).send('Method not allowed');
   }
 });

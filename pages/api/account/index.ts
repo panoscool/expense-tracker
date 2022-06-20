@@ -16,7 +16,7 @@ const getAccounts = async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(200).json(accounts);
   } catch (err) {
     console.error(err);
-    res.status(500).end(err || 'Internal server error');
+    res.status(500).send(err || 'Internal server error');
   }
 };
 
@@ -25,7 +25,7 @@ const addAccount = async (req: NextApiRequest, res: NextApiResponse) => {
     const errors = await validate(accountSchema, req.body);
 
     if (errors) {
-      return res.status(400).json({ error: errors });
+      return res.status(400).send({ error: errors });
     }
 
     const userId = await getDecodedUserId(req, res);
@@ -43,7 +43,7 @@ const addAccount = async (req: NextApiRequest, res: NextApiResponse) => {
     const user = await User.findOne({ email });
 
     if (user?._id === account.user) {
-      return res.status(400).json({ error: 'You cannot add yourself as a user' });
+      return res.status(400).send({ error: 'You cannot add yourself as a user' });
     }
 
     if (user) {
@@ -57,7 +57,7 @@ const addAccount = async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(200).json(account);
   } catch (err) {
     console.error(err);
-    res.status(500).end(err || 'Internal server error');
+    res.status(500).send(err || 'Internal server error');
   }
 };
 
@@ -70,6 +70,6 @@ export default authenticated(async function handler(req: NextApiRequest, res: Ne
     case 'POST':
       return await addAccount(req, res);
     default:
-      return res.status(405).end('Method not allowed');
+      return res.status(405).send('Method not allowed');
   }
 });

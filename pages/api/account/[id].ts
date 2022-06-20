@@ -13,19 +13,19 @@ const getAccount = async (req: NextApiRequest, res: NextApiResponse) => {
     let account = await Account.findById(req.query.id).populate('users', 'name email');
 
     if (!account) {
-      return res.status(200).json({ error: 'Account not found' });
+      return res.status(200).send({ error: 'Account not found' });
     }
 
     const isUserInAccount = account.users.some((user: any) => user._id?.toString() === userId);
 
     if (!isUserInAccount) {
-      return res.status(401).json({ error: 'Unauthorized access' });
+      return res.status(401).send({ error: 'Unauthorized access' });
     }
 
     res.status(200).json(account);
   } catch (err) {
     console.error(err);
-    res.status(500).end(err || 'Internal server error');
+    res.status(500).send(err || 'Internal server error');
   }
 };
 
@@ -35,19 +35,19 @@ const updateAccount = async (req: NextApiRequest, res: NextApiResponse) => {
     const account = await Account.findById(req.query.id);
 
     if (!account) {
-      return res.status(200).json({ error: 'Account not found' });
+      return res.status(200).send({ error: 'Account not found' });
     }
 
     const authorized = await hasAccess(userId, account?.user);
 
     if (!authorized) {
-      return res.status(401).json({ error: 'Unauthorized access' });
+      return res.status(401).send({ error: 'Unauthorized access' });
     }
 
     const errors = await validate(accountSchema, req.body);
 
     if (errors) {
-      return res.status(400).json({ error: errors });
+      return res.status(400).send({ error: errors });
     }
 
     const { name, description, email } = req.body;
@@ -61,7 +61,7 @@ const updateAccount = async (req: NextApiRequest, res: NextApiResponse) => {
 
     // if user.id is equal to account.user, then user is the owner of the account and cannot remove himself
     if (user?._id?.toString() === account.user.toString()) {
-      return res.status(400).json({ error: 'You cannot remove yourself from the account' });
+      return res.status(400).send({ error: 'You cannot remove yourself from the account' });
     }
 
     // if user does not exist in the account users array add it
@@ -87,7 +87,7 @@ const updateAccount = async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(200).json(updatedAccount);
   } catch (err) {
     console.error(err);
-    res.status(500).end(err || 'Internal server error');
+    res.status(500).send(err || 'Internal server error');
   }
 };
 
@@ -97,13 +97,13 @@ const deleteAccount = async (req: NextApiRequest, res: NextApiResponse) => {
     const account = await Account.findById(req.query.id);
 
     if (!account) {
-      return res.status(200).json({ error: 'Account not found' });
+      return res.status(200).send({ error: 'Account not found' });
     }
 
     const authorized = await hasAccess(userId, account?.user);
 
     if (!authorized) {
-      return res.status(401).json({ error: 'Unauthorized access' });
+      return res.status(401).send({ error: 'Unauthorized access' });
     }
 
     // delete all expenses associated with the account
@@ -114,7 +114,7 @@ const deleteAccount = async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(200).json({ message: 'Ok' });
   } catch (err) {
     console.error(err);
-    res.status(500).end(err || 'Internal server error');
+    res.status(500).send(err || 'Internal server error');
   }
 };
 
@@ -129,6 +129,6 @@ export default authenticated(async function handler(req: NextApiRequest, res: Ne
     case 'DELETE':
       return await deleteAccount(req, res);
     default:
-      return res.status(405).end('Method not allowed');
+      return res.status(405).send('Method not allowed');
   }
 });

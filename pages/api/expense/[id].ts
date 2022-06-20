@@ -16,7 +16,7 @@ const getExpense = async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(200).json(expense);
   } catch (err) {
     console.error(err);
-    res.status(500).end(err || 'Internal server error');
+    res.status(500).send(err || 'Internal server error');
   }
 };
 
@@ -26,19 +26,19 @@ const updateExpense = async (req: NextApiRequest, res: NextApiResponse) => {
     const expense = await Expense.findById(req.query.id);
 
     if (!expense) {
-      return res.status(200).json({ error: 'Expense not found' });
+      return res.status(200).send({ error: 'Expense not found' });
     }
 
     const authorized = await hasAccess(userId, expense?.user);
 
     if (!authorized) {
-      return res.status(401).json({ error: 'Unauthorized access' });
+      return res.status(401).send({ error: 'Unauthorized access' });
     }
 
     const errors = await validate(expenseSchema, req.body);
 
     if (errors) {
-      return res.status(400).json({ error: errors });
+      return res.status(400).send({ error: errors });
     }
 
     const { date, account, category, amount, note, description } = req.body;
@@ -57,7 +57,7 @@ const updateExpense = async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(200).json(updatedExpense);
   } catch (err) {
     console.error(err);
-    res.status(500).end(err || 'Internal server error');
+    res.status(500).send(err || 'Internal server error');
   }
 };
 
@@ -67,13 +67,13 @@ const deleteExpense = async (req: NextApiRequest, res: NextApiResponse) => {
     const expense = await Expense.findById(req.query.id);
 
     if (!expense) {
-      return res.status(200).json({ error: 'Expense not found' });
+      return res.status(200).send({ error: 'Expense not found' });
     }
 
     const authorized = await hasAccess(userId, expense?.user);
 
     if (!authorized) {
-      return res.status(401).json({ error: 'Unauthorized access' });
+      return res.status(401).send({ error: 'Unauthorized access' });
     }
 
     await expense.delete();
@@ -81,7 +81,7 @@ const deleteExpense = async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(200).json({ message: 'Ok' });
   } catch (err) {
     console.error(err);
-    res.status(500).end(err || 'Internal server error');
+    res.status(500).send(err || 'Internal server error');
   }
 };
 
@@ -96,6 +96,6 @@ export default authenticated(async function handler(req: NextApiRequest, res: Ne
     case 'DELETE':
       return deleteExpense(req, res);
     default:
-      return res.status(405).end('Method not allowed');
+      return res.status(405).send('Method not allowed');
   }
 });

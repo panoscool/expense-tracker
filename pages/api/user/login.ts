@@ -10,7 +10,7 @@ async function checkHashedPassword(text: string, hash: string) {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
-    return res.status(405).end('Method not allowed');
+    return res.status(405).send('Method not allowed');
   }
 
   try {
@@ -21,13 +21,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(401).json({ error: 'Invalid credentials' });
+      return res.status(401).send({ error: 'Invalid credentials' });
     }
 
     const passwordMatch = await checkHashedPassword(password, user.password);
 
     if (!passwordMatch) {
-      return res.status(401).json({ error: 'Invalid credentials' });
+      return res.status(401).send({ error: 'Invalid credentials' });
     }
 
     const token = await setAccessToken(user);
@@ -35,6 +35,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(200).json(token);
   } catch (err) {
     console.error(err);
-    res.status(500).end(err || 'Internal server error');
+    res.status(500).send(err || 'Internal server error');
   }
 }

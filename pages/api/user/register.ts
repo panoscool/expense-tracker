@@ -17,7 +17,7 @@ async function getHashedPassword(text: string) {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
-    return res.status(405).end('Method not allowed');
+    return res.status(405).send('Method not allowed');
   }
 
   try {
@@ -26,7 +26,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const errors = await validate(registerSchema, req.body);
 
     if (errors) {
-      return res.status(400).json({ error: errors });
+      return res.status(400).send({ error: errors });
     }
 
     const { name, email, password } = req.body;
@@ -34,7 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
-      return res.status(400).json({ error: `User with ${email} already exists` });
+      return res.status(400).send({ error: `User with ${email} already exists` });
     }
 
     const hashedPassword = await getHashedPassword(password);
@@ -61,6 +61,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(200).json(token);
   } catch (err) {
     console.error(err);
-    res.status(500).end(err || 'Internal server error');
+    res.status(500).send(err || 'Internal server error');
   }
 }

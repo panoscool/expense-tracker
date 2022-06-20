@@ -8,53 +8,53 @@ import { categorySchema } from '../../../lib/utils/yup-schema';
 import { authenticated, getDecodedUserId, hasAccess } from '../authenticated';
 import Account from '../../../lib/models/account';
 
-const getCategory = async (req: NextApiRequest, res: NextApiResponse<any>) => {
+const getCategory = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const userId = (await getDecodedUserId(req, res)) as string;
     const category = await Category.findById(req.query.id);
 
     if (!category) {
-      return res.status(200).json({ error: 'Category not found' });
+      return res.status(200).send({ error: 'Category not found' });
     }
 
     const authorized = await hasAccess(userId, category?.user);
 
     if (!authorized) {
-      return res.status(401).json({ error: 'Unauthorized access' });
+      return res.status(401).send({ error: 'Unauthorized access' });
     }
 
     res.status(200).json(category);
   } catch (err) {
     console.error(err);
-    res.status(500).end(err || 'Internal server error');
+    res.status(500).send(err || 'Internal server error');
   }
 };
 
-const updateCategory = async (req: NextApiRequest, res: NextApiResponse<any>) => {
+const updateCategory = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const userId = (await getDecodedUserId(req, res)) as string;
     const category = await Category.findById(req.query.id);
 
     if (!category) {
-      return res.status(200).json({ error: 'Category not found' });
+      return res.status(200).send({ error: 'Category not found' });
     }
 
     const authorized = await hasAccess(userId, category?.user);
 
     if (!authorized) {
-      return res.status(401).json({ error: 'Unauthorized access' });
+      return res.status(401).send({ error: 'Unauthorized access' });
     }
 
     const errors = await validate(categorySchema, req.body);
 
     if (errors) {
-      return res.status(400).json({ error: errors });
+      return res.status(400).send({ error: errors });
     }
 
     const label = cleanLabel(req.body.label);
 
     if (category.labels.includes(label)) {
-      return res.status(200).json({ error: 'Category already exists' });
+      return res.status(200).send({ error: 'Category already exists' });
     }
 
     // update the labels array with the new label if it is not already in the array
@@ -67,24 +67,24 @@ const updateCategory = async (req: NextApiRequest, res: NextApiResponse<any>) =>
     res.status(200).json(updatedCategories);
   } catch (err) {
     console.error(err);
-    res.status(500).end(err || 'Internal server error');
+    res.status(500).send(err || 'Internal server error');
   }
 };
 
-const deleteCategory = async (req: NextApiRequest, res: NextApiResponse<any>) => {
+const deleteCategory = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const userId = (await getDecodedUserId(req, res)) as string;
     const account = await Account.findOne({ user: userId });
     const category = await Category.findById(req.query.id);
 
     if (!category) {
-      return res.status(200).json({ error: 'Category not found' });
+      return res.status(200).send({ error: 'Category not found' });
     }
 
     const authorized = await hasAccess(userId, category?.user);
 
     if (!authorized) {
-      return res.status(401).json({ error: 'Unauthorized access' });
+      return res.status(401).send({ error: 'Unauthorized access' });
     }
 
     const label = cleanLabel(req.body.label);
@@ -100,14 +100,11 @@ const deleteCategory = async (req: NextApiRequest, res: NextApiResponse<any>) =>
     res.status(200).json({ message: 'Ok' });
   } catch (err) {
     console.error(err);
-    res.status(500).end(err || 'Internal server error');
+    res.status(500).send(err || 'Internal server error');
   }
 };
 
-export default authenticated(async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<any>,
-) {
+export default authenticated(async function handler(req: NextApiRequest, res: NextApiResponse) {
   await dbConnect();
 
   switch (req.method) {
@@ -118,6 +115,6 @@ export default authenticated(async function handler(
     case 'DELETE':
       return await deleteCategory(req, res);
     default:
-      return res.status(405).end('Method not allowed');
+      return res.status(405).send('Method not allowed');
   }
 });
