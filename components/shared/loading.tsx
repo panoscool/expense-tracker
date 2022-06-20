@@ -9,7 +9,7 @@ const Backdrop = styled(BaseBackdrop)(({ theme }) => ({
 export default function Loading({ loading }: { loading: boolean }) {
   return (
     <Backdrop open={loading}>
-      {loading && <CircularProgress sx={{ color: (theme) => theme.palette.common.white }} />}
+      <CircularProgress sx={{ color: (theme) => theme.palette.common.white }} />
     </Backdrop>
   );
 }
