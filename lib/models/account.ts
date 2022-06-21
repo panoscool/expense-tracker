@@ -6,6 +6,8 @@ export interface IAccount extends Document {
   name: string;
   users: string[];
   description: string;
+  created_at: Date;
+  updated_at: Date;
 }
 
 const AccountSchema: Schema = new Schema(

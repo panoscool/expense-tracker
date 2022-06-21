@@ -30,8 +30,8 @@ export const getDecodedUserId = async (req: NextApiRequest, res: NextApiResponse
   }
 };
 
-export const hasAccess = async (userId?: string, entityUserId?: string) => {
-  return userId === entityUserId?.toString();
+export const hasAccess = async (userId?: string, creatorId?: string, entityUserId?: string) => {
+  return userId === creatorId?.toString() || userId === entityUserId?.toString();
 };
 
 export const authenticated =

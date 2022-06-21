@@ -12,12 +12,14 @@ import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import useAppContext from '../../hooks/use-app-context';
 import useForm from '../../hooks/use-form';
 import useIsDesktop from '../../hooks/use-is-desktop';
 import { Account } from '../../lib/interfaces/account';
 import { ExpenseCreate } from '../../lib/interfaces/expense';
+import { getAccount } from '../../lib/services/account';
 import {
   createExpense,
   deleteExpense,
@@ -43,15 +45,23 @@ const initialValues: ExpenseCreate = {
   account: '',
   category: '',
   amount: 0,
+  user: '',
   description: '',
   details: '',
 };
 
 const ExpenseForm: React.FC = () => {
+  const router = useRouter();
   const isDesktop = useIsDesktop();
   const [openCalculator, setOpenCalculator] = useState(false);
-  const { accounts, expense, categories, modal, dispatch } = useAppContext();
+  const { auth, accounts, account, expense, categories, modal, dispatch } = useAppContext();
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(expenseSchema, initialValues);
+
+  useEffect(() => {
+    if (values.account || router.query.account_id) {
+      getAccount(dispatch, values.account || (router.query.account_id as string));
+    }
+  }, [values?.account, router.query.account_id]);
 
   useEffect(() => {
     if (modal?.params) {
@@ -59,11 +69,11 @@ const ExpenseForm: React.FC = () => {
     }
 
     if (expense?._id) {
-      setValues(expense);
+      setValues({ ...expense, user: expense.user._id });
     }
 
     if (!modal?.params) {
-      setValues(initialValues);
+      setValues({ ...initialValues, user: auth?.id, account: account?._id });
     }
   }, [dispatch, expense?._id, modal?.params, setValues]);
 
@@ -184,6 +194,21 @@ const ExpenseForm: React.FC = () => {
             ),
           }}
         />
+        <TextField
+          select
+          name="user"
+          label="User"
+          disabled={!account}
+          value={values.user || ''}
+          onChange={handleChange}
+        >
+          <MenuItem value="">None</MenuItem>
+          {account?.users.map((user) => (
+            <MenuItem key={user._id} value={user._id}>
+              {user.name}
+            </MenuItem>
+          ))}
+        </TextField>
         <TextField
           name="description"
           label="Description"

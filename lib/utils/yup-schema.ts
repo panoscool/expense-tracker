@@ -35,6 +35,7 @@ export const expenseSchema = yup.object({
   account: yup.string().required('Account is required'),
   category: yup.string().required('Category is required'),
   amount: yup.number().typeError('Value is not a number').required('Amount is required'),
+  user: yup.string().trim().nullable(),
   description: yup.string().trim().nullable(),
   details: yup.string().trim().nullable(),
 });

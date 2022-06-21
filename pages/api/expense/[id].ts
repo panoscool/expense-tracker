@@ -39,7 +39,7 @@ const updateExpense = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(200).send({ error: 'Expense not found' });
     }
 
-    const authorized = await hasAccess(userId, expense?.user);
+    const authorized = await hasAccess(userId, expense?.created_by, expense?.user);
 
     if (!authorized) {
       return res.status(401).send({ error: 'Unauthorized access' });
@@ -60,6 +60,7 @@ const updateExpense = async (req: NextApiRequest, res: NextApiResponse) => {
       amount,
       details,
       description,
+      updated_by: userId,
     });
 
     const updatedExpense = await Expense.findById(req.query.id);
