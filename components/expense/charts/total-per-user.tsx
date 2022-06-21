@@ -14,7 +14,7 @@ type Props = {
 const TotalPerUser: React.FC<Props> = ({ expenses }) => {
   const totalPerUser: { [key: string]: number } = getTotalAmountPerUser(expenses || []);
   const userAmount: number[] = Object.values(totalPerUser);
-  const userColor: string[] = Object.keys(totalPerUser).map((key) => stringToColor(key));
+  const userColor: string[] = Object.keys(totalPerUser).map(stringToColor);
   const userName: string[] = Object.keys(totalPerUser).map((key) => {
     const foundUser = expenses.find((expense) => expense.user._id === key);
     return foundUser ? foundUser.user.name : '';

@@ -12,7 +12,7 @@ type Props = {
   dates: string[];
 };
 
-const TotalPerDay = ({ days, dates }: Props) => {
+const TotalPerDay: React.FC<Props> = ({ days, dates }) => {
   const totalPerDay = days.map((day: Expense[]) => {
     return day.reduce((acc, curr) => acc + curr.amount, 0);
   });

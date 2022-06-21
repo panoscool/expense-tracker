@@ -18,6 +18,7 @@ import UserPayable from './user-payable';
 
 const TotalPerDay = dynamic(() => import('./charts/total-per-day'), { ssr: false });
 const TotalPerUser = dynamic(() => import('./charts/total-per-user'), { ssr: false });
+const TotalPerCategory = dynamic(() => import('./charts/total-per-category'), { ssr: false });
 
 const Expenses: React.FC = () => {
   const router = useRouter();
@@ -69,6 +70,7 @@ const Expenses: React.FC = () => {
         </Grid>
       </Grid>
 
+      <TotalPerCategory expenses={expenses || []} />
       {totalUsers > 1 && <UserPayable expenses={expenses || []} />}
 
       <Box mt={8} mb={2}>
