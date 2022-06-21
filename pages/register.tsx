@@ -61,14 +61,14 @@ const Register: NextPage = () => {
 
     if (canSubmit()) {
       try {
-        setLoading(dispatch, 'register');
+        setLoading(dispatch, true);
         const data: any = await apiRequest('POST', '/user/register', values);
         storeSetAuth(data as string);
         router.push('/');
       } catch (error) {
         setError(dispatch, error as string);
       } finally {
-        setLoading(dispatch, 'register');
+        setLoading(dispatch, false);
       }
     }
   };

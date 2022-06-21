@@ -59,14 +59,14 @@ const Login: NextPage = () => {
 
     if (canSubmit()) {
       try {
-        setLoading(dispatch, 'login');
+        setLoading(dispatch, true);
         const data: any = await apiRequest('POST', '/user/login', values);
         storeSetAuth(data as string);
         router.push('/');
       } catch (error) {
         setError(dispatch, error as string);
       } finally {
-        setLoading(dispatch, 'login');
+        setLoading(dispatch, false);
       }
     }
   };
