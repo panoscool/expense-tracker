@@ -43,8 +43,8 @@ const initialValues: ExpenseCreate = {
   account: '',
   category: '',
   amount: 0,
-  note: '',
   description: '',
+  details: '',
 };
 
 const ExpenseForm: React.FC = () => {
@@ -185,24 +185,24 @@ const ExpenseForm: React.FC = () => {
           }}
         />
         <TextField
-          name="note"
-          label="Note"
-          value={values.note || ''}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          error={!!hasError('note')}
-          helperText={hasError('note')?.message}
-        />
-        <TextField
           name="description"
           label="Description"
-          multiline
-          rows={3}
           value={values.description || ''}
           onChange={handleChange}
           onBlur={handleBlur}
           error={!!hasError('description')}
           helperText={hasError('description')?.message}
+        />
+        <TextField
+          name="details"
+          label="Details"
+          multiline
+          rows={3}
+          value={values.details || ''}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          error={!!hasError('details')}
+          helperText={hasError('details')?.message}
         />
 
         <Box display="flex" alignSelf="center" gap={2} mt={3}>

@@ -73,7 +73,7 @@ const ExpenseCard: React.FC<Props> = ({ day, date, onSelectExpense }) => {
                     <CategoryIcon icon={expense.category} />
                   </ListItemIcon>
                   <ListItemText
-                    primary={expense.note}
+                    primary={expense.description}
                     secondary={expense.user.name}
                     sx={{ textTransform: 'capitalize' }}
                   />

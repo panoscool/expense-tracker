@@ -55,7 +55,7 @@ const addExpense = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const userId = await getDecodedUserId(req, res);
 
-    const { date, account, category, amount, note, description } = req.body;
+    const { date, account, category, amount, details, description } = req.body;
 
     const expense = await Expense.create({
       _id: uuidv4(),
@@ -64,8 +64,8 @@ const addExpense = async (req: NextApiRequest, res: NextApiResponse) => {
       date,
       category,
       amount,
-      note,
       description,
+      details,
     });
 
     res.status(200).json(expense);

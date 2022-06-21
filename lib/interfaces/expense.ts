@@ -10,7 +10,7 @@ export interface Expense {
   account: string;
   category: string;
   amount: number;
-  note: string;
+  details: string;
   description: string;
   user: User;
 }

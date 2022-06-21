@@ -19,8 +19,8 @@ const ExpenseSchema: Schema = new Schema(
     category: { type: String, required: true },
     date: { type: Date, required: true },
     amount: { type: Number, required: true },
-    note: { type: String, trim: true },
     description: { type: String, trim: true },
+    details: { type: String, trim: true },
   },
   {
     timestamps: {

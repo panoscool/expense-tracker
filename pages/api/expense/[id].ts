@@ -51,14 +51,14 @@ const updateExpense = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(400).send({ error: errors });
     }
 
-    const { date, account, category, amount, note, description } = req.body;
+    const { date, account, category, amount, details, description } = req.body;
 
     await expense.updateOne({
       account,
       date,
       category,
       amount,
-      note,
+      details,
       description,
     });
 
