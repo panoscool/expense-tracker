@@ -19,10 +19,10 @@ import { Theme } from '@mui/material/styles';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useAppContext from '../../hooks/use-app-context';
 import { Account } from '../../lib/interfaces/account';
-import { deleteAccount } from '../../lib/services/account';
+import { deleteAccount, getAccounts } from '../../lib/services/account';
 import DropDown from '../shared/drop-down';
 import AccountForm from './account-form';
 import AccountUsers from './account-users';
@@ -33,6 +33,10 @@ const AccountList = () => {
   const [showForm, setShowForm] = useState(false);
   const [showUsers, setShowUsers] = useState(false);
   const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
+
+  useEffect(() => {
+    getAccounts(dispatch);
+  }, [dispatch]);
 
   const handleAccountSelect = (id: string) => () => {
     router.push(`/expenses/?account_id=${id}`);

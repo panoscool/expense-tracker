@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import useAppContext from '../../hooks/use-app-context';
 import useIsDesktop from '../../hooks/use-is-desktop';
 import { ExpensesFilters } from '../../lib/interfaces/expense';
-import { getAccount } from '../../lib/services/account';
+import { getAccounts } from '../../lib/services/account';
 import { getExpenses } from '../../lib/services/expense';
 import { setModal } from '../../lib/services/helpers';
 import { getTotalUsers } from '../../lib/utils/expense-calculations';
@@ -23,7 +23,7 @@ const TotalPerCategory = dynamic(() => import('./charts/total-per-category'), { 
 const Expenses: React.FC = () => {
   const router = useRouter();
   const isDesktop = useIsDesktop();
-  const { account, expenses, categories, dispatch } = useAppContext();
+  const { expenses, dispatch } = useAppContext();
   const [filterBy, setFilterBy] = useState<string>('date');
   const [state, setState] = useState<ExpensesFilters>({
     date: new Date(),
@@ -32,10 +32,8 @@ const Expenses: React.FC = () => {
   });
 
   useEffect(() => {
-    if (router.query.account_id) {
-      getAccount(dispatch, router.query.account_id as string);
-    }
-  }, [dispatch, router.query.account_id]);
+    getAccounts(dispatch);
+  }, [dispatch]);
 
   useEffect(() => {
     if (router.query.account_id) {
@@ -77,8 +75,6 @@ const Expenses: React.FC = () => {
         <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap">
           <ExpenseFilters
             filterBy={filterBy}
-            account={account}
-            categories={categories}
             state={state}
             onFilterByChange={setFilterBy}
             onStateChange={setState}

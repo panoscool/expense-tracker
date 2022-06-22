@@ -1,23 +1,37 @@
-import { Box, ListItemIcon, ListItemText, MenuItem, TextField } from '@mui/material';
 import ListAltOutlinedIcon from '@mui/icons-material/ListAltOutlined';
-import { Account } from '../../lib/interfaces/account';
-import { Category } from '../../lib/interfaces/category';
+import { Box, ListItemIcon, ListItemText, MenuItem, TextField } from '@mui/material';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import useAppContext from '../../hooks/use-app-context';
+import { ExpensesFilters } from '../../lib/interfaces/expense';
+import { getAccount } from '../../lib/services/account';
+import { getCategories } from '../../lib/services/category';
 import CategoryIcon from '../shared/category-icon';
 import DateField from '../shared/date-field';
-import IconSelectField from '../shared/IconSelectField';
-import { ExpensesFilters } from '../../lib/interfaces/expense';
+import IconSelectField from '../shared/icon-select-field';
 
 type Props = {
   filterBy: string;
-  account: Account | null;
-  categories: Category | null;
   state: ExpensesFilters;
   onFilterByChange: React.Dispatch<React.SetStateAction<string>>;
   onStateChange: React.Dispatch<React.SetStateAction<ExpensesFilters>>;
 };
 
 const ExpenseFilters: React.FC<Props> = (props) => {
-  const { filterBy, account, categories, state, onFilterByChange, onStateChange } = props;
+  const { filterBy, state, onFilterByChange, onStateChange } = props;
+
+  const router = useRouter();
+  const { account, categories, dispatch } = useAppContext();
+
+  useEffect(() => {
+    getCategories(dispatch);
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (router.query.account_id) {
+      getAccount(dispatch, router.query.account_id as string);
+    }
+  }, [dispatch, router.query.account_id]);
 
   const handleChangeFilterBy = (event: React.ChangeEvent<HTMLInputElement>) => {
     onFilterByChange(event.target.value);

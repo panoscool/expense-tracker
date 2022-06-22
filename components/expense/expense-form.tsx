@@ -32,7 +32,7 @@ import { expenseSchema } from '../../lib/utils/yup-schema';
 import CalculatorDialog from '../calculator/calculator-dialog';
 import CategoryIcon from '../shared/category-icon';
 import DateField from '../shared/date-field';
-import IconSelectField from '../shared/IconSelectField';
+import IconSelectField from '../shared/icon-select-field';
 
 const Form = styled('form')`
   display: flex;
