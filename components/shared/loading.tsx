@@ -6,10 +6,12 @@ const Backdrop = styled(BaseBackdrop)(({ theme }) => ({
   zIndex: theme.zIndex.modal + 1,
 }));
 
-export default function Loading({ loading }: { loading: boolean }) {
+const Loading: React.FC<{ loading: string[] }> = ({ loading }) => {
   return (
-    <Backdrop open={loading}>
+    <Backdrop open={loading.length > 0}>
       <CircularProgress sx={{ color: (theme) => theme.palette.common.white }} />
     </Backdrop>
   );
-}
+};
+
+export default Loading;

@@ -14,7 +14,7 @@ type ExpensesFilters = {
 
 export const getExpenses = async (dispatch: React.Dispatch<any>, params?: ExpensesFilters) => {
   try {
-    setLoading(dispatch, true);
+    setLoading(dispatch, 'get_expenses');
     const formattedParams = params ? buildParams(params) : '';
     const defaultParams = `date=${format(new Date(), 'yyyy-MM-dd')}`;
 
@@ -27,26 +27,26 @@ export const getExpenses = async (dispatch: React.Dispatch<any>, params?: Expens
   } catch (error) {
     setError(dispatch, error as string);
   } finally {
-    setLoading(dispatch, false);
+    setLoading(dispatch, 'get_expenses');
   }
 };
 
 export const getExpense = async (dispatch: React.Dispatch<any>, id: string) => {
   try {
-    setLoading(dispatch, true);
+    setLoading(dispatch, 'get_expense');
 
     const response = await apiRequest('GET', `/expense/${id}`);
     dispatch({ type: Actions.SET_EXPENSE, payload: { expense: response } });
   } catch (error) {
     setError(dispatch, error as string);
   } finally {
-    setLoading(dispatch, false);
+    setLoading(dispatch, 'get_expense');
   }
 };
 
 export const createExpense = async (dispatch: React.Dispatch<any>, data: ExpenseCreate) => {
   try {
-    setLoading(dispatch, true);
+    setLoading(dispatch, 'create_expense');
     setError(dispatch, null);
 
     const response = await apiRequest('POST', '/expense', data);
@@ -58,13 +58,13 @@ export const createExpense = async (dispatch: React.Dispatch<any>, data: Expense
     setError(dispatch, error as string);
     enqueueNotification(dispatch, `Expense failed to create: ${error}`, 'error');
   } finally {
-    setLoading(dispatch, false);
+    setLoading(dispatch, 'create_expense');
   }
 };
 
 export const updateExpense = async (dispatch: React.Dispatch<any>, data: Expense) => {
   try {
-    setLoading(dispatch, true);
+    setLoading(dispatch, 'update_expense');
     setError(dispatch, null);
 
     const response = await apiRequest('PUT', `/expense/${data._id}`, data);
@@ -76,13 +76,13 @@ export const updateExpense = async (dispatch: React.Dispatch<any>, data: Expense
     setError(dispatch, error as string);
     enqueueNotification(dispatch, `Expense failed to update: ${error}`, 'error');
   } finally {
-    setLoading(dispatch, false);
+    setLoading(dispatch, 'update_expense');
   }
 };
 
 export const deleteExpense = async (dispatch: React.Dispatch<any>, id: string) => {
   try {
-    setLoading(dispatch, true);
+    setLoading(dispatch, 'delete_expense');
     setError(dispatch, null);
 
     await apiRequest('DELETE', `/expense/${id}`);
@@ -93,6 +93,6 @@ export const deleteExpense = async (dispatch: React.Dispatch<any>, id: string) =
     setError(dispatch, error as string);
     enqueueNotification(dispatch, `Expense failed to delete: ${error}`, 'error');
   } finally {
-    setLoading(dispatch, false);
+    setLoading(dispatch, 'delete_expense');
   }
 };

@@ -10,7 +10,7 @@ const initState: AppState = {
   expense: null,
   categories: null,
   modal: null,
-  loading: false,
+  loading: [],
   error: null,
   notifications: [],
 };
@@ -54,9 +54,12 @@ const reducer: Reducer<AppState, { type: Actions; payload?: any }> = (state, { t
       };
 
     case Actions.SET_LOADING:
+      if (state.loading.includes(payload.loading)) {
+        return { ...state, loading: state.loading.filter((act) => act !== payload.loading) };
+      }
       return {
         ...state,
-        loading: payload.loading,
+        loading: [...state.loading, payload.loading],
       };
 
     case Actions.SET_ERROR:

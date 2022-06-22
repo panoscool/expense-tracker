@@ -9,33 +9,33 @@ interface AccountUpdate extends Partial<Account> {
 
 export const getAccounts = async (dispatch: React.Dispatch<any>) => {
   try {
-    setLoading(dispatch, true);
+    setLoading(dispatch, 'get_accounts');
 
     const data = await apiRequest('GET', '/account');
     dispatch({ type: Actions.SET_ACCOUNTS, payload: { accounts: data } });
   } catch (error) {
     setError(dispatch, error as string);
   } finally {
-    setLoading(dispatch, false);
+    setLoading(dispatch, 'get_accounts');
   }
 };
 
 export const getAccount = async (dispatch: React.Dispatch<any>, id: string) => {
   try {
-    setLoading(dispatch, true);
+    setLoading(dispatch, 'get_account');
 
     const data = await apiRequest('GET', `/account/${id}`);
     dispatch({ type: Actions.SET_ACCOUNT, payload: { account: data } });
   } catch (error) {
     setError(dispatch, error as string);
   } finally {
-    setLoading(dispatch, false);
+    setLoading(dispatch, 'get_account');
   }
 };
 
 export const createAccount = async (dispatch: React.Dispatch<any>, data: AccountCreate) => {
   try {
-    setLoading(dispatch, true);
+    setLoading(dispatch, 'create_account');
     setError(dispatch, null);
 
     const response = await apiRequest('POST', '/account', data);
@@ -47,13 +47,13 @@ export const createAccount = async (dispatch: React.Dispatch<any>, data: Account
     setError(dispatch, error as string);
     enqueueNotification(dispatch, `Account failed to create: ${error}`, 'error');
   } finally {
-    setLoading(dispatch, false);
+    setLoading(dispatch, 'create_account');
   }
 };
 
 export const updateAccount = async (dispatch: React.Dispatch<any>, data: AccountUpdate) => {
   try {
-    setLoading(dispatch, true);
+    setLoading(dispatch, 'update_account');
     setError(dispatch, null);
 
     const response = await apiRequest('PUT', `/account/${data._id}`, data);
@@ -65,13 +65,13 @@ export const updateAccount = async (dispatch: React.Dispatch<any>, data: Account
     setError(dispatch, error as string);
     enqueueNotification(dispatch, `Account failed to update: ${error}`, 'error');
   } finally {
-    setLoading(dispatch, false);
+    setLoading(dispatch, 'update_account');
   }
 };
 
 export const deleteAccount = async (dispatch: React.Dispatch<any>, id: string) => {
   try {
-    setLoading(dispatch, true);
+    setLoading(dispatch, 'delete_account');
     setError(dispatch, null);
 
     await apiRequest('DELETE', `/account/${id}`);
@@ -82,6 +82,6 @@ export const deleteAccount = async (dispatch: React.Dispatch<any>, id: string) =
     setError(dispatch, error as string);
     enqueueNotification(dispatch, `Account failed to delete: ${error}`, 'error');
   } finally {
-    setLoading(dispatch, false);
+    setLoading(dispatch, 'delete_account');
   }
 };

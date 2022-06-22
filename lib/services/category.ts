@@ -9,20 +9,20 @@ type Category = {
 
 export const getCategories = async (dispatch: React.Dispatch<any>) => {
   try {
-    setLoading(dispatch, true);
+    setLoading(dispatch, 'get_categories');
 
     const data = await apiRequest('GET', '/category');
     dispatch({ type: Actions.SET_CATEGORIES, payload: { categories: data } });
   } catch (error) {
     setError(dispatch, error as string);
   } finally {
-    setLoading(dispatch, false);
+    setLoading(dispatch, 'get_categories');
   }
 };
 
 export const createCategory = async (dispatch: React.Dispatch<any>, data: Category) => {
   try {
-    setLoading(dispatch, true);
+    setLoading(dispatch, 'create_category');
     setError(dispatch, null);
 
     await apiRequest('PUT', `/category/${data.id}`, { label: data.label });
@@ -33,13 +33,13 @@ export const createCategory = async (dispatch: React.Dispatch<any>, data: Catego
     setError(dispatch, error as string);
     enqueueNotification(dispatch, `Category failed to create: ${error}`, 'error');
   } finally {
-    setLoading(dispatch, false);
+    setLoading(dispatch, 'create_category');
   }
 };
 
 export const deleteCategory = async (dispatch: React.Dispatch<any>, data: Category) => {
   try {
-    setLoading(dispatch, true);
+    setLoading(dispatch, 'delete_category');
     setError(dispatch, null);
 
     dispatch({ type: Actions.SET_ERROR, payload: { error: null } });
@@ -52,6 +52,6 @@ export const deleteCategory = async (dispatch: React.Dispatch<any>, data: Catego
     setError(dispatch, error as string);
     enqueueNotification(dispatch, `Category failed to delete: ${error}`, 'error');
   } finally {
-    setLoading(dispatch, false);
+    setLoading(dispatch, 'delete_category');
   }
 };

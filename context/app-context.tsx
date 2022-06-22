@@ -8,7 +8,7 @@ import { login, logout } from '../lib/services/helpers';
 
 const initState: AppContextType = {
   auth: null,
-  loading: false,
+  loading: [],
   error: null,
   modal: null,
   accounts: null,

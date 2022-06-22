@@ -40,7 +40,7 @@ export interface AppState {
   expense: Expense | null;
   categories: Category | null;
   modal: ModalType | null;
-  loading: boolean;
+  loading: string[];
   error: string | null;
   notifications: NotificationsType[];
 }

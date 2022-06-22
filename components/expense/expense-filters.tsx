@@ -17,9 +17,7 @@ type Props = {
   onStateChange: React.Dispatch<React.SetStateAction<ExpensesFilters>>;
 };
 
-const ExpenseFilters: React.FC<Props> = (props) => {
-  const { filterBy, state, onFilterByChange, onStateChange } = props;
-
+const ExpenseFilters: React.FC<Props> = ({ filterBy, state, onFilterByChange, onStateChange }) => {
   const router = useRouter();
   const { account, categories, dispatch } = useAppContext();
 

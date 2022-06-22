@@ -27,7 +27,7 @@ export const setModal = (dispatch: React.Dispatch<any>, payload: ModalType | nul
   dispatch({ type: Actions.SET_MODAL, payload });
 };
 
-export const setLoading = (dispatch: React.Dispatch<any>, loading: boolean) => {
+export const setLoading = (dispatch: React.Dispatch<any>, loading: string) => {
   dispatch({ type: Actions.SET_LOADING, payload: { loading } });
 };
 

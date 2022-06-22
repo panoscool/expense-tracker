@@ -77,7 +77,6 @@ const reducer: Reducer<State, { type: Actions; payload?: any }> = (state, { type
       ) {
         return state;
       }
-
       return {
         ...state,
         overwrite: true,
@@ -100,7 +99,6 @@ const reducer: Reducer<State, { type: Actions; payload?: any }> = (state, { type
       if (state.currentOperand.length === 1) {
         return { ...state, currentOperand: null };
       }
-
       return {
         ...state,
         currentOperand: state.currentOperand.slice(0, -1),
