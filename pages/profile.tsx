@@ -3,14 +3,14 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useEffect } from 'react';
 import ProfileForm from '../components/profile/profile-form';
-import useProtectedRoute from '../hooks/use-protected-route';
+import useAuth from '../hooks/use-auth';
 
 const Home: NextPage = () => {
-  const { authenticated, checkAuthState } = useProtectedRoute(true);
+  const { authenticated, checkAuthStateAndRedirect } = useAuth(true);
 
   useEffect(() => {
-    checkAuthState('/login');
-  }, [checkAuthState]);
+    checkAuthStateAndRedirect('/login');
+  }, [checkAuthStateAndRedirect]);
 
   if (!authenticated) return null;
 

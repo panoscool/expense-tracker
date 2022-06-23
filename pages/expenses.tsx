@@ -2,14 +2,14 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useEffect } from 'react';
 import Expenses from '../components/expense';
-import useProtectedRoute from '../hooks/use-protected-route';
+import useAuth from '../hooks/use-auth';
 
 const Home: NextPage = () => {
-  const { authenticated, checkAuthState } = useProtectedRoute(true);
+  const { authenticated, checkAuthStateAndRedirect } = useAuth(true);
 
   useEffect(() => {
-    checkAuthState('/login');
-  }, [checkAuthState]);
+    checkAuthStateAndRedirect('/login');
+  }, [checkAuthStateAndRedirect]);
 
   if (!authenticated) return null;
 

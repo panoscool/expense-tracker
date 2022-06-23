@@ -1,10 +1,6 @@
-import { createContext, useEffect } from 'react';
+import { createContext, useState } from 'react';
 import useAppState from '../hooks/use-app-state';
-import { storeGetDecodedToken } from '../lib/config/store';
 import { AppContextType } from '../lib/interfaces/common';
-import { DecodedToken } from '../lib/interfaces/user';
-import { logout } from '../lib/services/helpers';
-import { getUser } from '../lib/services/user';
 
 const initState: AppContextType = {
   user: null,
@@ -17,13 +13,15 @@ const initState: AppContextType = {
   expense: null,
   categories: null,
   notifications: [],
+  authenticated: false,
   dispatch: () => {},
+  setAuthenticated: () => {},
 };
 
 export const AppContext = createContext(initState);
 
 const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const authData: DecodedToken | null = storeGetDecodedToken();
+  const [authenticated, setAuthenticated] = useState(false);
 
   const { state, dispatch } = useAppState();
 
@@ -40,14 +38,6 @@ const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     notifications,
   } = state;
 
-  useEffect(() => {
-    if (authData?.sub) {
-      getUser(dispatch);
-    } else {
-      logout(dispatch);
-    }
-  }, [authData?.sub, dispatch]);
-
   const contextValues = {
     user,
     loading,
@@ -59,9 +49,11 @@ const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     expense,
     categories,
     notifications,
+    authenticated,
   };
   const contextFunctions = {
     dispatch,
+    setAuthenticated,
   };
 
   return (

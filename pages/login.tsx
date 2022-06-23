@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import NextLink from '../components/shared/next-link';
 import useAppContext from '../hooks/use-app-context';
 import useForm from '../hooks/use-form';
-import useProtectedRoute from '../hooks/use-protected-route';
+import useAuth from '../hooks/use-auth';
 import apiRequest from '../lib/config/axios';
 import { storeSetAccessToken } from '../lib/config/store';
 import { setError, setLoading } from '../lib/services/helpers';
@@ -35,16 +35,16 @@ const Form = styled('form')(({ theme }) => ({
 
 const Login: NextPage = () => {
   const router = useRouter();
-  const { authenticated, checkAuthState } = useProtectedRoute(false);
   const { error, dispatch } = useAppContext();
+  const { authenticated, checkAuthStateAndRedirect } = useAuth(false);
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(loginSchema, {
     email: '',
     password: '',
   });
 
   useEffect(() => {
-    checkAuthState('/');
-  }, [checkAuthState]);
+    checkAuthStateAndRedirect('/');
+  }, [checkAuthStateAndRedirect]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [event.target.name]: event.target.value });

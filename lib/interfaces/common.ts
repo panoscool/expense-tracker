@@ -46,5 +46,7 @@ export interface AppState {
 }
 
 export interface AppContextType extends AppState {
+  authenticated: boolean;
+  setAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
   dispatch: React.Dispatch<any>;
 }
