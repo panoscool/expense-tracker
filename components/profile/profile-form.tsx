@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import useAppContext from '../../hooks/use-app-context';
 import useForm from '../../hooks/use-form';
 import { userUpdateSchema } from '../../lib/config/yup-schema';
@@ -18,6 +18,7 @@ const Form = styled('form')`
 
 const ProfileForm: React.FC = () => {
   const { user, dispatch } = useAppContext();
+  const [isSaveDisabled, setIsSaveDisabled] = useState(true);
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(userUpdateSchema, {
     name: '',
     password: '',
@@ -35,6 +36,7 @@ const ProfileForm: React.FC = () => {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [event.target.name]: event.target.value });
+    setIsSaveDisabled(false);
   };
 
   const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
@@ -101,8 +103,14 @@ const ProfileForm: React.FC = () => {
         />
 
         <Box textAlign="center" mt={3}>
-          <Button type="submit" variant="contained" color="primary" sx={{ minWidth: 200 }}>
-            Submit
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            disabled={isSaveDisabled}
+            sx={{ minWidth: 200 }}
+          >
+            Save
           </Button>
         </Box>
       </Form>
