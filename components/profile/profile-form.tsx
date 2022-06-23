@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import useAppContext from '../../hooks/use-app-context';
 import useForm from '../../hooks/use-form';
 import { userUpdateSchema } from '../../lib/config/yup-schema';
+import { getAccounts } from '../../lib/services/account';
 import { updateUser } from '../../lib/services/user';
 
 const Form = styled('form')`
@@ -16,7 +17,7 @@ const Form = styled('form')`
 `;
 
 const ProfileForm: React.FC = () => {
-  const { auth, dispatch } = useAppContext();
+  const { user, dispatch } = useAppContext();
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(userUpdateSchema, {
     name: '',
     password: '',
@@ -25,8 +26,12 @@ const ProfileForm: React.FC = () => {
   });
 
   useEffect(() => {
-    setValues({ name: auth?.name });
-  }, [auth, setValues]);
+    getAccounts(dispatch);
+  }, [dispatch]);
+
+  useEffect(() => {
+    setValues({ name: user?.name });
+  }, [user, setValues]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [event.target.name]: event.target.value });
@@ -54,7 +59,7 @@ const ProfileForm: React.FC = () => {
         <Typography variant="caption">* Leave password blank to keep current password</Typography>
       </Box>
 
-      <Form onSubmit={handleSubmit} noValidate>
+      <Form onSubmit={handleSubmit} noValidate autoComplete="off">
         <TextField
           name="name"
           label="Name"

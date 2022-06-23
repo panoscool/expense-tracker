@@ -13,7 +13,7 @@ import Navbar from './top-bar';
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const notistackRef: any = useRef(null);
-  const { auth, loading, modal } = useAppContext();
+  const { user, loading, modal } = useAppContext();
 
   const onClickDismiss = (key: SnackbarKey) => () => {
     if (notistackRef.current) {
@@ -35,13 +35,13 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         </IconButton>
       )}
     >
-      {auth && <Navbar />}
+      {user && <Navbar />}
 
       <Container maxWidth="lg">
         <Box my={4}>{children}</Box>
       </Container>
 
-      {auth && (
+      {user && (
         <Dialog open={modal?.open === 'expense-form'}>
           <ExpenseForm />
         </Dialog>

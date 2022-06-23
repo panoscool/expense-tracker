@@ -1,14 +1,13 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { createContext, useEffect } from 'react';
 import useAppState from '../hooks/use-app-state';
-import { storeGetDecodedAuth } from '../lib/config/store';
+import { storeGetDecodedToken } from '../lib/config/store';
 import { AppContextType } from '../lib/interfaces/common';
 import { DecodedToken } from '../lib/interfaces/user';
 import { logout } from '../lib/services/helpers';
 import { getUser } from '../lib/services/user';
 
 const initState: AppContextType = {
-  auth: null,
+  user: null,
   loading: [],
   error: null,
   modal: null,
@@ -24,7 +23,7 @@ const initState: AppContextType = {
 export const AppContext = createContext(initState);
 
 const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const authData: DecodedToken | null = storeGetDecodedAuth();
+  const authData: DecodedToken | null = storeGetDecodedToken();
 
   const { state, dispatch } = useAppState();
 
@@ -50,7 +49,7 @@ const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   }, [authData?.sub, dispatch]);
 
   const contextValues = {
-    auth: user,
+    user,
     loading,
     error,
     modal,

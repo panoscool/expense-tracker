@@ -9,7 +9,7 @@ import useAppContext from '../hooks/use-app-context';
 import useForm from '../hooks/use-form';
 import useProtectedRoute from '../hooks/use-protected-route';
 import apiRequest from '../lib/config/axios';
-import { storeSetAuth } from '../lib/config/store';
+import { storeSetAccessToken } from '../lib/config/store';
 import { setError, setLoading } from '../lib/services/helpers';
 import { registerSchema } from '../lib/config/yup-schema';
 
@@ -63,7 +63,7 @@ const Register: NextPage = () => {
       try {
         setLoading(dispatch, 'register');
         const data: any = await apiRequest('POST', '/user/register', values);
-        storeSetAuth(data as string);
+        storeSetAccessToken(data as string);
         router.push('/');
       } catch (error) {
         setError(dispatch, error as string);

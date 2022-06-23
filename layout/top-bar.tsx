@@ -27,7 +27,7 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
 const Topbar: React.FC = () => {
   const router = useRouter();
   const isDesktop = useIsDesktop();
-  const { auth, accounts, dispatch } = useAppContext();
+  const { user, accounts, dispatch } = useAppContext();
 
   const handleAccountSelect = (id: string) => () => {
     router.push(`/expenses/?account_id=${id}`);
@@ -78,7 +78,7 @@ const Topbar: React.FC = () => {
               <ListItemIcon>
                 <PersonRoundedIcon />
               </ListItemIcon>
-              <ListItemText primary={auth?.name} sx={{ textTransform: 'capitalize' }} />
+              <ListItemText primary={user?.name} sx={{ textTransform: 'capitalize' }} />
             </MenuItem>
           </NextLink>
           <MenuItem onClick={handleLogout}>

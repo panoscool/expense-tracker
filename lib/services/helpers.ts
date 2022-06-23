@@ -35,6 +35,6 @@ export const setError = (dispatch: React.Dispatch<any>, error: string | null) =>
 };
 
 export const logout = (dispatch: React.Dispatch<any>) => {
-  dispatch({ type: Actions.CLEAR_AUTH });
+  dispatch({ type: Actions.LOGOUT });
   Router.push('/login');
 };

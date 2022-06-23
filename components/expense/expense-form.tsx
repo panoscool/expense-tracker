@@ -54,7 +54,7 @@ const ExpenseForm: React.FC = () => {
   const router = useRouter();
   const isDesktop = useIsDesktop();
   const [openCalculator, setOpenCalculator] = useState(false);
-  const { auth, accounts, account, expense, categories, modal, dispatch } = useAppContext();
+  const { user, accounts, account, expense, categories, modal, dispatch } = useAppContext();
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(expenseSchema, initialValues);
 
   useEffect(() => {
@@ -73,7 +73,7 @@ const ExpenseForm: React.FC = () => {
     }
 
     if (!modal?.params) {
-      setValues({ ...initialValues, user: auth?.id, account: account?._id });
+      setValues({ ...initialValues, user: user?._id, account: account?._id });
     }
   }, [dispatch, expense?._id, modal?.params, setValues]);
 

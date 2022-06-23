@@ -1,12 +1,12 @@
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
-import { storeGetDecodedAuth } from '../lib/config/store';
+import { storeGetDecodedToken } from '../lib/config/store';
 import { DecodedToken } from '../lib/interfaces/user';
 
 const useProtectedRoute = (reqAuth: boolean) => {
   const router = useRouter();
   const [authenticated, setAuthenticated] = useState(false);
-  const authData: DecodedToken | null = storeGetDecodedAuth();
+  const authData: DecodedToken | null = storeGetDecodedToken();
 
   useEffect(() => {
     if (authData) {

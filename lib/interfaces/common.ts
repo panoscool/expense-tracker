@@ -1,11 +1,11 @@
 import { Account } from './account';
 import { Category } from './category';
 import { Expense } from './expense';
-import { Auth } from './user';
+import { User } from './user';
 
 export enum Actions {
-  SET_AUTH = 'SET_AUTH',
-  CLEAR_AUTH = 'CLEAR_AUTH',
+  LOGOUT = 'LOGOUT',
+  SET_USER = 'SET_USER',
   SET_ACCOUNTS = 'SET_ACCOUNTS',
   SET_ACCOUNT = 'SET_ACCOUNT',
   SET_EXPENSES = 'SET_EXPENSES',
@@ -33,7 +33,7 @@ export interface NotificationsType {
 }
 
 export interface AppState {
-  user: Auth | null;
+  user: User | null;
   accounts: Account[] | null;
   account: Account | null;
   expenses: Expense[] | null;
@@ -45,7 +45,6 @@ export interface AppState {
   notifications: NotificationsType[];
 }
 
-export interface AppContextType extends Omit<AppState, 'user'> {
-  auth: Auth | null;
+export interface AppContextType extends AppState {
   dispatch: React.Dispatch<any>;
 }

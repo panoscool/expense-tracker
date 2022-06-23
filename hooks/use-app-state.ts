@@ -1,5 +1,5 @@
 import { Reducer, useReducer } from 'react';
-import { storeClearAuth } from '../lib/config/store';
+import { storeClearAccessToken } from '../lib/config/store';
 import { Actions, AppState } from '../lib/interfaces/common';
 
 const initState: AppState = {
@@ -82,14 +82,14 @@ const reducer: Reducer<AppState, { type: Actions; payload?: any }> = (state, { t
         ),
       };
 
-    case Actions.SET_AUTH:
+    case Actions.SET_USER:
       return {
         ...state,
         user: payload.user,
       };
 
-    case Actions.CLEAR_AUTH:
-      storeClearAuth();
+    case Actions.LOGOUT:
+      storeClearAccessToken();
 
       return initState;
 
