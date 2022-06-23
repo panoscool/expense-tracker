@@ -1,5 +1,4 @@
 import { Reducer, useReducer } from 'react';
-import { storeClearAccessToken } from '../lib/config/store';
 import { Actions, AppState } from '../lib/interfaces/common';
 
 const initState: AppState = {
@@ -89,8 +88,6 @@ const reducer: Reducer<AppState, { type: Actions; payload?: any }> = (state, { t
       };
 
     case Actions.LOGOUT:
-      storeClearAccessToken();
-
       return initState;
 
     default:

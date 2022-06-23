@@ -1,4 +1,5 @@
 import Router from 'next/router';
+import { storeClearAccessToken } from '../config/store';
 import { Actions, ModalType } from '../interfaces/common';
 
 export const enqueueNotification = (
@@ -36,5 +37,8 @@ export const setError = (dispatch: React.Dispatch<any>, error: string | null) =>
 
 export const logout = (dispatch: React.Dispatch<any>) => {
   dispatch({ type: Actions.LOGOUT });
+
+  storeClearAccessToken();
+
   Router.push('/login');
 };
