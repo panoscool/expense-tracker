@@ -2,8 +2,8 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import Expense from '../../../lib/models/expense';
 import dbConnect from '../../../lib/config/db-connect';
 import validate from '../../../lib/utils/validate';
-import { expenseSchema } from '../../../lib/utils/yup-schema';
-import { authenticated, getDecodedUserId, hasAccess } from '../authenticated';
+import { expenseSchema } from '../../../lib/config/yup-schema';
+import { authenticated, getDecodedUserId, hasAccess } from '../helpers';
 import User from '../../../lib/models/user';
 import Account from '../../../lib/models/account';
 

@@ -2,9 +2,9 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { v4 as uuidv4 } from 'uuid';
 import Category from '../../../lib/models/category';
 import dbConnect from '../../../lib/config/db-connect';
-import { cleanLabel } from '../../../lib/utils/format-text';
-import { categorySchema } from '../../../lib/utils/yup-schema';
-import { authenticated, getDecodedUserId } from '../authenticated';
+import { trimToLowerCaseString } from '../../../lib/utils/format-text';
+import { categorySchema } from '../../../lib/config/yup-schema';
+import { authenticated, getDecodedUserId } from '../helpers';
 import validate from '../../../lib/utils/validate';
 
 const getCategories = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -33,7 +33,7 @@ const addCategory = async (req: NextApiRequest, res: NextApiResponse) => {
     const category = await Category.create({
       _id: uuidv4(),
       user: userId,
-      labels: [cleanLabel(req.body.label)],
+      labels: [trimToLowerCaseString(req.body.label)],
     });
 
     res.status(200).json(category);

@@ -1,5 +1,5 @@
 import { InferType } from 'yup';
-import { categorySchema } from '../utils/yup-schema';
+import { categorySchema } from '../config/yup-schema';
 
 export type CategoryCreate = InferType<typeof categorySchema>;
 

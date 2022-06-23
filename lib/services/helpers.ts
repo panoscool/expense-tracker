@@ -1,6 +1,5 @@
 import Router from 'next/router';
 import { Actions, ModalType } from '../interfaces/common';
-import { DecodedToken } from '../interfaces/user';
 
 export const enqueueNotification = (
   dispatch: React.Dispatch<any>,
@@ -38,10 +37,4 @@ export const setError = (dispatch: React.Dispatch<any>, error: string | null) =>
 export const logout = (dispatch: React.Dispatch<any>) => {
   dispatch({ type: Actions.CLEAR_AUTH });
   Router.push('/login');
-};
-
-export const login = (dispatch: React.Dispatch<any>, authData: DecodedToken) => {
-  const { sub, name, email } = authData;
-
-  dispatch({ type: Actions.SET_AUTH, payload: { user: { id: sub, name, email } } });
 };

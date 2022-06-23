@@ -16,8 +16,8 @@ const Home: NextPage = () => {
   return (
     <div>
       <Head>
-        <title>Expense Tracker App</title>
-        <meta name="description" content="Keep track of expenses and share with others" />
+        <title>Expenses</title>
+        <meta name="description" content="Keep track of expenses share with others and split" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 

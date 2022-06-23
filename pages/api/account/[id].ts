@@ -3,8 +3,8 @@ import Account from '../../../lib/models/account';
 import Expense from '../../../lib/models/expense';
 import User from '../../../lib/models/user';
 import dbConnect from '../../../lib/config/db-connect';
-import { accountSchema } from '../../../lib/utils/yup-schema';
-import { authenticated, hasAccess, getDecodedUserId } from '../authenticated';
+import { accountSchema } from '../../../lib/config/yup-schema';
+import { authenticated, hasAccess, getDecodedUserId } from '../helpers';
 import validate from '../../../lib/utils/validate';
 
 const getAccount = async (req: NextApiRequest, res: NextApiResponse) => {

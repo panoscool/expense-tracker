@@ -1,9 +1,8 @@
-import Grid from '@mui/material/Grid';
+import { Box } from '@mui/material';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useEffect } from 'react';
-import AccountList from '../components/account/account-list';
-import CategoryList from '../components/category/category-list';
+import ProfileForm from '../components/profile/profile-form';
 import useProtectedRoute from '../hooks/use-protected-route';
 
 const Home: NextPage = () => {
@@ -18,22 +17,14 @@ const Home: NextPage = () => {
   return (
     <div>
       <Head>
-        <title>Expense Tracker</title>
+        <title>Profile</title>
         <meta name="description" content="Keep track of expenses share with others and split" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
-        <Grid container spacing={4}>
-          <Grid item xs={12} md={6}>
-            <AccountList />
-          </Grid>
-
-          <Grid item xs={12} md={6}>
-            <CategoryList />
-          </Grid>
-        </Grid>
-      </main>
+      <Box maxWidth={600} margin="0 auto" component="main">
+        <ProfileForm />
+      </Box>
     </div>
   );
 };

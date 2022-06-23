@@ -1,5 +1,5 @@
 import { InferType } from 'yup';
-import { accountSchema } from '../utils/yup-schema';
+import { accountSchema } from '../config/yup-schema';
 import { User } from './user';
 
 export type AccountCreate = InferType<typeof accountSchema>;

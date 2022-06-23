@@ -73,12 +73,14 @@ const Topbar: React.FC = () => {
         </DropDown>
 
         <DropDown icon={<AccountCircleRoundedIcon />} btnSize="large" btnType="icon">
-          <MenuItem disabled>
-            <ListItemIcon>
-              <PersonRoundedIcon />
-            </ListItemIcon>
-            <ListItemText primary={auth?.name} sx={{ textTransform: 'capitalize' }} />
-          </MenuItem>
+          <NextLink href="/profile" style={{ color: 'inherit', textDecoration: 'none' }}>
+            <MenuItem>
+              <ListItemIcon>
+                <PersonRoundedIcon />
+              </ListItemIcon>
+              <ListItemText primary={auth?.name} sx={{ textTransform: 'capitalize' }} />
+            </MenuItem>
+          </NextLink>
           <MenuItem onClick={handleLogout}>
             <ListItemIcon>
               <ExitToAppRoundedIcon />

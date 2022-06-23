@@ -1,19 +1,13 @@
-import { hash } from 'bcrypt';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { v4 as uuidv4 } from 'uuid';
-import { defaultCategories, defaultAccount } from '../../../lib/config/default-values';
+import dbConnect from '../../../lib/config/db-connect';
+import { defaultAccount, defaultCategories } from '../../../lib/config/default-values';
+import { registerSchema } from '../../../lib/config/yup-schema';
 import Account from '../../../lib/models/account';
 import Category from '../../../lib/models/category';
 import User from '../../../lib/models/user';
-import dbConnect from '../../../lib/config/db-connect';
 import validate from '../../../lib/utils/validate';
-import { registerSchema } from '../../../lib/utils/yup-schema';
-import { setAccessToken } from '../authenticated';
-
-async function getHashedPassword(text: string) {
-  const saltRounds = 10;
-  return hash(text, saltRounds);
-}
+import { getHashedPassword, setAccessToken } from '../helpers';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {

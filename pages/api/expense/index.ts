@@ -6,8 +6,8 @@ import Account from '../../../lib/models/account';
 import Expense from '../../../lib/models/expense';
 import User from '../../../lib/models/user';
 import validate from '../../../lib/utils/validate';
-import { expenseSchema } from '../../../lib/utils/yup-schema';
-import { authenticated, getDecodedUserId } from '../authenticated';
+import { expenseSchema } from '../../../lib/config/yup-schema';
+import { authenticated, getDecodedUserId } from '../helpers';
 
 const getExpenses = async (req: NextApiRequest, res: NextApiResponse) => {
   try {

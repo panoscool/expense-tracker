@@ -41,7 +41,7 @@ export const createAccount = async (dispatch: React.Dispatch<any>, data: Account
     const response = await apiRequest('POST', '/account', data);
     dispatch({ type: Actions.SET_ACCOUNT, payload: { account: response } });
 
-    getAccounts(dispatch);
+    await getAccounts(dispatch);
     enqueueNotification(dispatch, 'Account created', 'success');
   } catch (error) {
     setError(dispatch, error as string);
@@ -59,7 +59,7 @@ export const updateAccount = async (dispatch: React.Dispatch<any>, data: Account
     const response = await apiRequest('PUT', `/account/${data._id}`, data);
     dispatch({ type: Actions.SET_ACCOUNT, payload: { account: response } });
 
-    getAccounts(dispatch);
+    await getAccounts(dispatch);
     enqueueNotification(dispatch, 'Account updated', 'success');
   } catch (error) {
     setError(dispatch, error as string);
@@ -76,7 +76,7 @@ export const deleteAccount = async (dispatch: React.Dispatch<any>, id: string) =
 
     await apiRequest('DELETE', `/account/${id}`);
 
-    getAccounts(dispatch);
+    await getAccounts(dispatch);
     enqueueNotification(dispatch, 'Account deleted', 'success');
   } catch (error) {
     setError(dispatch, error as string);

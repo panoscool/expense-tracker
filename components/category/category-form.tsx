@@ -8,7 +8,7 @@ import useForm from '../../hooks/use-form';
 import useIsDesktop from '../../hooks/use-is-desktop';
 import { createCategory } from '../../lib/services/category';
 import { getDialogWidth } from '../../lib/utils/common-breakpoints';
-import { categorySchema } from '../../lib/utils/yup-schema';
+import { categorySchema } from '../../lib/config/yup-schema';
 
 const Form = styled('form')`
   display: flex;

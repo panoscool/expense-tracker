@@ -11,7 +11,7 @@ import useProtectedRoute from '../hooks/use-protected-route';
 import apiRequest from '../lib/config/axios';
 import { storeSetAuth } from '../lib/config/store';
 import { setError, setLoading } from '../lib/services/helpers';
-import { registerSchema } from '../lib/utils/yup-schema';
+import { registerSchema } from '../lib/config/yup-schema';
 
 const Wrapper = styled(Box)`
   display: flex;
@@ -78,8 +78,8 @@ const Register: NextPage = () => {
   return (
     <div>
       <Head>
-        <title>Expense Tracker App</title>
-        <meta name="description" content="Keep track of expenses and share with others" />
+        <title>Expense Tracker - Register</title>
+        <meta name="description" content="Keep track of expenses share with others and split" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 

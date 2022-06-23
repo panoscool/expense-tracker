@@ -1,12 +1,7 @@
-import { compare } from 'bcrypt';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import User from '../../../lib/models/user';
 import dbConnect from '../../../lib/config/db-connect';
-import { setAccessToken } from '../authenticated';
-
-async function checkHashedPassword(text: string, hash: string) {
-  return compare(text, hash);
-}
+import User from '../../../lib/models/user';
+import { checkHashedPassword, setAccessToken } from '../helpers';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {

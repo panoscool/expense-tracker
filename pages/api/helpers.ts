@@ -1,6 +1,20 @@
 import { sign, verify } from 'jsonwebtoken';
+import { hash, compare } from 'bcrypt';
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
 import { IUser } from '../../lib/models/user';
+
+export async function getHashedPassword(text: string) {
+  const saltRounds = 10;
+  return hash(text, saltRounds);
+}
+
+export async function checkHashedPassword(text: string, hash: string) {
+  return compare(text, hash);
+}
+
+export const hasAccess = async (userId?: string, creatorId?: string, entityUserId?: string) => {
+  return userId === creatorId?.toString() || userId === entityUserId?.toString();
+};
 
 export const setAccessToken = async (user: IUser) => {
   const secret = process.env.JWT_SECRET || '';
@@ -28,10 +42,6 @@ export const getDecodedUserId = async (req: NextApiRequest, res: NextApiResponse
     console.error(err);
     return res.status(400).send({ error: 'Not authenticated' });
   }
-};
-
-export const hasAccess = async (userId?: string, creatorId?: string, entityUserId?: string) => {
-  return userId === creatorId?.toString() || userId === entityUserId?.toString();
 };
 
 export const authenticated =

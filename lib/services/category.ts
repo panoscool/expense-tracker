@@ -27,7 +27,7 @@ export const createCategory = async (dispatch: React.Dispatch<any>, data: Catego
 
     await apiRequest('PUT', `/category/${data.id}`, { label: data.label });
 
-    getCategories(dispatch);
+    await getCategories(dispatch);
     enqueueNotification(dispatch, 'Category created', 'success');
   } catch (error) {
     setError(dispatch, error as string);
@@ -42,11 +42,9 @@ export const deleteCategory = async (dispatch: React.Dispatch<any>, data: Catego
     setLoading(dispatch, 'delete_category');
     setError(dispatch, null);
 
-    dispatch({ type: Actions.SET_ERROR, payload: { error: null } });
-
     await apiRequest('DELETE', `/category/${data.id}`, { label: data.label });
 
-    getCategories(dispatch);
+    await getCategories(dispatch);
     enqueueNotification(dispatch, 'Category deleted', 'success');
   } catch (error) {
     setError(dispatch, error as string);

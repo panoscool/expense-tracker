@@ -3,8 +3,8 @@ import { v4 as uuidv4 } from 'uuid';
 import Account from '../../../lib/models/account';
 import User from '../../../lib/models/user';
 import dbConnect from '../../../lib/config/db-connect';
-import { accountSchema } from '../../../lib/utils/yup-schema';
-import { authenticated, getDecodedUserId } from '../authenticated';
+import { accountSchema } from '../../../lib/config/yup-schema';
+import { authenticated, getDecodedUserId } from '../helpers';
 import validate from '../../../lib/utils/validate';
 
 const getAccounts = async (req: NextApiRequest, res: NextApiResponse) => {

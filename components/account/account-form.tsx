@@ -10,7 +10,7 @@ import useIsDesktop from '../../hooks/use-is-desktop';
 import { Account, AccountCreate } from '../../lib/interfaces/account';
 import { createAccount, updateAccount } from '../../lib/services/account';
 import { getDialogWidth } from '../../lib/utils/common-breakpoints';
-import { accountSchema } from '../../lib/utils/yup-schema';
+import { accountSchema } from '../../lib/config/yup-schema';
 
 const Form = styled('form')`
   display: flex;

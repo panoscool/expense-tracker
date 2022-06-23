@@ -2,10 +2,10 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import Category from '../../../lib/models/category';
 import Expense from '../../../lib/models/expense';
 import dbConnect from '../../../lib/config/db-connect';
-import { cleanLabel } from '../../../lib/utils/format-text';
+import { trimToLowerCaseString } from '../../../lib/utils/format-text';
 import validate from '../../../lib/utils/validate';
-import { categorySchema } from '../../../lib/utils/yup-schema';
-import { authenticated, getDecodedUserId, hasAccess } from '../authenticated';
+import { categorySchema } from '../../../lib/config/yup-schema';
+import { authenticated, getDecodedUserId, hasAccess } from '../helpers';
 import Account from '../../../lib/models/account';
 
 const getCategory = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -51,7 +51,7 @@ const updateCategory = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(400).send({ error: errors });
     }
 
-    const label = cleanLabel(req.body.label);
+    const label = trimToLowerCaseString(req.body.label);
 
     if (category.labels.includes(label)) {
       return res.status(200).send({ error: 'Category already exists' });
@@ -87,7 +87,7 @@ const deleteCategory = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(401).send({ error: 'Unauthorized access' });
     }
 
-    const label = cleanLabel(req.body.label);
+    const label = trimToLowerCaseString(req.body.label);
 
     // find all expenses with this category and update them to other
     await Expense.updateMany({ account: account, category: label }, { category: 'other' });

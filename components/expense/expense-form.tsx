@@ -28,7 +28,7 @@ import {
 } from '../../lib/services/expense';
 import { setModal } from '../../lib/services/helpers';
 import { getDialogWidth } from '../../lib/utils/common-breakpoints';
-import { expenseSchema } from '../../lib/utils/yup-schema';
+import { expenseSchema } from '../../lib/config/yup-schema';
 import CalculatorDialog from '../calculator/calculator-dialog';
 import CategoryIcon from '../shared/category-icon';
 import DateField from '../shared/date-field';
