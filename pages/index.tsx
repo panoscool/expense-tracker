@@ -20,7 +20,6 @@ const Home: NextPage = () => {
       <Head>
         <title>Expense Tracker</title>
         <meta name="description" content="Keep track of expenses share with others and split" />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main>

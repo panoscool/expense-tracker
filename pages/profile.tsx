@@ -17,9 +17,8 @@ const Home: NextPage = () => {
   return (
     <div>
       <Head>
-        <title>Profile</title>
-        <meta name="description" content="Keep track of expenses share with others and split" />
-        <link rel="icon" href="/favicon.ico" />
+        <title>Expense Tracker - Profile</title>
+        <meta name="description" content="User profile" />
       </Head>
 
       <Box maxWidth={600} margin="0 auto" component="main">

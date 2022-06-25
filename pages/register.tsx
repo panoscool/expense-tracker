@@ -79,8 +79,7 @@ const Register: NextPage = () => {
     <div>
       <Head>
         <title>Expense Tracker - Register</title>
-        <meta name="description" content="Keep track of expenses share with others and split" />
-        <link rel="icon" href="/favicon.ico" />
+        <meta name="description" content="Register to expense tracker" />
       </Head>
 
       <main>

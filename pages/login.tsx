@@ -77,8 +77,7 @@ const Login: NextPage = () => {
     <div>
       <Head>
         <title>Expense Tracker - Login</title>
-        <meta name="description" content="Keep track of expenses share with others and split" />
-        <link rel="icon" href="/favicon.ico" />
+        <meta name="description" content="Login to expense tracker" />
       </Head>
 
       <main>

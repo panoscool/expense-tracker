@@ -17,8 +17,7 @@ const Home: NextPage = () => {
     <div>
       <Head>
         <title>Expenses</title>
-        <meta name="description" content="Keep track of expenses share with others and split" />
-        <link rel="icon" href="/favicon.ico" />
+        <meta name="description" content="Expenses list view and analytics" />
       </Head>
 
       <main>
