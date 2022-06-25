@@ -98,9 +98,11 @@ const ExpenseForm: React.FC = () => {
   };
 
   const handleDeleteExpense = async () => {
-    if (modal?.params) {
-      await deleteExpense(dispatch, modal.params);
-      handleCloseModal();
+    if (window.confirm(`Are you sure you want to delete the ${expense?.category} expense?`)) {
+      if (modal?.params) {
+        await deleteExpense(dispatch, modal.params);
+        handleCloseModal();
+      }
     }
   };
 
