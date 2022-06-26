@@ -60,6 +60,7 @@ const AccountForm: React.FC<Props> = ({ selectedAccount, closeModal }) => {
         ? await updateAccount(dispatch, values)
         : await createAccount(dispatch, values);
 
+      setValues({ ...values, email: '' });
       selectedAccount == null && closeModal();
     }
   };
