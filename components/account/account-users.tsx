@@ -67,8 +67,8 @@ const AccountUsers: React.FC<Props> = ({ accountId, open, onClose }) => {
 
   if (!account) return null;
 
-  const accountOwner = account?.users.find((u) => u._id === account.user);
-  const sharedWith = account?.users.filter((u) => u._id !== account.user);
+  const accountOwner = account.users.find((u) => u._id === account.user);
+  const sharedWith = account.users.filter((u) => u._id !== account.user);
 
   return (
     <Dialog open={open} onClose={onClose}>
