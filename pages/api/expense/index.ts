@@ -55,12 +55,12 @@ const addExpense = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const userId = await getDecodedUserId(req, res);
 
-    const { user, date, account, category, amount, details, description } = req.body;
+    const { user_id, date, account_id, category, amount, details, description } = req.body;
 
     const expense = await Expense.create({
       _id: uuidv4(),
-      user: user || userId,
-      account: account,
+      user: user_id || userId,
+      account: account_id,
       date,
       category,
       amount,

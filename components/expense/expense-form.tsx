@@ -13,7 +13,7 @@ import TextField from '@mui/material/TextField';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import useAppContext from '../../hooks/use-app-context';
 import useForm from '../../hooks/use-form';
 import useIsDesktop from '../../hooks/use-is-desktop';
@@ -33,6 +33,7 @@ import CalculatorDialog from '../calculator/calculator-dialog';
 import CategoryIcon from '../shared/category-icon';
 import DateField from '../shared/date-field';
 import IconSelectField from '../shared/icon-select-field';
+import useHasAccess from '../../hooks/use-has-access';
 
 const Form = styled('form')`
   display: flex;
@@ -42,10 +43,10 @@ const Form = styled('form')`
 
 const initialValues: ExpenseCreate = {
   date: new Date(),
-  account: '',
+  account_id: '',
   category: '',
   amount: 0,
-  user: '',
+  user_id: '',
   description: '',
   details: '',
 };
@@ -53,15 +54,16 @@ const initialValues: ExpenseCreate = {
 const ExpenseForm: React.FC = () => {
   const router = useRouter();
   const isDesktop = useIsDesktop();
+  const { hasAccess } = useHasAccess();
   const [openCalculator, setOpenCalculator] = useState(false);
   const { user, accounts, account, expense, categories, modal, dispatch } = useAppContext();
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(expenseSchema, initialValues);
 
   useEffect(() => {
-    if (values.account || router.query.account_id) {
-      getAccount(dispatch, values.account || (router.query.account_id as string));
+    if (values.account_id || router.query.account_id) {
+      getAccount(dispatch, values.account_id || (router.query.account_id as string));
     }
-  }, [values?.account, router.query.account_id]);
+  }, [values.account_id, router.query.account_id, dispatch]);
 
   useEffect(() => {
     if (modal?.params) {
@@ -69,11 +71,11 @@ const ExpenseForm: React.FC = () => {
     }
 
     if (expense?._id) {
-      setValues({ ...expense, user: expense.user._id });
+      setValues({ ...expense, user_id: expense.user._id, account_id: account?._id });
     }
 
     if (!modal?.params) {
-      setValues({ ...initialValues, user: user?._id, account: account?._id });
+      setValues({ ...initialValues, user_id: user?._id, account_id: account?._id });
     }
   }, [dispatch, expense?._id, modal?.params, setValues]);
 
@@ -116,6 +118,11 @@ const ExpenseForm: React.FC = () => {
     }
   };
 
+  const disableSave = useMemo(
+    () => (modal?.params && !hasAccess(values?.user_id, values?.created_by)) || false,
+    [modal?.params, hasAccess, values?.user, values?.created_by],
+  );
+
   return (
     <Box m={2} p={2} minWidth={getDialogWidth(isDesktop)}>
       <Box mb={4} display="flex" justifyContent="space-between" alignItems="center">
@@ -125,9 +132,15 @@ const ExpenseForm: React.FC = () => {
 
         {modal?.params && (
           <Tooltip title="Delete expense">
-            <IconButton color="error" onClick={handleDeleteExpense}>
-              <DeleteRoundedIcon />
-            </IconButton>
+            <span>
+              <IconButton
+                color="error"
+                onClick={handleDeleteExpense}
+                disabled={!hasAccess(values?.user, values?.created_by)}
+              >
+                <DeleteRoundedIcon />
+              </IconButton>
+            </span>
           </Tooltip>
         )}
       </Box>
@@ -143,13 +156,13 @@ const ExpenseForm: React.FC = () => {
         />
         <TextField
           select
-          name="account"
+          name="account_id"
           label="Account"
-          value={values.account || ''}
+          value={values.account_id || ''}
           onChange={handleChange}
           onBlur={handleBlur}
-          error={!!hasError('account')}
-          helperText={hasError('account')?.message}
+          error={!!hasError('account_id')}
+          helperText={hasError('account_id')?.message}
         >
           <MenuItem value="">None</MenuItem>
           {accounts?.map((account: Account) => (
@@ -198,10 +211,10 @@ const ExpenseForm: React.FC = () => {
         />
         <TextField
           select
-          name="user"
+          name="user_id"
           label="User"
           disabled={!account}
-          value={values.user || ''}
+          value={values.user_id || ''}
           onChange={handleChange}
         >
           <MenuItem value="">None</MenuItem>
@@ -236,7 +249,7 @@ const ExpenseForm: React.FC = () => {
           <Button variant="contained" color="secondary" onClick={handleCloseModal}>
             Cancel
           </Button>
-          <Button type="submit" variant="contained" color="primary">
+          <Button type="submit" variant="contained" color="primary" disabled={disableSave}>
             Submit
           </Button>
         </Box>

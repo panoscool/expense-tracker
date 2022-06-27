@@ -6,7 +6,7 @@ import { logout } from '../lib/services/helpers';
 import { getUser } from '../lib/services/user';
 import useAppContext from './use-app-context';
 
-const useAuth = (reqAuth: boolean) => {
+function useAuth(reqAuth: boolean) {
   const router = useRouter();
   const { authenticated, setAuthenticated, dispatch } = useAppContext();
   const authData: DecodedToken | null = storeGetDecodedToken();
@@ -37,6 +37,6 @@ const useAuth = (reqAuth: boolean) => {
   );
 
   return { authenticated, checkAuthStateAndRedirect };
-};
+}
 
 export default useAuth;

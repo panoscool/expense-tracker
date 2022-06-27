@@ -51,14 +51,14 @@ const updateExpense = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(400).send({ error: errors });
     }
 
-    const { user, date, account, category, amount, details, description } = req.body;
+    const { user_id, date, account_id, category, amount, details, description } = req.body;
 
     await expense.updateOne({
-      account,
+      account: account_id,
       date,
       category,
       amount,
-      user,
+      user: user_id,
       details,
       description,
       updated_by: userId,

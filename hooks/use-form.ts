@@ -4,7 +4,7 @@ import { AnyObjectSchema } from 'yup';
 type Error = { path: string; message: string };
 type Touched = { [key: string]: boolean };
 
-const useForm = (schema: AnyObjectSchema, initState: any = {}) => {
+function useForm(schema: AnyObjectSchema, initState: any = {}) {
   const [values, setValues] = useState(initState);
   const [touched, setTouched] = useState<Touched>({});
   const [errors, setErrors] = useState<Error[]>([]);
@@ -49,6 +49,6 @@ const useForm = (schema: AnyObjectSchema, initState: any = {}) => {
   };
 
   return { values, setValues, onBlur, hasError, canSubmit };
-};
+}
 
 export default useForm;

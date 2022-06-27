@@ -11,6 +11,7 @@ import { Account, AccountCreate } from '../../lib/interfaces/account';
 import { createAccount, updateAccount } from '../../lib/services/account';
 import { getDialogWidth } from '../../lib/utils/common-breakpoints';
 import { accountSchema } from '../../lib/config/yup-schema';
+import useHasAccess from '../../hooks/use-has-access';
 
 const Form = styled('form')`
   display: flex;
@@ -31,6 +32,7 @@ const initialValues: AccountCreate = {
 
 const AccountForm: React.FC<Props> = ({ selectedAccount, closeModal }) => {
   const isDesktop = useIsDesktop();
+  const { hasAccess } = useHasAccess();
   const { dispatch } = useAppContext();
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(accountSchema, initialValues);
 
@@ -115,7 +117,12 @@ const AccountForm: React.FC<Props> = ({ selectedAccount, closeModal }) => {
           <Button variant="contained" color="secondary" onClick={closeModal}>
             Cancel
           </Button>
-          <Button type="submit" variant="contained" color="primary">
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            disabled={!hasAccess(values?.user)}
+          >
             Submit
           </Button>
         </Box>

@@ -21,6 +21,7 @@ import Typography from '@mui/material/Typography';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import useAppContext from '../../hooks/use-app-context';
+import useHasAccess from '../../hooks/use-has-access';
 import { Account } from '../../lib/interfaces/account';
 import { deleteAccount, getAccounts } from '../../lib/services/account';
 import DropDown from '../shared/drop-down';
@@ -29,6 +30,7 @@ import AccountUsers from './account-users';
 
 const AccountList = () => {
   const router = useRouter();
+  const { isCreator } = useHasAccess();
   const { accounts, dispatch } = useAppContext();
   const [showForm, setShowForm] = useState(false);
   const [showUsers, setShowUsers] = useState(false);
@@ -115,7 +117,10 @@ const AccountList = () => {
                     </ListItemIcon>
                     <ListItemText primary="Edit" />
                   </MenuItem>
-                  <MenuItem onClick={handleAccountDelete(account)}>
+                  <MenuItem
+                    onClick={handleAccountDelete(account)}
+                    disabled={!isCreator(account.user)}
+                  >
                     <ListItemIcon {...deleteColor()}>
                       <DeleteRoundedIcon fontSize="small" />
                     </ListItemIcon>

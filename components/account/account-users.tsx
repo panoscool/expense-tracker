@@ -23,6 +23,8 @@ import { getAccount, updateAccount } from '../../lib/services/account';
 import { getDialogWidth } from '../../lib/utils/common-breakpoints';
 import { getInitials } from '../../lib/utils/get-initials';
 import { stringToColor } from '../../lib/utils/string-to-color';
+import useHasAccess from '../../hooks/use-has-access';
+import { Tooltip } from '@mui/material';
 
 type Props = {
   accountId: string | undefined;
@@ -32,6 +34,7 @@ type Props = {
 
 const AccountUsers: React.FC<Props> = ({ accountId, open, onClose }) => {
   const isDesktop = useIsDesktop();
+  const { hasAccess } = useHasAccess();
   const { account, dispatch } = useAppContext();
 
   useEffect(() => {
@@ -92,9 +95,18 @@ const AccountUsers: React.FC<Props> = ({ accountId, open, onClose }) => {
                 </ListItemAvatar>
                 <ListItemText primary={user.name} secondary={user.email} />
                 <ListItemSecondaryAction>
-                  <IconButton edge="end" onClick={handleDeleteUser(user.email)}>
-                    <DeleteRoundedIcon />
-                  </IconButton>
+                  <Tooltip title="Remove user from account" placement="left">
+                    <span>
+                      <IconButton
+                        edge="end"
+                        color="error"
+                        disabled={!hasAccess(account?.user)}
+                        onClick={handleDeleteUser(user.email)}
+                      >
+                        <DeleteRoundedIcon />
+                      </IconButton>
+                    </span>
+                  </Tooltip>
                 </ListItemSecondaryAction>
               </ListItem>
             ))}
