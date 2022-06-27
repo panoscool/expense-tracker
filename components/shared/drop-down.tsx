@@ -7,11 +7,12 @@ type Props = {
   children: React.ReactNode;
   icon: React.ReactNode;
   label?: string;
+  disabled?: boolean;
   btnType: 'text' | 'icon';
   btnSize?: 'small' | 'medium' | 'large';
 };
 
-const DropDown: React.FC<Props> = ({ children, icon, btnType, label, btnSize }) => {
+const DropDown: React.FC<Props> = ({ children, icon, btnType, label, btnSize, disabled }) => {
   const id = useId();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -37,6 +38,7 @@ const DropDown: React.FC<Props> = ({ children, icon, btnType, label, btnSize }) 
           color="inherit"
           edge="end"
           size={btnSize}
+          disabled={disabled}
           aria-haspopup="true"
           aria-label="dropdown-menu"
           aria-expanded={Boolean(anchorEl) ? 'true' : undefined}
@@ -50,6 +52,7 @@ const DropDown: React.FC<Props> = ({ children, icon, btnType, label, btnSize }) 
         <Button
           color="inherit"
           size={btnSize}
+          disabled={disabled}
           aria-haspopup="true"
           aria-expanded={Boolean(anchorEl) ? 'true' : undefined}
           aria-controls={Boolean(anchorEl) ? `menu-${id || 'dropdown'}` : undefined}

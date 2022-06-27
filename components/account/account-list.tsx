@@ -109,18 +109,18 @@ const AccountList = () => {
                     <VisibilityOutlinedIcon />
                   </IconButton>
                 </div>
-
-                <DropDown icon={<MoreVertRoundedIcon />} btnType="icon">
+                <DropDown
+                  btnType="icon"
+                  icon={<MoreVertRoundedIcon />}
+                  disabled={!isCreator(account.user)}
+                >
                   <MenuItem onClick={handleAccountEdit(account)}>
                     <ListItemIcon>
                       <EditRoundedIcon fontSize="small" />
                     </ListItemIcon>
                     <ListItemText primary="Edit" />
                   </MenuItem>
-                  <MenuItem
-                    onClick={handleAccountDelete(account)}
-                    disabled={!isCreator(account.user)}
-                  >
+                  <MenuItem onClick={handleAccountDelete(account)}>
                     <ListItemIcon {...deleteColor()}>
                       <DeleteRoundedIcon fontSize="small" />
                     </ListItemIcon>
