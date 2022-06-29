@@ -59,7 +59,7 @@ const updateCategory = async (req: NextApiRequest, res: NextApiResponse) => {
 
     // update the labels array with the new label if it is not already in the array
     await category.updateOne({
-      labels: [...category.labels, label],
+      $push: { labels: label },
     });
 
     const updatedCategories = await Category.findById(req.query.id);
@@ -92,9 +92,9 @@ const deleteCategory = async (req: NextApiRequest, res: NextApiResponse) => {
     // find all expenses with this category and update them to other
     await Expense.updateMany({ account: account, category: label }, { category: 'other' });
 
-    // delete only the req.body.label inside the category labels array
+    // delete the label inside the category labels array
     await category.updateOne({
-      labels: category.labels.filter((lbl) => lbl !== label),
+      $pull: { labels: label },
     });
 
     res.status(200).json({ message: 'Ok' });

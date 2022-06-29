@@ -10,7 +10,7 @@ import validate from '../../../lib/utils/validate';
 const getAccount = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const userId = (await getDecodedUserId(req, res)) as string;
-    let account = await Account.findById(req.query.id).populate('users', 'name email');
+    const account = await Account.findById(req.query.id).populate('users', 'name email');
 
     if (!account) {
       return res.status(200).send({ error: 'Account not found' });
