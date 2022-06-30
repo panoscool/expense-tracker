@@ -2,7 +2,6 @@ import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo } from 'react';
 import { storeGetDecodedToken } from '../lib/config/store';
 import { DecodedToken } from '../lib/interfaces/user';
-import { logout } from '../lib/services/helpers';
 import { getUser } from '../lib/services/user';
 import useAppContext from './use-app-context';
 
@@ -19,15 +18,17 @@ function useAuth(reqAuth: boolean) {
       getUser(dispatch);
     } else {
       setAuthenticated(false);
-      logout(dispatch);
     }
   }, [userId, dispatch, setAuthenticated]);
 
   const checkAuthStateAndRedirect = useCallback(
     (redirectUrl: string) => {
+      // if not authenticated redirect to login page
       if (reqAuth && (userId == undefined || userId == null)) {
         router.push(redirectUrl);
       }
+
+      // if authenticated redirect to home page
       if (!reqAuth && userId) {
         router.push(redirectUrl);
       }
