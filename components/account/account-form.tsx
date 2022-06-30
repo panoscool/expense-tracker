@@ -9,7 +9,7 @@ import useForm from '../../hooks/use-form';
 import useIsDesktop from '../../hooks/use-is-desktop';
 import { accountSchema } from '../../lib/config/yup-schema';
 import { Account, AccountCreate } from '../../lib/interfaces/account';
-import { createAccount, updateAccount } from '../../lib/services/account';
+import { createAccount, getAccounts, updateAccount } from '../../lib/services/account';
 import { getDialogWidth } from '../../lib/utils/common-breakpoints';
 
 const Form = styled('form')`
@@ -59,6 +59,8 @@ const AccountForm: React.FC<Props> = ({ selectedAccount, closeModal }) => {
       selectedAccount
         ? await updateAccount(dispatch, values)
         : await createAccount(dispatch, values);
+
+      await getAccounts(dispatch);
 
       setValues({ ...values, email: '' });
       selectedAccount == null && closeModal();

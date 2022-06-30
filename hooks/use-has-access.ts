@@ -5,7 +5,9 @@ function useHasAccess() {
   const { user } = useAppContext();
 
   const hasAccess = useCallback(
-    (userId: string, creatorId?: string) => user?._id === userId || user?._id === creatorId,
+    (userId: string, creatorId?: string) => {
+      return user?._id === userId || user?._id === creatorId;
+    },
     [user?._id],
   );
 

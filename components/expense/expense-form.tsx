@@ -24,6 +24,7 @@ import {
   createExpense,
   deleteExpense,
   getExpense,
+  getExpenses,
   updateExpense,
 } from '../../lib/services/expense';
 import { setModal } from '../../lib/services/helpers';
@@ -34,6 +35,7 @@ import CategoryIcon from '../shared/category-icon';
 import DateField from '../shared/date-field';
 import IconSelectField from '../shared/icon-select-field';
 import useHasAccess from '../../hooks/use-has-access';
+import { getPayments } from '../../lib/services/payment';
 
 const Form = styled('form')`
   display: flex;
@@ -103,6 +105,12 @@ const ExpenseForm: React.FC = () => {
     if (window.confirm(`Are you sure you want to delete the ${expense?.category} expense?`)) {
       if (modal?.params) {
         await deleteExpense(dispatch, modal.params);
+
+        await getExpenses(dispatch);
+
+        if (account?._id) {
+          await getPayments(dispatch, { account_id: account?._id });
+        }
         handleCloseModal();
       }
     }
@@ -114,6 +122,11 @@ const ExpenseForm: React.FC = () => {
     if (canSubmit()) {
       modal?.params ? await updateExpense(dispatch, values) : await createExpense(dispatch, values);
 
+      await getExpenses(dispatch);
+
+      if (account?._id) {
+        await getPayments(dispatch, { account_id: account?._id });
+      }
       handleCloseModal();
     }
   };
@@ -136,7 +149,7 @@ const ExpenseForm: React.FC = () => {
               <IconButton
                 color="error"
                 onClick={handleDeleteExpense}
-                disabled={!hasAccess(values?.user, values?.created_by)}
+                disabled={!hasAccess(values?.user?._id, values?.created_by)}
               >
                 <DeleteRoundedIcon />
               </IconButton>

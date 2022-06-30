@@ -48,8 +48,7 @@ const UserPayable: React.FC = () => {
       </AccordionSummary>
       <AccordionDetails>
         <Alert
-          sx={{ mb: 2 }}
-          variant="filled"
+          sx={{ mb: 3 }}
           severity={payments?.settled ? 'success' : 'info'}
           action={
             <Button color="inherit" onClick={handleUpdateSettled}>

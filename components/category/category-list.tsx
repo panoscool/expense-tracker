@@ -37,6 +37,8 @@ const CategoryList = () => {
     if (window.confirm(`Are you sure you want to delete ${label}?`)) {
       if (categories) {
         await deleteCategory(dispatch, { id: categories?._id, label });
+
+        await getCategories(dispatch);
       }
     }
   };

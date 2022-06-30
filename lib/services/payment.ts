@@ -29,8 +29,8 @@ export const updatePayment = async (dispatch: React.Dispatch<any>, data: Payment
   try {
     setLoading(dispatch, 'update_payment');
 
-    await apiRequest('PATCH', `/payment/${data._id}`, { settled: data.settled });
-    await getPayments(dispatch, { account_id: data.account });
+    const response = await apiRequest('PATCH', `/payment/${data._id}`, { settled: data.settled });
+    dispatch({ type: Actions.SET_PAYMENTS, payload: { payments: response } });
   } catch (error) {
     setError(dispatch, error as string);
   } finally {

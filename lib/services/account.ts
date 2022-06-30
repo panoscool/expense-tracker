@@ -11,8 +11,8 @@ export const getAccounts = async (dispatch: React.Dispatch<any>) => {
   try {
     setLoading(dispatch, 'get_accounts');
 
-    const data = await apiRequest('GET', '/account');
-    dispatch({ type: Actions.SET_ACCOUNTS, payload: { accounts: data } });
+    const response = await apiRequest('GET', '/account');
+    dispatch({ type: Actions.SET_ACCOUNTS, payload: { accounts: response } });
   } catch (error) {
     setError(dispatch, error as string);
   } finally {
@@ -24,8 +24,8 @@ export const getAccount = async (dispatch: React.Dispatch<any>, id: string) => {
   try {
     setLoading(dispatch, 'get_account');
 
-    const data = await apiRequest('GET', `/account/${id}`);
-    dispatch({ type: Actions.SET_ACCOUNT, payload: { account: data } });
+    const response = await apiRequest('GET', `/account/${id}`);
+    dispatch({ type: Actions.SET_ACCOUNT, payload: { account: response } });
   } catch (error) {
     setError(dispatch, error as string);
   } finally {
@@ -41,7 +41,6 @@ export const createAccount = async (dispatch: React.Dispatch<any>, data: Account
     const response = await apiRequest('POST', '/account', data);
     dispatch({ type: Actions.SET_ACCOUNT, payload: { account: response } });
 
-    await getAccounts(dispatch);
     enqueueNotification(dispatch, 'Account created', 'success');
   } catch (error) {
     setError(dispatch, error as string);
@@ -59,7 +58,6 @@ export const updateAccount = async (dispatch: React.Dispatch<any>, data: Account
     const response = await apiRequest('PUT', `/account/${data._id}`, data);
     dispatch({ type: Actions.SET_ACCOUNT, payload: { account: response } });
 
-    await getAccounts(dispatch);
     enqueueNotification(dispatch, 'Account updated', 'success');
   } catch (error) {
     setError(dispatch, error as string);
@@ -76,7 +74,6 @@ export const deleteAccount = async (dispatch: React.Dispatch<any>, id: string) =
 
     await apiRequest('DELETE', `/account/${id}`);
 
-    await getAccounts(dispatch);
     enqueueNotification(dispatch, 'Account deleted', 'success');
   } catch (error) {
     setError(dispatch, error as string);

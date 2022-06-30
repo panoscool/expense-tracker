@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import useAppContext from '../../hooks/use-app-context';
 import useForm from '../../hooks/use-form';
 import useIsDesktop from '../../hooks/use-is-desktop';
-import { createCategory } from '../../lib/services/category';
+import { createCategory, getCategories } from '../../lib/services/category';
 import { getDialogWidth } from '../../lib/utils/common-breakpoints';
 import { categorySchema } from '../../lib/config/yup-schema';
 
@@ -47,6 +47,8 @@ const CategoryForm: React.FC<Props> = ({ categoryId, closeModal }) => {
     if (canSubmit()) {
       if (categoryId) {
         await createCategory(dispatch, { id: categoryId, label: values.label });
+
+        await getCategories(dispatch);
 
         setValues({ label: '' });
       }

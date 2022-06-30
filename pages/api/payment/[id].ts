@@ -67,7 +67,25 @@ const updatePayment = async (req: NextApiRequest, res: NextApiResponse) => {
 
     await payment.updateOne({ settled, updated_by: userId });
 
-    res.status(200).json({ message: 'Ok' });
+    const updatedPayment = await Payment.findById(payment._id)
+      .populate({
+        path: 'giving_users',
+        populate: {
+          path: 'user',
+          model: 'User',
+          select: 'name email',
+        },
+      })
+      .populate({
+        path: 'receiving_users',
+        populate: {
+          path: 'user',
+          model: 'User',
+          select: 'name email',
+        },
+      });
+
+    res.status(200).json(updatedPayment);
   } catch (error) {
     console.error(error);
     res.status(500).send({ error: 'Internal server error' });

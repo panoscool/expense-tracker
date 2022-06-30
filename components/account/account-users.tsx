@@ -51,7 +51,7 @@ const AccountUsers: React.FC<Props> = ({ accountId, open, onClose }) => {
           email: email,
         });
 
-        getAccount(dispatch, account._id);
+        await getAccount(dispatch, account._id);
       }
     }
   };
@@ -82,7 +82,7 @@ const AccountUsers: React.FC<Props> = ({ accountId, open, onClose }) => {
           <Divider />
         </Box>
 
-        <Alert severity="info" variant="filled" sx={{ mb: 3 }}>
+        <Alert severity="info" sx={{ mb: 3 }}>
           Owner: {accountOwner?.name}
         </Alert>
 

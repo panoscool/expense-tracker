@@ -56,6 +56,8 @@ const AccountList = () => {
 
     if (window.confirm(`Are you sure you want to delete ${account.name}?`)) {
       await deleteAccount(dispatch, account._id);
+
+      await getAccounts(dispatch);
     }
   };
 
