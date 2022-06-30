@@ -11,8 +11,8 @@ export const getCategories = async (dispatch: React.Dispatch<any>) => {
   try {
     setLoading(dispatch, 'get_categories');
 
-    const data = await apiRequest('GET', '/category');
-    dispatch({ type: Actions.SET_CATEGORIES, payload: { categories: data } });
+    const response = await apiRequest('GET', '/category');
+    dispatch({ type: Actions.SET_CATEGORIES, payload: { categories: response } });
   } catch (error) {
     setError(dispatch, error as string);
   } finally {

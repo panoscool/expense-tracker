@@ -12,6 +12,7 @@ const initState: AppContextType = {
   expenses: null,
   expense: null,
   categories: null,
+  payments: null,
   notifications: [],
   authenticated: false,
   dispatch: () => {},
@@ -32,6 +33,7 @@ const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     expenses,
     expense,
     categories,
+    payments,
     modal,
     loading,
     error,
@@ -48,6 +50,7 @@ const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     expenses,
     expense,
     categories,
+    payments,
     notifications,
     authenticated,
   };

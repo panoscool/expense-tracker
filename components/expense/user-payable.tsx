@@ -1,6 +1,7 @@
 import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
 import MoveToInboxRoundedIcon from '@mui/icons-material/MoveToInboxRounded';
 import OutboxRoundedIcon from '@mui/icons-material/OutboxRounded';
+import { Alert, Button } from '@mui/material';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -10,12 +11,12 @@ import CardHeader from '@mui/material/CardHeader';
 import Grid from '@mui/material/Grid';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
+import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import { Expense } from '../../lib/interfaces/expense';
-import { getPayableAmountPerUser } from '../../lib/utils/expense-calculations';
+import useAppContext from '../../hooks/use-app-context';
+import { updatePayment } from '../../lib/services/payment';
 import { formatCurrency } from '../../lib/utils/number-formatter';
 import { stringToColor } from '../../lib/utils/string-to-color';
-import { styled } from '@mui/material/styles';
 
 const Item = styled(ListItem)({
   display: 'flex',
@@ -23,25 +24,14 @@ const Item = styled(ListItem)({
   justifyContent: 'space-between',
 });
 
-type Props = {
-  expenses: Expense[];
-};
+const UserPayable: React.FC = () => {
+  const { payments, dispatch } = useAppContext();
 
-const UserPayable: React.FC<Props> = ({ expenses }) => {
-  const payablePerUser = getPayableAmountPerUser(expenses || []);
-
-  const getUsersName = Object.keys(payablePerUser).map((userId) => {
-    const user = expenses.find((expense) => expense.user._id === userId);
-
-    return {
-      id: userId,
-      name: user?.user.name,
-      amount: payablePerUser[userId],
-    };
-  });
-
-  const givingUsers = getUsersName.filter((user) => user.amount > 0);
-  const receivingUsers = getUsersName.filter((user) => user.amount < 0);
+  const handleUpdateSettled = async () => {
+    if (payments) {
+      await updatePayment(dispatch, { ...payments, settled: !payments.settled });
+    }
+  };
 
   function userColor(string: string) {
     return { color: stringToColor(string) };
@@ -57,6 +47,18 @@ const UserPayable: React.FC<Props> = ({ expenses }) => {
         <Typography>Users payable</Typography>
       </AccordionSummary>
       <AccordionDetails>
+        <Alert
+          sx={{ mb: 2 }}
+          variant="filled"
+          severity={payments?.settled ? 'success' : 'info'}
+          action={
+            <Button color="inherit" onClick={handleUpdateSettled}>
+              Mark {payments?.settled ? 'unsettled' : 'settled'}
+            </Button>
+          }
+        >
+          The period {payments?.period} {payments?.settled ? 'is settled' : 'is unsettled'}.
+        </Alert>
         <Grid container spacing={3}>
           <Grid item xs={12} md={6}>
             <Card variant="outlined">
@@ -73,12 +75,16 @@ const UserPayable: React.FC<Props> = ({ expenses }) => {
                 subheader="Should give the specified amount"
               />
               <List>
-                {givingUsers.map((user) => (
-                  <Item key={user.id}>
-                    <Typography variant="body1" textTransform="capitalize" {...userColor(user.id)}>
-                      <strong>{user.name}</strong>
+                {payments?.giving_users.map((giv) => (
+                  <Item key={giv.user._id}>
+                    <Typography
+                      variant="body1"
+                      textTransform="capitalize"
+                      {...userColor(giv.user._id)}
+                    >
+                      <strong>{giv.user.name}</strong>
                     </Typography>
-                    <Typography variant="body1">{formatCurrency(user.amount)}</Typography>
+                    <Typography variant="body1">{formatCurrency(giv.amount)}</Typography>
                   </Item>
                 ))}
               </List>
@@ -99,12 +105,16 @@ const UserPayable: React.FC<Props> = ({ expenses }) => {
                 subheader="Should receive the specified amount"
               />
               <List>
-                {receivingUsers.map((user) => (
-                  <Item key={user.id}>
-                    <Typography variant="body1" textTransform="capitalize" {...userColor(user.id)}>
-                      <strong>{user.name}</strong>
+                {payments?.receiving_users.map((rec) => (
+                  <Item key={rec.user._id}>
+                    <Typography
+                      variant="body1"
+                      textTransform="capitalize"
+                      {...userColor(rec.user._id)}
+                    >
+                      <strong>{rec.user.name}</strong>
                     </Typography>
-                    <Typography variant="body1">{formatCurrency(Math.abs(user.amount))}</Typography>
+                    <Typography variant="body1">{formatCurrency(Math.abs(rec.amount))}</Typography>
                   </Item>
                 ))}
               </List>

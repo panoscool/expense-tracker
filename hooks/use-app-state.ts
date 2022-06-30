@@ -8,6 +8,7 @@ const initState: AppState = {
   expenses: null,
   expense: null,
   categories: null,
+  payments: null,
   modal: null,
   loading: [],
   error: null,
@@ -44,6 +45,12 @@ const reducer: Reducer<AppState, { type: Actions; payload?: any }> = (state, { t
       return {
         ...state,
         categories: payload.categories,
+      };
+
+    case Actions.SET_PAYMENTS:
+      return {
+        ...state,
+        payments: payload.payments,
       };
 
     case Actions.SET_MODAL:

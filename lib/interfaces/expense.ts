@@ -6,7 +6,7 @@ export type ExpenseCreate = InferType<typeof expenseSchema>;
 
 export interface Expense {
   _id: string;
-  date: string;
+  date: Date;
   account: string;
   category: string;
   amount: number;

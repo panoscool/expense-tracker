@@ -1,11 +1,12 @@
 import { Document, model, Model, models, Schema, SchemaTypes } from 'mongoose';
 
-export interface IAccount extends Document {
+interface IAccount extends Document {
   _id: string;
   user: Document['_id'];
   name: string;
   users: string[];
   description: string;
+  currency: string;
   created_at: Date;
   updated_at: Date;
 }
@@ -17,6 +18,7 @@ const AccountSchema: Schema = new Schema(
     name: { type: String, required: true, trim: true },
     users: [{ type: SchemaTypes.ObjectId, ref: 'User' }],
     description: { type: String, required: false },
+    currency: { type: String, required: false },
   },
   {
     timestamps: {

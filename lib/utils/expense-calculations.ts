@@ -6,6 +6,11 @@ export const getTotalExpenses = (expenses: Expense[]): number => {
   }, 0);
 };
 
+/**
+ * @param expenses
+ * @description Returns the total unique users included in the expenses
+ * @returns {number} Total unique users
+ */
 export const getTotalUsers = (expenses: Expense[]): number => {
   const users = expenses.reduce((acc: any, expense) => {
     if (acc[expense.user._id]) {
@@ -42,18 +47,41 @@ export const getAverageExpensesPerUser = (expenses: Expense[]): number => {
 /**
  * @param expenses - Array of expenses
  * @description user with negative amount has to receive the specified number, user with positive amount has to give the specified number
- * @returns {[string, number]} - Array of user id's and their amount
+ * @returns {[string, number]} Array of user id's and their amount
  */
 export const getPayableAmountPerUser = (expenses: Expense[]): { [key: string]: number } => {
   const payedAmount = getTotalAmountPerUser(expenses);
   const averageAmount = getAverageExpensesPerUser(expenses);
 
   // get the amount each user has to pay in order the expenses to split equally
-
   const payableAmountPerUser = Object.keys(payedAmount).reduce((acc: any, userId) => {
     acc[userId] = averageAmount - payedAmount[userId];
     return acc;
   }, {});
 
   return payableAmountPerUser;
+};
+
+export const getGivingAndReceivingUsers = (expenses: Expense[]): [string[], string[]] => {
+  const payable = getPayableAmountPerUser(expenses);
+  const payableAmountPerUser = Object.keys(payable).map((key) => {
+    return {
+      user: key,
+      amount: payable[key],
+    };
+  });
+
+  const [giving, receiving] = payableAmountPerUser.reduce(
+    (acc: any, curr) => {
+      if (curr.amount > 0) {
+        acc[0].push(curr);
+      } else {
+        acc[1].push(curr);
+      }
+      return acc;
+    },
+    [[], []],
+  );
+
+  return [giving, receiving];
 };

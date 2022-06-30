@@ -10,6 +10,7 @@ import { ExpensesFilters } from '../../lib/interfaces/expense';
 import { getAccounts } from '../../lib/services/account';
 import { getExpenses } from '../../lib/services/expense';
 import { setModal } from '../../lib/services/helpers';
+import { getPayments } from '../../lib/services/payment';
 import { getTotalUsers } from '../../lib/utils/expense-calculations';
 import EmptyList from '../shared/empty-list';
 import ExpenseCard from './expense-card';
@@ -42,6 +43,7 @@ const Expenses: React.FC = () => {
         user_id: state.user_id === 'all' ? null : state.user_id,
         category: state.category === 'all' ? null : state.category,
       });
+      getPayments(dispatch, { account_id: router.query.account_id as string, period: state.date });
     }
   }, [dispatch, state, router.query.account_id]);
 
@@ -69,7 +71,7 @@ const Expenses: React.FC = () => {
       </Grid>
 
       <TotalPerCategory expenses={expenses || []} />
-      {totalUsers > 1 && <UserPayable expenses={expenses || []} />}
+      {totalUsers > 1 && <UserPayable />}
 
       <Box mt={8} mb={2}>
         <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap">

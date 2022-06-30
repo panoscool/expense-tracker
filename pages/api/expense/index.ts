@@ -2,12 +2,13 @@ import { endOfMonth, parseISO, startOfMonth } from 'date-fns';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { v4 as uuidv4 } from 'uuid';
 import dbConnect from '../../../lib/config/db-connect';
+import { expenseSchema } from '../../../lib/config/yup-schema';
 import Account from '../../../lib/models/account';
 import Expense from '../../../lib/models/expense';
 import User from '../../../lib/models/user';
 import validate from '../../../lib/utils/validate';
-import { expenseSchema } from '../../../lib/config/yup-schema';
 import { authenticated, getDecodedUserId } from '../helpers';
+import { updatePayment } from '../payment';
 
 const getExpenses = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
@@ -69,6 +70,13 @@ const addExpense = async (req: NextApiRequest, res: NextApiResponse) => {
       created_by: userId,
       updated_by: userId,
     });
+
+    const expenses = await Expense.find({
+      account: account_id,
+      date: { $gte: startOfMonth(parseISO(date)), $lte: endOfMonth(parseISO(date)) },
+    });
+
+    await updatePayment({ expenses, accountId: account_id, userId: user_id || userId, date });
 
     res.status(200).json(expense);
   } catch (err) {

@@ -1,13 +1,13 @@
 import { model, Schema, Model, Document, SchemaTypes, models } from 'mongoose';
 
-export interface IExpense extends Document {
+interface IExpense extends Document {
   _id: string;
   user: Document['_id'];
   account: string;
   category: string;
   date: Date;
   amount: number;
-  note: string;
+  details: string;
   description: string;
   created_by: Document['_id'];
   updated_by: Document['_id'];
