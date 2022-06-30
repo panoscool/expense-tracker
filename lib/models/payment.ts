@@ -22,14 +22,12 @@ const PaymentSchema: Schema = new Schema(
     giving_users: [
       {
         amount: { type: Number, required: true },
-        settled: { type: Boolean, required: true, default: false },
         user: { type: SchemaTypes.ObjectId, ref: 'User', required: true },
       },
     ],
     receiving_users: [
       {
         amount: { type: Number, required: true },
-        settled: { type: Boolean, required: true, default: false },
         user: { type: SchemaTypes.ObjectId, ref: 'User', required: true },
       },
     ],
