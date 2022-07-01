@@ -46,7 +46,7 @@ const Form = styled('form')`
 const initialValues: ExpenseCreate = {
   date: new Date(),
   account_id: '',
-  category: '',
+  category: 'other',
   amount: 0,
   user_id: '',
   description: '',
@@ -111,7 +111,6 @@ const ExpenseForm: React.FC = () => {
         if (account?._id) {
           await getPayments(dispatch, { account_id: account?._id });
         }
-        handleCloseModal();
       }
     }
   };
@@ -127,7 +126,6 @@ const ExpenseForm: React.FC = () => {
       if (account?._id) {
         await getPayments(dispatch, { account_id: account?._id });
       }
-      handleCloseModal();
     }
   };
 

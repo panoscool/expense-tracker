@@ -1,15 +1,16 @@
-import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import CardGiftcardOutlinedIcon from '@mui/icons-material/CardGiftcardOutlined';
+import ElectricBoltOutlinedIcon from '@mui/icons-material/ElectricBoltOutlined';
 import EmojiTransportationOutlinedIcon from '@mui/icons-material/EmojiTransportationOutlined';
 import HealthAndSafetyOutlinedIcon from '@mui/icons-material/HealthAndSafetyOutlined';
-import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
-import CardGiftcardOutlinedIcon from '@mui/icons-material/CardGiftcardOutlined';
 import InterestsOutlinedIcon from '@mui/icons-material/InterestsOutlined';
-import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
-import MoodOutlinedIcon from '@mui/icons-material/MoodOutlined';
-import WaterOutlinedIcon from '@mui/icons-material/WaterOutlined';
-import ElectricBoltOutlinedIcon from '@mui/icons-material/ElectricBoltOutlined';
-import ReceiptOutlinedIcon from '@mui/icons-material/ReceiptOutlined';
 import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
+import MoodOutlinedIcon from '@mui/icons-material/MoodOutlined';
+import ReceiptOutlinedIcon from '@mui/icons-material/ReceiptOutlined';
+import RepeatOutlinedIcon from '@mui/icons-material/RepeatOutlined';
+import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
+import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import WaterOutlinedIcon from '@mui/icons-material/WaterOutlined';
 
 type Props = {
   icon: string;
@@ -25,13 +26,14 @@ const CategoryIcon: React.FC<Props> = ({ icon, size }) => {
     water: <WaterOutlinedIcon fontSize={size} />,
     electricity: <ElectricBoltOutlinedIcon fontSize={size} />,
     telecommunication: <LocalPhoneOutlinedIcon fontSize={size} />,
+    subscription: <RepeatOutlinedIcon fontSize={size} />,
     education: <SchoolOutlinedIcon fontSize={size} />,
     beauty: <MoodOutlinedIcon fontSize={size} />,
     health: <HealthAndSafetyOutlinedIcon fontSize={size} />,
     gift: <CardGiftcardOutlinedIcon fontSize={size} />,
   };
 
-  return component[icon] ? component[icon] : <ReceiptOutlinedIcon />;
+  return component[icon] ? component[icon] : <ReceiptOutlinedIcon fontSize={size} />;
 };
 
 export default CategoryIcon;

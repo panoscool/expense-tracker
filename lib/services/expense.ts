@@ -4,7 +4,7 @@ import apiRequest from '../config/axios';
 import { Actions } from '../interfaces/common';
 import { Expense, ExpenseCreate } from '../interfaces/expense';
 import { buildParams } from '../utils/url-params';
-import { enqueueNotification, setError, setLoading } from './helpers';
+import { enqueueNotification, setError, setLoading, setModal } from './helpers';
 
 type ExpensesFilters = {
   date: string;
@@ -52,6 +52,7 @@ export const createExpense = async (dispatch: React.Dispatch<any>, data: Expense
     const response = await apiRequest('POST', '/expense', data);
     dispatch({ type: Actions.SET_EXPENSE, payload: { expense: response } });
 
+    setModal(dispatch, null);
     enqueueNotification(dispatch, 'Expense created', 'success');
   } catch (error) {
     setError(dispatch, error as string);
@@ -69,6 +70,7 @@ export const updateExpense = async (dispatch: React.Dispatch<any>, data: Expense
     const response = await apiRequest('PUT', `/expense/${data._id}`, data);
     dispatch({ type: Actions.SET_EXPENSE, payload: { expense: response } });
 
+    setModal(dispatch, null);
     enqueueNotification(dispatch, 'Expense updated', 'success');
   } catch (error) {
     setError(dispatch, error as string);
@@ -85,6 +87,7 @@ export const deleteExpense = async (dispatch: React.Dispatch<any>, id: string) =
 
     await apiRequest('DELETE', `/expense/${id}`);
 
+    setModal(dispatch, null);
     enqueueNotification(dispatch, 'Expense deleted', 'success');
   } catch (error) {
     setError(dispatch, error as string);

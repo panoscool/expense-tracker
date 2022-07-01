@@ -8,6 +8,7 @@ export const defaultCategories: string[] = [
   'water',
   'electricity',
   'telecommunication',
+  'subscription',
   'education',
   'beauty',
   'health',
