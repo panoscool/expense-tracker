@@ -220,21 +220,23 @@ const ExpenseForm: React.FC = () => {
             ),
           }}
         />
-        <TextField
-          select
-          name="user_id"
-          label="User"
-          disabled={!account}
-          value={values.user_id || ''}
-          onChange={handleChange}
-        >
-          <MenuItem value="">None</MenuItem>
-          {account?.users.map((user) => (
-            <MenuItem key={user._id} value={user._id}>
-              {user.name}
-            </MenuItem>
-          ))}
-        </TextField>
+        {account && account.users.length > 1 && (
+          <TextField
+            select
+            name="user_id"
+            label="User"
+            disabled={!account}
+            value={values.user_id || ''}
+            onChange={handleChange}
+          >
+            <MenuItem value="">None</MenuItem>
+            {account?.users.map((user) => (
+              <MenuItem key={user._id} value={user._id}>
+                {user.name}
+              </MenuItem>
+            ))}
+          </TextField>
+        )}
         <TextField
           name="description"
           label="Description"

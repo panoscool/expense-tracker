@@ -41,7 +41,7 @@ const ExpenseFilters: React.FC<Props> = ({ filterBy, state, onFilterByChange, on
 
   const filterOptions: { value: string; label: string }[] = [
     { value: 'date', label: 'Date' },
-    { value: 'user_id', label: 'User' },
+    ...(account && account.users.length > 1 ? [{ value: 'user_id', label: 'User' }] : []),
     { value: 'category', label: 'Category' },
   ];
 
