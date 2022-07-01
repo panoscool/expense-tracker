@@ -22,7 +22,7 @@ export enum Actions {
 
 export interface ModalType {
   open: string;
-  params?: string;
+  id?: string;
 }
 
 export interface NotificationsType {

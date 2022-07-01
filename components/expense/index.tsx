@@ -48,7 +48,7 @@ const Expenses: React.FC = () => {
   }, [dispatch, state, router.query.account_id]);
 
   const handleExpenseEdit = (id: string) => {
-    setModal(dispatch, { open: 'expense-form', params: id });
+    setModal(dispatch, { open: 'expense-form', id });
   };
 
   const groupedByDay = groupBy(expenses, (expense) => format(new Date(expense.date), 'yyyy-MM-dd'));

@@ -68,18 +68,18 @@ const ExpenseForm: React.FC = () => {
   }, [values.account_id, router.query.account_id, dispatch]);
 
   useEffect(() => {
-    if (modal?.params) {
-      getExpense(dispatch, modal.params);
+    if (modal?.id) {
+      getExpense(dispatch, modal.id);
     }
 
     if (expense?._id) {
       setValues({ ...expense, user_id: expense.user._id, account_id: account?._id });
     }
 
-    if (!modal?.params) {
+    if (!modal?.id) {
       setValues({ ...initialValues, user_id: user?._id, account_id: account?._id });
     }
-  }, [dispatch, expense?._id, modal?.params, setValues]);
+  }, [dispatch, expense?._id, modal?.id, setValues]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [event.target.name]: event.target.value });
@@ -103,8 +103,8 @@ const ExpenseForm: React.FC = () => {
 
   const handleDeleteExpense = async () => {
     if (window.confirm(`Are you sure you want to delete the ${expense?.category} expense?`)) {
-      if (modal?.params) {
-        await deleteExpense(dispatch, modal.params);
+      if (modal?.id) {
+        await deleteExpense(dispatch, modal.id);
 
         await getExpenses(dispatch);
 
@@ -119,7 +119,7 @@ const ExpenseForm: React.FC = () => {
     event.preventDefault();
 
     if (canSubmit()) {
-      modal?.params ? await updateExpense(dispatch, values) : await createExpense(dispatch, values);
+      modal?.id ? await updateExpense(dispatch, values) : await createExpense(dispatch, values);
 
       await getExpenses(dispatch);
 
@@ -130,8 +130,8 @@ const ExpenseForm: React.FC = () => {
   };
 
   const disableSave = useMemo(
-    () => (modal?.params && !hasAccess(values?.user_id, values?.created_by)) || false,
-    [modal?.params, hasAccess, values?.user, values?.created_by],
+    () => (modal?.id && !hasAccess(values?.user_id, values?.created_by)) || false,
+    [modal?.id, hasAccess, values?.user, values?.created_by],
   );
 
   return (
@@ -141,7 +141,7 @@ const ExpenseForm: React.FC = () => {
           Add Expense
         </Typography>
 
-        {modal?.params && (
+        {modal?.id && (
           <Tooltip title="Delete expense">
             <span>
               <IconButton
