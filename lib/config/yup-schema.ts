@@ -58,7 +58,11 @@ export const expenseSchema = yup.object({
   date: yup.date().typeError('Value should be a date').required('Date is required'),
   account_id: yup.string().required('Account is required'),
   category: yup.string().required('Category is required'),
-  amount: yup.number().typeError('Value is not a number').required('Amount is required'),
+  amount: yup
+    .number()
+    .typeError('Value is not a number')
+    .min(0.1, 'Minimum amount is 0.1')
+    .required('Amount is required'),
   user_id: yup.string().trim().nullable(),
   description: yup.string().trim().nullable(),
   details: yup.string().trim().nullable(),
