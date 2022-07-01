@@ -8,7 +8,7 @@ import Expense from '../../../lib/models/expense';
 import User from '../../../lib/models/user';
 import validate from '../../../lib/utils/validate';
 import { authenticated, getDecodedUserId } from '../helpers';
-import { updatePayment } from '../payment';
+import { updatePayment } from '../payment/helpers';
 
 const getExpenses = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
@@ -71,12 +71,7 @@ const addExpense = async (req: NextApiRequest, res: NextApiResponse) => {
       updated_by: userId,
     });
 
-    const expenses = await Expense.find({
-      account: account_id,
-      date: { $gte: startOfMonth(parseISO(date)), $lte: endOfMonth(parseISO(date)) },
-    });
-
-    await updatePayment({ expenses, accountId: account_id, userId: user_id || userId, date });
+    await updatePayment({ accountId: account_id, userId: user_id || userId, date });
 
     res.status(200).json(expense);
   } catch (err) {

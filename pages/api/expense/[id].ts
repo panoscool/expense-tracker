@@ -1,11 +1,13 @@
+import { format } from 'date-fns';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import Expense from '../../../lib/models/expense';
 import dbConnect from '../../../lib/config/db-connect';
-import validate from '../../../lib/utils/validate';
 import { expenseSchema } from '../../../lib/config/yup-schema';
-import { authenticated, getDecodedUserId, hasAccess } from '../helpers';
-import User from '../../../lib/models/user';
 import Account from '../../../lib/models/account';
+import Expense from '../../../lib/models/expense';
+import User from '../../../lib/models/user';
+import validate from '../../../lib/utils/validate';
+import { authenticated, getDecodedUserId, hasAccess } from '../helpers';
+import { updatePayment } from '../payment/helpers';
 
 const getExpense = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
@@ -64,6 +66,8 @@ const updateExpense = async (req: NextApiRequest, res: NextApiResponse) => {
       updated_by: userId,
     });
 
+    await updatePayment({ accountId: account_id, userId: user_id || userId, date });
+
     const updatedExpense = await Expense.findById(req.query.id);
 
     res.status(200).json(updatedExpense);
@@ -89,6 +93,12 @@ const deleteExpense = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     await expense.delete();
+
+    await updatePayment({
+      accountId: expense.account,
+      userId: userId,
+      date: format(expense.date, 'yyyy-MM-dd'),
+    });
 
     res.status(200).json({ message: 'Ok' });
   } catch (err) {
