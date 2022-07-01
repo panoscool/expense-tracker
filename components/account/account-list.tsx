@@ -16,7 +16,7 @@ import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
 import { Theme } from '@mui/material/styles';
-import Tooltip from '@mui/material/Tooltip';
+import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -90,11 +90,9 @@ const AccountList = () => {
     <Box>
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Typography variant="h6">Accounts</Typography>
-        <Tooltip title="Add account">
-          <IconButton onClick={handleOpenModal}>
-            <AddRoundedIcon />
-          </IconButton>
-        </Tooltip>
+        <Button onClick={handleOpenModal} startIcon={<AddRoundedIcon />}>
+          Add
+        </Button>
       </Box>
 
       <List>

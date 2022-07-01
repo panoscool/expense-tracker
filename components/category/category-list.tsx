@@ -8,7 +8,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import ListItemText from '@mui/material/ListItemText';
-import Tooltip from '@mui/material/Tooltip';
+import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { useEffect, useState } from 'react';
 import useAppContext from '../../hooks/use-app-context';
@@ -47,11 +47,9 @@ const CategoryList = () => {
     <Box>
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Typography variant="h6">Categories</Typography>
-        <Tooltip title="Add category">
-          <IconButton onClick={handleOpenModal}>
-            <AddRoundedIcon />
-          </IconButton>
-        </Tooltip>
+        <Button onClick={handleOpenModal} startIcon={<AddRoundedIcon />}>
+          Add
+        </Button>
       </Box>
 
       <List>
