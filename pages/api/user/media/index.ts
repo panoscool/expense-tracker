@@ -37,11 +37,11 @@ const uploadImage = async (req: NextApiRequest, res: NextApiResponse) => {
       folder: 'user_images',
       public_id: `${userId}`,
       overwrite: true,
-      // crop the image to 300x300 pixels
+      // crop the image to 640x640 pixels
       eager: [
         {
-          width: 300,
-          height: 300,
+          width: 640,
+          height: 640,
           crop: 'thumb',
           gravity: 'face',
         },
