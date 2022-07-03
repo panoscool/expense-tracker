@@ -30,7 +30,7 @@ const getPayments = async (req: NextApiRequest, res: NextApiResponse) => {
         populate: {
           path: 'user',
           model: 'User',
-          select: 'name email',
+          select: 'name email image',
         },
       })
       .populate({
@@ -38,11 +38,11 @@ const getPayments = async (req: NextApiRequest, res: NextApiResponse) => {
         populate: {
           path: 'user',
           model: 'User',
-          select: 'name email',
+          select: 'name email image',
         },
       });
 
-    res.status(200).json(payments);
+    res.status(200).json({ data: payments });
   } catch (err) {
     console.error(err);
     res.status(500).send({ error: 'Internal server error' });

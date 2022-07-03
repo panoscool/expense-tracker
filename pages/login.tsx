@@ -60,8 +60,8 @@ const Login: NextPage = () => {
     if (canSubmit()) {
       try {
         setLoading(dispatch, 'login');
-        const data: any = await apiRequest('POST', '/user/login', values);
-        storeSetAccessToken(data as string);
+        const res = await apiRequest('POST', '/user/login', values);
+        storeSetAccessToken(res.data);
         router.push('/');
       } catch (error) {
         setError(dispatch, error as string);

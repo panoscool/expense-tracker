@@ -7,10 +7,10 @@ export const getUser = async (dispatch: React.Dispatch<any>) => {
   try {
     setError(dispatch, null);
 
-    const response: any = await apiRequest('GET', '/user');
+    const response = await apiRequest('GET', '/user');
 
-    const { _id, name, email } = response;
-    dispatch({ type: Actions.SET_USER, payload: { user: { _id: _id, name, email } } });
+    const { _id, name, email, image } = response.data;
+    dispatch({ type: Actions.SET_USER, payload: { user: { _id: _id, name, email, image } } });
   } catch (error) {
     setError(dispatch, error as string);
     enqueueNotification(dispatch, `Something went wrong: ${error}`, 'error');

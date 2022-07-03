@@ -13,7 +13,7 @@ const getCategories = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const categories = await Category.findOne({ user: userId });
 
-    res.status(200).json(categories);
+    res.status(200).json({ data: categories });
   } catch (err) {
     console.error(err);
     res.status(500).send({ error: 'Internal server error' });
@@ -36,7 +36,7 @@ const addCategory = async (req: NextApiRequest, res: NextApiResponse) => {
       labels: [trimToLowerCaseString(req.body.label)],
     });
 
-    res.status(200).json(category);
+    res.status(200).json({ data: category });
   } catch (err) {
     console.error(err);
     res.status(500).send(err || 'Internal server error');

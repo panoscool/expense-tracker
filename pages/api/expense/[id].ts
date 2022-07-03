@@ -16,7 +16,7 @@ const getExpense = async (req: NextApiRequest, res: NextApiResponse) => {
     const expense = await Expense.findById(req.query.id).populate('user', 'name');
 
     if (!expense) {
-      return res.status(200).json({ error: 'Expense not found' });
+      return res.status(200).send({ error: 'Expense not found' });
     }
 
     const account = await Account.findOne({ _id: expense.account });
@@ -25,7 +25,7 @@ const getExpense = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(401).send({ error: 'Not authorized' });
     }
 
-    res.status(200).json(expense);
+    res.status(200).json({ data: expense });
   } catch (err) {
     console.error(err);
     res.status(500).send(err || 'Internal server error');
@@ -70,7 +70,7 @@ const updateExpense = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const updatedExpense = await Expense.findById(req.query.id);
 
-    res.status(200).json(updatedExpense);
+    res.status(200).json({ data: updatedExpense });
   } catch (err) {
     console.error(err);
     res.status(500).send(err || 'Internal server error');

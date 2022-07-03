@@ -52,11 +52,8 @@ const ProfileForm: React.FC = () => {
   };
 
   return (
-    <Box m={2} p={2}>
+    <div>
       <Box mb={3}>
-        <Typography gutterBottom variant="h6">
-          Profile
-        </Typography>
         <Typography variant="body2">Update your name and password</Typography>
         <Typography variant="caption">* Leave password blank to keep current password</Typography>
       </Box>
@@ -114,7 +111,7 @@ const ProfileForm: React.FC = () => {
           </Button>
         </Box>
       </Form>
-    </Box>
+    </div>
   );
 };
 

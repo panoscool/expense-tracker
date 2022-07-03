@@ -39,7 +39,7 @@ const getExpenses = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const expenses = await Expense.find(filters).sort({ date: 'asc' }).populate('user', 'name');
 
-    res.status(200).json(expenses);
+    res.status(200).json({ data: expenses });
   } catch (err) {
     console.error(err);
     res.status(500).send(err || 'Internal server error');
@@ -73,7 +73,7 @@ const addExpense = async (req: NextApiRequest, res: NextApiResponse) => {
 
     await updatePayment({ accountId: account_id, userId: user_id || userId, date });
 
-    res.status(200).json(expense);
+    res.status(200).json({ data: expense });
   } catch (err) {
     console.error(err);
     res.status(500).send(err || 'Internal server error');

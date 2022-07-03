@@ -3,6 +3,7 @@ import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
+import Avatar from '@mui/material/Avatar';
 import AppBar from '@mui/material/AppBar';
 import Button from '@mui/material/Button';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -72,7 +73,11 @@ const Topbar: React.FC = () => {
           ))}
         </DropDown>
 
-        <DropDown icon={<AccountCircleRoundedIcon />} btnSize="large" btnType="icon">
+        <DropDown
+          icon={user?.image ? <Avatar src={user.image} alt="user" /> : <AccountCircleRoundedIcon />}
+          btnSize="large"
+          btnType="icon"
+        >
           <NextLink href="/profile" style={{ color: 'inherit', textDecoration: 'none' }}>
             <MenuItem>
               <ListItemIcon>

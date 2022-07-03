@@ -10,7 +10,7 @@ import validate from '../../../lib/utils/validate';
 const getAccount = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const userId = (await getDecodedUserId(req, res)) as string;
-    const account = await Account.findById(req.query.id).populate('users', 'name email');
+    const account = await Account.findById(req.query.id).populate('users', 'name email image');
 
     if (!account) {
       return res.status(200).send({ error: 'Account not found' });
@@ -22,7 +22,7 @@ const getAccount = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(401).send({ error: 'Unauthorized access' });
     }
 
-    res.status(200).json(account);
+    res.status(200).json({ data: account });
   } catch (err) {
     console.error(err);
     res.status(500).send(err || 'Internal server error');
@@ -84,7 +84,7 @@ const updateAccount = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const updatedAccount = await Account.findById(req.query.id);
 
-    res.status(200).json(updatedAccount);
+    res.status(200).json({ data: updatedAccount });
   } catch (err) {
     console.error(err);
     res.status(500).send(err || 'Internal server error');

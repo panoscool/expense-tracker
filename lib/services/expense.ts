@@ -23,7 +23,7 @@ export const getExpenses = async (dispatch: React.Dispatch<any>, params?: Expens
       `/expense/?account_id=${router.query.account_id}&${formattedParams || defaultParams}`,
     );
 
-    dispatch({ type: Actions.SET_EXPENSES, payload: { expenses: response } });
+    dispatch({ type: Actions.SET_EXPENSES, payload: { expenses: response.data } });
   } catch (error) {
     setError(dispatch, error as string);
   } finally {
@@ -36,7 +36,7 @@ export const getExpense = async (dispatch: React.Dispatch<any>, id: string) => {
     setLoading(dispatch, 'get_expense');
 
     const response = await apiRequest('GET', `/expense/${id}`);
-    dispatch({ type: Actions.SET_EXPENSE, payload: { expense: response } });
+    dispatch({ type: Actions.SET_EXPENSE, payload: { expense: response.data } });
   } catch (error) {
     setError(dispatch, error as string);
   } finally {
@@ -50,7 +50,7 @@ export const createExpense = async (dispatch: React.Dispatch<any>, data: Expense
     setError(dispatch, null);
 
     const response = await apiRequest('POST', '/expense', data);
-    dispatch({ type: Actions.SET_EXPENSE, payload: { expense: response } });
+    dispatch({ type: Actions.SET_EXPENSE, payload: { expense: response.data } });
 
     setModal(dispatch, null);
     enqueueNotification(dispatch, 'Expense created', 'success');
@@ -68,7 +68,7 @@ export const updateExpense = async (dispatch: React.Dispatch<any>, data: Expense
     setError(dispatch, null);
 
     const response = await apiRequest('PUT', `/expense/${data._id}`, data);
-    dispatch({ type: Actions.SET_EXPENSE, payload: { expense: response } });
+    dispatch({ type: Actions.SET_EXPENSE, payload: { expense: response.data } });
 
     setModal(dispatch, null);
     enqueueNotification(dispatch, 'Expense updated', 'success');

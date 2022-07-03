@@ -20,6 +20,7 @@
     "apexcharts": "^3.35.2",
     "axios": "^0.27.2",
     "bcrypt": "^5.0.1",
+    "cloudinary": "^1.30.0",
     "date-fns": "^2.28.0",
     "jsonwebtoken": "^8.5.1",
     "jwt-decode": "^3.1.2",

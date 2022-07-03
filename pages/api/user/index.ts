@@ -20,7 +20,9 @@ const getUser = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(404).send({ error: 'User not found' });
     }
 
-    res.status(200).json({ _id: user._id, name: user.name, email: user.email });
+    const data = { _id: user._id, name: user.name, email: user.email, image: user.image };
+
+    res.status(200).json({ data });
   } catch (err) {
     console.error(err);
     res.status(500).send({ error: 'Internal server error' });

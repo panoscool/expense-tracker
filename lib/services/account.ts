@@ -12,7 +12,7 @@ export const getAccounts = async (dispatch: React.Dispatch<any>) => {
     setLoading(dispatch, 'get_accounts');
 
     const response = await apiRequest('GET', '/account');
-    dispatch({ type: Actions.SET_ACCOUNTS, payload: { accounts: response } });
+    dispatch({ type: Actions.SET_ACCOUNTS, payload: { accounts: response.data } });
   } catch (error) {
     setError(dispatch, error as string);
   } finally {
@@ -25,7 +25,7 @@ export const getAccount = async (dispatch: React.Dispatch<any>, id: string) => {
     setLoading(dispatch, 'get_account');
 
     const response = await apiRequest('GET', `/account/${id}`);
-    dispatch({ type: Actions.SET_ACCOUNT, payload: { account: response } });
+    dispatch({ type: Actions.SET_ACCOUNT, payload: { account: response.data } });
   } catch (error) {
     setError(dispatch, error as string);
   } finally {
@@ -39,7 +39,7 @@ export const createAccount = async (dispatch: React.Dispatch<any>, data: Account
     setError(dispatch, null);
 
     const response = await apiRequest('POST', '/account', data);
-    dispatch({ type: Actions.SET_ACCOUNT, payload: { account: response } });
+    dispatch({ type: Actions.SET_ACCOUNT, payload: { account: response.data } });
 
     enqueueNotification(dispatch, 'Account created', 'success');
   } catch (error) {
@@ -56,7 +56,7 @@ export const updateAccount = async (dispatch: React.Dispatch<any>, data: Account
     setError(dispatch, null);
 
     const response = await apiRequest('PUT', `/account/${data._id}`, data);
-    dispatch({ type: Actions.SET_ACCOUNT, payload: { account: response } });
+    dispatch({ type: Actions.SET_ACCOUNT, payload: { account: response.data } });
 
     enqueueNotification(dispatch, 'Account updated', 'success');
   } catch (error) {
