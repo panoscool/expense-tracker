@@ -1,9 +1,11 @@
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
-import { Alert } from '@mui/material';
+import { FormHelperText } from '@mui/material';
+import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
 import Image from 'next/image';
 import { useState } from 'react';
 import useAppContext from '../../hooks/use-app-context';
@@ -102,18 +104,27 @@ const UploadForm: React.FC = () => {
 
   return (
     <div>
+      <Box mb={3}>
+        <Typography variant="body2">Update your profile picture</Typography>
+      </Box>
+
       <Form onSubmit={handleSubmitFile}>
-        <Input
-          id="file-input"
-          type="file"
-          name="image"
-          accept="image/*"
-          value={file}
-          onChange={handleFileInputChange}
-        />
-        <Button type="submit" variant="contained" disabled={!file}>
-          Save
-        </Button>
+        <Box width="100%">
+          <Input
+            id="file-input"
+            type="file"
+            name="image"
+            accept="image/*"
+            value={file}
+            onChange={handleFileInputChange}
+          />
+          <FormHelperText>* Max allowed image size is 4mb</FormHelperText>
+        </Box>
+        <div>
+          <Button type="submit" variant="contained" disabled={!file}>
+            Save
+          </Button>
+        </div>
       </Form>
 
       {success && (
