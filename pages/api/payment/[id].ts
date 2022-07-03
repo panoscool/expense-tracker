@@ -30,7 +30,7 @@ const getPayments = async (req: NextApiRequest, res: NextApiResponse) => {
         populate: {
           path: 'user',
           model: 'User',
-          select: 'name email',
+          select: 'name email image',
         },
       })
       .populate({
@@ -38,7 +38,7 @@ const getPayments = async (req: NextApiRequest, res: NextApiResponse) => {
         populate: {
           path: 'user',
           model: 'User',
-          select: 'name email',
+          select: 'name email image',
         },
       });
 

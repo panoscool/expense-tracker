@@ -91,7 +91,11 @@ const AccountUsers: React.FC<Props> = ({ accountId, open, onClose }) => {
             {sharedWith.map((user: User) => (
               <ListItem key={user._id} disablePadding>
                 <ListItemAvatar>
-                  <Avatar {...stringAvatar(user._id, user.name)} />
+                  {user.image ? (
+                    <Avatar src={user.image} />
+                  ) : (
+                    <Avatar {...stringAvatar(user._id, user.name)} />
+                  )}
                 </ListItemAvatar>
                 <ListItemText primary={user.name} secondary={user.email} />
                 <ListItemSecondaryAction>

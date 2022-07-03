@@ -10,7 +10,7 @@ import validate from '../../../lib/utils/validate';
 const getAccounts = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const userId = await getDecodedUserId(req, res);
-    const accounts = await Account.find({ users: userId }).populate('users', 'name email');
+    const accounts = await Account.find({ users: userId }).populate('users', 'name email image');
 
     res.status(200).json({ data: accounts });
   } catch (err) {

@@ -1,9 +1,9 @@
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
-import { FormHelperText } from '@mui/material';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import FormHelperText from '@mui/material/FormHelperText';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import Image from 'next/image';
@@ -27,7 +27,7 @@ const Form = styled('form')(({ theme }) => ({
 const UploadForm: React.FC = () => {
   const { user, dispatch } = useAppContext();
   const [ratio, setRatio] = useState(16 / 9);
-  const [file, setFile] = useState<string>('');
+  const [filePath, setFilePath] = useState<string>('');
   const [previewSource, setPreviewSource] = useState<string>('');
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
@@ -46,15 +46,25 @@ const UploadForm: React.FC = () => {
 
   const handleClearPreview = () => {
     setPreviewSource('');
-    setFile('');
+    setFilePath('');
   };
 
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0];
 
+    setError('');
+
+    // if file size is greater than 5MB then show error
+    if (file && file.size > 5000000) {
+      setError('File size is greater than 4MB');
+      setFilePath('');
+
+      return;
+    }
+
     if (file) {
       previewFile(file);
-      setFile(e.target.value);
+      setFilePath(e.target.value);
     }
   };
 
@@ -65,6 +75,10 @@ const UploadForm: React.FC = () => {
       await getUser(dispatch);
 
       setSuccess('Image deleted successfully');
+
+      setTimeout(() => {
+        setSuccess('');
+      }, 3000);
     } catch (err) {
       console.error(err);
       setError(`Image failed to delete: ${err}`);
@@ -79,7 +93,7 @@ const UploadForm: React.FC = () => {
       await apiRequest('POST', '/user/media', { file_string: base64EncodedImage });
       await getUser(dispatch);
 
-      setFile('');
+      setFilePath('');
       setPreviewSource('');
       setSuccess('Image uploaded successfully');
 
@@ -115,30 +129,30 @@ const UploadForm: React.FC = () => {
             type="file"
             name="image"
             accept="image/*"
-            value={file}
+            value={filePath}
             onChange={handleFileInputChange}
           />
           <FormHelperText>* Max allowed image size is 4mb</FormHelperText>
         </Box>
         <div>
-          <Button type="submit" variant="contained" disabled={!file}>
+          <Button type="submit" variant="contained" disabled={!filePath}>
             Save
           </Button>
         </div>
       </Form>
 
       {success && (
-        <Alert severity="success" sx={{ my: 3 }}>
+        <Alert severity="success" sx={{ my: 2 }}>
           {success}
         </Alert>
       )}
       {error && (
-        <Alert severity="error" sx={{ my: 3 }}>
+        <Alert severity="error" onClose={() => setError('')} sx={{ my: 2 }}>
           {error}
         </Alert>
       )}
 
-      <Box mt={3} display="flex" flexDirection="column" alignItems="flex-start">
+      <Box mt={1} display="flex" flexDirection="column" alignItems="flex-start">
         {!previewSource && user?.image && (
           <>
             <Button
@@ -163,7 +177,7 @@ const UploadForm: React.FC = () => {
         )}
       </Box>
 
-      <Box mt={3} display="flex" flexDirection="column" alignItems="flex-start">
+      <Box mt={1} display="flex" flexDirection="column" alignItems="flex-start">
         {previewSource && (
           <>
             <Button onClick={handleClearPreview} startIcon={<CancelOutlinedIcon />} sx={{ mb: 1 }}>
