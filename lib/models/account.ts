@@ -5,8 +5,8 @@ interface IAccount extends Document {
   user: Document['_id'];
   name: string;
   users: string[];
-  description: string;
-  currency: string;
+  description: string | null;
+  currency: string | null;
   created_at: Date;
   updated_at: Date;
 }
@@ -17,8 +17,8 @@ const AccountSchema: Schema = new Schema(
     user: { type: SchemaTypes.ObjectId, ref: 'User', required: true },
     name: { type: String, required: true, trim: true },
     users: [{ type: SchemaTypes.ObjectId, ref: 'User' }],
-    description: { type: String, required: false },
-    currency: { type: String, required: false },
+    description: { type: String, default: null },
+    currency: { type: String, default: 'EUR' },
   },
   {
     timestamps: {

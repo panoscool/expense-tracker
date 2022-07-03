@@ -42,7 +42,7 @@ const getPayments = async (req: NextApiRequest, res: NextApiResponse) => {
         },
       });
 
-    res.status(200).json(payments);
+    res.status(200).json({ data: payments });
   } catch (err) {
     console.error(err);
     res.status(500).send({ error: 'Internal server error' });

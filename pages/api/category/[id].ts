@@ -23,7 +23,7 @@ const getCategory = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(401).send({ error: 'Unauthorized access' });
     }
 
-    res.status(200).json(category);
+    res.status(200).json({ data: category });
   } catch (err) {
     console.error(err);
     res.status(500).send(err || 'Internal server error');
@@ -64,7 +64,7 @@ const updateCategory = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const updatedCategories = await Category.findById(req.query.id);
 
-    res.status(200).json(updatedCategories);
+    res.status(200).json({ data: updatedCategories });
   } catch (err) {
     console.error(err);
     res.status(500).send(err || 'Internal server error');

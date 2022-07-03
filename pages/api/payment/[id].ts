@@ -42,7 +42,7 @@ const getPayments = async (req: NextApiRequest, res: NextApiResponse) => {
         },
       });
 
-    res.status(200).json(payments);
+    res.status(200).json({ data: payments });
   } catch (err) {
     console.error(err);
     res.status(500).send({ error: 'Internal server error' });
@@ -55,7 +55,7 @@ const updatePayment = async (req: NextApiRequest, res: NextApiResponse) => {
     const payment = await Payment.findById(req.query.id);
 
     if (!payment) {
-      return res.status(404).json({ error: 'Payment not found' });
+      return res.status(404).send({ error: 'Payment not found' });
     }
 
     const account = await Account.findById(payment.account);
@@ -85,7 +85,7 @@ const updatePayment = async (req: NextApiRequest, res: NextApiResponse) => {
         },
       });
 
-    res.status(200).json(updatedPayment);
+    res.status(200).json({ data: updatedPayment });
   } catch (error) {
     console.error(error);
     res.status(500).send({ error: 'Internal server error' });

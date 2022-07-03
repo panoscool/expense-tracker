@@ -62,8 +62,8 @@ const Register: NextPage = () => {
     if (canSubmit()) {
       try {
         setLoading(dispatch, 'register');
-        const data: any = await apiRequest('POST', '/user/register', values);
-        storeSetAccessToken(data as string);
+        const res = await apiRequest('POST', '/user/register', values);
+        storeSetAccessToken(res.data);
         router.push('/');
       } catch (error) {
         setError(dispatch, error as string);

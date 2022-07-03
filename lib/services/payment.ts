@@ -17,7 +17,7 @@ export const getPayments = async (dispatch: React.Dispatch<any>, data: GetPaymen
       (data?.period && format(data.period, 'yyyy-MM-dd')) || format(new Date(), 'yyyy-MM-dd');
 
     const response = await apiRequest('GET', `/payment/${data.account_id}?period=${params}`);
-    dispatch({ type: Actions.SET_PAYMENTS, payload: { payments: response } });
+    dispatch({ type: Actions.SET_PAYMENTS, payload: { payments: response.data } });
   } catch (error) {
     setError(dispatch, error as string);
   } finally {
@@ -30,7 +30,7 @@ export const updatePayment = async (dispatch: React.Dispatch<any>, data: Payment
     setLoading(dispatch, 'update_payment');
 
     const response = await apiRequest('PATCH', `/payment/${data._id}`, { settled: data.settled });
-    dispatch({ type: Actions.SET_PAYMENTS, payload: { payments: response } });
+    dispatch({ type: Actions.SET_PAYMENTS, payload: { payments: response.data } });
   } catch (error) {
     setError(dispatch, error as string);
   } finally {

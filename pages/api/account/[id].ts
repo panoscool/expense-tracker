@@ -22,7 +22,7 @@ const getAccount = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(401).send({ error: 'Unauthorized access' });
     }
 
-    res.status(200).json(account);
+    res.status(200).json({ data: account });
   } catch (err) {
     console.error(err);
     res.status(500).send(err || 'Internal server error');
@@ -84,7 +84,7 @@ const updateAccount = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const updatedAccount = await Account.findById(req.query.id);
 
-    res.status(200).json(updatedAccount);
+    res.status(200).json({ data: updatedAccount });
   } catch (err) {
     console.error(err);
     res.status(500).send(err || 'Internal server error');

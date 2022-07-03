@@ -12,7 +12,7 @@ export const getCategories = async (dispatch: React.Dispatch<any>) => {
     setLoading(dispatch, 'get_categories');
 
     const response = await apiRequest('GET', '/category');
-    dispatch({ type: Actions.SET_CATEGORIES, payload: { categories: response } });
+    dispatch({ type: Actions.SET_CATEGORIES, payload: { categories: response.data } });
   } catch (error) {
     setError(dispatch, error as string);
   } finally {

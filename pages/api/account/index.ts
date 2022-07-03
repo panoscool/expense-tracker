@@ -12,7 +12,7 @@ const getAccounts = async (req: NextApiRequest, res: NextApiResponse) => {
     const userId = await getDecodedUserId(req, res);
     const accounts = await Account.find({ users: userId }).populate('users', 'name email');
 
-    res.status(200).json(accounts);
+    res.status(200).json({ data: accounts });
   } catch (err) {
     console.error(err);
     res.status(500).send(err || 'Internal server error');
@@ -53,7 +53,7 @@ const addAccount = async (req: NextApiRequest, res: NextApiResponse) => {
       });
     }
 
-    res.status(200).json(account);
+    res.status(200).json({ data: account });
   } catch (err) {
     console.error(err);
     res.status(500).send(err || 'Internal server error');

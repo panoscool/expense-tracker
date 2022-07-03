@@ -27,7 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const token = await setAccessToken(user);
 
-    res.status(200).json(token);
+    res.status(200).json({ data: token });
   } catch (err) {
     console.error(err);
     res.status(500).send(err || 'Internal server error');
