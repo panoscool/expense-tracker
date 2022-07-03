@@ -53,7 +53,7 @@ const Topbar: React.FC = () => {
 
         <Button
           color="inherit"
-          size={isDesktop ? 'small' : 'medium'}
+          size="large"
           startIcon={<AddRoundedIcon />}
           onClick={handleAddExpense}
         >
@@ -62,7 +62,7 @@ const Topbar: React.FC = () => {
 
         <DropDown
           label="Accounts"
-          btnSize={isDesktop ? 'small' : 'large'}
+          btnSize="large"
           btnType={isDesktop ? 'text' : 'icon'}
           icon={<AccountBalanceWalletRoundedIcon />}
         >

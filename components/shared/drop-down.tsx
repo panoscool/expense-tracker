@@ -35,6 +35,7 @@ const DropDown: React.FC<Props> = ({ children, icon, btnType, label, btnSize, di
     <div>
       {btnType === 'icon' && (
         <IconButton
+          id={`${id}-menu-button`}
           color="inherit"
           edge="end"
           size={btnSize}
@@ -42,7 +43,7 @@ const DropDown: React.FC<Props> = ({ children, icon, btnType, label, btnSize, di
           aria-haspopup="true"
           aria-label="dropdown-menu"
           aria-expanded={Boolean(anchorEl) ? 'true' : undefined}
-          aria-controls={Boolean(anchorEl) ? `menu-${id || 'dropdown'}` : undefined}
+          aria-controls={Boolean(anchorEl) ? `${id}-dropdown-menu` : undefined}
           onClick={handleMenu}
         >
           {icon}
@@ -50,12 +51,13 @@ const DropDown: React.FC<Props> = ({ children, icon, btnType, label, btnSize, di
       )}
       {btnType === 'text' && (
         <Button
+          id={`${id}-menu-button`}
           color="inherit"
           size={btnSize}
           disabled={disabled}
           aria-haspopup="true"
           aria-expanded={Boolean(anchorEl) ? 'true' : undefined}
-          aria-controls={Boolean(anchorEl) ? `menu-${id || 'dropdown'}` : undefined}
+          aria-controls={Boolean(anchorEl) ? `${id}-dropdown-menu` : undefined}
           startIcon={icon}
           onClick={handleMenu}
         >
@@ -63,11 +65,14 @@ const DropDown: React.FC<Props> = ({ children, icon, btnType, label, btnSize, di
         </Button>
       )}
       <Menu
-        id={`menu-${id || 'dropdown'}`}
+        id={`${id}-dropdown-menu`}
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleClose}
         onClick={handleClose}
+        MenuListProps={{
+          'aria-labelledby': `${id}-menu-button`,
+        }}
       >
         {children}
       </Menu>
