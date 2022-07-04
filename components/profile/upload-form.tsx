@@ -9,9 +9,8 @@ import Typography from '@mui/material/Typography';
 import Image from 'next/image';
 import { useState } from 'react';
 import useAppContext from '../../hooks/use-app-context';
-import apiRequest from '../../lib/config/axios';
-import { setLoading } from '../../lib/services/helpers';
-import { getUser } from '../../lib/services/user';
+import { setError } from '../../lib/services/helpers';
+import { deleteUserImage, getUser, uploadUserImage } from '../../lib/services/user';
 
 const Input = styled('input')(({ theme }) => ({
   width: '100%',
@@ -24,13 +23,16 @@ const Form = styled('form')(({ theme }) => ({
   gap: theme.spacing(2),
 }));
 
+const IMAGE_WIDTH = 320;
+const IMAGE_HEIGHT = 320;
+const IMAGE_SIZE_LIMIT = 5000000;
+const IMAGE_RATIO = IMAGE_WIDTH / IMAGE_HEIGHT;
+
 const UploadForm: React.FC = () => {
-  const { user, dispatch } = useAppContext();
-  const [ratio, setRatio] = useState(16 / 9);
+  const { user, error, dispatch } = useAppContext();
+  const [ratio, setRatio] = useState(IMAGE_RATIO);
   const [filePath, setFilePath] = useState<string>('');
   const [previewSource, setPreviewSource] = useState<string>('');
-  const [success, setSuccess] = useState('');
-  const [error, setError] = useState('');
 
   const previewFile = (file: File) => {
     const reader = new FileReader();
@@ -40,24 +42,28 @@ const UploadForm: React.FC = () => {
     };
     reader.onerror = () => {
       console.error('Error reading file');
-      setError('Something went wrong!');
+      setError(dispatch, 'Something went wrong!');
     };
   };
 
-  const handleClearPreview = () => {
+  const handleClearFile = () => {
     setPreviewSource('');
     setFilePath('');
+  };
+
+  const handleClearError = () => {
+    setError(dispatch, null);
   };
 
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0];
 
-    setError('');
+    setError(dispatch, null);
 
     // if file size is greater than 5MB then show error
-    if (file && file.size > 5000000) {
-      setError('File size is greater than 4MB');
-      setFilePath('');
+    if (file && file.size > IMAGE_SIZE_LIMIT) {
+      setError(dispatch, 'File size is greater than 4MB');
+      handleClearFile();
 
       return;
     }
@@ -69,43 +75,16 @@ const UploadForm: React.FC = () => {
   };
 
   const handleDeleteImage = async () => {
-    try {
-      setLoading(dispatch, 'delete_image');
-      await apiRequest('DELETE', '/user/media');
-      await getUser(dispatch);
-
-      setSuccess('Image deleted successfully');
-
-      setTimeout(() => {
-        setSuccess('');
-      }, 3000);
-    } catch (err) {
-      console.error(err);
-      setError(`Image failed to delete: ${err}`);
-    } finally {
-      setLoading(dispatch, 'delete_image');
-    }
+    await deleteUserImage(dispatch);
+    await getUser(dispatch);
   };
 
   const uploadImage = async (base64EncodedImage: string) => {
-    try {
-      setLoading(dispatch, 'upload_image');
-      await apiRequest('POST', '/user/media', { file_string: base64EncodedImage });
-      await getUser(dispatch);
+    await uploadUserImage(dispatch, base64EncodedImage);
+    await getUser(dispatch);
 
-      setFilePath('');
-      setPreviewSource('');
-      setSuccess('Image uploaded successfully');
-
-      setTimeout(() => {
-        setSuccess('');
-      }, 3000);
-    } catch (err) {
-      console.error(err);
-      setError(`Image failed to upload: ${err}`);
-    } finally {
-      setLoading(dispatch, 'upload_image');
-    }
+    setFilePath('');
+    setPreviewSource('');
   };
 
   const handleSubmitFile = (e: React.FormEvent) => {
@@ -141,13 +120,8 @@ const UploadForm: React.FC = () => {
         </div>
       </Form>
 
-      {success && (
-        <Alert severity="success" sx={{ my: 2 }}>
-          {success}
-        </Alert>
-      )}
       {error && (
-        <Alert severity="error" onClose={() => setError('')} sx={{ my: 2 }}>
+        <Alert severity="error" onClose={handleClearError} sx={{ my: 2 }}>
           {error}
         </Alert>
       )}
@@ -166,8 +140,8 @@ const UploadForm: React.FC = () => {
             <Image
               src={user.image}
               alt=""
-              width={300}
-              height={300 / ratio}
+              width={IMAGE_WIDTH}
+              height={IMAGE_HEIGHT / ratio}
               layout="fixed"
               onLoadingComplete={({ naturalWidth, naturalHeight }) =>
                 setRatio(naturalWidth / naturalHeight)
@@ -180,14 +154,14 @@ const UploadForm: React.FC = () => {
       <Box mt={1} display="flex" flexDirection="column" alignItems="flex-start">
         {previewSource && (
           <>
-            <Button onClick={handleClearPreview} startIcon={<CancelOutlinedIcon />} sx={{ mb: 1 }}>
+            <Button onClick={handleClearFile} startIcon={<CancelOutlinedIcon />} sx={{ mb: 1 }}>
               Cancel
             </Button>
             <Image
               src={previewSource}
               alt="preview selected"
-              width={300}
-              height={300 / ratio}
+              width={IMAGE_WIDTH}
+              height={IMAGE_HEIGHT / ratio}
               layout="fixed"
               onLoadingComplete={({ naturalWidth, naturalHeight }) =>
                 setRatio(naturalWidth / naturalHeight)

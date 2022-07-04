@@ -8,7 +8,7 @@ import useAppContext from '../../hooks/use-app-context';
 import useForm from '../../hooks/use-form';
 import { userUpdateSchema } from '../../lib/config/yup-schema';
 import { getAccounts } from '../../lib/services/account';
-import { updateUser } from '../../lib/services/user';
+import { getUser, updateUser } from '../../lib/services/user';
 
 const Form = styled('form')`
   display: flex;
@@ -48,6 +48,7 @@ const ProfileForm: React.FC = () => {
 
     if (canSubmit()) {
       await updateUser(dispatch, values);
+      await getUser(dispatch);
     }
   };
 
