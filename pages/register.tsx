@@ -139,7 +139,7 @@ const Register: NextPage = () => {
           </Form>
 
           <Typography>
-            You have account? <NextLink href="/login">Login</NextLink>
+            Have an account? <NextLink href="/login">Login</NextLink>
           </Typography>
         </Wrapper>
       </main>

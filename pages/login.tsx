@@ -117,7 +117,7 @@ const Login: NextPage = () => {
           </Form>
 
           <Typography>
-            Don&apos;t have account? <NextLink href="/register">Register</NextLink>
+            Don&apos;t have an account? <NextLink href="/register">Register</NextLink>
           </Typography>
         </Wrapper>
       </main>
