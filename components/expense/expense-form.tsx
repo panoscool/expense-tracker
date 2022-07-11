@@ -159,6 +159,7 @@ const ExpenseForm: React.FC = () => {
       <Form onSubmit={handleSubmit} noValidate>
         <DateField
           label="Date"
+          disableFuture
           value={values.date}
           onChange={setValues}
           onBlur={onBlur}

@@ -1,4 +1,4 @@
-import { format } from 'date-fns';
+import { format, isSameMonth, parseISO } from 'date-fns';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import dbConnect from '../../../lib/config/db-connect';
 import { expenseSchema } from '../../../lib/config/yup-schema';
@@ -66,12 +66,25 @@ const updateExpense = async (req: NextApiRequest, res: NextApiResponse) => {
       updated_by: userId,
     });
 
-    if (expense.account !== account_id) {
-      await updatePayment({ accountId: account_id, date, userId: user_id || userId });
-      await updatePayment({ accountId: expense.account, date, userId: user_id || userId });
-    } else {
-      await updatePayment({ accountId: account_id, date, userId: user_id || userId });
+    if (expense.account !== account_id && !isSameMonth(expense.date, parseISO(date))) {
+      await updatePayment({
+        accountId: expense.account,
+        userId: user_id || userId,
+        date: format(expense.date, 'yyyy-MM-dd'),
+      });
     }
+    if (expense.account !== account_id) {
+      await updatePayment({ accountId: expense.account, date, userId: user_id || userId });
+    }
+    if (!isSameMonth(expense.date, parseISO(date))) {
+      await updatePayment({
+        accountId: account_id,
+        date: format(expense.date, 'yyyy-MM-dd'),
+        userId: user_id || userId,
+      });
+    }
+
+    await updatePayment({ accountId: account_id, date, userId: user_id || userId });
 
     const updatedExpense = await Expense.findById(req.query.id);
 
