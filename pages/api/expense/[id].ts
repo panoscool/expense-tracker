@@ -66,7 +66,12 @@ const updateExpense = async (req: NextApiRequest, res: NextApiResponse) => {
       updated_by: userId,
     });
 
-    await updatePayment({ accountId: account_id, userId: user_id || userId, date });
+    if (expense.account !== account_id) {
+      await updatePayment({ accountId: account_id, date, userId: user_id || userId });
+      await updatePayment({ accountId: expense.account, date, userId: user_id || userId });
+    } else {
+      await updatePayment({ accountId: account_id, date, userId: user_id || userId });
+    }
 
     const updatedExpense = await Expense.findById(req.query.id);
 
