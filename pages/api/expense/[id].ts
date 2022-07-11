@@ -74,17 +74,17 @@ const updateExpense = async (req: NextApiRequest, res: NextApiResponse) => {
       });
     }
     if (expense.account !== account_id) {
-      await updatePayment({ accountId: expense.account, date, userId: user_id || userId });
+      await updatePayment({ accountId: expense.account, userId: user_id || userId, date });
     }
     if (!isSameMonth(expense.date, parseISO(date))) {
       await updatePayment({
         accountId: account_id,
-        date: format(expense.date, 'yyyy-MM-dd'),
         userId: user_id || userId,
+        date: format(expense.date, 'yyyy-MM-dd'),
       });
     }
 
-    await updatePayment({ accountId: account_id, date, userId: user_id || userId });
+    await updatePayment({ accountId: account_id, userId: user_id || userId, date });
 
     const updatedExpense = await Expense.findById(req.query.id);
 
