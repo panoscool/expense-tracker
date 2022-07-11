@@ -66,25 +66,37 @@ const updateExpense = async (req: NextApiRequest, res: NextApiResponse) => {
       updated_by: userId,
     });
 
-    if (expense.account !== account_id && !isSameMonth(expense.date, parseISO(date))) {
+    const sameAccount = expense.account.toString() === account_id;
+    const sameMonth = isSameMonth(expense.date, parseISO(date));
+    const formattedDate = format(expense.date, 'yyyy-MM-dd');
+
+    if (!sameAccount && !sameMonth) {
       await updatePayment({
         accountId: expense.account,
         userId: user_id || userId,
-        date: format(expense.date, 'yyyy-MM-dd'),
+        date: formattedDate,
       });
     }
-    if (expense.account !== account_id) {
-      await updatePayment({ accountId: expense.account, userId: user_id || userId, date });
+    if (!sameAccount && sameMonth) {
+      await updatePayment({
+        accountId: expense.account,
+        userId: user_id || userId,
+        date,
+      });
     }
-    if (!isSameMonth(expense.date, parseISO(date))) {
+    if (sameAccount && !sameMonth) {
       await updatePayment({
         accountId: account_id,
         userId: user_id || userId,
-        date: format(expense.date, 'yyyy-MM-dd'),
+        date: formattedDate,
       });
     }
 
-    await updatePayment({ accountId: account_id, userId: user_id || userId, date });
+    await updatePayment({
+      accountId: account_id,
+      userId: user_id || userId,
+      date,
+    });
 
     const updatedExpense = await Expense.findById(req.query.id);
 
