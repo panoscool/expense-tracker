@@ -1,5 +1,5 @@
 export const getInitials = (name: string) => {
-  const nameSplit = name?.split(' ');
+  const nameSplit = name?.trim().split(' ');
 
   if (nameSplit?.length === 1) {
     return nameSplit[0][0].toLocaleUpperCase();
