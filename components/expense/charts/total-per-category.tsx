@@ -7,7 +7,7 @@ import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
 import Typography from '@mui/material/Typography';
 import { Expense } from '../../../lib/interfaces/expense';
 import { capitalizeFirstLetter } from '../../../lib/utils/format-text';
-import { formatCurrency } from '../../../lib/utils/number-formatter';
+import { formatCurrency } from '../../../lib/utils/format-number';
 import { stringToColor } from '../../../lib/utils/string-to-color';
 
 type Props = {

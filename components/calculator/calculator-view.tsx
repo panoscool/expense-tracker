@@ -1,7 +1,7 @@
 import Button from '@mui/material/Button';
 import { alpha, styled } from '@mui/material/styles';
 import { Actions } from '../../hooks/use-calculator';
-import { formatOperand } from '../../lib/utils/number-formatter';
+import { formatOperand } from '../../lib/utils/format-number';
 import DigitButton from './digit-button';
 import OperationButton from './operation-button';
 

@@ -5,7 +5,7 @@ import { format, parseISO } from 'date-fns';
 import React from 'react';
 import Chart from 'react-apexcharts';
 import { Expense } from '../../../lib/interfaces/expense';
-import { formatCurrency } from '../../../lib/utils/number-formatter';
+import { formatCurrency } from '../../../lib/utils/format-number';
 
 type Props = {
   days: Expense[][];

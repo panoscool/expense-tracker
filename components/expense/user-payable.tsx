@@ -15,7 +15,7 @@ import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import useAppContext from '../../hooks/use-app-context';
 import { updatePayment } from '../../lib/services/payment';
-import { formatCurrency } from '../../lib/utils/number-formatter';
+import { formatCurrency } from '../../lib/utils/format-number';
 import { stringToColor } from '../../lib/utils/string-to-color';
 
 const Item = styled(ListItem)({

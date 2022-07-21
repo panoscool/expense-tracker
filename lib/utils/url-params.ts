@@ -15,6 +15,7 @@ export const getParams = (providedLocation = null) => {
 export const setParams = (newParams: any) => {
   const currentParams = getParams();
   const newQuery = buildParams({ ...currentParams, ...newParams });
+
   if (newQuery) {
     Router.push(`${location.pathname}?${newQuery}`);
   } else {

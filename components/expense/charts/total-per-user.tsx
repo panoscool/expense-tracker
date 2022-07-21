@@ -4,7 +4,7 @@ import CardHeader from '@mui/material/CardHeader';
 import Chart from 'react-apexcharts';
 import { Expense } from '../../../lib/interfaces/expense';
 import { getTotalAmountPerUser } from '../../../lib/utils/expense-calculations';
-import { formatCurrency } from '../../../lib/utils/number-formatter';
+import { formatCurrency } from '../../../lib/utils/format-number';
 import { stringToColor } from '../../../lib/utils/string-to-color';
 
 type Props = {

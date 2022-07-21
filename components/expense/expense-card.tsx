@@ -14,7 +14,7 @@ import Typography from '@mui/material/Typography';
 import { format, parseISO } from 'date-fns';
 import { Fragment } from 'react';
 import { Expense } from '../../lib/interfaces/expense';
-import { formatCurrency } from '../../lib/utils/number-formatter';
+import { formatCurrency } from '../../lib/utils/format-number';
 import { stringToColor } from '../../lib/utils/string-to-color';
 import CategoryIcon from '../shared/category-icon';
 
