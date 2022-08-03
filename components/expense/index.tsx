@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import useAppContext from '../../hooks/use-app-context';
 import useIsDesktop from '../../hooks/use-is-desktop';
 import { QueryParams } from '../../lib/interfaces/common';
-import { getAccounts } from '../../lib/services/account';
+import { getAccount, getAccounts } from '../../lib/services/account';
 import { getExpenses } from '../../lib/services/expense';
 import { setModal } from '../../lib/services/helpers';
 import { getPayments } from '../../lib/services/payment';
@@ -24,7 +24,7 @@ const TotalPerCategory = dynamic(() => import('./charts/total-per-category'), { 
 const Expenses: React.FC = () => {
   const router = useRouter();
   const isDesktop = useIsDesktop();
-  const { expenses, dispatch } = useAppContext();
+  const { expenses, account, dispatch } = useAppContext();
 
   const { account_id, user_id, date, category }: QueryParams = router.query;
 
@@ -36,6 +36,7 @@ const Expenses: React.FC = () => {
     if (account_id) {
       getExpenses(dispatch);
       getPayments(dispatch);
+      getAccount(dispatch, account_id);
     }
   }, [dispatch, account_id, user_id, date, category]);
 
@@ -50,6 +51,16 @@ const Expenses: React.FC = () => {
 
   return (
     <div>
+      <Box display="flex" justifyContent="space-between" alignItems="center">
+        <Typography variant="h6">{account?.name}</Typography>
+
+        {account && account?.users.length > 1 && (
+          <Typography variant="caption">Users: {account?.users.length}</Typography>
+        )}
+      </Box>
+
+      <Divider sx={{ mb: 2 }} />
+
       <Grid container spacing={1} sx={{ mb: 2 }}>
         {isDesktop && (
           <Grid item xs={12} md={9}>

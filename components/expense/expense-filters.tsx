@@ -43,6 +43,10 @@ const ExpenseFilters: React.FC = () => {
     if (category) {
       setFilters((prevFilters) => ({ ...prevFilters, category }));
     }
+
+    return () => {
+      setFilters({ date: new Date(), user_id: 'all', category: 'all' });
+    };
   }, [dispatch, user_id, date, category]);
 
   const handleChangeFilterBy = (event: React.ChangeEvent<HTMLInputElement>) => {
