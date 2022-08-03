@@ -12,9 +12,10 @@ import { stringToColor } from '../../../lib/utils/string-to-color';
 
 type Props = {
   expenses: Expense[];
+  currency?: string;
 };
 
-const TotalPerCategory: React.FC<Props> = ({ expenses }) => {
+const TotalPerCategory: React.FC<Props> = ({ expenses, currency }) => {
   const totalPerCategory = expenses.reduce((acc: any, curr) => {
     if (!acc[curr.category]) {
       acc[curr.category] = 0;
@@ -58,7 +59,7 @@ const TotalPerCategory: React.FC<Props> = ({ expenses }) => {
         labels: {
           show: true,
           formatter: function (val: number) {
-            return formatCurrency(val);
+            return formatCurrency(val, currency);
           },
         },
       },
@@ -84,20 +85,11 @@ const TotalPerCategory: React.FC<Props> = ({ expenses }) => {
 
   return (
     <Accordion variant="outlined">
-      <AccordionSummary
-        expandIcon={<ExpandMoreRoundedIcon />}
-        aria-controls="panel1b-content"
-        id="panel1b-header"
-      >
+      <AccordionSummary expandIcon={<ExpandMoreRoundedIcon />} aria-controls="panel1b-content" id="panel1b-header">
         <Typography>Total per category</Typography>
       </AccordionSummary>
       <AccordionDetails>
-        <Chart
-          type="bar"
-          height="240px"
-          series={chartConfig.series}
-          options={chartConfig.options}
-        />
+        <Chart type="bar" height="240px" series={chartConfig.series} options={chartConfig.options} />
       </AccordionDetails>
     </Accordion>
   );

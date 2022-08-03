@@ -7,6 +7,7 @@ export type AccountCreate = InferType<typeof accountSchema>;
 export interface Account {
   _id: string;
   name: string;
+  currency: string;
   description: string;
   user: string;
   users: User[];

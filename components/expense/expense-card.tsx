@@ -25,10 +25,11 @@ const TotalAmount = styled(Typography)`
 type Props = {
   day: Expense[];
   date: string;
+  currency?: string;
   onSelectExpense: (id: string) => void;
 };
 
-const ExpenseCard: React.FC<Props> = ({ day, date, onSelectExpense }) => {
+const ExpenseCard: React.FC<Props> = ({ day, date, currency, onSelectExpense }) => {
   const handleExpenseClick = (expense: Expense) => {
     onSelectExpense(expense._id);
   };
@@ -53,7 +54,7 @@ const ExpenseCard: React.FC<Props> = ({ day, date, onSelectExpense }) => {
         }
         action={
           <TotalAmount variant="h6" color="primary">
-            {formatCurrency(totalAmount)}
+            {formatCurrency(totalAmount, currency)}
           </TotalAmount>
         }
         title={formatDate('EEEE')}
@@ -77,9 +78,7 @@ const ExpenseCard: React.FC<Props> = ({ day, date, onSelectExpense }) => {
                     secondary={expense.user.name}
                     sx={{ textTransform: 'capitalize' }}
                   />
-                  <ListItemSecondaryAction>
-                    {formatCurrency(expense.amount)}
-                  </ListItemSecondaryAction>
+                  <ListItemSecondaryAction>{formatCurrency(expense.amount, currency)}</ListItemSecondaryAction>
                 </ListItemButton>
               </ListItem>
               {index === day.length - 1 ? null : <Divider component="li" />}

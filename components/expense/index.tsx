@@ -1,7 +1,8 @@
-import { Box, Divider, Grid, Typography } from '@mui/material';
+import { Alert, Box, Divider, Grid, Typography } from '@mui/material';
 import { format } from 'date-fns';
 import { groupBy } from 'lodash';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import useAppContext from '../../hooks/use-app-context';
@@ -51,6 +52,14 @@ const Expenses: React.FC = () => {
 
   return (
     <div>
+      <Alert severity="info" sx={{ mb: 2 }}>
+        If you see a wrong currency, update the account from this{' '}
+        <Link href="/">
+          <a>page</a>
+        </Link>{' '}
+        by clicking the three dots, edit and select the correct currency.
+      </Alert>
+
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Typography variant="h6">{account?.name}</Typography>
 
@@ -64,16 +73,16 @@ const Expenses: React.FC = () => {
       <Grid container spacing={1} sx={{ mb: 2 }}>
         {isDesktop && (
           <Grid item xs={12} md={9}>
-            <TotalPerDay days={days} dates={dates} />
+            <TotalPerDay days={days} dates={dates} currency={account?.currency} />
           </Grid>
         )}
 
         <Grid item xs={12} md={3}>
-          <TotalPerUser expenses={expenses || []} />
+          <TotalPerUser expenses={expenses || []} currency={account?.currency} />
         </Grid>
       </Grid>
 
-      <TotalPerCategory expenses={expenses || []} />
+      <TotalPerCategory expenses={expenses || []} currency={account?.currency} />
       {totalUsers > 1 && <UserPayable />}
 
       <Box mt={8} mb={2}>
@@ -90,6 +99,7 @@ const Expenses: React.FC = () => {
             key={index}
             date={dates[index]}
             day={day}
+            currency={account?.currency}
             onSelectExpense={handleExpenseEdit}
           />
         ))

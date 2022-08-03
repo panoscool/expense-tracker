@@ -11,6 +11,7 @@ import { accountSchema } from '../../lib/config/yup-schema';
 import { Account, AccountCreate } from '../../lib/interfaces/account';
 import { createAccount, getAccounts, updateAccount } from '../../lib/services/account';
 import { getDialogWidth } from '../../lib/utils/common-breakpoints';
+import CurrencySelect from '../shared/currency-select';
 
 const Form = styled('form')`
   display: flex;
@@ -27,6 +28,7 @@ const initialValues: AccountCreate = {
   name: '',
   description: '',
   email: '',
+  currency: '',
 };
 
 const AccountForm: React.FC<Props> = ({ selectedAccount, closeModal }) => {
@@ -44,21 +46,19 @@ const AccountForm: React.FC<Props> = ({ selectedAccount, closeModal }) => {
     };
   }, [selectedAccount, setValues]);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValues({ ...values, [event.target.name]: event.target.value });
+  const handleChange = (value: string, inputName: string) => {
+    setValues({ ...values, [inputName]: value });
   };
 
-  const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
-    onBlur(event.target.name);
+  const handleBlur = (inputName: string) => {
+    onBlur(inputName);
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (canSubmit()) {
-      selectedAccount
-        ? await updateAccount(dispatch, values)
-        : await createAccount(dispatch, values);
+      selectedAccount ? await updateAccount(dispatch, values) : await createAccount(dispatch, values);
 
       await getAccounts(dispatch);
 
@@ -80,10 +80,17 @@ const AccountForm: React.FC<Props> = ({ selectedAccount, closeModal }) => {
           name="name"
           label="Name"
           value={values.name || ''}
-          onChange={handleChange}
-          onBlur={handleBlur}
+          onChange={(event) => handleChange(event.target.value, 'name')}
+          onBlur={() => handleBlur('name')}
           error={!!hasError('name')}
           helperText={hasError('name')?.message}
+        />
+        <CurrencySelect
+          selectedValue={values.currency}
+          onChange={(newValue) => handleChange(newValue?.value || '', 'currency')}
+          onBlur={() => handleBlur('currency')}
+          error={!!hasError('currency')}
+          helperText={hasError('currency')?.message}
         />
         <TextField
           name="description"
@@ -91,24 +98,22 @@ const AccountForm: React.FC<Props> = ({ selectedAccount, closeModal }) => {
           multiline
           rows={3}
           value={values.description || ''}
-          onChange={handleChange}
-          onBlur={handleBlur}
+          onChange={(event) => handleChange(event.target.value, 'description')}
+          onBlur={() => handleBlur('description')}
           error={!!hasError('description')}
           helperText={hasError('description')?.message}
         />
 
         <Typography variant="h6">Share account</Typography>
         <Typography variant="body2">Add the user email to share the account with</Typography>
-        <Typography variant="caption">
-          * The user should be registered with the same email
-        </Typography>
+        <Typography variant="caption">* The user should be registered with the same email</Typography>
 
         <TextField
           name="email"
           label="User email"
           value={values.email || ''}
-          onChange={handleChange}
-          onBlur={handleBlur}
+          onChange={(event) => handleChange(event.target.value, 'email')}
+          onBlur={() => handleBlur('email')}
           error={!!hasError('email')}
           helperText={hasError('email')?.message}
         />

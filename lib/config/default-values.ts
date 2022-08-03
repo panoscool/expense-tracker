@@ -20,5 +20,6 @@ export const defaultAccount = (user: User) => ({
   user: user._id,
   name: 'Personal',
   users: [user._id],
+  currency: 'EUR',
   description: 'Default personal account',
 });

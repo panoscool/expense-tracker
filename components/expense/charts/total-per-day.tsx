@@ -10,9 +10,10 @@ import { formatCurrency } from '../../../lib/utils/format-number';
 type Props = {
   days: Expense[][];
   dates: string[];
+  currency?: string;
 };
 
-const TotalPerDay: React.FC<Props> = ({ days, dates }) => {
+const TotalPerDay: React.FC<Props> = ({ days, dates, currency }) => {
   const totalPerDay = days.map((day: Expense[]) => {
     return day.reduce((acc, curr) => acc + curr.amount, 0);
   });
@@ -68,7 +69,7 @@ const TotalPerDay: React.FC<Props> = ({ days, dates }) => {
         labels: {
           show: true,
           formatter: function (val: number) {
-            return formatCurrency(val);
+            return formatCurrency(val, currency);
           },
         },
       },
@@ -82,12 +83,7 @@ const TotalPerDay: React.FC<Props> = ({ days, dates }) => {
     <Card variant="outlined">
       <CardHeader title="Total per day" />
       <CardContent>
-        <Chart
-          type="area"
-          height="240px"
-          series={chartConfig.series}
-          options={chartConfig.options}
-        />
+        <Chart type="area" height="240px" series={chartConfig.series} options={chartConfig.options} />
       </CardContent>
     </Card>
   );

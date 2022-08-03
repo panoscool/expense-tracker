@@ -46,6 +46,7 @@ export const registerSchema = yup.object({
 
 export const accountSchema = yup.object({
   name: yup.string().trim().required('Name is required'),
+  currency: yup.string().trim().required('Currency is required'),
   description: yup.string().trim().nullable(),
   email: yup.string().trim().nullable(),
 });

@@ -25,7 +25,7 @@ const Item = styled(ListItem)({
 });
 
 const UserPayable: React.FC = () => {
-  const { payments, dispatch } = useAppContext();
+  const { payments, account, dispatch } = useAppContext();
 
   const handleUpdateSettled = async () => {
     if (payments) {
@@ -39,11 +39,7 @@ const UserPayable: React.FC = () => {
 
   return (
     <Accordion variant="outlined">
-      <AccordionSummary
-        expandIcon={<ExpandMoreRoundedIcon />}
-        aria-controls="panel1a-content"
-        id="panel1a-header"
-      >
+      <AccordionSummary expandIcon={<ExpandMoreRoundedIcon />} aria-controls="panel1a-content" id="panel1a-header">
         <Typography>Users payable</Typography>
       </AccordionSummary>
       <AccordionDetails>
@@ -63,10 +59,7 @@ const UserPayable: React.FC = () => {
             <Card variant="outlined">
               <CardHeader
                 avatar={
-                  <Avatar
-                    aria-label="giving users"
-                    sx={{ bgcolor: (theme) => theme.palette.error.main }}
-                  >
+                  <Avatar aria-label="giving users" sx={{ bgcolor: (theme) => theme.palette.error.main }}>
                     <OutboxRoundedIcon />
                   </Avatar>
                 }
@@ -76,14 +69,10 @@ const UserPayable: React.FC = () => {
               <List>
                 {payments?.giving_users.map((giv) => (
                   <Item key={giv.user._id}>
-                    <Typography
-                      variant="body1"
-                      textTransform="capitalize"
-                      {...userColor(giv.user._id)}
-                    >
+                    <Typography variant="body1" textTransform="capitalize" {...userColor(giv.user._id)}>
                       <strong>{giv.user.name}</strong>
                     </Typography>
-                    <Typography variant="body1">{formatCurrency(giv.amount)}</Typography>
+                    <Typography variant="body1">{formatCurrency(giv.amount, account?.currency)}</Typography>
                   </Item>
                 ))}
               </List>
@@ -93,10 +82,7 @@ const UserPayable: React.FC = () => {
             <Card variant="outlined">
               <CardHeader
                 avatar={
-                  <Avatar
-                    aria-label="receiving users"
-                    sx={{ bgcolor: (theme) => theme.palette.success.main }}
-                  >
+                  <Avatar aria-label="receiving users" sx={{ bgcolor: (theme) => theme.palette.success.main }}>
                     <MoveToInboxRoundedIcon />
                   </Avatar>
                 }
@@ -106,14 +92,10 @@ const UserPayable: React.FC = () => {
               <List>
                 {payments?.receiving_users.map((rec) => (
                   <Item key={rec.user._id}>
-                    <Typography
-                      variant="body1"
-                      textTransform="capitalize"
-                      {...userColor(rec.user._id)}
-                    >
+                    <Typography variant="body1" textTransform="capitalize" {...userColor(rec.user._id)}>
                       <strong>{rec.user.name}</strong>
                     </Typography>
-                    <Typography variant="body1">{formatCurrency(Math.abs(rec.amount))}</Typography>
+                    <Typography variant="body1">{formatCurrency(Math.abs(rec.amount), account?.currency)}</Typography>
                   </Item>
                 ))}
               </List>

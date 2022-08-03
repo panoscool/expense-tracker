@@ -9,9 +9,10 @@ import { stringToColor } from '../../../lib/utils/string-to-color';
 
 type Props = {
   expenses: Expense[];
+  currency?: string;
 };
 
-const TotalPerUser: React.FC<Props> = ({ expenses }) => {
+const TotalPerUser: React.FC<Props> = ({ expenses, currency }) => {
   const totalPerUser: { [key: string]: number } = getTotalAmountPerUser(expenses || []);
   const userAmount: number[] = Object.values(totalPerUser);
   const userColor: string[] = Object.keys(totalPerUser).map(stringToColor);
@@ -53,7 +54,7 @@ const TotalPerUser: React.FC<Props> = ({ expenses }) => {
                 formatter: function (w: any) {
                   const val = w.globals.seriesTotals.reduce((a: number, b: number) => a + b, 0);
 
-                  return formatCurrency(val);
+                  return formatCurrency(val, currency);
                 },
               },
             },
@@ -73,7 +74,7 @@ const TotalPerUser: React.FC<Props> = ({ expenses }) => {
         labels: {
           show: true,
           formatter: function (val: number) {
-            return formatCurrency(val);
+            return formatCurrency(val, currency);
           },
         },
       },

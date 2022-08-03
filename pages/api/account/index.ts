@@ -29,12 +29,13 @@ const addAccount = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const userId = await getDecodedUserId(req, res);
 
-    const { name, description, email } = req.body;
+    const { name, currency, description, email } = req.body;
 
     const account = await Account.create({
       _id: uuidv4(),
       user: userId,
       name,
+      currency,
       users: [userId],
       description,
     });
