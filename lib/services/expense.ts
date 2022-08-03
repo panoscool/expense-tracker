@@ -1,27 +1,30 @@
 import { format } from 'date-fns';
-import router from 'next/router';
 import apiRequest from '../config/axios';
 import { Actions } from '../interfaces/common';
 import { Expense, ExpenseCreate } from '../interfaces/expense';
-import { buildParams } from '../utils/url-params';
+import { buildParams, getParams } from '../utils/url-params';
 import { enqueueNotification, setError, setLoading, setModal } from './helpers';
 
-type ExpensesFilters = {
-  date: string;
-  user_id: string | null;
-  category: string | null;
-};
-
-export const getExpenses = async (dispatch: React.Dispatch<any>, params?: ExpensesFilters) => {
+export const getExpenses = async (dispatch: React.Dispatch<any>) => {
   try {
     setLoading(dispatch, 'get_expenses');
-    const formattedParams = params ? buildParams(params) : '';
-    const defaultParams = `date=${format(new Date(), 'yyyy-MM-dd')}`;
 
-    const response = await apiRequest(
-      'GET',
-      `/expense/?account_id=${router.query.account_id}&${formattedParams || defaultParams}`,
-    );
+    const params = getParams();
+
+    const filteredParams = Object.keys(params).reduce((acc: any, key) => {
+      if (params[key] !== 'all') {
+        acc[key] = params[key];
+      }
+      // if there is no date, set it to today
+      if (!acc.date) {
+        acc.date = format(new Date(), 'yyyy-MM-dd');
+      }
+      return acc;
+    }, {});
+
+    const formattedParams = filteredParams ? buildParams(filteredParams) : '';
+
+    const response = await apiRequest('GET', `/expense/?${formattedParams}`);
 
     dispatch({ type: Actions.SET_EXPENSES, payload: { expenses: response.data } });
   } catch (error) {

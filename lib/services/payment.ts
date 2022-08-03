@@ -2,21 +2,19 @@ import { format } from 'date-fns';
 import apiRequest from '../config/axios';
 import { Actions } from '../interfaces/common';
 import { Payment } from '../interfaces/payment';
+import { getParams } from '../utils/url-params';
 import { setError, setLoading } from './helpers';
 
-type GetPayments = {
-  account_id: string;
-  period?: Date;
-};
-
-export const getPayments = async (dispatch: React.Dispatch<any>, data: GetPayments) => {
+export const getPayments = async (dispatch: React.Dispatch<any>) => {
   try {
     setLoading(dispatch, 'get_payments');
 
-    const params =
-      (data?.period && format(data.period, 'yyyy-MM-dd')) || format(new Date(), 'yyyy-MM-dd');
+    const { account_id, date } = getParams();
 
-    const response = await apiRequest('GET', `/payment/${data.account_id}?period=${params}`);
+    const response = await apiRequest(
+      'GET',
+      `/payment/${account_id}?period=${date || format(new Date(), 'yyyy-MM-dd')}`,
+    );
     dispatch({ type: Actions.SET_PAYMENTS, payload: { payments: response.data } });
   } catch (error) {
     setError(dispatch, error as string);

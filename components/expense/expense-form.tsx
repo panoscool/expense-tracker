@@ -81,8 +81,8 @@ const ExpenseForm: React.FC = () => {
     }
   }, [dispatch, expense?._id, modal?.id, setValues]);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValues({ ...values, [event.target.name]: event.target.value });
+  const handleChange = (value: string | Date | null, inputName: string) => {
+    setValues({ ...values, [inputName]: value });
   };
 
   const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
@@ -109,7 +109,7 @@ const ExpenseForm: React.FC = () => {
         await getExpenses(dispatch);
 
         if (account?._id) {
-          await getPayments(dispatch, { account_id: account?._id });
+          await getPayments(dispatch);
         }
       }
     }
@@ -124,7 +124,7 @@ const ExpenseForm: React.FC = () => {
       await getExpenses(dispatch);
 
       if (account?._id) {
-        await getPayments(dispatch, { account_id: account?._id });
+        await getPayments(dispatch);
       }
     }
   };
@@ -161,7 +161,7 @@ const ExpenseForm: React.FC = () => {
           label="Date"
           disableFuture
           value={values.date}
-          onChange={setValues}
+          onChange={(value) => handleChange(value, 'date')}
           onBlur={onBlur}
           error={!!hasError('date')}
           helperText={hasError('date')?.message}
@@ -171,7 +171,7 @@ const ExpenseForm: React.FC = () => {
           name="account_id"
           label="Account"
           value={values.account_id || ''}
-          onChange={handleChange}
+          onChange={(event) => handleChange(event.target.value, 'account_id')}
           onBlur={handleBlur}
           error={!!hasError('account_id')}
           helperText={hasError('account_id')?.message}
@@ -187,7 +187,7 @@ const ExpenseForm: React.FC = () => {
           name="category"
           label="Category"
           value={values.category || ''}
-          onChange={handleChange}
+          onChange={(event) => handleChange(event.target.value, 'category')}
           onBlur={handleBlur}
           error={!!hasError('category')}
           helperText={hasError('category')?.message}
@@ -207,7 +207,7 @@ const ExpenseForm: React.FC = () => {
           name="amount"
           label="Amount"
           value={values.amount || ''}
-          onChange={handleChange}
+          onChange={(event) => handleChange(event.target.value, 'amount')}
           onBlur={handleBlur}
           error={!!hasError('amount')}
           helperText={hasError('amount')?.message}
@@ -228,7 +228,7 @@ const ExpenseForm: React.FC = () => {
             label="User"
             disabled={!account}
             value={values.user_id || ''}
-            onChange={handleChange}
+            onChange={(event) => handleChange(event.target.value, 'user_id')}
           >
             <MenuItem value="">None</MenuItem>
             {account?.users.map((user) => (
@@ -242,7 +242,7 @@ const ExpenseForm: React.FC = () => {
           name="description"
           label="Description"
           value={values.description || ''}
-          onChange={handleChange}
+          onChange={(event) => handleChange(event.target.value, 'description')}
           onBlur={handleBlur}
           error={!!hasError('description')}
           helperText={hasError('description')?.message}
@@ -253,7 +253,7 @@ const ExpenseForm: React.FC = () => {
           multiline
           rows={3}
           value={values.details || ''}
-          onChange={handleChange}
+          onChange={(event) => handleChange(event.target.value, 'details')}
           onBlur={handleBlur}
           error={!!hasError('details')}
           helperText={hasError('details')?.message}

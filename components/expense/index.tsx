@@ -3,10 +3,10 @@ import { format } from 'date-fns';
 import { groupBy } from 'lodash';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import useAppContext from '../../hooks/use-app-context';
 import useIsDesktop from '../../hooks/use-is-desktop';
-import { ExpensesFilters } from '../../lib/interfaces/expense';
+import { QueryParams } from '../../lib/interfaces/common';
 import { getAccounts } from '../../lib/services/account';
 import { getExpenses } from '../../lib/services/expense';
 import { setModal } from '../../lib/services/helpers';
@@ -25,27 +25,19 @@ const Expenses: React.FC = () => {
   const router = useRouter();
   const isDesktop = useIsDesktop();
   const { expenses, dispatch } = useAppContext();
-  const [filterBy, setFilterBy] = useState<string>('date');
-  const [state, setState] = useState<ExpensesFilters>({
-    date: new Date(),
-    user_id: 'all',
-    category: 'all',
-  });
+
+  const { account_id, user_id, date, category }: QueryParams = router.query;
 
   useEffect(() => {
     getAccounts(dispatch);
   }, [dispatch]);
 
   useEffect(() => {
-    if (router.query.account_id) {
-      getExpenses(dispatch, {
-        date: format(state.date, 'yyyy-MM-dd'),
-        user_id: state.user_id === 'all' ? null : state.user_id,
-        category: state.category === 'all' ? null : state.category,
-      });
-      getPayments(dispatch, { account_id: router.query.account_id as string, period: state.date });
+    if (account_id) {
+      getExpenses(dispatch);
+      getPayments(dispatch);
     }
-  }, [dispatch, state, router.query.account_id]);
+  }, [dispatch, account_id, user_id, date, category]);
 
   const handleExpenseEdit = (id: string) => {
     setModal(dispatch, { open: 'expense-form', id });
@@ -75,12 +67,7 @@ const Expenses: React.FC = () => {
 
       <Box mt={8} mb={2}>
         <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap">
-          <ExpenseFilters
-            filterBy={filterBy}
-            state={state}
-            onFilterByChange={setFilterBy}
-            onStateChange={setState}
-          />
+          <ExpenseFilters />
 
           <Typography variant="caption">Results: {expenses?.length}</Typography>
         </Box>

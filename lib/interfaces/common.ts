@@ -53,3 +53,10 @@ export interface AppContextType extends AppState {
   setAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
   dispatch: React.Dispatch<any>;
 }
+
+export interface QueryParams {
+  account_id?: string;
+  user_id?: string;
+  category?: string;
+  date?: string;
+}

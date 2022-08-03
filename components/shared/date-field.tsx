@@ -19,10 +19,6 @@ type DateFieldProps = {
 const DateField: React.FC<DateFieldProps> = (props) => {
   const { label, value, views, helperText, error, format, disableFuture, onChange, onBlur } = props;
 
-  const setValue = (date: Date | null) => {
-    onChange((prevState: any) => ({ ...prevState, date }));
-  };
-
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <DatePicker
@@ -31,9 +27,7 @@ const DateField: React.FC<DateFieldProps> = (props) => {
         views={views}
         label={label}
         value={value}
-        onChange={(newValue) => {
-          setValue(newValue);
-        }}
+        onChange={(newValue) => onChange(newValue)}
         renderInput={(params) => (
           <TextField
             {...params}

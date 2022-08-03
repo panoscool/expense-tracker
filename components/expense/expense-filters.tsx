@@ -1,42 +1,62 @@
 import ListAltOutlinedIcon from '@mui/icons-material/ListAltOutlined';
 import { Box, ListItemIcon, ListItemText, MenuItem, TextField } from '@mui/material';
+import { format } from 'date-fns';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import useAppContext from '../../hooks/use-app-context';
+import { QueryParams } from '../../lib/interfaces/common';
 import { ExpensesFilters } from '../../lib/interfaces/expense';
 import { getAccount } from '../../lib/services/account';
 import { getCategories } from '../../lib/services/category';
+import { setParams } from '../../lib/utils/url-params';
 import CategoryIcon from '../shared/category-icon';
 import DateField from '../shared/date-field';
 import IconSelectField from '../shared/icon-select-field';
 
-type Props = {
-  filterBy: string;
-  state: ExpensesFilters;
-  onFilterByChange: React.Dispatch<React.SetStateAction<string>>;
-  onStateChange: React.Dispatch<React.SetStateAction<ExpensesFilters>>;
-};
-
-const ExpenseFilters: React.FC<Props> = ({ filterBy, state, onFilterByChange, onStateChange }) => {
+const ExpenseFilters: React.FC = () => {
   const router = useRouter();
   const { account, categories, dispatch } = useAppContext();
+  const [filterBy, setFilterBy] = useState<string>('date');
+  const [filters, setFilters] = useState<ExpensesFilters>({
+    date: new Date(),
+    user_id: 'all',
+    category: 'all',
+  });
+
+  const { date, user_id, account_id, category }: QueryParams = router.query;
 
   useEffect(() => {
     getCategories(dispatch);
-  }, [dispatch]);
+
+    if (account_id) {
+      getAccount(dispatch, account_id);
+    }
+  }, [dispatch, account_id]);
 
   useEffect(() => {
-    if (router.query.account_id) {
-      getAccount(dispatch, router.query.account_id as string);
+    if (date) {
+      setFilters((prevFilters) => ({ ...prevFilters, date: new Date(date) }));
     }
-  }, [dispatch, router.query.account_id]);
+    if (user_id) {
+      setFilters((prevFilters) => ({ ...prevFilters, user_id }));
+    }
+    if (category) {
+      setFilters((prevFilters) => ({ ...prevFilters, category }));
+    }
+  }, [dispatch, user_id, date, category]);
 
   const handleChangeFilterBy = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onFilterByChange(event.target.value);
+    setFilterBy(event.target.value);
   };
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onStateChange((prevState: any) => ({ ...prevState, [filterBy]: event.target.value }));
+  const handleChange = (value: string | Date | null) => {
+    const formatDate = (date: Date) => format(date, 'yyyy-MM-dd');
+
+    if (filterBy === 'date' && value) {
+      setParams({ ...filters, [filterBy]: formatDate(value as Date) });
+    } else {
+      setParams({ ...filters, date: formatDate(filters.date), [filterBy]: value });
+    }
   };
 
   const filterOptions: { value: string; label: string }[] = [
@@ -67,8 +87,8 @@ const ExpenseFilters: React.FC<Props> = ({ filterBy, state, onFilterByChange, on
           views={['year', 'month']}
           format="MMMM yyyy"
           label="Date"
-          value={state.date}
-          onChange={onStateChange}
+          value={filters.date}
+          onChange={handleChange}
         />
       )}
       {filterBy === 'user_id' && (
@@ -76,8 +96,8 @@ const ExpenseFilters: React.FC<Props> = ({ filterBy, state, onFilterByChange, on
           select
           name="user_id"
           label="User"
-          value={state.user_id || ''}
-          onChange={handleChange}
+          value={filters.user_id || ''}
+          onChange={(event) => handleChange(event.target.value)}
           sx={{ minWidth: '160px' }}
         >
           <MenuItem value="all">All</MenuItem>
@@ -92,8 +112,8 @@ const ExpenseFilters: React.FC<Props> = ({ filterBy, state, onFilterByChange, on
         <IconSelectField
           name="category"
           label="Category"
-          value={state.category || ''}
-          onChange={handleChange}
+          value={filters.category || ''}
+          onChange={(event) => handleChange(event.target.value)}
           sx={{ minWidth: '160px' }}
         >
           <MenuItem value="all">
