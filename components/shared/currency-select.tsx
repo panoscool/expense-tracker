@@ -29,10 +29,12 @@ const CurrencySelect: React.FC<Props> = ({ selectedValue, onChange, onBlur, erro
   const [inputValue, setInputValue] = useState('');
 
   useEffect(() => {
-    const found = options.find((option) => option.value === selectedValue);
+    const foundCurrency = options.find((option) => option.value === selectedValue);
 
-    if (found) {
-      setValue(found);
+    if (foundCurrency) {
+      setValue(foundCurrency);
+    } else {
+      setValue(null);
     }
   }, [selectedValue]);
 
