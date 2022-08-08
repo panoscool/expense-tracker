@@ -10,9 +10,10 @@ type Props = {
   disabled?: boolean;
   btnType: 'text' | 'icon';
   btnSize?: 'small' | 'medium' | 'large';
+  iconEdge?: 'start' | 'end';
 };
 
-const DropDown: React.FC<Props> = ({ children, icon, btnType, label, btnSize, disabled }) => {
+const DropDown: React.FC<Props> = ({ children, icon, btnType, label, btnSize, disabled, iconEdge }) => {
   const id = useId();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -37,7 +38,7 @@ const DropDown: React.FC<Props> = ({ children, icon, btnType, label, btnSize, di
         <IconButton
           id={`${id}-menu-button`}
           color="inherit"
-          edge="end"
+          edge={iconEdge || 'end'}
           size={btnSize}
           disabled={disabled}
           aria-haspopup="true"

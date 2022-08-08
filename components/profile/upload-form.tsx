@@ -42,7 +42,7 @@ const UploadForm: React.FC = () => {
     };
     reader.onerror = () => {
       console.error('Error reading file');
-      setError(dispatch, 'Something went wrong!');
+      setError(dispatch, 'Error reading file');
     };
   };
 
@@ -129,12 +129,7 @@ const UploadForm: React.FC = () => {
       <Box mt={1} display="flex" flexDirection="column" alignItems="flex-start">
         {!previewSource && user?.image && (
           <>
-            <Button
-              color="error"
-              onClick={handleDeleteImage}
-              startIcon={<DeleteRoundedIcon />}
-              sx={{ mb: 1 }}
-            >
+            <Button color="error" onClick={handleDeleteImage} startIcon={<DeleteRoundedIcon />} sx={{ mb: 1 }}>
               Delete
             </Button>
             <Image
@@ -143,9 +138,7 @@ const UploadForm: React.FC = () => {
               width={IMAGE_WIDTH}
               height={IMAGE_HEIGHT / ratio}
               layout="fixed"
-              onLoadingComplete={({ naturalWidth, naturalHeight }) =>
-                setRatio(naturalWidth / naturalHeight)
-              }
+              onLoadingComplete={({ naturalWidth, naturalHeight }) => setRatio(naturalWidth / naturalHeight)}
             />
           </>
         )}
@@ -163,9 +156,7 @@ const UploadForm: React.FC = () => {
               width={IMAGE_WIDTH}
               height={IMAGE_HEIGHT / ratio}
               layout="fixed"
-              onLoadingComplete={({ naturalWidth, naturalHeight }) =>
-                setRatio(naturalWidth / naturalHeight)
-              }
+              onLoadingComplete={({ naturalWidth, naturalHeight }) => setRatio(naturalWidth / naturalHeight)}
             />
           </>
         )}

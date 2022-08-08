@@ -7,7 +7,6 @@ import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import Box from '@mui/material/Box';
 import Dialog from '@mui/material/Dialog';
-import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -99,21 +98,16 @@ const AccountList = () => {
         {accounts?.map((account) => (
           <ListItem disablePadding key={account._id} onClick={handleAccountSelect(account._id)}>
             <ListItemButton>
-              <ListItemIcon>
-                {account.users.length > 1 ? <LockOpenOutlinedIcon /> : <LockOutlinedIcon />}
-              </ListItemIcon>
-              <ListItemText primary={account.name} secondary={account.description} />
+              <ListItemIcon>{account.users.length > 1 ? <LockOpenOutlinedIcon /> : <LockOutlinedIcon />}</ListItemIcon>
+              <ListItemText primary={account.name} secondary={account.currency} />
               <ListItemSecondaryAction sx={{ display: 'flex' }}>
-                <div>
-                  <IconButton onClick={handleOpenUsers(account)}>
-                    <VisibilityOutlinedIcon />
-                  </IconButton>
-                </div>
-                <DropDown
-                  btnType="icon"
-                  icon={<MoreVertRoundedIcon />}
-                  disabled={!isCreator(account.user)}
-                >
+                <DropDown btnType="icon" icon={<MoreVertRoundedIcon />} disabled={!isCreator(account.user)}>
+                  <MenuItem onClick={handleOpenUsers(account)}>
+                    <ListItemIcon>
+                      <VisibilityOutlinedIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText primary="Details" />
+                  </MenuItem>
                   <MenuItem onClick={handleAccountEdit(account)}>
                     <ListItemIcon>
                       <EditRoundedIcon fontSize="small" />

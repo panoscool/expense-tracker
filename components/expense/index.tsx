@@ -1,8 +1,7 @@
-import { Alert, Box, Divider, Grid, Typography } from '@mui/material';
+import { Box, Divider, Grid, Typography } from '@mui/material';
 import { format } from 'date-fns';
 import { groupBy } from 'lodash';
 import dynamic from 'next/dynamic';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import useAppContext from '../../hooks/use-app-context';
@@ -52,14 +51,6 @@ const Expenses: React.FC = () => {
 
   return (
     <div>
-      <Alert severity="info" sx={{ mb: 2 }}>
-        If you see a wrong currency, update the account from this{' '}
-        <Link href="/">
-          <a>page</a>
-        </Link>{' '}
-        by clicking the three dots, edit and select the correct currency.
-      </Alert>
-
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Typography variant="h6">{account?.name}</Typography>
 
