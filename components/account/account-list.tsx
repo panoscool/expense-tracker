@@ -101,20 +101,20 @@ const AccountList = () => {
               <ListItemIcon>{account.users.length > 1 ? <LockOpenOutlinedIcon /> : <LockOutlinedIcon />}</ListItemIcon>
               <ListItemText primary={account.name} secondary={account.currency} />
               <ListItemSecondaryAction sx={{ display: 'flex' }}>
-                <DropDown btnType="icon" icon={<MoreVertRoundedIcon />} disabled={!isCreator(account.user)}>
+                <DropDown btnType="icon" icon={<MoreVertRoundedIcon />}>
                   <MenuItem onClick={handleOpenUsers(account)}>
                     <ListItemIcon>
                       <VisibilityOutlinedIcon fontSize="small" />
                     </ListItemIcon>
                     <ListItemText primary="Details" />
                   </MenuItem>
-                  <MenuItem onClick={handleAccountEdit(account)}>
+                  <MenuItem onClick={handleAccountEdit(account)} disabled={!isCreator(account.user)}>
                     <ListItemIcon>
                       <EditRoundedIcon fontSize="small" />
                     </ListItemIcon>
                     <ListItemText primary="Edit" />
                   </MenuItem>
-                  <MenuItem onClick={handleAccountDelete(account)}>
+                  <MenuItem onClick={handleAccountDelete(account)} disabled={!isCreator(account.user)}>
                     <ListItemIcon {...deleteColor()}>
                       <DeleteRoundedIcon fontSize="small" />
                     </ListItemIcon>
