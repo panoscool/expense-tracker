@@ -46,7 +46,9 @@ const CategoryList = () => {
   return (
     <Box>
       <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Typography variant="h6">Categories</Typography>
+        <Typography variant="h6" role="contentinfo">
+          Categories
+        </Typography>
         <Button onClick={handleOpenModal} startIcon={<AddRoundedIcon />}>
           Add
         </Button>
@@ -61,10 +63,7 @@ const CategoryList = () => {
             <ListItemText primary={label} sx={{ textTransform: 'capitalize' }} />
             <ListItemSecondaryAction>
               {!defaultCategories.includes(label) && (
-                <IconButton
-                  disabled={defaultCategories.includes(label)}
-                  onClick={handleDeleteCategory(label)}
-                >
+                <IconButton disabled={defaultCategories.includes(label)} onClick={handleDeleteCategory(label)}>
                   <DeleteRoundedIcon />
                 </IconButton>
               )}
