@@ -6,11 +6,9 @@ import Typography from '@mui/material/Typography';
 import { useEffect } from 'react';
 import useAppContext from '../../hooks/use-app-context';
 import useForm from '../../hooks/use-form';
-import useIsDesktop from '../../hooks/use-is-desktop';
 import { accountSchema } from '../../lib/config/yup-schema';
 import { Account, AccountCreate } from '../../lib/interfaces/account';
 import { createAccount, getAccounts, updateAccount } from '../../lib/services/account';
-import { getDialogWidth } from '../../lib/utils/common-breakpoints';
 import CurrencySelect from '../shared/currency-select';
 
 const Form = styled('form')`
@@ -32,7 +30,6 @@ const initialValues: AccountCreate = {
 };
 
 const AccountForm: React.FC<Props> = ({ selectedAccount, closeModal }) => {
-  const isDesktop = useIsDesktop();
   const { dispatch } = useAppContext();
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(accountSchema, initialValues);
 
@@ -68,7 +65,7 @@ const AccountForm: React.FC<Props> = ({ selectedAccount, closeModal }) => {
   };
 
   return (
-    <Box m={2} p={2} minWidth={getDialogWidth(isDesktop)}>
+    <Box m={2} p={2}>
       <Box mb={2}>
         <Typography gutterBottom variant="h6">
           Add Account

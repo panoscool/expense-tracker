@@ -88,7 +88,9 @@ const AccountList = () => {
   return (
     <Box>
       <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Typography variant="h6">Accounts</Typography>
+        <Typography variant="h6" role="contentinfo">
+          Accounts
+        </Typography>
         <Button onClick={handleOpenModal} startIcon={<AddRoundedIcon />}>
           Add
         </Button>
@@ -127,7 +129,7 @@ const AccountList = () => {
         ))}
       </List>
 
-      <Dialog open={showForm}>
+      <Dialog fullWidth maxWidth="xs" open={showForm}>
         <AccountForm selectedAccount={selectedAccount} closeModal={handleCloseModal} />
       </Dialog>
 

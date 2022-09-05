@@ -5,9 +5,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import useAppContext from '../../hooks/use-app-context';
 import useForm from '../../hooks/use-form';
-import useIsDesktop from '../../hooks/use-is-desktop';
 import { createCategory, getCategories } from '../../lib/services/category';
-import { getDialogWidth } from '../../lib/utils/common-breakpoints';
 import { categorySchema } from '../../lib/config/yup-schema';
 
 const Form = styled('form')`
@@ -22,7 +20,6 @@ type Props = {
 };
 
 const CategoryForm: React.FC<Props> = ({ categoryId, closeModal }) => {
-  const isDesktop = useIsDesktop();
   const { dispatch } = useAppContext();
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(categorySchema, {
     label: '',
@@ -56,7 +53,7 @@ const CategoryForm: React.FC<Props> = ({ categoryId, closeModal }) => {
   };
 
   return (
-    <Box m={2} p={2} minWidth={getDialogWidth(isDesktop)}>
+    <Box m={2} p={2}>
       <Box mb={3}>
         <Typography gutterBottom variant="h6">
           Add Category

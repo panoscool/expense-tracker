@@ -42,7 +42,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       </Container>
 
       {authenticated && (
-        <Dialog open={modal?.open === 'expense-form'}>
+        <Dialog fullWidth maxWidth="xs" open={modal?.open === 'expense-form'}>
           <ExpenseForm />
         </Dialog>
       )}
