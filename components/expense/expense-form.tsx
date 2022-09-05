@@ -16,19 +16,11 @@ import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 import useAppContext from '../../hooks/use-app-context';
 import useForm from '../../hooks/use-form';
-import useIsDesktop from '../../hooks/use-is-desktop';
 import { Account } from '../../lib/interfaces/account';
 import { ExpenseCreate } from '../../lib/interfaces/expense';
 import { getAccount } from '../../lib/services/account';
-import {
-  createExpense,
-  deleteExpense,
-  getExpense,
-  getExpenses,
-  updateExpense,
-} from '../../lib/services/expense';
+import { createExpense, deleteExpense, getExpense, getExpenses, updateExpense } from '../../lib/services/expense';
 import { setModal } from '../../lib/services/helpers';
-import { getDialogWidth } from '../../lib/utils/common-breakpoints';
 import { expenseSchema } from '../../lib/config/yup-schema';
 import CalculatorDialog from '../calculator/calculator-dialog';
 import CategoryIcon from '../shared/category-icon';
@@ -55,7 +47,6 @@ const initialValues: ExpenseCreate = {
 
 const ExpenseForm: React.FC = () => {
   const router = useRouter();
-  const isDesktop = useIsDesktop();
   const { hasAccess } = useHasAccess();
   const [openCalculator, setOpenCalculator] = useState(false);
   const { user, accounts, account, expense, categories, modal, dispatch } = useAppContext();
@@ -135,7 +126,7 @@ const ExpenseForm: React.FC = () => {
   );
 
   return (
-    <Box m={2} p={2} minWidth={getDialogWidth(isDesktop)}>
+    <Box m={2} p={2}>
       <Box mb={4} display="flex" justifyContent="space-between" alignItems="center">
         <Typography gutterBottom variant="h6">
           Add Expense
@@ -269,11 +260,7 @@ const ExpenseForm: React.FC = () => {
         </Box>
       </Form>
 
-      <CalculatorDialog
-        open={openCalculator}
-        onClose={toggleOpenCalculator}
-        onConfirm={handleConfirmCalculation}
-      />
+      <CalculatorDialog open={openCalculator} onClose={toggleOpenCalculator} onConfirm={handleConfirmCalculation} />
     </Box>
   );
 };

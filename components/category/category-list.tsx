@@ -72,7 +72,7 @@ const CategoryList = () => {
         ))}
       </List>
 
-      <Dialog open={showForm}>
+      <Dialog fullWidth maxWidth="xs" open={showForm}>
         <CategoryForm categoryId={categories?._id} closeModal={handleCloseModal} />
       </Dialog>
     </Box>

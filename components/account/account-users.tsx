@@ -17,10 +17,8 @@ import ListSubheader from '@mui/material/ListSubheader';
 import Typography from '@mui/material/Typography';
 import { useEffect } from 'react';
 import useAppContext from '../../hooks/use-app-context';
-import useIsDesktop from '../../hooks/use-is-desktop';
 import { User } from '../../lib/interfaces/user';
 import { getAccount, updateAccount } from '../../lib/services/account';
-import { getDialogWidth } from '../../lib/utils/common-breakpoints';
 import { getInitials } from '../../lib/utils/get-initials';
 import { stringToColor } from '../../lib/utils/string-to-color';
 import useHasAccess from '../../hooks/use-has-access';
@@ -33,7 +31,6 @@ type Props = {
 };
 
 const AccountUsers: React.FC<Props> = ({ accountId, open, onClose }) => {
-  const isDesktop = useIsDesktop();
   const { hasAccess } = useHasAccess();
   const { account, dispatch } = useAppContext();
 
@@ -71,8 +68,8 @@ const AccountUsers: React.FC<Props> = ({ accountId, open, onClose }) => {
   const sharedWith = account.users.filter((u) => u._id !== account.user);
 
   return (
-    <Dialog open={open} onClose={onClose}>
-      <DialogContent sx={{ minWidth: getDialogWidth(isDesktop) }}>
+    <Dialog fullWidth maxWidth="xs" open={open} onClose={onClose}>
+      <DialogContent>
         <Box mb={2}>
           <Typography variant="h6">{account.name}</Typography>
           <Typography gutterBottom variant="body2">
@@ -91,11 +88,7 @@ const AccountUsers: React.FC<Props> = ({ accountId, open, onClose }) => {
             {sharedWith.map((user: User) => (
               <ListItem key={user._id} disablePadding>
                 <ListItemAvatar>
-                  {user.image ? (
-                    <Avatar src={user.image} />
-                  ) : (
-                    <Avatar {...stringAvatar(user._id, user.name)} />
-                  )}
+                  {user.image ? <Avatar src={user.image} /> : <Avatar {...stringAvatar(user._id, user.name)} />}
                 </ListItemAvatar>
                 <ListItemText primary={user.name} secondary={user.email} />
                 <ListItemSecondaryAction>
