@@ -3,8 +3,8 @@ import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
-import Avatar from '@mui/material/Avatar';
 import AppBar from '@mui/material/AppBar';
+import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
@@ -12,9 +12,9 @@ import MenuItem from '@mui/material/MenuItem';
 import { alpha, styled } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import DropDown from '../components/shared/drop-down';
-import NextLink from '../components/shared/next-link';
 import useAppContext from '../hooks/use-app-context';
 import useIsDesktop from '../hooks/use-is-desktop';
 import { Account } from '../lib/interfaces/account';
@@ -46,17 +46,12 @@ const Topbar: React.FC = () => {
     <StyledAppBar position="sticky">
       <Toolbar>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: '#fff' }}>
-          <NextLink href="/" style={{ color: 'inherit' }}>
+          <Link href="/" style={{ color: 'inherit' }}>
             Expenses
-          </NextLink>
+          </Link>
         </Typography>
 
-        <Button
-          color="inherit"
-          size="large"
-          startIcon={<AddRoundedIcon />}
-          onClick={handleAddExpense}
-        >
+        <Button color="inherit" size="large" startIcon={<AddRoundedIcon />} onClick={handleAddExpense}>
           Expense
         </Button>
 
@@ -78,14 +73,14 @@ const Topbar: React.FC = () => {
           btnSize="large"
           btnType="icon"
         >
-          <NextLink href="/profile" style={{ color: 'inherit', textDecoration: 'none' }}>
+          <Link href="/profile" style={{ color: 'inherit', textDecoration: 'none' }}>
             <MenuItem>
               <ListItemIcon>
                 <PersonRoundedIcon />
               </ListItemIcon>
               <ListItemText primary={user?.name} sx={{ textTransform: 'capitalize' }} />
             </MenuItem>
-          </NextLink>
+          </Link>
           <MenuItem onClick={handleLogout}>
             <ListItemIcon>
               <ExitToAppRoundedIcon />

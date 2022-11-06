@@ -2,16 +2,16 @@ import { Box, Button, TextField, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import type { NextPage } from 'next';
 import Head from 'next/head';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import NextLink from '../components/shared/next-link';
 import useAppContext from '../hooks/use-app-context';
-import useForm from '../hooks/use-form';
 import useAuth from '../hooks/use-auth';
+import useForm from '../hooks/use-form';
 import apiRequest from '../lib/config/axios';
 import { storeSetAccessToken } from '../lib/config/store';
-import { setError, setLoading } from '../lib/services/helpers';
 import { registerSchema } from '../lib/config/yup-schema';
+import { setError, setLoading } from '../lib/services/helpers';
 
 const Wrapper = styled(Box)`
   display: flex;
@@ -139,7 +139,7 @@ const Register: NextPage = () => {
           </Form>
 
           <Typography>
-            Have an account? <NextLink href="/login">Login</NextLink>
+            Have an account? <Link href="/login">Login</Link>
           </Typography>
         </Wrapper>
       </main>
