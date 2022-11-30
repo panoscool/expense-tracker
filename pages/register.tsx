@@ -2,16 +2,16 @@ import { Box, Button, TextField, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import useAppContext from '../hooks/use-app-context';
-import useAuth from '../hooks/use-auth';
 import useForm from '../hooks/use-form';
+import useAuth from '../hooks/use-auth';
 import apiRequest from '../lib/config/axios';
 import { storeSetAccessToken } from '../lib/config/store';
-import { registerSchema } from '../lib/config/yup-schema';
 import { setError, setLoading } from '../lib/services/helpers';
+import { registerSchema } from '../lib/config/yup-schema';
+import Link from 'next/link';
 
 const Wrapper = styled(Box)`
   display: flex;

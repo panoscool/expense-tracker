@@ -71,14 +71,12 @@ const Topbar: React.FC = () => {
           btnSize="large"
           btnType="icon"
         >
-          <Link href="/profile" style={{ color: 'inherit', textDecoration: 'none' }}>
-            <MenuItem>
-              <ListItemIcon>
-                <PersonRoundedIcon />
-              </ListItemIcon>
-              <ListItemText primary={user?.name} sx={{ textTransform: 'capitalize' }} />
-            </MenuItem>
-          </Link>
+          <MenuItem component={Link} href="/profile">
+            <ListItemIcon>
+              <PersonRoundedIcon />
+            </ListItemIcon>
+            <ListItemText primary={user?.name} sx={{ textTransform: 'capitalize' }} />
+          </MenuItem>
           <MenuItem onClick={handleLogout}>
             <ListItemIcon>
               <ExitToAppRoundedIcon />
