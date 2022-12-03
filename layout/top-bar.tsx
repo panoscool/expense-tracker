@@ -45,10 +45,8 @@ const Topbar: React.FC = () => {
   return (
     <StyledAppBar position="sticky">
       <Toolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: '#fff' }}>
-          <Link href="/" style={{ color: 'inherit' }}>
-            Expenses
-          </Link>
+        <Typography variant="h6" component={Link} href="/" sx={{ flexGrow: 1, color: '#fff' }}>
+          Expenses
         </Typography>
 
         <Button color="inherit" size="large" startIcon={<AddRoundedIcon />} onClick={handleAddExpense}>
