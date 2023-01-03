@@ -6,7 +6,7 @@ type DigitButtonProps = {
   digit: string;
 };
 
-const DigitButton: React.FC<DigitButtonProps> = ({ dispatch, digit }) => {
+export const DigitButton: React.FC<DigitButtonProps> = ({ dispatch, digit }) => {
   const handleClick = () => {
     dispatch({ type: Actions.ADD_DIGIT, payload: { digit } });
   };
@@ -17,5 +17,3 @@ const DigitButton: React.FC<DigitButtonProps> = ({ dispatch, digit }) => {
     </Button>
   );
 };
-
-export default DigitButton;

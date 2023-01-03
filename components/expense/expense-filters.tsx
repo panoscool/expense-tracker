@@ -8,12 +8,13 @@ import { QueryParams } from '../../lib/interfaces/common';
 import { ExpensesFilters } from '../../lib/interfaces/expense';
 import { getAccount } from '../../lib/services/account';
 import { getCategories } from '../../lib/services/category';
+import { formatDate } from '../../lib/utils/date';
 import { setParams } from '../../lib/utils/url-params';
 import CategoryIcon from '../shared/category-icon';
 import DateField from '../shared/date-field';
 import IconSelectField from '../shared/icon-select-field';
 
-const ExpenseFilters: React.FC = () => {
+export const ExpenseFilters: React.FC = () => {
   const router = useRouter();
   const { account, categories, dispatch } = useAppContext();
   const [filterBy, setFilterBy] = useState<string>('date');
@@ -47,19 +48,17 @@ const ExpenseFilters: React.FC = () => {
     return () => {
       setFilters({ date: new Date(), user_id: 'all', category: 'all' });
     };
-  }, [dispatch, user_id, date, category]);
+  }, [user_id, date, category]);
 
   const handleChangeFilterBy = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFilterBy(event.target.value);
   };
 
   const handleChange = (value: string | Date | null) => {
-    const formatDate = (date: Date) => format(date, 'yyyy-MM-dd');
-
     if (filterBy === 'date' && value) {
-      setParams({ ...filters, [filterBy]: formatDate(value as Date) });
+      setParams({ [filterBy]: formatDate(value as Date) });
     } else {
-      setParams({ ...filters, date: formatDate(filters.date), [filterBy]: value });
+      setParams({ date: formatDate(filters.date), [filterBy]: value });
     }
   };
 
@@ -139,5 +138,3 @@ const ExpenseFilters: React.FC = () => {
     </Box>
   );
 };
-
-export default ExpenseFilters;

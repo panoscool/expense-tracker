@@ -29,7 +29,7 @@ type Props = {
   onSelectExpense: (id: string) => void;
 };
 
-const ExpenseCard: React.FC<Props> = ({ day, date, currency, onSelectExpense }) => {
+export const ExpenseCard: React.FC<Props> = ({ day, date, currency, onSelectExpense }) => {
   const handleExpenseClick = (expense: Expense) => {
     onSelectExpense(expense._id);
   };
@@ -89,5 +89,3 @@ const ExpenseCard: React.FC<Props> = ({ day, date, currency, onSelectExpense }) 
     </Card>
   );
 };
-
-export default ExpenseCard;

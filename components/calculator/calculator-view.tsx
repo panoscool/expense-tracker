@@ -2,8 +2,8 @@ import Button from '@mui/material/Button';
 import { alpha, styled } from '@mui/material/styles';
 import { Actions } from '../../hooks/use-calculator';
 import { formatOperand } from '../../lib/utils/format-number';
-import DigitButton from './digit-button';
-import OperationButton from './operation-button';
+import { DigitButton } from './digit-button';
+import { OperationButton } from './operation-button';
 
 const CalculatorGrid = styled('div')(({ theme }) => ({
   display: 'inline-grid',
@@ -50,7 +50,7 @@ type CalculatorViewProps = {
   dispatch: React.Dispatch<any>;
 };
 
-const CalculatorView: React.FC<CalculatorViewProps> = (props) => {
+export const CalculatorView: React.FC<CalculatorViewProps> = (props) => {
   const { currentOperand, previousOperand, operation, dispatch } = props;
 
   const handleClear = () => {
@@ -101,5 +101,3 @@ const CalculatorView: React.FC<CalculatorViewProps> = (props) => {
     </CalculatorGrid>
   );
 };
-
-export default CalculatorView;

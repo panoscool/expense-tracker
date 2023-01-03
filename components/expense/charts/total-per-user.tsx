@@ -2,6 +2,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import Chart from 'react-apexcharts';
+import { ApexOptions } from 'apexcharts';
 import { Expense } from '../../../lib/interfaces/expense';
 import { getTotalAmountPerUser } from '../../../lib/utils/expense-calculations';
 import { formatCurrency } from '../../../lib/utils/format-number';
@@ -21,66 +22,62 @@ const TotalPerUser: React.FC<Props> = ({ expenses, currency }) => {
     return foundUser ? foundUser.user.name : '';
   });
 
-  const chartConfig = {
-    series: userAmount,
-
-    chartOptions: {
-      colors: userColor,
-      labels: userName,
-      chart: {
-        toolbar: {
-          show: true,
-        },
+  const chartOptions: ApexOptions = {
+    colors: userColor,
+    labels: userName,
+    chart: {
+      toolbar: {
+        show: true,
       },
-      dataLabels: {
-        enabled: false,
-      },
-      plotOptions: {
-        pie: {
-          expandOnClick: false,
-          donut: {
-            labels: {
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    stroke: {
+      show: false,
+    },
+    legend: {
+      show: false,
+    },
+    tooltip: {
+      enabled: true,
+    },
+    plotOptions: {
+      pie: {
+        expandOnClick: false,
+        donut: {
+          labels: {
+            show: true,
+            name: {
               show: true,
-              name: {
-                show: true,
-              },
-              value: {
-                show: true,
-              },
-              total: {
-                show: true,
-                showAlways: true,
-                label: 'Total',
-                formatter: function (w: any) {
-                  const val = w.globals.seriesTotals.reduce((a: number, b: number) => a + b, 0);
+            },
+            value: {
+              show: true,
+            },
+            total: {
+              show: true,
+              showAlways: true,
+              label: 'Total',
+              formatter: function (w: any) {
+                const val = w.globals.seriesTotals.reduce((a: number, b: number) => a + b, 0);
 
-                  return formatCurrency(val, currency);
-                },
+                return formatCurrency(val, currency);
               },
             },
           },
         },
       },
-      stroke: {
-        show: false,
-      },
-      legend: {
-        show: false,
-      },
-      tooltip: {
-        enabled: true,
-      },
-      yaxis: {
-        labels: {
-          show: true,
-          formatter: function (val: number) {
-            return formatCurrency(val, currency);
-          },
+    },
+    yaxis: {
+      labels: {
+        show: true,
+        formatter: function (val: number) {
+          return formatCurrency(val, currency);
         },
       },
-      noData: {
-        text: 'No data available',
-      },
+    },
+    noData: {
+      text: 'No data available',
     },
   };
 
@@ -91,8 +88,8 @@ const TotalPerUser: React.FC<Props> = ({ expenses, currency }) => {
         <Chart
           type="donut"
           height={expenses?.length > 0 ? '275px' : '255px'}
-          series={chartConfig.series}
-          options={chartConfig.chartOptions}
+          series={userAmount}
+          options={chartOptions}
         />
       </CardContent>
     </Card>

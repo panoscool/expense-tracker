@@ -24,10 +24,10 @@ import useHasAccess from '../../hooks/use-has-access';
 import { Account } from '../../lib/interfaces/account';
 import { deleteAccount, getAccounts } from '../../lib/services/account';
 import DropDown from '../shared/drop-down';
-import AccountForm from './account-form';
-import AccountUsers from './account-users';
+import { AccountForm } from './account-form';
+import { AccountUsers } from './account-users';
 
-const AccountList = () => {
+export const AccountList = () => {
   const router = useRouter();
   const { isCreator } = useHasAccess();
   const { accounts, dispatch } = useAppContext();
@@ -137,5 +137,3 @@ const AccountList = () => {
     </Box>
   );
 };
-
-export default AccountList;

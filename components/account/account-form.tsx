@@ -29,7 +29,7 @@ const initialValues: AccountCreate = {
   currency: '',
 };
 
-const AccountForm: React.FC<Props> = ({ selectedAccount, closeModal }) => {
+export const AccountForm: React.FC<Props> = ({ selectedAccount, closeModal }) => {
   const { dispatch } = useAppContext();
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(accountSchema, initialValues);
 
@@ -127,5 +127,3 @@ const AccountForm: React.FC<Props> = ({ selectedAccount, closeModal }) => {
     </Box>
   );
 };
-
-export default AccountForm;

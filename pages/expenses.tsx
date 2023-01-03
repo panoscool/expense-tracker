@@ -1,10 +1,10 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useEffect } from 'react';
-import Expenses from '../components/expense';
+import { ExpensesList } from '../components/expense';
 import useAuth from '../hooks/use-auth';
 
-const Home: NextPage = () => {
+const Expenses: NextPage = () => {
   const { authenticated, checkAuthStateAndRedirect } = useAuth(true);
 
   useEffect(() => {
@@ -21,10 +21,10 @@ const Home: NextPage = () => {
       </Head>
 
       <main>
-        <Expenses />
+        <ExpensesList />
       </main>
     </div>
   );
 };
 
-export default Home;
+export default Expenses;

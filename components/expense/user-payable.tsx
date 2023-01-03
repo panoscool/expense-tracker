@@ -24,7 +24,7 @@ const Item = styled(ListItem)({
   justifyContent: 'space-between',
 });
 
-const UserPayable: React.FC = () => {
+export const UserPayable: React.FC = () => {
   const { payments, account, dispatch } = useAppContext();
 
   const handleUpdateSettled = async () => {
@@ -106,5 +106,3 @@ const UserPayable: React.FC = () => {
     </Accordion>
   );
 };
-
-export default UserPayable;
