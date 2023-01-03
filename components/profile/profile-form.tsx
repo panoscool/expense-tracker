@@ -16,7 +16,7 @@ const Form = styled('form')`
   gap: 1rem;
 `;
 
-const ProfileForm: React.FC = () => {
+export const ProfileForm: React.FC = () => {
   const { user, dispatch } = useAppContext();
   const [isSaveDisabled, setIsSaveDisabled] = useState(true);
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(userUpdateSchema, {
@@ -101,13 +101,7 @@ const ProfileForm: React.FC = () => {
         />
 
         <Box textAlign="center" mt={3}>
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            disabled={isSaveDisabled}
-            sx={{ minWidth: 200 }}
-          >
+          <Button type="submit" variant="contained" color="primary" disabled={isSaveDisabled} sx={{ minWidth: 200 }}>
             Save
           </Button>
         </Box>
@@ -115,5 +109,3 @@ const ProfileForm: React.FC = () => {
     </div>
   );
 };
-
-export default ProfileForm;

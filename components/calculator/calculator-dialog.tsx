@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import useCalculator, { Actions } from '../../hooks/use-calculator';
-import CalculatorView from './calculator-view';
+import { CalculatorView } from './calculator-view';
 
 type CalculatorDialogProps = {
   open: boolean;
@@ -11,7 +11,7 @@ type CalculatorDialogProps = {
   onConfirm: (currentOperand: string | null) => void;
 };
 
-const CalculatorDialog: React.FC<CalculatorDialogProps> = ({ open, onClose, onConfirm }) => {
+export const CalculatorDialog: React.FC<CalculatorDialogProps> = ({ open, onClose, onConfirm }) => {
   const { currentOperand, previousOperand, operation, dispatch } = useCalculator();
 
   const handleConfirm = () => {
@@ -41,5 +41,3 @@ const CalculatorDialog: React.FC<CalculatorDialogProps> = ({ open, onClose, onCo
     </Dialog>
   );
 };
-
-export default CalculatorDialog;

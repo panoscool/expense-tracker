@@ -5,28 +5,23 @@ import { format, parseISO } from 'date-fns';
 import React from 'react';
 import Chart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
-import { Expense } from '../../../lib/interfaces/expense';
 import { formatCurrency } from '../../../lib/utils/format-number';
 
 type Props = {
-  days: Expense[][];
-  dates: string[];
+  data: any;
   currency?: string;
 };
 
-const TotalPerDay: React.FC<Props> = ({ days, dates, currency }) => {
-  const totalPerDay = days.map((day: Expense[]) => {
-    return day.reduce((acc, curr) => acc + curr.amount, 0);
-  });
-
+const TotalPerAccount: React.FC<Props> = ({ data, currency }) => {
   const series = [
     {
       name: 'Total',
-      data: totalPerDay,
+      data: data?.map((item: any) => item.total),
     },
   ];
 
   const options: ApexOptions = {
+    labels: data?.map((item: any) => format(parseISO(item._id), 'MMMM yyyy')),
     chart: {
       toolbar: {
         show: true,
@@ -35,35 +30,21 @@ const TotalPerDay: React.FC<Props> = ({ days, dates, currency }) => {
     grid: {
       show: true,
     },
-    dataLabels: {
-      enabled: false,
-    },
     stroke: {
       show: true,
     },
-    tooltip: {
-      theme: 'light',
+    dataLabels: {
+      enabled: false,
     },
     legend: {
-      show: true,
+      show: false,
     },
-    xaxis: {
-      labels: {
-        show: true,
-        formatter: function (val: string) {
-          return val ? format(parseISO(val), 'dd/MMM') : '';
-        },
+    plotOptions: {
+      bar: {
+        columnWidth: '90%',
+        barHeight: '100%',
+        distributed: true,
       },
-      axisBorder: {
-        show: true,
-      },
-      axisTicks: {
-        show: true,
-      },
-      tooltip: {
-        enabled: false,
-      },
-      categories: dates?.map((date) => date),
     },
     yaxis: {
       labels: {
@@ -73,6 +54,17 @@ const TotalPerDay: React.FC<Props> = ({ days, dates, currency }) => {
         },
       },
     },
+    xaxis: {
+      labels: {
+        show: true,
+      },
+      axisBorder: {
+        show: true,
+      },
+      axisTicks: {
+        show: false,
+      },
+    },
     noData: {
       text: 'No data available',
     },
@@ -80,7 +72,7 @@ const TotalPerDay: React.FC<Props> = ({ days, dates, currency }) => {
 
   return (
     <Card variant="outlined">
-      <CardHeader title="Total per day" />
+      <CardHeader title="Total per month" />
       <CardContent>
         <Chart type="area" height="240px" series={series} options={options} />
       </CardContent>
@@ -88,4 +80,4 @@ const TotalPerDay: React.FC<Props> = ({ days, dates, currency }) => {
   );
 };
 
-export default TotalPerDay;
+export default TotalPerAccount;

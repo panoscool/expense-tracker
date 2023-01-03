@@ -13,15 +13,15 @@ import { setModal } from '../../lib/services/helpers';
 import { getPayments } from '../../lib/services/payment';
 import { getTotalUsers } from '../../lib/utils/expense-calculations';
 import EmptyList from '../shared/empty-list';
-import ExpenseCard from './expense-card';
-import ExpenseFilters from './expense-filters';
-import UserPayable from './user-payable';
+import { ExpenseCard } from './expense-card';
+import { ExpenseFilters } from './expense-filters';
+import { UserPayable } from './user-payable';
 
 const TotalPerDay = dynamic(() => import('./charts/total-per-day'), { ssr: false });
 const TotalPerUser = dynamic(() => import('./charts/total-per-user'), { ssr: false });
 const TotalPerCategory = dynamic(() => import('./charts/total-per-category'), { ssr: false });
 
-const Expenses: React.FC = () => {
+export const ExpensesList: React.FC = () => {
   const router = useRouter();
   const isDesktop = useIsDesktop();
   const { expenses, account, dispatch } = useAppContext();
@@ -100,5 +100,3 @@ const Expenses: React.FC = () => {
     </div>
   );
 };
-
-export default Expenses;

@@ -28,7 +28,7 @@ const IMAGE_HEIGHT = 320;
 const IMAGE_SIZE_LIMIT = 5000000;
 const IMAGE_RATIO = IMAGE_WIDTH / IMAGE_HEIGHT;
 
-const UploadForm: React.FC = () => {
+export const UploadForm: React.FC = () => {
   const { user, error, dispatch } = useAppContext();
   const [ratio, setRatio] = useState(IMAGE_RATIO);
   const [filePath, setFilePath] = useState<string>('');
@@ -164,5 +164,3 @@ const UploadForm: React.FC = () => {
     </div>
   );
 };
-
-export default UploadForm;

@@ -7,11 +7,11 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ProfileForm from '../components/profile/profile-form';
-import UploadForm from '../components/profile/upload-form';
+import { ProfileForm } from '../components/profile/profile-form';
+import { UploadForm } from '../components/profile/upload-form';
 import useAuth from '../hooks/use-auth';
 
-const Home: NextPage = () => {
+const Profile: NextPage = () => {
   const { authenticated, checkAuthStateAndRedirect } = useAuth(true);
   const [expanded, setExpanded] = useState<string | false>('panel1');
 
@@ -34,11 +34,7 @@ const Home: NextPage = () => {
 
       <Box maxWidth={600} margin="0 auto" component="main">
         <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1bh-content"
-            id="panel1bh-header"
-          >
+          <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1bh-content" id="panel1bh-header">
             <Typography>Profile</Typography>
           </AccordionSummary>
           <AccordionDetails>
@@ -47,11 +43,7 @@ const Home: NextPage = () => {
         </Accordion>
 
         <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel2bh-content"
-            id="panel2bh-header"
-          >
+          <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel2bh-content" id="panel2bh-header">
             <Typography>Image</Typography>
           </AccordionSummary>
           <AccordionDetails>
@@ -63,4 +55,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default Profile;

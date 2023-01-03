@@ -6,6 +6,9 @@ import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import AppBar from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import AnalyticsRoundedIcon from '@mui/icons-material/AnalyticsRounded';
+import Box from '@mui/material/Box';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
@@ -30,10 +33,6 @@ const Topbar: React.FC = () => {
   const isDesktop = useIsDesktop();
   const { user, accounts, dispatch } = useAppContext();
 
-  const handleAccountSelect = (id: string) => () => {
-    router.push(`/expenses/?account_id=${id}`);
-  };
-
   const handleAddExpense = () => {
     setModal(dispatch, { open: 'expense-form' });
   };
@@ -45,9 +44,11 @@ const Topbar: React.FC = () => {
   return (
     <StyledAppBar position="sticky">
       <Toolbar>
-        <Typography variant="h6" component={Link} href="/" sx={{ flexGrow: 1, color: '#fff' }}>
-          Expenses
-        </Typography>
+        <Box flexGrow={1}>
+          <Typography variant="h6" component={Link} href="/" sx={{ color: '#fff' }}>
+            Expenses
+          </Typography>
+        </Box>
 
         <Button color="inherit" size="large" startIcon={<AddRoundedIcon />} onClick={handleAddExpense}>
           Expense
@@ -60,25 +61,27 @@ const Topbar: React.FC = () => {
           icon={<AccountBalanceWalletRoundedIcon />}
         >
           {accounts?.map((account: Account) => (
-            <MenuItem key={account._id} onClick={handleAccountSelect(account._id)}>
+            <MenuItem key={account._id} component={Link} href={`/expenses/?account_id=${account._id}`}>
               {account.name}
             </MenuItem>
           ))}
         </DropDown>
+
+        <IconButton color="inherit" component={Link} href="/statistics">
+          <AnalyticsRoundedIcon />
+        </IconButton>
 
         <DropDown
           icon={user?.image ? <Avatar src={user.image} alt="user" /> : <AccountCircleRoundedIcon />}
           btnSize="large"
           btnType="icon"
         >
-          <Link href="/profile" style={{ color: 'inherit', textDecoration: 'none' }}>
-            <MenuItem>
-              <ListItemIcon>
-                <PersonRoundedIcon />
-              </ListItemIcon>
-              <ListItemText primary={user?.name} sx={{ textTransform: 'capitalize' }} />
-            </MenuItem>
-          </Link>
+          <MenuItem component={Link} href="/profile">
+            <ListItemIcon>
+              <PersonRoundedIcon />
+            </ListItemIcon>
+            <ListItemText primary={user?.name} sx={{ textTransform: 'capitalize' }} />
+          </MenuItem>
           <MenuItem onClick={handleLogout}>
             <ListItemIcon>
               <ExitToAppRoundedIcon />

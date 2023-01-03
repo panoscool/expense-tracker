@@ -6,7 +6,7 @@ type OperationButtonProps = {
   operation: string;
 };
 
-const OperationButton: React.FC<OperationButtonProps> = ({ dispatch, operation }) => {
+export const OperationButton: React.FC<OperationButtonProps> = ({ dispatch, operation }) => {
   const handleClick = () => {
     dispatch({ type: Actions.OPERATION, payload: { operation } });
   };
@@ -17,5 +17,3 @@ const OperationButton: React.FC<OperationButtonProps> = ({ dispatch, operation }
     </Button>
   );
 };
-
-export default OperationButton;

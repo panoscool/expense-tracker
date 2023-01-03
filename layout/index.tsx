@@ -5,7 +5,7 @@ import Dialog from '@mui/material/Dialog';
 import IconButton from '@mui/material/IconButton';
 import { SnackbarKey, SnackbarProvider } from 'notistack';
 import { useRef } from 'react';
-import ExpenseForm from '../components/expense/expense-form';
+import { ExpenseForm } from '../components/expense/expense-form';
 import Loading from '../components/shared/loading';
 import useAppContext from '../hooks/use-app-context';
 import Notifier from './notifier';

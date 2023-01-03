@@ -19,7 +19,7 @@ type Props = {
   closeModal: () => void;
 };
 
-const CategoryForm: React.FC<Props> = ({ categoryId, closeModal }) => {
+export const CategoryForm: React.FC<Props> = ({ categoryId, closeModal }) => {
   const { dispatch } = useAppContext();
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(categorySchema, {
     label: '',
@@ -83,5 +83,3 @@ const CategoryForm: React.FC<Props> = ({ categoryId, closeModal }) => {
     </Box>
   );
 };
-
-export default CategoryForm;

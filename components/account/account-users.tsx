@@ -30,7 +30,7 @@ type Props = {
   onClose: () => void;
 };
 
-const AccountUsers: React.FC<Props> = ({ accountId, open, onClose }) => {
+export const AccountUsers: React.FC<Props> = ({ accountId, open, onClose }) => {
   const { hasAccess } = useHasAccess();
   const { account, dispatch } = useAppContext();
 
@@ -120,5 +120,3 @@ const AccountUsers: React.FC<Props> = ({ accountId, open, onClose }) => {
     </Dialog>
   );
 };
-
-export default AccountUsers;

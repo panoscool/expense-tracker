@@ -1,5 +1,6 @@
 import React from 'react';
 import Chart from 'react-apexcharts';
+import { ApexOptions } from 'apexcharts';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -24,62 +25,61 @@ const TotalPerCategory: React.FC<Props> = ({ expenses, currency }) => {
     return acc;
   }, {});
 
-  const chartConfig = {
-    series: [
-      {
-        name: 'Amount',
-        data: Object.keys(totalPerCategory).map((key) => totalPerCategory[key]),
-      },
-    ],
-    options: {
-      labels: Object.keys(totalPerCategory).map(capitalizeFirstLetter),
-      colors: Object.keys(totalPerCategory).map(stringToColor),
-      plotOptions: {
-        bar: {
-          columnWidth: '90%',
-          barHeight: '100%',
-          distributed: true,
-        },
-      },
-      chart: {
-        toolbar: {
-          show: true,
-        },
-      },
-      grid: {
+  const series = [
+    {
+      name: 'Amount',
+      data: Object.keys(totalPerCategory).map((key) => totalPerCategory[key]),
+    },
+  ];
+
+  const options: ApexOptions = {
+    labels: Object.keys(totalPerCategory).map(capitalizeFirstLetter),
+    colors: Object.keys(totalPerCategory).map(stringToColor),
+    chart: {
+      toolbar: {
         show: true,
       },
-      stroke: {
+    },
+    grid: {
+      show: true,
+    },
+    stroke: {
+      show: true,
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    legend: {
+      show: false,
+    },
+    plotOptions: {
+      bar: {
+        columnWidth: '90%',
+        barHeight: '100%',
+        distributed: true,
+      },
+    },
+    yaxis: {
+      labels: {
+        show: true,
+        formatter: function (val: number) {
+          return formatCurrency(val, currency);
+        },
+      },
+    },
+    xaxis: {
+      labels: {
         show: true,
       },
-      dataLabels: {
-        enabled: false,
+      axisBorder: {
+        show: true,
       },
-      yaxis: {
-        labels: {
-          show: true,
-          formatter: function (val: number) {
-            return formatCurrency(val, currency);
-          },
-        },
-      },
-      xaxis: {
-        labels: {
-          show: true,
-        },
-        axisBorder: {
-          show: true,
-        },
-        axisTicks: {
-          show: false,
-        },
-      },
-      legend: {
+      axisTicks: {
         show: false,
       },
-      noData: {
-        text: 'No data available',
-      },
+    },
+    noData: {
+      text: 'No data available',
     },
   };
 
@@ -89,7 +89,7 @@ const TotalPerCategory: React.FC<Props> = ({ expenses, currency }) => {
         <Typography>Total per category</Typography>
       </AccordionSummary>
       <AccordionDetails>
-        <Chart type="bar" height="240px" series={chartConfig.series} options={chartConfig.options} />
+        <Chart type="bar" height="240px" series={series} options={options} />
       </AccordionDetails>
     </Accordion>
   );

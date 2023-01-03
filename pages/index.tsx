@@ -2,8 +2,8 @@ import Grid from '@mui/material/Grid';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useEffect } from 'react';
-import AccountList from '../components/account/account-list';
-import CategoryList from '../components/category/category-list';
+import { AccountList } from '../components/account/account-list';
+import { CategoryList } from '../components/category/category-list';
 import useAuth from '../hooks/use-auth';
 
 const Home: NextPage = () => {

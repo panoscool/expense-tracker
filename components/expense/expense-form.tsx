@@ -22,7 +22,7 @@ import { getAccount } from '../../lib/services/account';
 import { createExpense, deleteExpense, getExpense, getExpenses, updateExpense } from '../../lib/services/expense';
 import { setModal } from '../../lib/services/helpers';
 import { expenseSchema } from '../../lib/config/yup-schema';
-import CalculatorDialog from '../calculator/calculator-dialog';
+import { CalculatorDialog } from '../calculator/calculator-dialog';
 import CategoryIcon from '../shared/category-icon';
 import DateField from '../shared/date-field';
 import IconSelectField from '../shared/icon-select-field';
@@ -45,7 +45,7 @@ const initialValues: ExpenseCreate = {
   details: '',
 };
 
-const ExpenseForm: React.FC = () => {
+export const ExpenseForm: React.FC = () => {
   const router = useRouter();
   const { hasAccess } = useHasAccess();
   const [openCalculator, setOpenCalculator] = useState(false);
@@ -264,5 +264,3 @@ const ExpenseForm: React.FC = () => {
     </Box>
   );
 };
-
-export default ExpenseForm;

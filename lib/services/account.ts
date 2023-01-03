@@ -13,6 +13,8 @@ export const getAccounts = async (dispatch: React.Dispatch<any>) => {
 
     const response = await apiRequest('GET', '/account');
     dispatch({ type: Actions.SET_ACCOUNTS, payload: { accounts: response.data } });
+
+    return response;
   } catch (error) {
     setError(dispatch, error as string);
   } finally {
@@ -26,6 +28,8 @@ export const getAccount = async (dispatch: React.Dispatch<any>, id: string) => {
 
     const response = await apiRequest('GET', `/account/${id}`);
     dispatch({ type: Actions.SET_ACCOUNT, payload: { account: response.data } });
+
+    return response;
   } catch (error) {
     setError(dispatch, error as string);
   } finally {
@@ -42,6 +46,8 @@ export const createAccount = async (dispatch: React.Dispatch<any>, data: Account
     dispatch({ type: Actions.SET_ACCOUNT, payload: { account: response.data } });
 
     enqueueNotification(dispatch, 'Account created', 'success');
+
+    return response;
   } catch (error) {
     setError(dispatch, error as string);
     enqueueNotification(dispatch, `Account failed to create: ${error}`, 'error');
@@ -59,6 +65,8 @@ export const updateAccount = async (dispatch: React.Dispatch<any>, data: Account
     dispatch({ type: Actions.SET_ACCOUNT, payload: { account: response.data } });
 
     enqueueNotification(dispatch, 'Account updated', 'success');
+
+    return response;
   } catch (error) {
     setError(dispatch, error as string);
     enqueueNotification(dispatch, `Account failed to update: ${error}`, 'error');
