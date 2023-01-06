@@ -21,7 +21,7 @@ export const CategoryTotal: React.FC<{ filters: Filters }> = ({ filters }) => {
       .catch((error) => {
         console.error(error);
       });
-  }, [filters.account_id, filters.date_from, filters.date_to]);
+  }, [filters]);
 
   return <TotalPerCategory data={data} />;
 };

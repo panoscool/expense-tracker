@@ -3,8 +3,7 @@ import dbConnect from '../../../lib/config/db-connect';
 import User from '../../../lib/models/user';
 import Expense from '../../../lib/models/expense';
 import { authenticated, getDecodedUserId } from '../helpers';
-import { endOf6Months, startOf6Months } from '../../../lib/utils/date';
-import { isValid, parseISO } from 'date-fns';
+import { parseISO } from 'date-fns';
 
 const getStatistics = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
@@ -23,26 +22,18 @@ const getStatistics = async (req: NextApiRequest, res: NextApiResponse) => {
       user: '$user',
     };
 
-    const fromDate = isValid(parseISO(dateFrom)) ? parseISO(dateFrom) : startOf6Months;
-    const toDate = isValid(parseISO(dateTo)) ? parseISO(dateTo) : endOf6Months;
-
     const expenses = await Expense.aggregate([
       {
         $match: {
           user: user._id,
           account: accountId,
-          created_at: { $gte: fromDate, $lte: toDate },
+          created_at: { $gte: parseISO(dateFrom), $lte: parseISO(dateTo) },
         },
       },
       {
         $group: {
           _id: (ID as any)[groupBy],
           total: { $sum: '$amount' },
-        },
-      },
-      {
-        $sort: {
-          date: 1,
         },
       },
     ]);

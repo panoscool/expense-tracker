@@ -1,5 +1,7 @@
 import { createContext, useState } from 'react';
 import useAppState from '../hooks/use-app-state';
+import { ThemeProvider } from '@mui/material/styles';
+import theme from '../styles/theme';
 import { AppContextType } from '../lib/interfaces/common';
 
 const initState: AppContextType = {
@@ -26,19 +28,8 @@ const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   const { state, dispatch } = useAppState();
 
-  const {
-    user,
-    accounts,
-    account,
-    expenses,
-    expense,
-    categories,
-    payments,
-    modal,
-    loading,
-    error,
-    notifications,
-  } = state;
+  const { user, accounts, account, expenses, expense, categories, payments, modal, loading, error, notifications } =
+    state;
 
   const contextValues = {
     user,
@@ -61,7 +52,7 @@ const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   return (
     <AppContext.Provider value={{ ...contextValues, ...contextFunctions }}>
-      {children}
+      <ThemeProvider theme={theme}>{children}</ThemeProvider>
     </AppContext.Provider>
   );
 };

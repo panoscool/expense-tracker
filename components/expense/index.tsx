@@ -50,7 +50,7 @@ export const ExpensesList: React.FC = () => {
   const totalUsers = getTotalUsers(expenses || []);
 
   return (
-    <div>
+    <Box pb={8}>
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Typography variant="h6">{account?.name}</Typography>
 
@@ -97,6 +97,6 @@ export const ExpensesList: React.FC = () => {
       ) : (
         <EmptyList />
       )}
-    </div>
+    </Box>
   );
 };

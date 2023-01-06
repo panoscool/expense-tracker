@@ -55,7 +55,6 @@ export function StatisticsFilters() {
 
   const handleChange = (value: Date | string, name: string) => {
     if (name.includes('date')) {
-      console.log(value, name);
       setParams({ [name]: formatDate(value as Date) });
     } else {
       setParams({ [name]: value });

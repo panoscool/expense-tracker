@@ -1,11 +1,9 @@
 import AccountBalanceWalletRoundedIcon from '@mui/icons-material/AccountBalanceWalletRounded';
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
-import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import AppBar from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import AnalyticsRoundedIcon from '@mui/icons-material/AnalyticsRounded';
 import Box from '@mui/material/Box';
@@ -16,12 +14,11 @@ import { alpha, styled } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import DropDown from '../components/shared/drop-down';
 import useAppContext from '../hooks/use-app-context';
 import useIsDesktop from '../hooks/use-is-desktop';
 import { Account } from '../lib/interfaces/account';
-import { logout, setModal } from '../lib/services/helpers';
+import { logout } from '../lib/services/helpers';
 
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
   backdropFilter: 'blur(20px)',
@@ -29,13 +26,8 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
 }));
 
 const Topbar: React.FC = () => {
-  const router = useRouter();
   const isDesktop = useIsDesktop();
   const { user, accounts, dispatch } = useAppContext();
-
-  const handleAddExpense = () => {
-    setModal(dispatch, { open: 'expense-form' });
-  };
 
   const handleLogout = () => {
     logout(dispatch);
@@ -50,10 +42,6 @@ const Topbar: React.FC = () => {
           </Typography>
         </Box>
 
-        <Button color="inherit" size="large" startIcon={<AddRoundedIcon />} onClick={handleAddExpense}>
-          Expense
-        </Button>
-
         <DropDown
           label="Accounts"
           btnSize="large"
@@ -67,9 +55,9 @@ const Topbar: React.FC = () => {
           ))}
         </DropDown>
 
-        <IconButton color="inherit" component={Link} href="/statistics">
+        {/* <IconButton color="inherit" component={Link} href="/statistics">
           <AnalyticsRoundedIcon />
-        </IconButton>
+        </IconButton> */}
 
         <DropDown
           icon={user?.image ? <Avatar src={user.image} alt="user" /> : <AccountCircleRoundedIcon />}
