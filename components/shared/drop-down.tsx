@@ -5,7 +5,7 @@ import { useId, useState } from 'react';
 
 type Props = {
   children: React.ReactNode;
-  icon: React.ReactNode;
+  icon?: React.ReactNode;
   label?: string;
   disabled?: boolean;
   btnType: 'text' | 'icon';

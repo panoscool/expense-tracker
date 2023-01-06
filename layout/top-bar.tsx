@@ -5,7 +5,7 @@ import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import AppBar from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
-import AnalyticsRoundedIcon from '@mui/icons-material/AnalyticsRounded';
+// import AnalyticsRoundedIcon from '@mui/icons-material/AnalyticsRounded';
 import Box from '@mui/material/Box';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
@@ -18,7 +18,9 @@ import DropDown from '../components/shared/drop-down';
 import useAppContext from '../hooks/use-app-context';
 import useIsDesktop from '../hooks/use-is-desktop';
 import { Account } from '../lib/interfaces/account';
-import { logout } from '../lib/services/helpers';
+import { logout, setModal } from '../lib/services/helpers';
+import AddRounded from '@mui/icons-material/AddRounded';
+import { Button } from '@mui/material';
 
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
   backdropFilter: 'blur(20px)',
@@ -28,6 +30,10 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
 const Topbar: React.FC = () => {
   const isDesktop = useIsDesktop();
   const { user, accounts, dispatch } = useAppContext();
+
+  const handleAddExpense = () => {
+    setModal(dispatch, { open: 'expense-form' });
+  };
 
   const handleLogout = () => {
     logout(dispatch);
@@ -42,18 +48,17 @@ const Topbar: React.FC = () => {
           </Typography>
         </Box>
 
-        <DropDown
-          label="Accounts"
-          btnSize="large"
-          btnType={isDesktop ? 'text' : 'icon'}
-          icon={<AccountBalanceWalletRoundedIcon />}
-        >
+        <DropDown label="Accounts" btnSize="large" btnType="text">
           {accounts?.map((account: Account) => (
             <MenuItem key={account._id} component={Link} href={`/expenses/?account_id=${account._id}`}>
               {account.name}
             </MenuItem>
           ))}
         </DropDown>
+
+        <Button variant="contained" onClick={handleAddExpense} startIcon={<AddRounded />}>
+          Create
+        </Button>
 
         {/* <IconButton color="inherit" component={Link} href="/statistics">
           <AnalyticsRoundedIcon />
