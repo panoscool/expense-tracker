@@ -9,7 +9,6 @@ const initState: AppState = {
   expense: null,
   categories: null,
   payments: null,
-  modal: null,
   loading: [],
   error: null,
   notifications: [],
@@ -53,12 +52,6 @@ const reducer: Reducer<AppState, { type: Actions; payload?: any }> = (state, { t
         payments: payload.payments,
       };
 
-    case Actions.SET_MODAL:
-      return {
-        ...state,
-        modal: payload,
-      };
-
     case Actions.SET_LOADING:
       if (state.loading.includes(payload.loading)) {
         return { ...state, loading: state.loading.filter((act) => act !== payload.loading) };
@@ -83,9 +76,7 @@ const reducer: Reducer<AppState, { type: Actions; payload?: any }> = (state, { t
     case Actions.REMOVE_SNACKBAR:
       return {
         ...state,
-        notifications: state.notifications.filter(
-          (notification) => notification.options.key !== payload.key,
-        ),
+        notifications: state.notifications.filter((notification) => notification.options.key !== payload.key),
       };
 
     case Actions.SET_USER:

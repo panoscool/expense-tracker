@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { AnyObjectSchema } from 'yup';
+import { AnySchema } from 'yup';
 
 type Error = { path: string; message: string };
 type Touched = { [key: string]: boolean };
 
-function useForm(schema: AnyObjectSchema, initState: any = {}) {
+function useForm(schema: AnySchema, initState: any = {}) {
   const [values, setValues] = useState(initState);
   const [touched, setTouched] = useState<Touched>({});
   const [errors, setErrors] = useState<Error[]>([]);

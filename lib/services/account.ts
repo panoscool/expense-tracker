@@ -2,6 +2,7 @@ import apiRequest from '../config/axios';
 import { Account, AccountCreate } from '../interfaces/account';
 import { Actions } from '../interfaces/common';
 import { enqueueNotification, setError, setLoading } from './helpers';
+import Router from 'next/router';
 
 interface AccountUpdate extends Partial<Account> {
   email: string;
@@ -14,6 +15,9 @@ export const getAccounts = async (dispatch: React.Dispatch<any>) => {
     const response = await apiRequest('GET', '/account');
     dispatch({ type: Actions.SET_ACCOUNTS, payload: { accounts: response.data } });
 
+    if (response.data.length > 0) {
+      Router.push({ pathname: Router.pathname, query: { account_id: response.data[0]._id } });
+    }
     return response;
   } catch (error) {
     setError(dispatch, error as string);

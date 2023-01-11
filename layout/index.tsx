@@ -1,55 +1,168 @@
-import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
+import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
+import MenuIcon from '@mui/icons-material/Menu';
+import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
+import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
+import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import { SnackbarKey, SnackbarProvider } from 'notistack';
-import { useRef } from 'react';
+import { styled } from '@mui/material/styles';
+import Toolbar from '@mui/material/Toolbar';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useEffect, useMemo, useState } from 'react';
 import { ExpenseForm } from '../components/expense/expense-form';
+import Notifier from '../components/notifier';
 import Loading from '../components/shared/loading';
 import useAppContext from '../hooks/use-app-context';
-import Notifier from './notifier';
-import Navbar from './top-bar';
+import useIsDesktop from '../hooks/use-is-desktop';
+import {
+  storeClearAccessToken,
+  storeGetDrawerState,
+  storeSetDrawerState,
+  storeSetThemeMode,
+} from '../lib/config/store';
+import { drawerWidth } from './drawer/drawer-styles';
+import { PersistentDrawer } from './drawer/persistent-drawer';
+import { TemporaryDrawer } from './drawer/temporary-drawer';
+import { Title } from './title';
+import { UserMenu } from './user-menu';
+
+interface AppBarProps extends MuiAppBarProps {
+  open?: boolean;
+}
+
+interface MainProps {
+  open: boolean;
+}
+
+const AppBar = styled(MuiAppBar, {
+  shouldForwardProp: (prop) => prop !== 'open',
+})<AppBarProps>(({ theme, open }) => ({
+  transition: theme.transitions.create(['margin', 'width'], {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  ...(open && {
+    width: `calc(100% - ${drawerWidth}px)`,
+    marginLeft: `${drawerWidth}px`,
+    transition: theme.transitions.create(['margin', 'width'], {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  }),
+}));
+
+const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<MainProps>(({ theme, open }) => ({
+  height: '100%',
+  position: 'relative',
+  padding: theme.spacing(3),
+  marginLeft: 0,
+  marginTop: 64,
+  transition: theme.transitions.create('margin', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  ...(open && {
+    marginLeft: `${drawerWidth}px`,
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  }),
+}));
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const notistackRef: any = useRef(null);
-  const { authenticated, loading, modal } = useAppContext();
+  const router = useRouter();
+  const isDesktop = useIsDesktop();
+  const [open, setOpen] = useState(storeGetDrawerState());
+  const { user, themeMode, loading, setThemeMode } = useAppContext();
 
-  const onClickDismiss = (key: SnackbarKey) => () => {
-    if (notistackRef.current) {
-      notistackRef.current.closeSnackbar(key);
+  useEffect(() => {
+    if (!isDesktop) {
+      setOpen(false);
+      storeSetDrawerState(false);
     }
+  }, [router, isDesktop]);
+
+  const toggleDrawer = (event: React.KeyboardEvent | React.MouseEvent) => {
+    if (
+      event.type === 'keydown' &&
+      ((event as React.KeyboardEvent).key === 'Tab' || (event as React.KeyboardEvent).key === 'Shift')
+    ) {
+      return;
+    }
+
+    setOpen(!open);
+    storeSetDrawerState(!open);
   };
 
+  const toggleThemeMode = () => {
+    const newThemeMode = themeMode === 'light' ? 'dark' : 'light';
+    setThemeMode(newThemeMode);
+    storeSetThemeMode(newThemeMode);
+  };
+
+  const handleLogout = () => {
+    storeClearAccessToken();
+
+    router.push('/login');
+  };
+
+  const [_, hash] = useMemo(() => router.asPath.split('#'), [router.asPath]);
+
   return (
-    <SnackbarProvider
-      ref={notistackRef}
-      maxSnack={2}
-      preventDuplicate
-      autoHideDuration={2500}
-      disableWindowBlurListener
-      anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-      action={(key) => (
-        <IconButton color="inherit" onClick={onClickDismiss(key)}>
-          <CloseRoundedIcon />
-        </IconButton>
+    <Box height="100%">
+      <AppBar position="fixed" open={open}>
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            edge="start"
+            aria-label="open drawer"
+            onClick={toggleDrawer}
+            sx={{ mr: 2, ...(open && { display: 'none' }) }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Box flexGrow={1}>{!open && <Title />}</Box>
+
+          <Button
+            startIcon={<AddRoundedIcon />}
+            sx={{ mr: 2, color: 'inherit' }}
+            component={Link}
+            href={`${router.asPath}#create`}
+          >
+            Create
+          </Button>
+
+          <IconButton color="inherit" edge="start" aria-label="toggle theme" onClick={toggleThemeMode} sx={{ mr: 1 }}>
+            {themeMode === 'light' ? <DarkModeRoundedIcon /> : <LightModeRoundedIcon />}
+          </IconButton>
+
+          {user && <UserMenu user={user} logout={handleLogout} />}
+        </Toolbar>
+        <Divider />
+      </AppBar>
+
+      {isDesktop ? (
+        <PersistentDrawer open={open} toggleDrawer={toggleDrawer} />
+      ) : (
+        <TemporaryDrawer open={open} toggleDrawer={toggleDrawer} />
       )}
-    >
-      {authenticated && <Navbar />}
 
-      <Container maxWidth="lg">
-        <Box my={4}>{children}</Box>
-      </Container>
+      <Main open={isDesktop && open}>{children}</Main>
 
-      {authenticated && (
-        <Dialog fullWidth maxWidth="xs" open={modal?.open === 'expense-form'}>
+      {['create', 'edit'].includes(hash) && (
+        <Dialog fullWidth maxWidth="xs" open>
           <ExpenseForm />
         </Dialog>
       )}
 
       <Notifier />
       <Loading loading={loading} />
-    </SnackbarProvider>
+    </Box>
   );
 };
 

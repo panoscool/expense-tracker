@@ -18,9 +18,7 @@ import useAppContext from '../../hooks/use-app-context';
 import useForm from '../../hooks/use-form';
 import { Account } from '../../lib/interfaces/account';
 import { ExpenseCreate } from '../../lib/interfaces/expense';
-import { getAccount } from '../../lib/services/account';
 import { createExpense, deleteExpense, getExpense, getExpenses, updateExpense } from '../../lib/services/expense';
-import { setModal } from '../../lib/services/helpers';
 import { expenseSchema } from '../../lib/config/yup-schema';
 import { CalculatorDialog } from '../calculator/calculator-dialog';
 import CategoryIcon from '../shared/category-icon';
@@ -49,28 +47,25 @@ export const ExpenseForm: React.FC = () => {
   const router = useRouter();
   const { hasAccess } = useHasAccess();
   const [openCalculator, setOpenCalculator] = useState(false);
-  const { user, accounts, account, expense, categories, modal, dispatch } = useAppContext();
+  const { user, accounts, account, expense, categories, dispatch } = useAppContext();
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(expenseSchema, initialValues);
 
-  useEffect(() => {
-    if (values.account_id || router.query.account_id) {
-      getAccount(dispatch, values.account_id || (router.query.account_id as string));
-    }
-  }, [values.account_id, router.query.account_id, dispatch]);
+  const accountId: string | undefined = useMemo(() => router.query?.account_id as string, [router.query?.account_id]);
+  const expenseId: string | undefined = useMemo(() => router.query?.expense_id as string, [router.query?.expense_id]);
 
   useEffect(() => {
-    if (modal?.id) {
-      getExpense(dispatch, modal.id);
+    if (expenseId) {
+      getExpense(dispatch, expenseId);
     }
 
     if (expense?._id) {
-      setValues({ ...expense, user_id: expense.user._id, account_id: account?._id });
+      setValues({ ...expense, user_id: expense.user._id, account_id: accountId });
     }
 
-    if (!modal?.id) {
-      setValues({ ...initialValues, user_id: user?._id, account_id: account?._id });
+    if (!expenseId) {
+      setValues({ ...initialValues, user_id: user?._id, account_id: accountId });
     }
-  }, [dispatch, expense?._id, modal?.id, setValues]);
+  }, [dispatch, expenseId, expense?._id, setValues]);
 
   const handleChange = (value: string | Date | null, inputName: string) => {
     setValues({ ...values, [inputName]: value });
@@ -89,19 +84,22 @@ export const ExpenseForm: React.FC = () => {
   };
 
   const handleCloseModal = () => {
-    setModal(dispatch, null);
+    delete router.query.expense_id;
+
+    setValues({});
+    router.push({
+      pathname: router.pathname,
+      query: { ...router.query },
+    });
   };
 
   const handleDeleteExpense = async () => {
     if (window.confirm(`Are you sure you want to delete the ${expense?.category} expense?`)) {
-      if (modal?.id) {
-        await deleteExpense(dispatch, modal.id);
-
+      if (expenseId) {
+        await deleteExpense(dispatch, expenseId);
         await getExpenses(dispatch);
-
-        if (account?._id) {
-          await getPayments(dispatch);
-        }
+        await getPayments(dispatch);
+        handleCloseModal();
       }
     }
   };
@@ -110,19 +108,17 @@ export const ExpenseForm: React.FC = () => {
     event.preventDefault();
 
     if (canSubmit()) {
-      modal?.id ? await updateExpense(dispatch, values) : await createExpense(dispatch, values);
+      expenseId ? await updateExpense(dispatch, values) : await createExpense(dispatch, values);
 
       await getExpenses(dispatch);
-
-      if (account?._id) {
-        await getPayments(dispatch);
-      }
+      await getPayments(dispatch);
+      handleCloseModal();
     }
   };
 
   const disableSave = useMemo(
-    () => (modal?.id && !hasAccess(values?.user_id, values?.created_by)) || false,
-    [modal?.id, hasAccess, values?.user, values?.created_by],
+    () => (expenseId && !hasAccess(values?.user_id, values?.created_by)) || false,
+    [expenseId, hasAccess, values?.user, values?.created_by],
   );
 
   return (
@@ -132,7 +128,7 @@ export const ExpenseForm: React.FC = () => {
           Add Expense
         </Typography>
 
-        {modal?.id && (
+        {expenseId && (
           <Tooltip title="Delete expense">
             <span>
               <IconButton

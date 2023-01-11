@@ -12,6 +12,7 @@ import ListItemText from '@mui/material/ListItemText';
 import { alpha, styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { format, parseISO } from 'date-fns';
+import { useRouter } from 'next/router';
 import { Fragment } from 'react';
 import { Expense } from '../../lib/interfaces/expense';
 import { formatCurrency } from '../../lib/utils/format-number';
@@ -26,12 +27,17 @@ type Props = {
   day: Expense[];
   date: string;
   currency?: string;
-  onSelectExpense: (id: string) => void;
 };
 
-export const ExpenseCard: React.FC<Props> = ({ day, date, currency, onSelectExpense }) => {
-  const handleExpenseClick = (expense: Expense) => {
-    onSelectExpense(expense._id);
+export const ExpenseCard: React.FC<Props> = ({ day, date, currency }) => {
+  const router = useRouter();
+
+  const handleExpenseClick = (id: string) => {
+    router.push({
+      pathname: router.pathname,
+      query: { ...router.query, expense_id: id },
+      hash: 'edit',
+    });
   };
 
   const formatDate = (fmt: string) => {
@@ -68,7 +74,7 @@ export const ExpenseCard: React.FC<Props> = ({ day, date, currency, onSelectExpe
         <List disablePadding>
           {day.map((expense: Expense, index: number) => (
             <Fragment key={index}>
-              <ListItem disableGutters onClick={() => handleExpenseClick(expense)}>
+              <ListItem disableGutters onClick={() => handleExpenseClick(expense._id)}>
                 <ListItemButton>
                   <ListItemIcon>
                     <CategoryIcon icon={expense.category} />

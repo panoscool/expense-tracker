@@ -15,7 +15,6 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListSubheader from '@mui/material/ListSubheader';
 import Typography from '@mui/material/Typography';
-import { useEffect } from 'react';
 import useAppContext from '../../hooks/use-app-context';
 import { User } from '../../lib/interfaces/user';
 import { getAccount, updateAccount } from '../../lib/services/account';
@@ -25,20 +24,13 @@ import useHasAccess from '../../hooks/use-has-access';
 import { Tooltip } from '@mui/material';
 
 type Props = {
-  accountId: string | undefined;
   open: boolean;
   onClose: () => void;
 };
 
-export const AccountUsers: React.FC<Props> = ({ accountId, open, onClose }) => {
+export const AccountUsers: React.FC<Props> = ({ open, onClose }) => {
   const { hasAccess } = useHasAccess();
   const { account, dispatch } = useAppContext();
-
-  useEffect(() => {
-    if (accountId) {
-      getAccount(dispatch, accountId);
-    }
-  }, [accountId, dispatch]);
 
   const handleDeleteUser = (email: string) => async () => {
     if (window.confirm(`Are you sure you want to delete the user ${email}?`)) {
