@@ -9,9 +9,9 @@ import useIsDesktop from '../../hooks/use-is-desktop';
 import { QueryParams } from '../../lib/interfaces/common';
 import { getAccount, getAccounts } from '../../lib/services/account';
 import { getExpenses } from '../../lib/services/expense';
-import { setModal } from '../../lib/services/helpers';
 import { getPayments } from '../../lib/services/payment';
 import { getTotalUsers } from '../../lib/utils/expense-calculations';
+import { AccountInfo } from '../account/account-info';
 import EmptyList from '../shared/empty-list';
 import { ExpenseCard } from './expense-card';
 import { ExpenseFilters } from './expense-filters';
@@ -24,7 +24,7 @@ const TotalPerCategory = dynamic(() => import('./charts/total-per-category'), { 
 export const ExpensesList: React.FC = () => {
   const router = useRouter();
   const isDesktop = useIsDesktop();
-  const { expenses, account, dispatch } = useAppContext();
+  const { expenses, account, themeMode, dispatch } = useAppContext();
 
   const { account_id, user_id, date, category }: QueryParams = router.query;
 
@@ -40,10 +40,6 @@ export const ExpensesList: React.FC = () => {
     }
   }, [dispatch, account_id, user_id, date, category]);
 
-  const handleExpenseEdit = (id: string) => {
-    setModal(dispatch, { open: 'expense-form', id });
-  };
-
   const groupedByDay = groupBy(expenses, (expense) => format(new Date(expense.date), 'yyyy-MM-dd'));
   const dates = Object.keys(groupedByDay);
   const days = dates.map((day) => groupedByDay[day]);
@@ -51,29 +47,23 @@ export const ExpensesList: React.FC = () => {
 
   return (
     <Box pb={8}>
-      <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Typography variant="h6">{account?.name}</Typography>
-
-        {account && account?.users.length > 1 && (
-          <Typography variant="caption">Users: {account?.users.length}</Typography>
-        )}
-      </Box>
+      <AccountInfo />
 
       <Divider sx={{ mb: 2 }} />
 
       <Grid container spacing={1} sx={{ mb: 2 }}>
         {isDesktop && (
           <Grid item xs={12} md={9}>
-            <TotalPerDay days={days} dates={dates} currency={account?.currency} />
+            <TotalPerDay days={days} dates={dates} currency={account?.currency} themeMode={themeMode} />
           </Grid>
         )}
 
         <Grid item xs={12} md={3}>
-          <TotalPerUser expenses={expenses || []} currency={account?.currency} />
+          <TotalPerUser expenses={expenses || []} currency={account?.currency} themeMode={themeMode} />
         </Grid>
       </Grid>
 
-      <TotalPerCategory expenses={expenses || []} currency={account?.currency} />
+      <TotalPerCategory expenses={expenses || []} currency={account?.currency} themeMode={themeMode} />
       {totalUsers > 1 && <UserPayable />}
 
       <Box mt={8} mb={2}>
@@ -85,15 +75,7 @@ export const ExpensesList: React.FC = () => {
         <Divider />
       </Box>
       {days?.length > 0 ? (
-        days.map((day, index) => (
-          <ExpenseCard
-            key={index}
-            date={dates[index]}
-            day={day}
-            currency={account?.currency}
-            onSelectExpense={handleExpenseEdit}
-          />
-        ))
+        days.map((day, index) => <ExpenseCard key={index} date={dates[index]} day={day} currency={account?.currency} />)
       ) : (
         <EmptyList />
       )}

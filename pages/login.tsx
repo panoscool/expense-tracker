@@ -3,7 +3,6 @@ import { styled } from '@mui/material/styles';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import useAppContext from '../hooks/use-app-context';
 import useAuth from '../hooks/use-auth';
@@ -13,7 +12,7 @@ import { storeSetAccessToken } from '../lib/config/store';
 import { loginSchema } from '../lib/config/yup-schema';
 import { setError, setLoading } from '../lib/services/helpers';
 
-const Wrapper = styled(Box)`
+const Wrapper = styled('main')`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -34,7 +33,6 @@ const Form = styled('form')(({ theme }) => ({
 }));
 
 const Login: NextPage = () => {
-  const router = useRouter();
   const { error, dispatch } = useAppContext();
   const { authenticated, checkAuthStateAndRedirect } = useAuth(false);
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(loginSchema, {
@@ -62,7 +60,6 @@ const Login: NextPage = () => {
         setLoading(dispatch, 'login');
         const res = await apiRequest('POST', '/user/login', values);
         storeSetAccessToken(res.data);
-        router.push('/');
       } catch (error) {
         setError(dispatch, error as string);
       } finally {
@@ -80,47 +77,45 @@ const Login: NextPage = () => {
         <meta name="description" content="Login to expense tracker" />
       </Head>
 
-      <main>
-        <Wrapper>
-          <Box textAlign="center">
-            <Typography gutterBottom variant="h4">
-              Login
-            </Typography>
-            <Typography color="error">{error}</Typography>
-          </Box>
-
-          <Form onSubmit={handleSubmit}>
-            <TextField
-              type="text"
-              name="email"
-              label="Email"
-              value={values.email || ''}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={!!hasError('email')}
-              helperText={hasError('email')?.message}
-            />
-            <TextField
-              type="password"
-              name="password"
-              label="Password"
-              value={values.password || ''}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={!!hasError('password')}
-              helperText={hasError('password')?.message}
-            />
-
-            <Button type="submit" variant="contained">
-              Login
-            </Button>
-          </Form>
-
-          <Typography>
-            Don&apos;t have an account? <Link href="/register">Register</Link>
+      <Wrapper>
+        <Box textAlign="center">
+          <Typography gutterBottom variant="h4">
+            Login
           </Typography>
-        </Wrapper>
-      </main>
+          <Typography color="error">{error}</Typography>
+        </Box>
+
+        <Form onSubmit={handleSubmit}>
+          <TextField
+            type="text"
+            name="email"
+            label="Email"
+            value={values.email || ''}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            error={!!hasError('email')}
+            helperText={hasError('email')?.message}
+          />
+          <TextField
+            type="password"
+            name="password"
+            label="Password"
+            value={values.password || ''}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            error={!!hasError('password')}
+            helperText={hasError('password')?.message}
+          />
+
+          <Button type="submit" variant="contained">
+            Login
+          </Button>
+        </Form>
+
+        <Typography>
+          Don&apos;t have an account? <Link href="/register">Register</Link>
+        </Typography>
+      </Wrapper>
     </div>
   );
 };

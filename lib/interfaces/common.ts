@@ -42,16 +42,17 @@ export interface AppState {
   expense: Expense | null;
   categories: Category | null;
   payments: Payment | null;
-  modal: ModalType | null;
   loading: string[];
   error: string | null;
   notifications: NotificationsType[];
 }
 
 export interface AppContextType extends AppState {
+  themeMode: 'light' | 'dark';
   authenticated: boolean;
   setAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
   dispatch: React.Dispatch<any>;
+  setThemeMode: React.Dispatch<React.SetStateAction<'light' | 'dark'>>;
 }
 
 export interface QueryParams {
@@ -60,3 +61,5 @@ export interface QueryParams {
   category?: string;
   date?: string;
 }
+
+export type UseCaseType = 'create' | 'edit' | null;

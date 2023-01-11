@@ -3,7 +3,6 @@ import Head from 'next/head';
 import CssBaseline from '@mui/material/CssBaseline';
 import { CacheProvider, EmotionCache } from '@emotion/react';
 import createEmotionCache from '../styles/createEmotionCache';
-import Layout from '../layout';
 import AppProvider from '../context/app-context';
 
 interface MyAppProps extends AppProps {
@@ -33,9 +32,7 @@ function MyApp(props: MyAppProps) {
 
       <AppProvider>
         <CssBaseline />
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        <Component {...pageProps} />
       </AppProvider>
     </CacheProvider>
   );

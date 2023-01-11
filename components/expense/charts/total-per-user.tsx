@@ -9,11 +9,12 @@ import { formatCurrency } from '../../../lib/utils/format-number';
 import { stringToColor } from '../../../lib/utils/string-to-color';
 
 type Props = {
+  themeMode: 'light' | 'dark';
   expenses: Expense[];
   currency?: string;
 };
 
-const TotalPerUser: React.FC<Props> = ({ expenses, currency }) => {
+const TotalPerUser: React.FC<Props> = ({ themeMode, expenses, currency }) => {
   const totalPerUser: { [key: string]: number } = getTotalAmountPerUser(expenses || []);
   const userAmount: number[] = Object.values(totalPerUser);
   const userColor: string[] = Object.keys(totalPerUser).map(stringToColor);
@@ -25,6 +26,9 @@ const TotalPerUser: React.FC<Props> = ({ expenses, currency }) => {
   const chartOptions: ApexOptions = {
     colors: userColor,
     labels: userName,
+    theme: {
+      mode: themeMode,
+    },
     chart: {
       toolbar: {
         show: true,

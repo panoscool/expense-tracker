@@ -9,12 +9,13 @@ import { Expense } from '../../../lib/interfaces/expense';
 import { formatCurrency } from '../../../lib/utils/format-number';
 
 type Props = {
+  themeMode: 'light' | 'dark';
   days: Expense[][];
   dates: string[];
   currency?: string;
 };
 
-const TotalPerDay: React.FC<Props> = ({ days, dates, currency }) => {
+const TotalPerDay: React.FC<Props> = ({ themeMode, days, dates, currency }) => {
   const totalPerDay = days.map((day: Expense[]) => {
     return day.reduce((acc, curr) => acc + curr.amount, 0);
   });
@@ -27,6 +28,9 @@ const TotalPerDay: React.FC<Props> = ({ days, dates, currency }) => {
   ];
 
   const options: ApexOptions = {
+    theme: {
+      mode: themeMode,
+    },
     chart: {
       toolbar: {
         show: true,
@@ -40,9 +44,6 @@ const TotalPerDay: React.FC<Props> = ({ days, dates, currency }) => {
     },
     stroke: {
       show: true,
-    },
-    tooltip: {
-      theme: 'light',
     },
     legend: {
       show: true,

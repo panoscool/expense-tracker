@@ -12,11 +12,12 @@ import { formatCurrency } from '../../../lib/utils/format-number';
 import { stringToColor } from '../../../lib/utils/string-to-color';
 
 type Props = {
+  themeMode: 'light' | 'dark';
   expenses: Expense[];
   currency?: string;
 };
 
-const TotalPerCategory: React.FC<Props> = ({ expenses, currency }) => {
+const TotalPerCategory: React.FC<Props> = ({ themeMode, expenses, currency }) => {
   const totalPerCategory = expenses.reduce((acc: any, curr) => {
     if (!acc[curr.category]) {
       acc[curr.category] = 0;
@@ -35,6 +36,9 @@ const TotalPerCategory: React.FC<Props> = ({ expenses, currency }) => {
   const options: ApexOptions = {
     labels: Object.keys(totalPerCategory).map(capitalizeFirstLetter),
     colors: Object.keys(totalPerCategory).map(stringToColor),
+    theme: {
+      mode: themeMode,
+    },
     chart: {
       toolbar: {
         show: true,

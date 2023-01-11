@@ -3,7 +3,7 @@ import apiRequest from '../config/axios';
 import { Actions } from '../interfaces/common';
 import { Expense, ExpenseCreate } from '../interfaces/expense';
 import { buildParams, getParams } from '../utils/url-params';
-import { enqueueNotification, setError, setLoading, setModal } from './helpers';
+import { enqueueNotification, setError, setLoading } from './helpers';
 
 export const getExpenses = async (dispatch: React.Dispatch<any>) => {
   try {
@@ -27,6 +27,8 @@ export const getExpenses = async (dispatch: React.Dispatch<any>) => {
     const response = await apiRequest('GET', `/expense/?${formattedParams}`);
 
     dispatch({ type: Actions.SET_EXPENSES, payload: { expenses: response.data } });
+
+    return response;
   } catch (error) {
     setError(dispatch, error as string);
   } finally {
@@ -40,6 +42,8 @@ export const getExpense = async (dispatch: React.Dispatch<any>, id: string) => {
 
     const response = await apiRequest('GET', `/expense/${id}`);
     dispatch({ type: Actions.SET_EXPENSE, payload: { expense: response.data } });
+
+    return response;
   } catch (error) {
     setError(dispatch, error as string);
   } finally {
@@ -55,8 +59,9 @@ export const createExpense = async (dispatch: React.Dispatch<any>, data: Expense
     const response = await apiRequest('POST', '/expense', data);
     dispatch({ type: Actions.SET_EXPENSE, payload: { expense: response.data } });
 
-    setModal(dispatch, null);
     enqueueNotification(dispatch, 'Expense created', 'success');
+
+    return response;
   } catch (error) {
     setError(dispatch, error as string);
     enqueueNotification(dispatch, `Expense failed to create: ${error}`, 'error');
@@ -73,8 +78,9 @@ export const updateExpense = async (dispatch: React.Dispatch<any>, data: Expense
     const response = await apiRequest('PUT', `/expense/${data._id}`, data);
     dispatch({ type: Actions.SET_EXPENSE, payload: { expense: response.data } });
 
-    setModal(dispatch, null);
     enqueueNotification(dispatch, 'Expense updated', 'success');
+
+    return response;
   } catch (error) {
     setError(dispatch, error as string);
     enqueueNotification(dispatch, `Expense failed to update: ${error}`, 'error');
@@ -90,7 +96,6 @@ export const deleteExpense = async (dispatch: React.Dispatch<any>, id: string) =
 
     await apiRequest('DELETE', `/expense/${id}`);
 
-    setModal(dispatch, null);
     enqueueNotification(dispatch, 'Expense deleted', 'success');
   } catch (error) {
     setError(dispatch, error as string);

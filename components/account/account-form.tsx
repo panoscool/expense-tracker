@@ -1,13 +1,11 @@
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
+import { Box, Button, TextField, Typography, Dialog, DialogContent } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import useAppContext from '../../hooks/use-app-context';
 import useForm from '../../hooks/use-form';
 import { accountSchema } from '../../lib/config/yup-schema';
 import { Account, AccountCreate } from '../../lib/interfaces/account';
+import { UseCaseType } from '../../lib/interfaces/common';
 import { createAccount, getAccounts, updateAccount } from '../../lib/services/account';
 import CurrencySelect from '../shared/currency-select';
 
@@ -18,8 +16,9 @@ const Form = styled('form')`
 `;
 
 type Props = {
-  selectedAccount: Account | null;
-  closeModal: () => void;
+  useCase: UseCaseType;
+  account: Account | null;
+  onClose: () => void;
 };
 
 const initialValues: AccountCreate = {
@@ -29,19 +28,21 @@ const initialValues: AccountCreate = {
   currency: '',
 };
 
-export const AccountForm: React.FC<Props> = ({ selectedAccount, closeModal }) => {
+export const AccountForm: React.FC<Props> = ({ account, useCase, onClose }) => {
   const { dispatch } = useAppContext();
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(accountSchema, initialValues);
 
+  const isEdit = useMemo(() => useCase === 'edit', [useCase]);
+
   useEffect(() => {
-    if (selectedAccount) {
-      setValues(selectedAccount);
+    if (isEdit) {
+      setValues(account);
     }
 
     return () => {
       setValues(initialValues);
     };
-  }, [selectedAccount, setValues]);
+  }, [account, isEdit, setValues]);
 
   const handleChange = (value: string, inputName: string) => {
     setValues({ ...values, [inputName]: value });
@@ -55,75 +56,77 @@ export const AccountForm: React.FC<Props> = ({ selectedAccount, closeModal }) =>
     event.preventDefault();
 
     if (canSubmit()) {
-      selectedAccount ? await updateAccount(dispatch, values) : await createAccount(dispatch, values);
+      isEdit ? await updateAccount(dispatch, values) : await createAccount(dispatch, values);
 
       await getAccounts(dispatch);
 
       setValues({ ...values, email: '' });
-      selectedAccount == null && closeModal();
+      !isEdit && onClose();
     }
   };
 
   return (
-    <Box m={2} p={2}>
-      <Box mb={2}>
-        <Typography gutterBottom variant="h6">
-          Add Account
-        </Typography>
-      </Box>
-
-      <Form onSubmit={handleSubmit} noValidate>
-        <TextField
-          name="name"
-          label="Name"
-          value={values.name || ''}
-          onChange={(event) => handleChange(event.target.value, 'name')}
-          onBlur={() => handleBlur('name')}
-          error={!!hasError('name')}
-          helperText={hasError('name')?.message}
-        />
-        <CurrencySelect
-          selectedValue={values.currency}
-          onChange={(newValue) => handleChange(newValue?.value || '', 'currency')}
-          onBlur={() => handleBlur('currency')}
-          error={!!hasError('currency')}
-          helperText={hasError('currency')?.message}
-        />
-        <TextField
-          name="description"
-          label="Description"
-          multiline
-          rows={3}
-          value={values.description || ''}
-          onChange={(event) => handleChange(event.target.value, 'description')}
-          onBlur={() => handleBlur('description')}
-          error={!!hasError('description')}
-          helperText={hasError('description')?.message}
-        />
-
-        <Typography variant="h6">Share account</Typography>
-        <Typography variant="body2">Add the user email to share the account with</Typography>
-        <Typography variant="caption">* The user should be registered with the same email</Typography>
-
-        <TextField
-          name="email"
-          label="User email"
-          value={values.email || ''}
-          onChange={(event) => handleChange(event.target.value, 'email')}
-          onBlur={() => handleBlur('email')}
-          error={!!hasError('email')}
-          helperText={hasError('email')?.message}
-        />
-
-        <Box display="flex" alignSelf="center" gap={2} mt={3}>
-          <Button variant="contained" color="secondary" onClick={closeModal}>
-            Cancel
-          </Button>
-          <Button type="submit" variant="contained" color="primary">
-            Submit
-          </Button>
+    <Dialog open={Boolean(useCase)} onClose={onClose}>
+      <DialogContent>
+        <Box mb={2}>
+          <Typography gutterBottom variant="h6">
+            Add Account
+          </Typography>
         </Box>
-      </Form>
-    </Box>
+
+        <Form onSubmit={handleSubmit} noValidate>
+          <TextField
+            name="name"
+            label="Name"
+            value={values.name || ''}
+            onChange={(event) => handleChange(event.target.value, 'name')}
+            onBlur={() => handleBlur('name')}
+            error={!!hasError('name')}
+            helperText={hasError('name')?.message}
+          />
+          <CurrencySelect
+            selectedValue={values.currency}
+            onChange={(newValue) => handleChange(newValue?.value || '', 'currency')}
+            onBlur={() => handleBlur('currency')}
+            error={!!hasError('currency')}
+            helperText={hasError('currency')?.message}
+          />
+          <TextField
+            name="description"
+            label="Description"
+            multiline
+            rows={3}
+            value={values.description || ''}
+            onChange={(event) => handleChange(event.target.value, 'description')}
+            onBlur={() => handleBlur('description')}
+            error={!!hasError('description')}
+            helperText={hasError('description')?.message}
+          />
+
+          <Typography variant="h6">Share account</Typography>
+          <Typography variant="body2">Add the user email to share the account with</Typography>
+          <Typography variant="caption">* The user should be registered with the same email</Typography>
+
+          <TextField
+            name="email"
+            label="User email"
+            value={values.email || ''}
+            onChange={(event) => handleChange(event.target.value, 'email')}
+            onBlur={() => handleBlur('email')}
+            error={!!hasError('email')}
+            helperText={hasError('email')?.message}
+          />
+
+          <Box display="flex" alignSelf="center" gap={2} mt={3}>
+            <Button variant="contained" color="secondary" onClick={onClose}>
+              Cancel
+            </Button>
+            <Button type="submit" variant="contained" color="primary">
+              Submit
+            </Button>
+          </Box>
+        </Form>
+      </DialogContent>
+    </Dialog>
   );
 };
