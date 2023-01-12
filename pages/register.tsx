@@ -1,4 +1,4 @@
-import { Box, Button, TextField, Typography } from '@mui/material';
+import { Box, Button, Container, TextField, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import type { NextPage } from 'next';
 import Head from 'next/head';
@@ -12,7 +12,7 @@ import { storeSetAccessToken } from '../lib/config/store';
 import { registerSchema } from '../lib/config/yup-schema';
 import { setError, setLoading } from '../lib/services/helpers';
 
-const Wrapper = styled('main')`
+const ContainerWrapper = styled(Container)`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -25,11 +25,7 @@ const Form = styled('form')(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   gap: '1.5rem',
-  width: '40%',
-
-  [theme.breakpoints.down('sm')]: {
-    width: '100%',
-  },
+  width: '100%',
 }));
 
 const Register: NextPage = () => {
@@ -79,7 +75,7 @@ const Register: NextPage = () => {
         <meta name="description" content="Register to expense tracker" />
       </Head>
 
-      <Wrapper>
+      <ContainerWrapper maxWidth="sm">
         <Box textAlign="center">
           <Typography gutterBottom variant="h4">
             Register
@@ -137,7 +133,7 @@ const Register: NextPage = () => {
         <Typography>
           Have an account? <Link href="/login">Login</Link>
         </Typography>
-      </Wrapper>
+      </ContainerWrapper>
     </div>
   );
 };
