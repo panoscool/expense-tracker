@@ -4,6 +4,7 @@ import Drawer from '@mui/material/Drawer';
 import { AccountsList } from '../accounts-list';
 import { sxProps } from './drawer-styles';
 import { Title } from '../title';
+import CategoriesList from '../categories-list';
 
 interface Props {
   open: boolean;
@@ -18,6 +19,9 @@ export function TemporaryDrawer({ open, toggleDrawer }: Props) {
       </Box>
       <Divider />
       <AccountsList />
+
+      <Divider />
+      <CategoriesList />
     </Drawer>
   );
 }

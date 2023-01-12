@@ -83,8 +83,16 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, themeMode, loading, setThemeMode, dispatch } = useAppContext();
 
   useEffect(() => {
-    getAccounts(dispatch);
-    getCategories(dispatch);
+    let isMounted = true;
+
+    if (isMounted) {
+      getAccounts(dispatch);
+      getCategories(dispatch);
+    }
+
+    return () => {
+      isMounted = false;
+    };
   }, [dispatch]);
 
   useEffect(() => {
