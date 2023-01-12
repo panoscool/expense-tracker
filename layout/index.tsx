@@ -60,7 +60,6 @@ const AppBar = styled(MuiAppBar, {
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<MainProps>(({ theme, open }) => ({
   height: '100%',
   position: 'relative',
-  padding: theme.spacing(3),
   marginLeft: 0,
   marginTop: 64,
   transition: theme.transitions.create('margin', {
