@@ -58,11 +58,7 @@ export const ExpenseCard: React.FC<Props> = ({ day, date, currency }) => {
             {formatDate('dd')}
           </Avatar>
         }
-        action={
-          <TotalAmount variant="h6" color="primary">
-            {formatCurrency(totalAmount, currency)}
-          </TotalAmount>
-        }
+        action={<TotalAmount variant="h6">{formatCurrency(totalAmount, currency)}</TotalAmount>}
         title={formatDate('EEEE')}
         subheader={formatDate('MMMM yyyy')}
         sx={{ backgroundColor: (theme) => alpha(theme.palette.primary.main, 0.05) }}
@@ -84,7 +80,9 @@ export const ExpenseCard: React.FC<Props> = ({ day, date, currency }) => {
                     secondary={expense.user.name}
                     sx={{ textTransform: 'capitalize' }}
                   />
-                  <ListItemSecondaryAction>{formatCurrency(expense.amount, currency)}</ListItemSecondaryAction>
+                  <ListItemSecondaryAction>
+                    <Typography>{formatCurrency(expense.amount, currency)}</Typography>
+                  </ListItemSecondaryAction>
                 </ListItemButton>
               </ListItem>
               {index === day.length - 1 ? null : <Divider component="li" />}
