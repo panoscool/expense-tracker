@@ -22,15 +22,17 @@ import { getInitials } from '../../lib/utils/get-initials';
 import { stringToColor } from '../../lib/utils/string-to-color';
 import useHasAccess from '../../hooks/use-has-access';
 import { Tooltip } from '@mui/material';
+import { Account } from '../../lib/interfaces/account';
 
 type Props = {
   open: boolean;
+  account: Account | null;
   onClose: () => void;
 };
 
-export const AccountUsers: React.FC<Props> = ({ open, onClose }) => {
+export const AccountUsers: React.FC<Props> = ({ open, account, onClose }) => {
   const { hasAccess } = useHasAccess();
-  const { account, dispatch } = useAppContext();
+  const { dispatch } = useAppContext();
 
   const handleDeleteUser = (email: string) => async () => {
     if (window.confirm(`Are you sure you want to delete the user ${email}?`)) {

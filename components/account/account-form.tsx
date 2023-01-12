@@ -16,7 +16,8 @@ const Form = styled('form')`
 `;
 
 type Props = {
-  useCase: UseCaseType;
+  open: boolean;
+  useCase: UseCaseType | null;
   account: Account | null;
   onClose: () => void;
 };
@@ -28,21 +29,21 @@ const initialValues: AccountCreate = {
   currency: '',
 };
 
-export const AccountForm: React.FC<Props> = ({ account, useCase, onClose }) => {
+export const AccountForm: React.FC<Props> = ({ open, account, useCase, onClose }) => {
   const { dispatch } = useAppContext();
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(accountSchema, initialValues);
 
-  const isEdit = useMemo(() => useCase === 'edit', [useCase]);
+  const isEditCase = useMemo(() => useCase === UseCaseType.account_edit, [useCase]);
 
   useEffect(() => {
-    if (isEdit) {
+    if (isEditCase) {
       setValues(account);
     }
 
     return () => {
       setValues(initialValues);
     };
-  }, [account, isEdit, setValues]);
+  }, [account, isEditCase, setValues]);
 
   const handleChange = (value: string, inputName: string) => {
     setValues({ ...values, [inputName]: value });
@@ -56,17 +57,17 @@ export const AccountForm: React.FC<Props> = ({ account, useCase, onClose }) => {
     event.preventDefault();
 
     if (canSubmit()) {
-      isEdit ? await updateAccount(dispatch, values) : await createAccount(dispatch, values);
+      isEditCase ? await updateAccount(dispatch, values) : await createAccount(dispatch, values);
 
       await getAccounts(dispatch);
 
       setValues({ ...values, email: '' });
-      !isEdit && onClose();
+      !isEditCase && onClose();
     }
   };
 
   return (
-    <Dialog open={Boolean(useCase)} onClose={onClose}>
+    <Dialog fullWidth maxWidth="sm" open={open} onClose={onClose}>
       <DialogContent>
         <Box mb={2}>
           <Typography gutterBottom variant="h6">

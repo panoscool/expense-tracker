@@ -1,3 +1,4 @@
+import SettingsRounded from '@mui/icons-material/SettingsRounded';
 import AccountCircleRounded from '@mui/icons-material/AccountCircleRounded';
 import ExitToAppRounded from '@mui/icons-material/ExitToAppRounded';
 import PersonRounded from '@mui/icons-material/PersonRounded';
@@ -34,6 +35,12 @@ export function UserMenu({ user, logout }: Props) {
             <PersonRounded />
           </ListItemIcon>
           <ListItemText primary={user?.name} sx={{ textTransform: 'capitalize' }} />
+        </MenuItem>
+        <MenuItem onClick={popupState.close} component={Link} href="/settings">
+          <ListItemIcon>
+            <SettingsRounded />
+          </ListItemIcon>
+          <ListItemText primary="Settings" sx={{ textTransform: 'capitalize' }} />
         </MenuItem>
         <MenuItem onClick={handleLogout}>
           <ListItemIcon>

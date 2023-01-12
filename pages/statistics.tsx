@@ -6,7 +6,6 @@ import { useEffect } from 'react';
 import { AccountTotal } from '../components/statistics/account-total';
 import { CategoryTotal } from '../components/statistics/category-total';
 import { StatisticsFilters } from '../components/statistics/statistics-filters';
-import { UserTotal } from '../components/statistics/user-total';
 import useAuth from '../hooks/use-auth';
 import { Filters } from '../lib/interfaces/statistics';
 

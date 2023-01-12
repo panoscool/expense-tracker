@@ -24,6 +24,8 @@ import {
   storeSetDrawerState,
   storeSetThemeMode,
 } from '../lib/config/store';
+import { getAccounts } from '../lib/services/account';
+import { getCategories } from '../lib/services/category';
 import { drawerWidth } from './drawer/drawer-styles';
 import { PersistentDrawer } from './drawer/persistent-drawer';
 import { TemporaryDrawer } from './drawer/temporary-drawer';
@@ -78,7 +80,12 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const router = useRouter();
   const isDesktop = useIsDesktop();
   const [open, setOpen] = useState(storeGetDrawerState());
-  const { user, themeMode, loading, setThemeMode } = useAppContext();
+  const { user, themeMode, loading, setThemeMode, dispatch } = useAppContext();
+
+  useEffect(() => {
+    getAccounts(dispatch);
+    getCategories(dispatch);
+  }, [dispatch]);
 
   useEffect(() => {
     if (!isDesktop) {

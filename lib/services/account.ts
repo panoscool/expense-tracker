@@ -15,7 +15,7 @@ export const getAccounts = async (dispatch: React.Dispatch<any>) => {
     const response = await apiRequest('GET', '/account');
     dispatch({ type: Actions.SET_ACCOUNTS, payload: { accounts: response.data } });
 
-    if (response.data.length > 0) {
+    if (response.data.length > 0 && Router.pathname === '/') {
       Router.push({ pathname: Router.pathname, query: { account_id: response.data[0]._id } });
     }
     return response;

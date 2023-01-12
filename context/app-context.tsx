@@ -1,4 +1,4 @@
-import { createContext, useRef, useState } from 'react';
+import { createContext, useMemo, useRef, useState } from 'react';
 import { createTheme, responsiveFontSizes, ThemeProvider } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
@@ -39,10 +39,14 @@ const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { state, dispatch } = useAppState();
   const notistackRef: any = useRef(null);
 
-  const muiTheme = createTheme({
-    palette: palette(themeMode),
-    components: components(),
-  });
+  const muiTheme = useMemo(
+    () =>
+      createTheme({
+        palette: palette(themeMode),
+        components: components(),
+      }),
+    [themeMode],
+  );
 
   const theme = responsiveFontSizes(muiTheme);
 

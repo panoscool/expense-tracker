@@ -1,8 +1,8 @@
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandMoreRounded from '@mui/icons-material/ExpandMoreRounded';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
-import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import type { NextPage } from 'next';
 import Head from 'next/head';
@@ -34,9 +34,9 @@ const Profile: NextPage = () => {
       </Head>
 
       <Layout>
-        <Box maxWidth={600} margin="0 auto">
+        <Container maxWidth="md">
           <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
-            <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1bh-content" id="panel1bh-header">
+            <AccordionSummary expandIcon={<ExpandMoreRounded />} aria-controls="panel1bh-content" id="panel1bh-header">
               <Typography>Profile</Typography>
             </AccordionSummary>
             <AccordionDetails>
@@ -45,14 +45,14 @@ const Profile: NextPage = () => {
           </Accordion>
 
           <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
-            <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel2bh-content" id="panel2bh-header">
+            <AccordionSummary expandIcon={<ExpandMoreRounded />} aria-controls="panel2bh-content" id="panel2bh-header">
               <Typography>Image</Typography>
             </AccordionSummary>
             <AccordionDetails>
               <UploadForm />
             </AccordionDetails>
           </Accordion>
-        </Box>
+        </Container>
       </Layout>
     </div>
   );
