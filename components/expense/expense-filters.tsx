@@ -6,7 +6,6 @@ import useAppContext from '../../hooks/use-app-context';
 import { QueryParams } from '../../lib/interfaces/common';
 import { ExpensesFilters } from '../../lib/interfaces/expense';
 import { getAccount } from '../../lib/services/account';
-import { getCategories } from '../../lib/services/category';
 import { formatDate } from '../../lib/utils/date';
 import { setParams } from '../../lib/utils/url-params';
 import CategoryIcon from '../shared/category-icon';
@@ -26,8 +25,6 @@ export const ExpenseFilters: React.FC = () => {
   const { date, user_id, account_id, category }: QueryParams = router.query;
 
   useEffect(() => {
-    getCategories(dispatch);
-
     if (account_id) {
       getAccount(dispatch, account_id);
     }

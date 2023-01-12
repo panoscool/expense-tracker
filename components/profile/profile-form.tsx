@@ -27,10 +27,6 @@ export const ProfileForm: React.FC = () => {
   });
 
   useEffect(() => {
-    getAccounts(dispatch);
-  }, [dispatch]);
-
-  useEffect(() => {
     setValues({ name: user?.name });
   }, [user, setValues]);
 

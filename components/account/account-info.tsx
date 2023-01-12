@@ -1,7 +1,6 @@
-import { AddRounded, DeleteRounded, EditRounded, MoreVertRounded, VisibilityOutlined } from '@mui/icons-material';
+import { DeleteRounded, EditRounded, MoreVertRounded, VisibilityOutlined } from '@mui/icons-material';
 import {
   Box,
-  Divider,
   IconButton,
   List,
   ListItem,
@@ -25,10 +24,10 @@ export function AccountInfo() {
   const { isCreator } = useHasAccess();
   const { account, dispatch } = useAppContext();
   const popupState = usePopupState({ variant: 'popover', popupId: 'userMenu' });
-  const [useCase, setUseCase] = useState<UseCaseType>(null);
+  const [useCase, setUseCase] = useState<UseCaseType | null>(null);
   const [openUser, setOpenUsers] = useState(false);
 
-  const handleAccountDelete = async (e: React.MouseEvent) => {
+  const handleDeleteAccount = async (e: React.MouseEvent) => {
     e.stopPropagation();
 
     if (!account?._id) return;
@@ -72,15 +71,6 @@ export function AccountInfo() {
             </IconButton>
 
             <Menu {...bindMenu(popupState)}>
-              <MenuItem onClick={() => handleOpen('create')}>
-                <ListItemIcon>
-                  <AddRounded fontSize="small" />
-                </ListItemIcon>
-                <ListItemText primary="Create" />
-              </MenuItem>
-
-              <Divider />
-
               <MenuItem onClick={handleOpenUsers}>
                 <ListItemIcon>
                   <VisibilityOutlined fontSize="small" />
@@ -88,14 +78,14 @@ export function AccountInfo() {
                 <ListItemText primary="View" />
               </MenuItem>
 
-              <MenuItem onClick={() => handleOpen('edit')} disabled={!isCreator(account.user)}>
+              <MenuItem onClick={() => handleOpen(UseCaseType.account_edit)} disabled={!isCreator(account.user)}>
                 <ListItemIcon>
                   <EditRounded fontSize="small" />
                 </ListItemIcon>
                 <ListItemText primary="Edit" />
               </MenuItem>
 
-              <MenuItem onClick={handleAccountDelete} disabled={!isCreator(account.user)}>
+              <MenuItem onClick={handleDeleteAccount} disabled={!isCreator(account.user)}>
                 <ListItemIcon {...deleteColor()}>
                   <DeleteRounded fontSize="small" />
                 </ListItemIcon>
@@ -106,8 +96,8 @@ export function AccountInfo() {
         </ListItem>
       </List>
 
-      <AccountForm useCase={useCase} account={account} onClose={handleClose} />
-      <AccountUsers open={openUser} onClose={() => setOpenUsers(false)} />
+      <AccountForm open={Boolean(useCase)} useCase={useCase} account={account} onClose={handleClose} />
+      <AccountUsers open={openUser} account={account} onClose={() => setOpenUsers(false)} />
     </Box>
   );
 }

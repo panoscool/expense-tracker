@@ -1,3 +1,4 @@
+import { Container } from '@mui/material';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useEffect } from 'react';
@@ -22,7 +23,9 @@ const Home: NextPage = () => {
       </Head>
 
       <Layout>
-        <ExpensesList />
+        <Container maxWidth="xl">
+          <ExpensesList />
+        </Container>
       </Layout>
     </div>
   );

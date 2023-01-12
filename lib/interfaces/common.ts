@@ -62,4 +62,9 @@ export interface QueryParams {
   date?: string;
 }
 
-export type UseCaseType = 'create' | 'edit' | null;
+export enum UseCaseType {
+  account_create = 'account_create',
+  account_edit = 'account_edit',
+  account_view = 'account_view',
+  category_create = 'category_create',
+}

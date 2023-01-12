@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import useAppContext from '../../hooks/use-app-context';
 import useIsDesktop from '../../hooks/use-is-desktop';
 import { QueryParams } from '../../lib/interfaces/common';
-import { getAccount, getAccounts } from '../../lib/services/account';
+import { getAccount } from '../../lib/services/account';
 import { getExpenses } from '../../lib/services/expense';
 import { getPayments } from '../../lib/services/payment';
 import { getTotalUsers } from '../../lib/utils/expense-calculations';
@@ -27,10 +27,6 @@ export const ExpensesList: React.FC = () => {
   const { expenses, account, themeMode, dispatch } = useAppContext();
 
   const { account_id, user_id, date, category }: QueryParams = router.query;
-
-  useEffect(() => {
-    getAccounts(dispatch);
-  }, [dispatch]);
 
   useEffect(() => {
     if (account_id) {
