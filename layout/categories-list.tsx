@@ -10,6 +10,13 @@ import ListItemText from '@mui/material/ListItemText';
 import { useState } from 'react';
 import CategoryIcon from '../components/shared/category-icon';
 import useAppContext from '../hooks/use-app-context';
+import { styled } from '@mui/material';
+
+const StyledListItemIcon = styled(ListItemIcon)(({ theme }) => ({
+  '&.MuiListItemIcon-root': {
+    minWidth: '48px',
+  },
+}));
 
 export default function CategoriesList() {
   const { categories } = useAppContext();
@@ -31,10 +38,10 @@ export default function CategoriesList() {
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
           {categories?.labels.map((label) => (
-            <ListItem key={label} sx={{ pl: 4 }}>
-              <ListItemIcon>
+            <ListItem key={label} sx={{ pl: 4 }} disablePadding disableGutters>
+              <StyledListItemIcon>
                 <CategoryIcon icon={label} />
-              </ListItemIcon>
+              </StyledListItemIcon>
               <ListItemText primary={label} sx={{ textTransform: 'capitalize' }} />
             </ListItem>
           ))}

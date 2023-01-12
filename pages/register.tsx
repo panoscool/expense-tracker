@@ -1,4 +1,5 @@
-import { Box, Button, Container, TextField, Typography } from '@mui/material';
+import { Box, Container, TextField, Typography } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { styled } from '@mui/material/styles';
 import type { NextPage } from 'next';
 import Head from 'next/head';
@@ -29,7 +30,7 @@ const Form = styled('form')(({ theme }) => ({
 }));
 
 const Register: NextPage = () => {
-  const { error, dispatch } = useAppContext();
+  const { loading, error, dispatch } = useAppContext();
   const { authenticated, checkAuthStateAndRedirect } = useAuth(false);
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(registerSchema, {
     name: '',
@@ -125,9 +126,9 @@ const Register: NextPage = () => {
             helperText={hasError('confirmPassword')?.message}
           />
 
-          <Button type="submit" variant="contained">
-            Register
-          </Button>
+          <LoadingButton type="submit" variant="contained" loading={loading.length > 0}>
+            <span>Register</span>
+          </LoadingButton>
         </Form>
 
         <Typography>
