@@ -34,7 +34,7 @@ const Profile: NextPage = () => {
       </Head>
 
       <Layout>
-        <Container maxWidth="md">
+        <Container maxWidth="md" sx={{ pt: 2 }}>
           <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
             <AccordionSummary expandIcon={<ExpandMoreRounded />} aria-controls="panel1bh-content" id="panel1bh-header">
               <Typography>Profile</Typography>

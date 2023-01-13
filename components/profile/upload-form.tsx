@@ -25,8 +25,12 @@ const Form = styled('form')(({ theme }) => ({
 
 const IMAGE_WIDTH = 320;
 const IMAGE_HEIGHT = 320;
-const IMAGE_SIZE_LIMIT = 5000000;
+const IMAGE_SIZE_LIMIT = 4;
 const IMAGE_RATIO = IMAGE_WIDTH / IMAGE_HEIGHT;
+
+function bytesToMegaBytes(bytes: number) {
+  return parseFloat((bytes / (1024 * 1024)).toFixed(2));
+}
 
 export const UploadForm: React.FC = () => {
   const { user, error, dispatch } = useAppContext();
@@ -60,9 +64,9 @@ export const UploadForm: React.FC = () => {
 
     setError(dispatch, null);
 
-    // if file size is greater than 5MB then show error
-    if (file && file.size > IMAGE_SIZE_LIMIT) {
-      setError(dispatch, 'File size is greater than 4MB');
+    // show error if file size is greater than 5MB
+    if (file && bytesToMegaBytes(file.size) > IMAGE_SIZE_LIMIT) {
+      setError(dispatch, `File size is greater than 4MB / ${bytesToMegaBytes(file.size)}MB`);
       handleClearFile();
 
       return;
@@ -126,7 +130,7 @@ export const UploadForm: React.FC = () => {
         </Alert>
       )}
 
-      <Box mt={1} display="flex" flexDirection="column" alignItems="flex-start">
+      <Box mt={2} display="flex" flexDirection="column" alignItems="flex-start">
         {!previewSource && user?.image && (
           <>
             <Button color="error" onClick={handleDeleteImage} startIcon={<DeleteRoundedIcon />} sx={{ mb: 1 }}>
@@ -134,20 +138,19 @@ export const UploadForm: React.FC = () => {
             </Button>
             <Image
               src={user.image}
-              alt=""
+              alt="user photo"
               width={IMAGE_WIDTH}
               height={IMAGE_HEIGHT / ratio}
-              layout="fixed"
               onLoadingComplete={({ naturalWidth, naturalHeight }) => setRatio(naturalWidth / naturalHeight)}
             />
           </>
         )}
       </Box>
 
-      <Box mt={1} display="flex" flexDirection="column" alignItems="flex-start">
+      <Box mt={2} display="flex" flexDirection="column" alignItems="flex-start">
         {previewSource && (
           <>
-            <Button onClick={handleClearFile} startIcon={<CancelOutlinedIcon />} sx={{ mb: 1 }}>
+            <Button color="inherit" onClick={handleClearFile} startIcon={<CancelOutlinedIcon />} sx={{ mb: 1 }}>
               Cancel
             </Button>
             <Image
@@ -155,7 +158,6 @@ export const UploadForm: React.FC = () => {
               alt="preview selected"
               width={IMAGE_WIDTH}
               height={IMAGE_HEIGHT / ratio}
-              layout="fixed"
               onLoadingComplete={({ naturalWidth, naturalHeight }) => setRatio(naturalWidth / naturalHeight)}
             />
           </>

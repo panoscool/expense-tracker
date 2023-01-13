@@ -54,11 +54,11 @@ const Profile: NextPage = () => {
     <div>
       <Head>
         <title>Expense Tracker - Settings</title>
-        <meta name="description" content="User profile" />
+        <meta name="description" content="Accounts and categories settings" />
       </Head>
 
       <Layout>
-        <Container maxWidth="md">
+        <Container maxWidth="md" sx={{ pt: 2 }}>
           <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
             <AccordionSummary expandIcon={<ExpandMoreRounded />} aria-controls="panel1bh-content" id="panel1bh-header">
               <Box display="flex" justifyContent="space-between" alignItems="center" flex={1}>
