@@ -4,9 +4,11 @@ import { useMemo } from 'react';
 import useAppContext from '../hooks/use-app-context';
 
 export function NoAccountId() {
-  const { accounts } = useAppContext();
+  const { loading, accounts } = useAppContext();
 
   const hasAccounts = useMemo(() => accounts && accounts.length > 0, [accounts]);
+
+  if (loading.length > 0) return null;
 
   return (
     <Box textAlign="center" pt={4}>
