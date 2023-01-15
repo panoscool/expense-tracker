@@ -1,4 +1,4 @@
-import { createContext, useMemo, useRef, useState } from 'react';
+import { createContext, useEffect, useMemo, useRef, useState } from 'react';
 import { createTheme, responsiveFontSizes, ThemeProvider } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
@@ -32,12 +32,14 @@ export const AppContext = createContext(initState);
 
 const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
-  const storedTheme = storeGetThemeMode(prefersDarkMode ? 'dark' : 'light');
+  const storedThemeMode = storeGetThemeMode(prefersDarkMode ? 'dark' : 'light');
 
-  const [themeMode, setThemeMode] = useState<'light' | 'dark'>(storedTheme);
+  const [themeMode, setThemeMode] = useState<'light' | 'dark'>(storedThemeMode);
   const [authenticated, setAuthenticated] = useState(false);
   const { state, dispatch } = useAppState();
   const notistackRef: any = useRef(null);
+
+  useEffect(() => setThemeMode(storedThemeMode), [storedThemeMode]);
 
   const muiTheme = useMemo(
     () =>
@@ -50,7 +52,7 @@ const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   const theme = responsiveFontSizes(muiTheme);
 
-  const onClickDismiss = (key: SnackbarKey) => () => {
+  const onClickDismissNotification = (key: SnackbarKey) => () => {
     if (notistackRef.current) {
       notistackRef.current.closeSnackbar(key);
     }
@@ -78,7 +80,7 @@ const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           disableWindowBlurListener
           anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
           action={(key) => (
-            <IconButton color="inherit" onClick={onClickDismiss(key)}>
+            <IconButton color="inherit" onClick={onClickDismissNotification(key)}>
               <CloseRoundedIcon />
             </IconButton>
           )}

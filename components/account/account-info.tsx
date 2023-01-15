@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import { Theme } from '@mui/material/styles';
 import { bindMenu, bindTrigger, usePopupState } from 'material-ui-popup-state/hooks';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import useAppContext from '../../hooks/use-app-context';
 import useHasAccess from '../../hooks/use-has-access';
@@ -21,6 +22,7 @@ import { AccountForm } from './account-form';
 import { AccountUsers } from './account-users';
 
 export function AccountInfo() {
+  const router = useRouter();
   const { isCreator } = useHasAccess();
   const { account, dispatch } = useAppContext();
   const popupState = usePopupState({ variant: 'popover', popupId: 'userMenu' });
@@ -34,6 +36,9 @@ export function AccountInfo() {
 
     if (window.confirm(`Are you sure you want to delete ${account?.name}?`)) {
       await deleteAccount(dispatch, account?._id);
+      // remove account id from query
+      router.push({ pathname: router.pathname, query: {} });
+      // fetch updated account list
       await getAccounts(dispatch);
       popupState.close();
     }

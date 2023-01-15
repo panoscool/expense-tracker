@@ -5,6 +5,8 @@ import { DecodedToken } from '../lib/interfaces/user';
 import { getUser } from '../lib/services/user';
 import useAppContext from './use-app-context';
 
+// TODO: Move auth check into next middleware using cookies
+
 function useAuth(reqAuth: boolean) {
   const router = useRouter();
   const { authenticated, setAuthenticated, dispatch } = useAppContext();
