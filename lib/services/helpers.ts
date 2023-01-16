@@ -7,7 +7,7 @@ export const enqueueNotification = (dispatch: React.Dispatch<any>, message: stri
       message: message,
       options: {
         variant: variant,
-        key: new Date().getTime() + Math.random(),
+        key: Date.now(),
       },
     },
   });

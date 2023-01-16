@@ -14,10 +14,10 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 import { ExpenseForm } from '../components/expense/expense-form';
-import Notifier from '../components/notifier';
 import Loading from '../components/shared/loading';
 import useAppContext from '../hooks/use-app-context';
 import useIsDesktop from '../hooks/use-is-desktop';
+import { useNotification } from '../hooks/use-notification';
 import {
   storeClearAccessToken,
   storeGetDrawerState,
@@ -76,6 +76,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<Ma
 }));
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  useNotification();
   const router = useRouter();
   const isDesktop = useIsDesktop();
   const [open, setOpen] = useState(storeGetDrawerState());
@@ -166,7 +167,6 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         </Dialog>
       )}
 
-      <Notifier />
       <Loading loading={loading} />
     </Box>
   );

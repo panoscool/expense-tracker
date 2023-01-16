@@ -13,19 +13,13 @@ export enum Actions {
   SET_EXPENSE = 'SET_EXPENSE',
   SET_CATEGORIES = 'SET_CATEGORIES',
   SET_PAYMENTS = 'SET_PAYMENTS',
-  SET_MODAL = 'SET_MODAL',
   SET_LOADING = 'SET_LOADING',
   SET_ERROR = 'SET_ERROR',
   ENQUEUE_SNACKBAR = 'ENQUEUE_SNACKBAR',
   REMOVE_SNACKBAR = 'REMOVE_SNACKBAR',
 }
 
-export interface ModalType {
-  open: string;
-  id?: string;
-}
-
-export interface NotificationsType {
+export interface NotificationType {
   message: string;
   options: {
     key: number;
@@ -44,7 +38,7 @@ export interface AppState {
   payments: Payment | null;
   loading: string[];
   error: string | null;
-  notifications: NotificationsType[];
+  notifications: NotificationType[];
 }
 
 export interface AppContextType extends AppState {
