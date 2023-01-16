@@ -22,7 +22,7 @@ export function useNotification() {
         // Add notification's key to the local state
         setDisplayed([...displayed, notification.options.key]);
 
-        // Dispatch action to remove the notification from the state
+        // Dispatch action to remove the notification from the global state
         removeNotification(dispatch, notification.options.key);
       }, 5);
 
