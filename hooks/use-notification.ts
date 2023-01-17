@@ -25,12 +25,12 @@ export function useNotification() {
         // Dispatch action to remove the notification from the global state
         removeNotification(dispatch, notification.options.key);
       }, 5);
-
-      return () => {
-        if (timer) {
-          clearTimeout(timer);
-        }
-      };
     }
+
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+    };
   }, [dispatch, displayed, enqueueSnackbar, notifications]);
 }

@@ -14,7 +14,7 @@ export const enqueueNotification = (dispatch: React.Dispatch<any>, message: stri
 };
 
 export const removeNotification = (dispatch: React.Dispatch<any>, key: number) => {
-  dispatch({ type: Actions.REMOVE_SNACKBAR, payload: key });
+  dispatch({ type: Actions.REMOVE_SNACKBAR, payload: { key } });
 };
 
 export const setLoading = (dispatch: React.Dispatch<any>, loading: string) => {
