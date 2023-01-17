@@ -19,7 +19,7 @@ export const hasAccess = async (userId?: string, creatorId?: string, entityUserI
 export const setAccessToken = async (user: IUser) => {
   const secret = process.env.JWT_SECRET || '';
   const expires = 1000 * 60 * 60 * 24 * 7;
-  const claims = { sub: user._id, name: user.name, email: user.email };
+  const claims = { sub: user._id, name: user.name, email: user.email, image: user.image };
 
   const accessToken = sign(claims, secret, {
     expiresIn: expires,
@@ -44,13 +44,12 @@ export const getDecodedUserId = async (req: NextApiRequest, res: NextApiResponse
   }
 };
 
-export const authenticated =
-  (fn: NextApiHandler) => async (req: NextApiRequest, res: NextApiResponse) => {
-    const userId = await getDecodedUserId(req, res);
+export const authenticated = (fn: NextApiHandler) => async (req: NextApiRequest, res: NextApiResponse) => {
+  const userId = await getDecodedUserId(req, res);
 
-    if (userId) {
-      return await fn(req, res);
-    }
+  if (userId) {
+    return await fn(req, res);
+  }
 
-    return res.status(400).send({ error: 'Authentication failed' });
-  };
+  return res.status(400).send({ error: 'Authentication failed' });
+};

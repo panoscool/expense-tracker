@@ -2,41 +2,40 @@ import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo } from 'react';
 import { storeGetDecodedToken } from '../lib/config/store';
 import { DecodedToken } from '../lib/interfaces/user';
-import { getUser } from '../lib/services/user';
 import useAppContext from './use-app-context';
 
 // TODO: Move auth check into next middleware using cookies
 
 function useAuth(reqAuth: boolean) {
   const router = useRouter();
-  const { authenticated, setAuthenticated, dispatch } = useAppContext();
-  const authData: DecodedToken | null = storeGetDecodedToken();
-
-  const userId = useMemo(() => authData?.sub, [authData]);
+  const { authenticated, setUser } = useAppContext();
+  const authData: DecodedToken | null = useMemo(() => storeGetDecodedToken(), []);
 
   useEffect(() => {
-    if (userId) {
-      setAuthenticated(true);
-      getUser(dispatch);
+    if (authData) {
+      setUser({
+        ...authData,
+        _id: authData.sub,
+      });
     } else {
-      setAuthenticated(false);
+      setUser(null);
     }
-  }, [userId, dispatch, setAuthenticated]);
+  }, [authData, setUser]);
 
   const checkAuthStateAndRedirect = useCallback(
     (redirectUrl: string) => {
       // if not authenticated redirect to login page
-      if (reqAuth && (userId == undefined || userId == null)) {
+      if (reqAuth && (authData == undefined || authData == null)) {
         router.push(redirectUrl);
       }
 
       // if authenticated redirect to home page
-      if (!reqAuth && userId) {
+      if (!reqAuth && authData) {
         router.push(redirectUrl);
       }
     },
 
-    [userId, reqAuth, router],
+    [authData, reqAuth, router],
   );
 
   return { authenticated, checkAuthStateAndRedirect };

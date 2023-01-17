@@ -5,8 +5,6 @@ import { Payment } from './payment';
 import { User } from './user';
 
 export enum Actions {
-  LOGOUT = 'LOGOUT',
-  SET_USER = 'SET_USER',
   SET_ACCOUNTS = 'SET_ACCOUNTS',
   SET_ACCOUNT = 'SET_ACCOUNT',
   SET_EXPENSES = 'SET_EXPENSES',
@@ -29,7 +27,6 @@ export interface NotificationType {
 }
 
 export interface AppState {
-  user: User | null;
   accounts: Account[] | null;
   account: Account | null;
   expenses: Expense[] | null;
@@ -43,10 +40,11 @@ export interface AppState {
 
 export interface AppContextType extends AppState {
   themeMode: 'light' | 'dark';
+  user: User | null;
   authenticated: boolean;
-  setAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
-  dispatch: React.Dispatch<any>;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
   setThemeMode: React.Dispatch<React.SetStateAction<'light' | 'dark'>>;
+  dispatch: React.Dispatch<any>;
 }
 
 export interface QueryParams {

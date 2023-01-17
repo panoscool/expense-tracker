@@ -2,7 +2,6 @@ import { Reducer, useReducer } from 'react';
 import { Actions, AppState } from '../lib/interfaces/common';
 
 const initState: AppState = {
-  user: null,
   accounts: null,
   account: null,
   expenses: null,
@@ -78,15 +77,6 @@ const reducer: Reducer<AppState, { type: Actions; payload?: any }> = (state, { t
         ...state,
         notifications: state.notifications.filter((notification) => notification.options.key === payload.key),
       };
-
-    case Actions.SET_USER:
-      return {
-        ...state,
-        user: payload.user,
-      };
-
-    case Actions.LOGOUT:
-      return initState;
 
     default:
       return state;

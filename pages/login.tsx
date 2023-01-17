@@ -1,9 +1,10 @@
-import { Box, Container, TextField, Typography } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
+import { Box, Container, TextField, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import useAppContext from '../hooks/use-app-context';
 import useAuth from '../hooks/use-auth';
@@ -30,6 +31,7 @@ const Form = styled('form')(({ theme }) => ({
 }));
 
 const Login: NextPage = () => {
+  const router = useRouter();
   const { loading, error, dispatch } = useAppContext();
   const { authenticated, checkAuthStateAndRedirect } = useAuth(false);
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(loginSchema, {
@@ -57,6 +59,7 @@ const Login: NextPage = () => {
         setLoading(dispatch, 'login');
         const res = await apiRequest('POST', '/user/login', values);
         storeSetAccessToken(res.data);
+        router.push('/');
       } catch (error) {
         setError(dispatch, error as string);
       } finally {
@@ -79,7 +82,7 @@ const Login: NextPage = () => {
           <Typography gutterBottom variant="h4">
             Login
           </Typography>
-          <Typography color="error">{error}</Typography>
+          <Typography color="error">{typeof error === 'string' && error}</Typography>
         </Box>
 
         <Form onSubmit={handleSubmit}>
