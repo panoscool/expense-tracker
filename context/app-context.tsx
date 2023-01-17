@@ -9,6 +9,7 @@ import { palette } from '../styles/palette';
 import { components } from '../styles/components';
 import { storeGetThemeMode } from '../lib/config/store';
 import { useMediaQuery } from '@mui/material';
+import { User } from '../lib/interfaces/user';
 
 const initState: AppContextType = {
   themeMode: 'light',
@@ -24,7 +25,7 @@ const initState: AppContextType = {
   notifications: [],
   authenticated: false,
   dispatch: () => {},
-  setAuthenticated: () => {},
+  setUser: () => {},
   setThemeMode: () => {},
 };
 
@@ -35,9 +36,11 @@ const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const storedThemeMode = storeGetThemeMode(prefersDarkMode ? 'dark' : 'light');
 
   const [themeMode, setThemeMode] = useState<'light' | 'dark'>(storedThemeMode);
-  const [authenticated, setAuthenticated] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
   const { state, dispatch } = useAppState();
   const notistackRef: any = useRef(null);
+
+  const authenticated = useMemo(() => Boolean(user?._id), [user]);
 
   useEffect(() => setThemeMode(storedThemeMode), [storedThemeMode]);
 
@@ -60,12 +63,14 @@ const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   const contextValues = {
     themeMode,
+    user,
     authenticated,
     ...state,
   };
+
   const contextFunctions = {
     dispatch,
-    setAuthenticated,
+    setUser,
     setThemeMode,
   };
 

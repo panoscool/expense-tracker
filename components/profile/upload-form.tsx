@@ -101,8 +101,9 @@ export const UploadForm: React.FC = () => {
 
   return (
     <div>
-      <Box mb={3}>
+      <Box mb={4}>
         <Typography variant="body2">Update your profile picture</Typography>
+        <Typography variant="caption">Profile picture will be updated across the app on your next login.</Typography>
       </Box>
 
       <Form onSubmit={handleSubmitFile}>

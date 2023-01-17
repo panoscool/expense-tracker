@@ -12,8 +12,6 @@ export interface User {
   image: string | null;
 }
 
-export interface DecodedToken {
+export interface DecodedToken extends User {
   sub: string;
-  name: string;
-  email: string;
 }

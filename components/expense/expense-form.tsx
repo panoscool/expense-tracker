@@ -47,11 +47,15 @@ export const ExpenseForm: React.FC = () => {
   const router = useRouter();
   const { hasAccess } = useHasAccess();
   const [openCalculator, setOpenCalculator] = useState(false);
-  const { user, accounts, account, expense, categories, dispatch } = useAppContext();
+  const { user, accounts, expense, categories, dispatch } = useAppContext();
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(expenseSchema, initialValues);
 
   const accountId: string | undefined = useMemo(() => router.query?.account_id as string, [router.query?.account_id]);
   const expenseId: string | undefined = useMemo(() => router.query?.expense_id as string, [router.query?.expense_id]);
+  const selectedAccount: Account | undefined = useMemo(
+    () => accounts?.find((acc) => acc._id === values.account_id),
+    [values],
+  );
 
   useEffect(() => {
     if (expenseId) {
@@ -65,6 +69,10 @@ export const ExpenseForm: React.FC = () => {
     if (!expenseId) {
       setValues({ ...initialValues, user_id: user?._id, account_id: accountId });
     }
+
+    return () => {
+      setValues({});
+    };
   }, [dispatch, expenseId, expense?._id, setValues]);
 
   const handleChange = (value: string | Date | null, inputName: string) => {
@@ -86,20 +94,25 @@ export const ExpenseForm: React.FC = () => {
   const handleCloseModal = () => {
     delete router.query.expense_id;
 
-    setValues({});
     router.push({
       pathname: router.pathname,
       query: { ...router.query },
     });
   };
 
+  const fetchUpdatedData = async () => {
+    if (accountId === selectedAccount?._id) {
+      await getExpenses(dispatch);
+      await getPayments(dispatch);
+    }
+    handleCloseModal();
+  };
+
   const handleDeleteExpense = async () => {
     if (window.confirm(`Are you sure you want to delete the ${expense?.category} expense?`)) {
       if (expenseId) {
         await deleteExpense(dispatch, expenseId);
-        await getExpenses(dispatch);
-        await getPayments(dispatch);
-        handleCloseModal();
+        await fetchUpdatedData();
       }
     }
   };
@@ -109,10 +122,7 @@ export const ExpenseForm: React.FC = () => {
 
     if (canSubmit()) {
       expenseId ? await updateExpense(dispatch, values) : await createExpense(dispatch, values);
-
-      await getExpenses(dispatch);
-      await getPayments(dispatch);
-      handleCloseModal();
+      await fetchUpdatedData();
     }
   };
 
@@ -208,17 +218,17 @@ export const ExpenseForm: React.FC = () => {
             ),
           }}
         />
-        {account && account.users.length > 1 && (
+        {selectedAccount && selectedAccount.users.length > 1 && (
           <TextField
             select
             name="user_id"
             label="User"
-            disabled={!account}
+            disabled={!selectedAccount}
             value={values.user_id || ''}
             onChange={(event) => handleChange(event.target.value, 'user_id')}
           >
             <MenuItem value="">None</MenuItem>
-            {account?.users.map((user) => (
+            {selectedAccount?.users.map((user) => (
               <MenuItem key={user._id} value={user._id}>
                 {user.name}
               </MenuItem>
