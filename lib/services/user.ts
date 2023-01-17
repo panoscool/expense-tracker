@@ -1,5 +1,4 @@
 import apiRequest from '../config/axios';
-import { Actions } from '../interfaces/common';
 import { UserUpdate } from '../interfaces/user';
 import { enqueueNotification, setError, setLoading } from './helpers';
 
@@ -9,8 +8,7 @@ export const getUser = async (dispatch: React.Dispatch<any>) => {
 
     const response = await apiRequest('GET', '/user');
 
-    const { _id, name, email, image } = response.data;
-    dispatch({ type: Actions.SET_USER, payload: { user: { _id: _id, name, email, image } } });
+    return response.data;
   } catch (error) {
     setError(dispatch, error as string);
     enqueueNotification(dispatch, `Something went wrong: ${error}`, 'error');
