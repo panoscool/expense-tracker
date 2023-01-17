@@ -50,7 +50,7 @@ export const ProfileForm: React.FC = () => {
 
   return (
     <div>
-      <Box mb={3}>
+      <Box mb={4}>
         <Typography variant="body2">Update your name and password</Typography>
         <Typography variant="caption">* Leave password blank to keep current password</Typography>
       </Box>
