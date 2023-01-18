@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import CalculateOutlinedIcon from '@mui/icons-material/CalculateOutlined';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import Box from '@mui/material/Box';
@@ -47,33 +46,29 @@ export const ExpenseForm: React.FC = () => {
   const router = useRouter();
   const { hasAccess } = useHasAccess();
   const [openCalculator, setOpenCalculator] = useState(false);
-  const { user, accounts, expense, categories, dispatch } = useAppContext();
+  const { accounts, categories, dispatch } = useAppContext();
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(expenseSchema, initialValues);
 
   const accountId: string | undefined = useMemo(() => router.query?.account_id as string, [router.query?.account_id]);
   const expenseId: string | undefined = useMemo(() => router.query?.expense_id as string, [router.query?.expense_id]);
   const selectedAccount: Account | undefined = useMemo(
     () => accounts?.find((acc) => acc._id === values.account_id),
-    [values],
+    [accounts, values.account_id],
   );
 
   useEffect(() => {
     if (expenseId) {
-      getExpense(dispatch, expenseId);
-    }
-
-    if (expense?._id) {
-      setValues({ ...expense, user_id: expense.user._id, account_id: accountId });
-    }
-
-    if (!expenseId) {
-      setValues({ ...initialValues, user_id: user?._id, account_id: accountId });
+      getExpense(dispatch, expenseId).then(({ data }: any) => {
+        if (data) {
+          setValues({ ...data, user_id: data.user._id, account_id: data.account });
+        }
+      });
     }
 
     return () => {
-      setValues({});
+      setValues(initialValues);
     };
-  }, [dispatch, expenseId, expense?._id, setValues]);
+  }, [dispatch, expenseId, setValues]);
 
   const handleChange = (value: string | Date | null, inputName: string) => {
     setValues({ ...values, [inputName]: value });
@@ -109,7 +104,7 @@ export const ExpenseForm: React.FC = () => {
   };
 
   const handleDeleteExpense = async () => {
-    if (window.confirm(`Are you sure you want to delete the ${expense?.category} expense?`)) {
+    if (window.confirm(`Are you sure you want to delete the ${values.category} expense?`)) {
       if (expenseId) {
         await deleteExpense(dispatch, expenseId);
         await fetchUpdatedData();
@@ -128,7 +123,7 @@ export const ExpenseForm: React.FC = () => {
 
   const disableSave = useMemo(
     () => (expenseId && !hasAccess(values?.user_id, values?.created_by)) || false,
-    [expenseId, hasAccess, values?.user, values?.created_by],
+    [expenseId, hasAccess, values?.user_id, values?.created_by],
   );
 
   return (

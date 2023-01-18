@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 import useAppContext from '../../hooks/use-app-context';
 import { QueryParams } from '../../lib/interfaces/common';
 import { ExpensesFilters } from '../../lib/interfaces/expense';
-import { getAccount } from '../../lib/services/account';
 import { formatDate } from '../../lib/utils/date';
 import { setParams } from '../../lib/utils/url-params';
 import CategoryIcon from '../shared/category-icon';
@@ -14,7 +13,7 @@ import IconSelectField from '../shared/icon-select-field';
 
 export const ExpenseFilters: React.FC = () => {
   const router = useRouter();
-  const { account, categories, dispatch } = useAppContext();
+  const { account, categories } = useAppContext();
   const [filterBy, setFilterBy] = useState<string>('date');
   const [filters, setFilters] = useState<ExpensesFilters>({
     date: new Date(),
@@ -22,13 +21,7 @@ export const ExpenseFilters: React.FC = () => {
     category: 'all',
   });
 
-  const { date, user_id, account_id, category }: QueryParams = router.query;
-
-  useEffect(() => {
-    if (account_id) {
-      getAccount(dispatch, account_id);
-    }
-  }, [dispatch, account_id]);
+  const { date, user_id, category }: QueryParams = router.query;
 
   useEffect(() => {
     if (date) {
