@@ -1,3 +1,4 @@
+import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
@@ -7,8 +8,8 @@ import { useEffect, useState } from 'react';
 import useAppContext from '../../hooks/use-app-context';
 import useForm from '../../hooks/use-form';
 import { userUpdateSchema } from '../../lib/config/yup-schema';
-import { getAccounts } from '../../lib/services/account';
-import { getUser, updateUser } from '../../lib/services/user';
+import { setError } from '../../lib/services/helpers';
+import { updateUser } from '../../lib/services/user';
 
 const Form = styled('form')`
   display: flex;
@@ -17,7 +18,7 @@ const Form = styled('form')`
 `;
 
 export const ProfileForm: React.FC = () => {
-  const { user, dispatch } = useAppContext();
+  const { user, error, dispatch } = useAppContext();
   const [isSaveDisabled, setIsSaveDisabled] = useState(true);
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(userUpdateSchema, {
     name: '',
@@ -39,12 +40,15 @@ export const ProfileForm: React.FC = () => {
     onBlur(event.target.name);
   };
 
+  const handleClearError = () => {
+    setError(dispatch, null);
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (canSubmit()) {
       await updateUser(dispatch, values);
-      await getUser(dispatch);
     }
   };
 
@@ -54,6 +58,12 @@ export const ProfileForm: React.FC = () => {
         <Typography variant="body2">Update your name and password</Typography>
         <Typography variant="caption">* Leave password blank to keep current password</Typography>
       </Box>
+
+      {error && (
+        <Alert severity="error" onClose={handleClearError} sx={{ my: 2 }}>
+          {error}
+        </Alert>
+      )}
 
       <Form onSubmit={handleSubmit} noValidate autoComplete="off">
         <TextField

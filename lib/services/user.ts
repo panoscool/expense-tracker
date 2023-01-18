@@ -2,6 +2,7 @@ import apiRequest from '../config/axios';
 import { UserUpdate } from '../interfaces/user';
 import { enqueueNotification, setError, setLoading } from './helpers';
 
+// getUser is not used since all info are saved in localStorage and get updated on new login
 export const getUser = async (dispatch: React.Dispatch<any>) => {
   try {
     setError(dispatch, null);
@@ -31,12 +32,12 @@ export const updateUser = async (dispatch: React.Dispatch<any>, data: UserUpdate
   }
 };
 
-export const uploadUserImage = async (dispatch: React.Dispatch<any>, fileString: string) => {
+export const uploadUserImage = async (dispatch: React.Dispatch<any>, base64: string) => {
   try {
     setLoading(dispatch, 'upload_user_image');
     setError(dispatch, null);
 
-    await apiRequest('POST', '/user/media', { file_string: fileString });
+    await apiRequest('POST', '/user/media', { base64 });
     enqueueNotification(dispatch, 'Profile image updated', 'success');
   } catch (error) {
     setError(dispatch, error as string);

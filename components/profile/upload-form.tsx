@@ -10,7 +10,7 @@ import Image from 'next/image';
 import { useState } from 'react';
 import useAppContext from '../../hooks/use-app-context';
 import { setError } from '../../lib/services/helpers';
-import { deleteUserImage, getUser, uploadUserImage } from '../../lib/services/user';
+import { deleteUserImage, uploadUserImage } from '../../lib/services/user';
 
 const Input = styled('input')(({ theme }) => ({
   width: '100%',
@@ -80,22 +80,14 @@ export const UploadForm: React.FC = () => {
 
   const handleDeleteImage = async () => {
     await deleteUserImage(dispatch);
-    await getUser(dispatch);
   };
 
-  const uploadImage = async (base64EncodedImage: string) => {
-    await uploadUserImage(dispatch, base64EncodedImage);
-    await getUser(dispatch);
-
-    setFilePath('');
-    setPreviewSource('');
-  };
-
-  const handleSubmitFile = (e: React.FormEvent) => {
+  const handleSubmitFile = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (previewSource) {
-      uploadImage(previewSource);
+    if (previewSource /* previewSource is base64EncodedImage */) {
+      await uploadUserImage(dispatch, previewSource);
+      handleClearFile();
     }
   };
 

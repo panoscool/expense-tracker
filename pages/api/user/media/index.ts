@@ -16,7 +16,7 @@ const uploadImage = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     await dbConnect();
 
-    const { file_string } = req.body;
+    const { base64 } = req.body;
 
     const userId = (await getDecodedUserId(req, res)) as string;
     const user = await User.findById(userId);
@@ -31,7 +31,7 @@ const uploadImage = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(401).send({ error: 'Unauthorized access' });
     }
 
-    const uploaded = await cloudinary.uploader.upload(file_string, {
+    const uploaded = await cloudinary.uploader.upload(base64, {
       resource_type: 'image',
       format: 'webp',
       folder: 'user_images',
