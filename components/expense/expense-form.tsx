@@ -46,7 +46,7 @@ export const ExpenseForm: React.FC = () => {
   const router = useRouter();
   const { hasAccess } = useHasAccess();
   const [openCalculator, setOpenCalculator] = useState(false);
-  const { accounts, categories, dispatch } = useAppContext();
+  const { account, accounts, categories, dispatch } = useAppContext();
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(expenseSchema, initialValues);
 
   const accountId: string | undefined = useMemo(() => router.query?.account_id as string, [router.query?.account_id]);
@@ -63,12 +63,14 @@ export const ExpenseForm: React.FC = () => {
           setValues({ ...data, user_id: data.user._id, account_id: data.account });
         }
       });
+    } else {
+      setValues({ ...initialValues, user_id: account?.user });
     }
 
     return () => {
       setValues(initialValues);
     };
-  }, [dispatch, expenseId, setValues]);
+  }, [account?.user, dispatch, expenseId, setValues]);
 
   const handleChange = (value: string | Date | null, inputName: string) => {
     setValues({ ...values, [inputName]: value });
