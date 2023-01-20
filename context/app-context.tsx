@@ -79,7 +79,7 @@ const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       <ThemeProvider theme={theme}>
         <SnackbarProvider
           ref={notistackRef}
-          maxSnack={2}
+          maxSnack={1}
           preventDuplicate
           autoHideDuration={2500}
           disableWindowBlurListener

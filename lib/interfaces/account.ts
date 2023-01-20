@@ -11,4 +11,9 @@ export interface Account {
   description: string;
   user: string;
   users: User[];
+  is_default: boolean;
+}
+
+export interface AccountUpdate extends Partial<Account> {
+  email?: string;
 }

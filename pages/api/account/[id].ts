@@ -50,12 +50,13 @@ const updateAccount = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(400).send({ error: errors });
     }
 
-    const { name, currency, description, email } = req.body;
+    const { name, currency, description, email, is_default } = req.body;
 
     await account.updateOne({
       name,
       currency,
       description,
+      is_default,
     });
 
     const user = await User.findOne({ email });
