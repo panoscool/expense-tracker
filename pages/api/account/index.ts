@@ -19,7 +19,7 @@ const getAccounts = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-const addAccount = async (req: NextApiRequest, res: NextApiResponse) => {
+const createAccount = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const errors = await validate(accountSchema, req.body);
 
@@ -68,7 +68,7 @@ export default authenticated(async function handler(req: NextApiRequest, res: Ne
     case 'GET':
       return await getAccounts(req, res);
     case 'POST':
-      return await addAccount(req, res);
+      return await createAccount(req, res);
     default:
       return res.status(405).send('Method not allowed');
   }

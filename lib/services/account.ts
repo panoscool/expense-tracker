@@ -8,7 +8,7 @@ interface AccountUpdate extends Partial<Account> {
   email: string;
 }
 
-const shouldForwardID = (res: any) => {
+const shouldSetQueryParams = (res: any) => {
   const { pathname, query } = Router;
 
   return res.data.length > 0 && pathname === '/' && !query?.account_id;
@@ -21,7 +21,7 @@ export const getAccounts = async (dispatch: React.Dispatch<any>) => {
     const response = await apiRequest('GET', '/account');
     dispatch({ type: Actions.SET_ACCOUNTS, payload: { accounts: response.data } });
 
-    if (shouldForwardID(response)) {
+    if (shouldSetQueryParams(response)) {
       Router.push({ pathname: Router.pathname, query: { account_id: response.data[0]._id } });
     }
     return response;
