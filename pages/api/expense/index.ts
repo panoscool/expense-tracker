@@ -46,7 +46,7 @@ const getExpenses = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-const createExpense = async (req: NextApiRequest, res: NextApiResponse) => {
+const addExpense = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const errors = await validate(expenseSchema, req.body);
 
@@ -87,7 +87,7 @@ export default authenticated(async function handler(req: NextApiRequest, res: Ne
     case 'GET':
       return await getExpenses(req, res);
     case 'POST':
-      return await createExpense(req, res);
+      return await addExpense(req, res);
     default:
       return res.status(405).send('Method not allowed');
   }

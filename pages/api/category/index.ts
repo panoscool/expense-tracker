@@ -20,7 +20,7 @@ const getCategories = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-const createCategory = async (req: NextApiRequest, res: NextApiResponse) => {
+const addCategory = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const errors = await validate(categorySchema, req.body);
 
@@ -50,7 +50,7 @@ export default authenticated(async function handler(req: NextApiRequest, res: Ne
     case 'GET':
       return await getCategories(req, res);
     case 'POST':
-      return await createCategory(req, res);
+      return await addCategory(req, res);
     default:
       return res.status(405).send('Method not allowed');
   }

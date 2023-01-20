@@ -1,19 +1,17 @@
 import apiRequest from '../config/axios';
-import { Account, AccountCreate, AccountUpdate } from '../interfaces/account';
+import { Account, AccountCreate } from '../interfaces/account';
 import { Actions } from '../interfaces/common';
 import { enqueueNotification, setError, setLoading } from './helpers';
 import Router from 'next/router';
 
-const shouldSetUrlParams = (data: Account[]) => {
+interface AccountUpdate extends Partial<Account> {
+  email: string;
+}
+
+const shouldForwardID = (res: any) => {
   const { pathname, query } = Router;
 
-  return data.length > 0 && pathname === '/' && !query?.account_id;
-};
-
-const urlParams = (data: Account[]) => {
-  const defaultAccount = data.find((acc) => acc?.is_default);
-
-  return defaultAccount ? defaultAccount._id : data[0]._id;
+  return res.data.length > 0 && pathname === '/' && !query?.account_id;
 };
 
 export const getAccounts = async (dispatch: React.Dispatch<any>) => {
@@ -23,8 +21,8 @@ export const getAccounts = async (dispatch: React.Dispatch<any>) => {
     const response = await apiRequest('GET', '/account');
     dispatch({ type: Actions.SET_ACCOUNTS, payload: { accounts: response.data } });
 
-    if (shouldSetUrlParams(response.data)) {
-      Router.push({ pathname: Router.pathname, query: { account_id: urlParams(response.data) } });
+    if (shouldForwardID(response)) {
+      Router.push({ pathname: Router.pathname, query: { account_id: response.data[0]._id } });
     }
     return response;
   } catch (error) {

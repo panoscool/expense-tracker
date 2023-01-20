@@ -1,4 +1,4 @@
-import { DeleteRounded, EditRounded, MoreVertRounded, VisibilityOutlined, CheckRounded } from '@mui/icons-material';
+import { DeleteRounded, EditRounded, MoreVertRounded, VisibilityOutlined } from '@mui/icons-material';
 import { IconButton, ListItemIcon, ListItemSecondaryAction, ListItemText, Menu, MenuItem } from '@mui/material';
 import { Theme } from '@mui/material/styles';
 import { bindMenu, bindTrigger, usePopupState } from 'material-ui-popup-state/hooks';
@@ -6,7 +6,7 @@ import useAppContext from '../../hooks/use-app-context';
 import useHasAccess from '../../hooks/use-has-access';
 import { Account } from '../../lib/interfaces/account';
 import { UseCaseType } from '../../lib/interfaces/common';
-import { deleteAccount, getAccounts, updateAccount } from '../../lib/services/account';
+import { deleteAccount, getAccounts } from '../../lib/services/account';
 
 type Props = {
   account: Account;
@@ -15,7 +15,7 @@ type Props = {
 
 export function AccountActions({ account, onOpen }: Props) {
   const { isCreator } = useHasAccess();
-  const { accounts, dispatch } = useAppContext();
+  const { dispatch } = useAppContext();
   const popupState = usePopupState({ variant: 'popover', popupId: 'userMenu' });
 
   const handleDeleteAccount = async (e: React.MouseEvent) => {
@@ -26,19 +26,6 @@ export function AccountActions({ account, onOpen }: Props) {
       await getAccounts(dispatch);
       popupState.close();
     }
-  };
-
-  const handleSetDefault = async () => {
-    if (accounts && accounts.length > 0)
-      for (const acc of accounts) {
-        if (acc._id === account._id) {
-          await updateAccount(dispatch, { ...acc, is_default: true });
-        } else {
-          await updateAccount(dispatch, { ...acc, is_default: false });
-        }
-      }
-    await getAccounts(dispatch);
-    popupState.close();
   };
 
   function deleteColor() {
@@ -64,13 +51,6 @@ export function AccountActions({ account, onOpen }: Props) {
             <VisibilityOutlined fontSize="small" />
           </ListItemIcon>
           <ListItemText primary="View" />
-        </MenuItem>
-
-        <MenuItem onClick={handleSetDefault}>
-          <ListItemIcon>
-            <CheckRounded fontSize="small" />
-          </ListItemIcon>
-          <ListItemText primary="Default" />
         </MenuItem>
 
         <MenuItem onClick={handleOpen(UseCaseType.account_edit)} disabled={!isCreator(account.user)}>
