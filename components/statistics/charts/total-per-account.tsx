@@ -1,29 +1,30 @@
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import CardHeader from '@mui/material/CardHeader';
 import { format, parseISO } from 'date-fns';
-import React from 'react';
 import Chart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 import { formatCurrency } from '../../../lib/utils/format-number';
 import { ThemeMode } from '../../../lib/interfaces/common';
+import { ChartHeader } from './chart-header';
 
 type Props = {
   data: any;
+  value: string;
   currency?: string;
   themeMode: ThemeMode;
+  setValue: React.Dispatch<React.SetStateAction<string>>;
 };
 
-const TotalPerAccount: React.FC<Props> = ({ data, currency, themeMode }) => {
+const TotalPerAccount: React.FC<Props> = ({ data, currency, themeMode, value, setValue }) => {
   const series = [
     {
       name: 'Total',
-      data: data?.map((item: any) => item.total),
+      data: [], // data?.map((item: any) => item.total),
     },
   ];
 
   const options: ApexOptions = {
-    labels: data?.map((item: any) => format(parseISO(item._id), 'MMMM yyyy')),
+    labels: [], // data?.map((item: any) => format(parseISO(item._id), 'MMMM yyyy')),
     theme: {
       mode: themeMode,
     },
@@ -77,7 +78,7 @@ const TotalPerAccount: React.FC<Props> = ({ data, currency, themeMode }) => {
 
   return (
     <Card variant="outlined">
-      <CardHeader title="Total per month" />
+      <ChartHeader title="Expenses per period" value={value} setValue={setValue} />
       <CardContent>
         <Chart type="area" height="240px" series={series} options={options} />
       </CardContent>

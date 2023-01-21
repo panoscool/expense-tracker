@@ -5,10 +5,10 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { AccountTotal } from '../components/statistics/account-total';
 import { CategoryTotal } from '../components/statistics/category-total';
-import { StatisticsFilters } from '../components/statistics/statistics-filters';
+import { StatisticsFilters } from '../components/statistics/account-select';
 import useAuth from '../hooks/use-auth';
 import Layout from '../layout';
-import { Filters } from '../lib/interfaces/statistics';
+import { UserTotal } from '../components/statistics/user-total';
 
 const Statistics: NextPage = () => {
   const router = useRouter();
@@ -20,9 +20,7 @@ const Statistics: NextPage = () => {
 
   if (!authenticated) return null;
 
-  const { date_from, date_to, account_id }: Filters = router.query;
-
-  const filters = { account_id, date_from, date_to };
+  const accountId = router.query.account_id as string;
 
   return (
     <div>
@@ -35,8 +33,9 @@ const Statistics: NextPage = () => {
         <Container maxWidth="xl" sx={{ pt: 2 }}>
           <StatisticsFilters />
           <Box display="flex" flexDirection="column" gap={2}>
-            <AccountTotal filters={filters} />
-            <CategoryTotal filters={filters} />
+            <AccountTotal accountId={accountId} />
+            <CategoryTotal accountId={accountId} />
+            <UserTotal accountId={accountId} />
           </Box>
         </Container>
       </Layout>

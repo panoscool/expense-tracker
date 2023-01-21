@@ -39,6 +39,7 @@ export function StatisticsFilters() {
       label="Account"
       value={accountId}
       onChange={(event) => handleChange(event.target.value, 'account_id')}
+      sx={{ my: 2 }}
     >
       {accounts?.map((account: Account) => (
         <MenuItem key={account._id} value={account._id}>

@@ -5,24 +5,20 @@ import apiRequest from '../../lib/config/axios';
 
 const TotalPerUser = dynamic(() => import('./charts/total-per-user'), { ssr: false });
 
-export function UserTotal() {
+export const UserTotal: React.FC<{ accountId?: string }> = ({ accountId }) => {
   const { themeMode } = useAppContext();
+  const [period, setPeriod] = useState('month');
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    apiRequest('POST', '/statistics', {
-      accountId: '71f79cae-7db5-4971-8957-ec7f8018c7d1',
-      dateFrom: '2022-01-01',
-      dateTo: '2022-12-31',
-      groupBy: 'user',
-    })
+    apiRequest('GET', `/statistics/user?account_id=${accountId}&period=${period}`)
       .then((resData) => {
         setData(resData as any);
       })
       .catch((error) => {
         console.error(error);
       });
-  }, []);
+  }, [accountId, period]);
 
-  return <TotalPerUser data={data} themeMode={themeMode} />;
-}
+  return <TotalPerUser data={data} themeMode={themeMode} value={period} setValue={setPeriod} />;
+};

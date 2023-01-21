@@ -62,3 +62,10 @@ export enum UseCaseType {
   account_view = 'account_view',
   category_create = 'category_create',
 }
+
+export enum Period {
+  quarter = 'quarter',
+  month = 'month',
+  week = 'week',
+  day = 'day',
+}
