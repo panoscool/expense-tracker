@@ -6,13 +6,15 @@ import React from 'react';
 import Chart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 import { formatCurrency } from '../../../lib/utils/format-number';
+import { ThemeMode } from '../../../lib/interfaces/common';
 
 type Props = {
   data: any;
   currency?: string;
+  themeMode: ThemeMode;
 };
 
-const TotalPerAccount: React.FC<Props> = ({ data, currency }) => {
+const TotalPerAccount: React.FC<Props> = ({ data, currency, themeMode }) => {
   const series = [
     {
       name: 'Total',
@@ -22,6 +24,9 @@ const TotalPerAccount: React.FC<Props> = ({ data, currency }) => {
 
   const options: ApexOptions = {
     labels: data?.map((item: any) => format(parseISO(item._id), 'MMMM yyyy')),
+    theme: {
+      mode: themeMode,
+    },
     chart: {
       toolbar: {
         show: true,

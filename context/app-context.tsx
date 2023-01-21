@@ -4,7 +4,7 @@ import IconButton from '@mui/material/IconButton';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import { SnackbarKey, SnackbarProvider } from 'notistack';
 import useAppState from '../hooks/use-app-state';
-import { AppContextType } from '../lib/interfaces/common';
+import { AppContextType, ThemeMode } from '../lib/interfaces/common';
 import { palette } from '../styles/palette';
 import { components } from '../styles/components';
 import { storeGetThemeMode } from '../lib/config/store';
@@ -35,7 +35,7 @@ const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const storedThemeMode = storeGetThemeMode(prefersDarkMode ? 'dark' : 'light');
 
-  const [themeMode, setThemeMode] = useState<'light' | 'dark'>(storedThemeMode);
+  const [themeMode, setThemeMode] = useState<ThemeMode>(storedThemeMode);
   const [user, setUser] = useState<User | null>(null);
   const { state, dispatch } = useAppState();
   const notistackRef: any = useRef(null);

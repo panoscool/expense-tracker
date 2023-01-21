@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, Container } from '@mui/material';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -7,6 +7,7 @@ import { AccountTotal } from '../components/statistics/account-total';
 import { CategoryTotal } from '../components/statistics/category-total';
 import { StatisticsFilters } from '../components/statistics/statistics-filters';
 import useAuth from '../hooks/use-auth';
+import Layout from '../layout';
 import { Filters } from '../lib/interfaces/statistics';
 
 const Statistics: NextPage = () => {
@@ -30,13 +31,15 @@ const Statistics: NextPage = () => {
         <meta name="description" content="Keep track of expenses share with others and split" />
       </Head>
 
-      <main>
-        <StatisticsFilters />
-        <Box display="flex" flexDirection="column" gap={2}>
-          <AccountTotal filters={filters} />
-          <CategoryTotal filters={filters} />
-        </Box>
-      </main>
+      <Layout>
+        <Container maxWidth="xl" sx={{ pt: 2 }}>
+          <StatisticsFilters />
+          <Box display="flex" flexDirection="column" gap={2}>
+            <AccountTotal filters={filters} />
+            <CategoryTotal filters={filters} />
+          </Box>
+        </Container>
+      </Layout>
     </div>
   );
 };

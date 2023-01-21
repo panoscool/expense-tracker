@@ -1,6 +1,7 @@
 import store from 'store';
 import jwt_decode from 'jwt-decode';
 import { DecodedToken } from '../interfaces/user';
+import { ThemeMode } from '../interfaces/common';
 
 const AUTH_KEY = 'access_token';
 const DRAWER_STATE = 'drawer_state';
@@ -25,5 +26,5 @@ export const storeGetDecodedToken = (): DecodedToken | null => {
 export const storeSetDrawerState = (state: boolean) => store.set(DRAWER_STATE, state);
 export const storeGetDrawerState = () => store.get(DRAWER_STATE, false);
 
-export const storeSetThemeMode = (mode: 'light' | 'dark') => store.set(THEME_MODE, mode);
-export const storeGetThemeMode = (mode: 'light' | 'dark') => store.get(THEME_MODE, mode);
+export const storeSetThemeMode = (mode: ThemeMode) => store.set(THEME_MODE, mode);
+export const storeGetThemeMode = (mode: ThemeMode) => store.get(THEME_MODE, mode);

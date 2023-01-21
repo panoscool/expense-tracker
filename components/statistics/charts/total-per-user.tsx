@@ -6,13 +6,15 @@ import Chart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 import { formatCurrency } from '../../../lib/utils/format-number';
 import { stringToColor } from '../../../lib/utils/string-to-color';
+import { ThemeMode } from '../../../lib/interfaces/common';
 
 type Props = {
   data: any;
   currency?: string;
+  themeMode: ThemeMode;
 };
 
-const TotalPerUser: React.FC<Props> = ({ data, currency }) => {
+const TotalPerUser: React.FC<Props> = ({ data, currency, themeMode }) => {
   const series = [
     {
       name: 'Total',
@@ -23,6 +25,9 @@ const TotalPerUser: React.FC<Props> = ({ data, currency }) => {
   const options: ApexOptions = {
     labels: data?.map((item: any) => item._id),
     colors: data?.map((item: any) => stringToColor(item._id)),
+    theme: {
+      mode: themeMode,
+    },
     chart: {
       toolbar: {
         show: true,

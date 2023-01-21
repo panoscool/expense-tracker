@@ -26,6 +26,8 @@ export interface NotificationType {
   };
 }
 
+export type ThemeMode = 'light' | 'dark';
+
 export interface AppState {
   accounts: Account[] | null;
   account: Account | null;
@@ -39,7 +41,7 @@ export interface AppState {
 }
 
 export interface AppContextType extends AppState {
-  themeMode: 'light' | 'dark';
+  themeMode: ThemeMode;
   user: User | null;
   authenticated: boolean;
   setUser: React.Dispatch<React.SetStateAction<User | null>>;

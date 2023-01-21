@@ -1,9 +1,15 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import dbConnect from '../../../lib/config/db-connect';
 import User from '../../../lib/models/user';
-import Expense from '../../../lib/models/expense';
 import { authenticated, getDecodedUserId } from '../helpers';
-import { parseISO } from 'date-fns';
+import {
+  getExpensesPerDay,
+  getExpensesPerMonth,
+  getExpensesPerMonthAndCategory,
+  getExpensesPerMonthAndUser,
+  getExpensesPerQuarter,
+  getExpensesPerWeek,
+} from './totals';
 
 const getStatistics = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
@@ -14,31 +20,32 @@ const getStatistics = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(404).send({ error: 'User not found' });
     }
 
-    const { accountId, dateFrom, dateTo, groupBy } = req.body;
+    const { accountId } = req.body; // change it to req.query.id
 
-    const ID = {
-      date: { $dateToString: { format: '%Y-%m', date: '$created_at' } },
-      category: '$category',
-      user: '$user',
-    };
+    const category = await getExpensesPerMonthAndCategory(accountId);
+    const userE = await getExpensesPerMonthAndUser(accountId);
 
-    const expenses = await Expense.aggregate([
-      {
-        $match: {
-          user: user._id,
-          account: accountId,
-          created_at: { $gte: parseISO(dateFrom), $lte: parseISO(dateTo) },
-        },
-      },
-      {
-        $group: {
-          _id: (ID as any)[groupBy],
-          total: { $sum: '$amount' },
-        },
-      },
-    ]);
+    const day = await getExpensesPerDay(accountId);
+    const week = await getExpensesPerWeek(accountId);
+    const month = await getExpensesPerMonth(accountId);
+    const quarter = await getExpensesPerQuarter(accountId);
 
-    res.status(200).json(expenses);
+    console.log(
+      'day ->',
+      day,
+      'week ->',
+      week,
+      'month ->',
+      month,
+      'quarter ->',
+      quarter,
+      'category ->',
+      category,
+      'user ->',
+      userE,
+    );
+
+    res.status(200).json([]);
   } catch (err) {
     console.error(err);
     res.status(500).send({ error: 'Internal server error' });

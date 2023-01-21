@@ -1,10 +1,12 @@
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
+import useAppContext from '../../hooks/use-app-context';
 import apiRequest from '../../lib/config/axios';
 
 const TotalPerUser = dynamic(() => import('./charts/total-per-user'), { ssr: false });
 
 export function UserTotal() {
+  const { themeMode } = useAppContext();
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -22,5 +24,5 @@ export function UserTotal() {
       });
   }, []);
 
-  return <TotalPerUser data={data} />;
+  return <TotalPerUser data={data} themeMode={themeMode} />;
 }

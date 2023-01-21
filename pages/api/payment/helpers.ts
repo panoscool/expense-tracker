@@ -10,7 +10,7 @@ interface Params {
   date: string;
 }
 
-export const updatePayment = async (params: Params) => {
+export async function updatePayment(params: Params) {
   try {
     const { accountId, userId, date } = params;
 
@@ -59,4 +59,4 @@ export const updatePayment = async (params: Params) => {
   } catch (error) {
     console.error(error);
   }
-};
+}

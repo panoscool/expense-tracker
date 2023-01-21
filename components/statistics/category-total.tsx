@@ -1,11 +1,13 @@
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
+import useAppContext from '../../hooks/use-app-context';
 import apiRequest from '../../lib/config/axios';
 import { Filters } from '../../lib/interfaces/statistics';
 
 const TotalPerCategory = dynamic(() => import('./charts/total-per-category'), { ssr: false });
 
 export const CategoryTotal: React.FC<{ filters: Filters }> = ({ filters }) => {
+  const { themeMode } = useAppContext();
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -23,5 +25,5 @@ export const CategoryTotal: React.FC<{ filters: Filters }> = ({ filters }) => {
       });
   }, [filters]);
 
-  return <TotalPerCategory data={data} />;
+  return <TotalPerCategory data={data} themeMode={themeMode} />;
 };

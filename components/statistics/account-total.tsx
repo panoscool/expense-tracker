@@ -1,11 +1,13 @@
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
+import useAppContext from '../../hooks/use-app-context';
 import apiRequest from '../../lib/config/axios';
 import { Filters } from '../../lib/interfaces/statistics';
 
 const TotalPerAccount = dynamic(() => import('./charts/total-per-account'), { ssr: false });
 
 export const AccountTotal: React.FC<{ filters: Filters }> = ({ filters }) => {
+  const { themeMode } = useAppContext();
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -23,5 +25,5 @@ export const AccountTotal: React.FC<{ filters: Filters }> = ({ filters }) => {
       });
   }, [filters]);
 
-  return <TotalPerAccount data={data} />;
+  return <TotalPerAccount data={data} themeMode={themeMode} />;
 };
