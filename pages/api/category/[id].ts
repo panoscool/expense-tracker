@@ -1,17 +1,19 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import CategoryModel from '../../../lib/models/category';
 import ExpenseModel from '../../../lib/models/expense';
 import dbConnect from '../../../lib/config/db-connect';
 import { trimToLowerCaseString } from '../../../lib/utils/format-text';
 import validate from '../../../lib/utils/validate';
 import { categorySchema } from '../../../lib/config/yup-schema';
 import { authenticated, getDecodedUserId, hasAccess } from '../helpers';
-import AccountModel from '../../../lib/models/account';
+import * as Repository from './repository';
+import * as AccountRepository from '../account/repository';
 
 const getCategory = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
+    const { id } = req.query;
+
     const userId = (await getDecodedUserId(req, res)) as string;
-    const category = await CategoryModel.findById(req.query.id);
+    const category = await Repository.getCategoryById(id as string);
 
     if (!category) {
       return res.status(200).send({ error: 'Category not found' });
@@ -32,8 +34,10 @@ const getCategory = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const updateCategory = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
+    const { id } = req.query;
+
     const userId = (await getDecodedUserId(req, res)) as string;
-    const category = await CategoryModel.findById(req.query.id);
+    const category = await Repository.getCategoryById(id as string);
 
     if (!category) {
       return res.status(200).send({ error: 'Category not found' });
@@ -57,12 +61,9 @@ const updateCategory = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(200).send({ error: 'Category already exists' });
     }
 
-    // update the labels array with the new label if it is not already in the array
-    await category.updateOne({
-      $push: { labels: label },
-    });
+    await Repository.addCategoryById(category._id, label);
 
-    const updatedCategories = await CategoryModel.findById(req.query.id);
+    const updatedCategories = await Repository.getCategoryById(id as string);
 
     res.status(200).json({ data: updatedCategories });
   } catch (err) {
@@ -73,9 +74,11 @@ const updateCategory = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const deleteCategory = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
+    const { id } = req.query;
+
     const userId = (await getDecodedUserId(req, res)) as string;
-    const account = await AccountModel.findOne({ user: userId });
-    const category = await CategoryModel.findById(req.query.id);
+    const account = await AccountRepository.getAccountsPopulatedByUserId(userId);
+    const category = await Repository.getCategoryById(id as string);
 
     if (!category) {
       return res.status(200).send({ error: 'Category not found' });
@@ -92,10 +95,7 @@ const deleteCategory = async (req: NextApiRequest, res: NextApiResponse) => {
     // find all expenses with this category and update them to other
     await ExpenseModel.updateMany({ account: account, category: label }, { category: 'other' });
 
-    // delete the label inside the category labels array
-    await category.updateOne({
-      $pull: { labels: label },
-    });
+    await Repository.removeCategoryById(category._id, label);
 
     res.status(200).json({ message: 'Ok' });
   } catch (err) {

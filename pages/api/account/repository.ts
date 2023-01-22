@@ -23,21 +23,11 @@ export async function updateAccountById(id: string, account: Partial<AccountCrea
 }
 
 export async function addAccountUserById(id: string, userId: string) {
-  // if user does not exist in the account users array add it
-  return await AccountModel.updateOne(
-    { _id: id },
-    { $expr: { $eq: [{ $indexOfArray: ['$users', userId] }, -1] } },
-    { $push: { users: userId } },
-  );
+  return await AccountModel.updateOne({ _id: id }, { $push: { users: userId } });
 }
 
 export async function removeAccountUserById(id: string, userId: string) {
-  // if user exists in the account users array remove it
-  return await AccountModel.updateOne(
-    { _id: id },
-    { $expr: { $ne: [{ $indexOfArray: ['$users', userId] }, -1] } },
-    { $pull: { users: userId } },
-  );
+  return await AccountModel.updateOne({ _id: id }, { $pull: { users: userId } });
 }
 
 export async function deleteAccountById(id: string) {

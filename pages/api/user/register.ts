@@ -1,13 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { v4 as uuidv4 } from 'uuid';
 import dbConnect from '../../../lib/config/db-connect';
 import { defaultAccount, defaultCategories } from '../../../lib/config/default-values';
 import { registerSchema } from '../../../lib/config/yup-schema';
-import CategoryModel from '../../../lib/models/category';
 import validate from '../../../lib/utils/validate';
+import * as AccountRepository from '../account/repository';
+import * as CategoryRepository from '../category/repository';
 import { getHashedPassword, setAccessToken } from '../helpers';
 import * as Repository from './repository';
-import * as AccountRepository from '../account/repository';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
@@ -41,8 +40,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     await AccountRepository.createAccount(defaultAccount(user));
 
-    await CategoryModel.create({
-      _id: uuidv4(),
+    await CategoryRepository.createCategory({
       user: user._id,
       labels: defaultCategories,
     });

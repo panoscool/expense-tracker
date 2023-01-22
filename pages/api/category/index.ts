@@ -1,17 +1,16 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { v4 as uuidv4 } from 'uuid';
-import CategoryModel from '../../../lib/models/category';
 import dbConnect from '../../../lib/config/db-connect';
 import { trimToLowerCaseString } from '../../../lib/utils/format-text';
 import { categorySchema } from '../../../lib/config/yup-schema';
 import { authenticated, getDecodedUserId } from '../helpers';
 import validate from '../../../lib/utils/validate';
+import * as Repository from './repository';
 
 const getCategories = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const userId = await getDecodedUserId(req, res);
 
-    const categories = await CategoryModel.findOne({ user: userId });
+    const categories = await Repository.getCategoryByUserId(userId as string);
 
     res.status(200).json({ data: categories });
   } catch (err) {
@@ -30,9 +29,8 @@ const createCategory = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const userId = await getDecodedUserId(req, res);
 
-    const category = await CategoryModel.create({
-      _id: uuidv4(),
-      user: userId,
+    const category = await Repository.createCategory({
+      user: userId as string,
       labels: [trimToLowerCaseString(req.body.label)],
     });
 
