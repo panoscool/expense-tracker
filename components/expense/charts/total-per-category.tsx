@@ -10,9 +10,10 @@ import { Expense } from '../../../lib/interfaces/expense';
 import { capitalizeFirstLetter } from '../../../lib/utils/format-text';
 import { formatCurrency } from '../../../lib/utils/format-number';
 import { stringToColor } from '../../../lib/utils/string-to-color';
+import { ThemeMode } from '../../../lib/interfaces/common';
 
 type Props = {
-  themeMode: 'light' | 'dark';
+  themeMode: ThemeMode;
   expenses: Expense[];
   currency?: string;
 };

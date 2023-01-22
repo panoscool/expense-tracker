@@ -27,7 +27,7 @@ export default function CategoriesList() {
   };
 
   return (
-    <List>
+    <List disablePadding>
       <ListItemButton onClick={handleClick}>
         <ListItemIcon>
           <CategoryRounded />

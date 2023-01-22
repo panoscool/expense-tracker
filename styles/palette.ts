@@ -1,6 +1,7 @@
 import { purple, grey } from '@mui/material/colors';
+import { ThemeMode } from '../lib/interfaces/common';
 
-export const palette = (themeMode: 'light' | 'dark' = 'light') => ({
+export const palette = (themeMode: ThemeMode = 'light') => ({
   mode: themeMode,
   common: {
     black: '#000',

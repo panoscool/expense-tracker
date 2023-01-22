@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react';
 import useAppContext from '../../hooks/use-app-context';
 import apiRequest from '../../lib/config/axios';
 
-const TotalPerAccount = dynamic(() => import('./charts/total-per-account'), { ssr: false });
+const TransactionsPerPeriod = dynamic(() => import('./charts/transactions-per-period'), { ssr: false });
 
-export const AccountTotal: React.FC<{ accountId?: string }> = ({ accountId }) => {
+export const TransactionsTotal: React.FC<{ accountId?: string }> = ({ accountId }) => {
   const { themeMode } = useAppContext();
   const [period, setPeriod] = useState('month');
   const [data, setData] = useState([]);
@@ -22,5 +22,5 @@ export const AccountTotal: React.FC<{ accountId?: string }> = ({ accountId }) =>
     }
   }, [accountId, period]);
 
-  return <TotalPerAccount data={data} themeMode={themeMode} value={period} setValue={setPeriod} />;
+  return <TransactionsPerPeriod data={data} themeMode={themeMode} value={period} setValue={setPeriod} />;
 };

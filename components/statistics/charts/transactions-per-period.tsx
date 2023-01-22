@@ -2,7 +2,6 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Chart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
-import { formatCurrency } from '../../../lib/utils/format-number';
 import { Period, ThemeMode } from '../../../lib/interfaces/common';
 import { ChartHeader } from './chart-header';
 import { formatDateString } from '../../../lib/utils/date';
@@ -11,7 +10,6 @@ import { DayMonth, Quarter, AccountStatistic, Week } from '../../../lib/interfac
 type Props = {
   data: AccountStatistic[];
   value: string;
-  currency?: string;
   themeMode: ThemeMode;
   setValue: React.Dispatch<React.SetStateAction<string>>;
 };
@@ -30,13 +28,13 @@ function getLabels(period: string, data: any) {
 }
 
 function getData(data: AccountStatistic[]) {
-  return data.map((expense: AccountStatistic) => expense.total_amount);
+  return data.map((expense: AccountStatistic) => expense.count);
 }
 
-const TotalPerAccount: React.FC<Props> = ({ data, currency, themeMode, value, setValue }) => {
+const TotalPerAccount: React.FC<Props> = ({ data, themeMode, value, setValue }) => {
   const series = [
     {
-      name: 'Amount',
+      name: 'Transactions',
       data: getData(data),
     },
   ];
@@ -73,9 +71,6 @@ const TotalPerAccount: React.FC<Props> = ({ data, currency, themeMode, value, se
     yaxis: {
       labels: {
         show: true,
-        formatter: function (val: number) {
-          return formatCurrency(val, currency);
-        },
       },
       axisBorder: {
         show: true,
@@ -102,7 +97,7 @@ const TotalPerAccount: React.FC<Props> = ({ data, currency, themeMode, value, se
 
   return (
     <Card variant="outlined">
-      <ChartHeader title="Expenses per period" value={value} setValue={setValue} />
+      <ChartHeader title="Transactions per period" value={value} setValue={setValue} />
       <CardContent>
         <Chart type="area" height="240px" series={series} options={options} />
       </CardContent>

@@ -12,11 +12,11 @@ export async function checkHashedPassword(text: string, hash: string) {
   return compare(text, hash);
 }
 
-export const hasAccess = async (userId?: string, creatorId?: string, entityUserId?: string) => {
+export async function hasAccess(userId?: string, creatorId?: string, entityUserId?: string) {
   return userId === creatorId?.toString() || userId === entityUserId?.toString();
-};
+}
 
-export const setAccessToken = async (user: IUser) => {
+export async function setAccessToken(user: IUser) {
   const secret = process.env.JWT_SECRET || '';
   const expires = 1000 * 60 * 60 * 24 * 7;
   const claims = { sub: user._id, name: user.name, email: user.email, image: user.image };
@@ -26,7 +26,7 @@ export const setAccessToken = async (user: IUser) => {
   });
 
   return accessToken;
-};
+}
 
 export const getDecodedUserId = async (req: NextApiRequest, res: NextApiResponse) => {
   try {

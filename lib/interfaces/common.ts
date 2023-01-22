@@ -26,6 +26,8 @@ export interface NotificationType {
   };
 }
 
+export type ThemeMode = 'light' | 'dark';
+
 export interface AppState {
   accounts: Account[] | null;
   account: Account | null;
@@ -39,7 +41,7 @@ export interface AppState {
 }
 
 export interface AppContextType extends AppState {
-  themeMode: 'light' | 'dark';
+  themeMode: ThemeMode;
   user: User | null;
   authenticated: boolean;
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
@@ -59,4 +61,11 @@ export enum UseCaseType {
   account_edit = 'account_edit',
   account_view = 'account_view',
   category_create = 'category_create',
+}
+
+export enum Period {
+  quarter = 'quarter',
+  month = 'month',
+  week = 'week',
+  day = 'day',
 }

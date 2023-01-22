@@ -1,28 +1,38 @@
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import CardHeader from '@mui/material/CardHeader';
 import React from 'react';
 import Chart from 'react-apexcharts';
+import { groupBy } from 'lodash';
 import { ApexOptions } from 'apexcharts';
 import { formatCurrency } from '../../../lib/utils/format-number';
-import { stringToColor } from '../../../lib/utils/string-to-color';
+import { ThemeMode } from '../../../lib/interfaces/common';
+import { Typography } from '@mui/material';
+import { CategoryStatistic } from '../../../lib/interfaces/statistics';
+import { formatDateString } from '../../../lib/utils/date';
 
 type Props = {
-  data: any;
+  data: CategoryStatistic[];
   currency?: string;
+  themeMode: ThemeMode;
 };
 
-const TotalPerCategory: React.FC<Props> = ({ data, currency }) => {
-  const series = [
-    {
-      name: 'Total',
-      data: data?.map((item: any) => item.total),
-    },
-  ];
+const TotalPerCategory: React.FC<Props> = ({ data, currency, themeMode }) => {
+  const groupedByDate = groupBy(data, (d) => d._id.date);
+  const dates = Object.keys(groupedByDate);
+  const series = dates.map((date) => {
+    return {
+      name: formatDateString(date, 'MMM-yyyy'),
+      data: groupedByDate[date].map((category) => category.total_amount),
+    };
+  });
+  const labels = dates.map((date) => groupedByDate[date].map((category) => category._id.category)).flat();
+  const uniqueLabels = [...new Set(labels)];
 
   const options: ApexOptions = {
-    labels: data?.map((item: any) => item._id),
-    colors: data?.map((item: any) => stringToColor(item._id)),
+    labels: uniqueLabels,
+    theme: {
+      mode: themeMode,
+    },
     chart: {
       toolbar: {
         show: true,
@@ -35,10 +45,11 @@ const TotalPerCategory: React.FC<Props> = ({ data, currency }) => {
       show: true,
     },
     dataLabels: {
-      enabled: false,
+      enabled: true,
     },
     legend: {
-      show: false,
+      show: true,
+      position: 'top',
     },
     plotOptions: {
       bar: {
@@ -73,9 +84,11 @@ const TotalPerCategory: React.FC<Props> = ({ data, currency }) => {
 
   return (
     <Card variant="outlined">
-      <CardHeader title="Total per category" />
+      <Typography variant="h6" p={2}>
+        Expenses per month/category
+      </Typography>
       <CardContent>
-        <Chart type="bar" height="240px" series={series} options={options} />
+        <Chart type="area" height="340px" series={series} options={options} />
       </CardContent>
     </Card>
   );

@@ -7,9 +7,10 @@ import Chart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 import { Expense } from '../../../lib/interfaces/expense';
 import { formatCurrency } from '../../../lib/utils/format-number';
+import { ThemeMode } from '../../../lib/interfaces/common';
 
 type Props = {
-  themeMode: 'light' | 'dark';
+  themeMode: ThemeMode;
   days: Expense[][];
   dates: string[];
   currency?: string;

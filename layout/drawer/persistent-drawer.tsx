@@ -8,6 +8,7 @@ import { AccountsList } from '../accounts-list';
 import { sxProps } from './drawer-styles';
 import { Title } from '../title';
 import CategoriesList from '../categories-list';
+import { StatisticsButton } from '../statistics-button';
 
 const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -37,6 +38,9 @@ export function PersistentDrawer({ open, toggleDrawer }: Props) {
       </DrawerHeader>
       <Divider />
       <AccountsList />
+
+      <Divider />
+      <StatisticsButton />
 
       <Divider />
       <CategoriesList />

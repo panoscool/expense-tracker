@@ -11,10 +11,10 @@ import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import ListItemText from '@mui/material/ListItemText';
 import { alpha, styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import { format, parseISO } from 'date-fns';
 import { useRouter } from 'next/router';
 import { Fragment } from 'react';
 import { Expense } from '../../lib/interfaces/expense';
+import { formatDateString } from '../../lib/utils/date';
 import { formatCurrency } from '../../lib/utils/format-number';
 import { stringToColor } from '../../lib/utils/string-to-color';
 import CategoryIcon from '../shared/category-icon';
@@ -40,10 +40,6 @@ export const ExpenseCard: React.FC<Props> = ({ day, date, currency }) => {
     });
   };
 
-  const formatDate = (fmt: string) => {
-    return format(parseISO(date), fmt);
-  };
-
   const totalAmount = day.reduce((acc, expense) => acc + expense.amount, 0);
 
   function avatarColor(dayString: string) {
@@ -54,13 +50,13 @@ export const ExpenseCard: React.FC<Props> = ({ day, date, currency }) => {
     <Card variant="outlined" sx={{ mb: 1 }}>
       <CardHeader
         avatar={
-          <Avatar aria-label="day" {...avatarColor(formatDate('EEEE'))}>
-            {formatDate('dd')}
+          <Avatar aria-label="day" {...avatarColor(formatDateString(date, 'EEEE'))}>
+            {formatDateString(date, 'dd')}
           </Avatar>
         }
         action={<TotalAmount variant="h6">{formatCurrency(totalAmount, currency)}</TotalAmount>}
-        title={formatDate('EEEE')}
-        subheader={formatDate('MMMM yyyy')}
+        title={formatDateString(date, 'EEEE')}
+        subheader={formatDateString(date, 'MMMM yyyy')}
         sx={{ backgroundColor: (theme) => alpha(theme.palette.primary.main, 0.05) }}
       />
 
