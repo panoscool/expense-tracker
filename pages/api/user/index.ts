@@ -1,20 +1,15 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import dbConnect from '../../../lib/config/db-connect';
 import { userUpdateSchema } from '../../../lib/config/yup-schema';
-import User from '../../../lib/models/user';
 import validate from '../../../lib/utils/validate';
-import {
-  authenticated,
-  checkHashedPassword,
-  getDecodedUserId,
-  getHashedPassword,
-} from '../helpers';
+import { authenticated, checkHashedPassword, getDecodedUserId, getHashedPassword } from '../helpers';
+import * as Repository from './repository';
 
 const getUser = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const userId = await getDecodedUserId(req, res);
 
-    const user = await User.findById(userId);
+    const user = await Repository.getUserById(userId as string);
 
     if (!user) {
       return res.status(404).send({ error: 'User not found' });
@@ -33,7 +28,7 @@ const updateUser = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const userId = await getDecodedUserId(req, res);
 
-    const user = await User.findById(userId);
+    const user = await Repository.getUserById(userId as string);
 
     if (!user) {
       return res.status(404).send({ error: 'User not found' });
@@ -55,6 +50,7 @@ const updateUser = async (req: NextApiRequest, res: NextApiResponse) => {
     if (name) {
       user.name = name;
     }
+
     if (password?.trim().length > 0) {
       const passwordMatch = await checkHashedPassword(password, user.password);
 

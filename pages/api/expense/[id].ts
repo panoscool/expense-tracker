@@ -2,9 +2,9 @@ import { format, isSameMonth, parseISO } from 'date-fns';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import dbConnect from '../../../lib/config/db-connect';
 import { expenseSchema } from '../../../lib/config/yup-schema';
-import Account from '../../../lib/models/account';
-import Expense from '../../../lib/models/expense';
-import User from '../../../lib/models/user';
+import AccountModel from '../../../lib/models/account';
+import ExpenseModel from '../../../lib/models/expense';
+import UserModel from '../../../lib/models/user';
 import validate from '../../../lib/utils/validate';
 import { authenticated, getDecodedUserId, hasAccess } from '../helpers';
 import { updatePayment } from '../payment/helpers';
@@ -12,14 +12,14 @@ import { updatePayment } from '../payment/helpers';
 const getExpense = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const userId = await getDecodedUserId(req, res);
-    const user = await User.findById(userId); // this is to initialize the User model for populate, otherwise userId can be used directly
-    const expense = await Expense.findById(req.query.id).populate('user', 'name');
+    const user = await UserModel.findById(userId); // this is to initialize the User model for populate, otherwise userId can be used directly
+    const expense = await ExpenseModel.findById(req.query.id).populate('user', 'name');
 
     if (!expense) {
       return res.status(200).send({ error: 'Expense not found' });
     }
 
-    const account = await Account.findOne({ _id: expense.account });
+    const account = await AccountModel.findOne({ _id: expense.account });
 
     if (!user || !account || !account.users.includes(userId as string)) {
       return res.status(401).send({ error: 'Not authorized' });
@@ -35,7 +35,7 @@ const getExpense = async (req: NextApiRequest, res: NextApiResponse) => {
 const updateExpense = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const userId = (await getDecodedUserId(req, res)) as string;
-    const expense = await Expense.findById(req.query.id);
+    const expense = await ExpenseModel.findById(req.query.id);
 
     if (!expense) {
       return res.status(200).send({ error: 'Expense not found' });
@@ -98,7 +98,7 @@ const updateExpense = async (req: NextApiRequest, res: NextApiResponse) => {
       date,
     });
 
-    const updatedExpense = await Expense.findById(req.query.id);
+    const updatedExpense = await ExpenseModel.findById(req.query.id);
 
     res.status(200).json({ data: updatedExpense });
   } catch (err) {
@@ -110,7 +110,7 @@ const updateExpense = async (req: NextApiRequest, res: NextApiResponse) => {
 const deleteExpense = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const userId = (await getDecodedUserId(req, res)) as string;
-    const expense = await Expense.findById(req.query.id);
+    const expense = await ExpenseModel.findById(req.query.id);
 
     if (!expense) {
       return res.status(200).send({ error: 'Expense not found' });

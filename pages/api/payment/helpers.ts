@@ -1,7 +1,7 @@
 import { endOfMonth, format, parseISO, startOfMonth } from 'date-fns';
 import { v4 as uuidv4 } from 'uuid';
-import Expense from '../../../lib/models/expense';
-import Payment from '../../../lib/models/payment';
+import ExpenseModel from '../../../lib/models/expense';
+import PaymentModel from '../../../lib/models/payment';
 import { getGivingAndReceivingUsers, getTotalUsers } from '../../../lib/utils/expense-calculations';
 
 interface Params {
@@ -14,7 +14,7 @@ export async function updatePayment(params: Params) {
   try {
     const { accountId, userId, date } = params;
 
-    const expenses = await Expense.find({
+    const expenses = await ExpenseModel.find({
       account: accountId,
       date: {
         $gte: startOfMonth(parseISO(date)),
@@ -27,13 +27,13 @@ export async function updatePayment(params: Params) {
     if (totalUsers > 1) {
       const [giving, receiving] = getGivingAndReceivingUsers(expenses);
 
-      const payment = await Payment.findOne({
+      const payment = await PaymentModel.findOne({
         account: accountId,
         period: format(parseISO(date), 'MMMM-yyyy'),
       });
 
       if (!payment) {
-        await Payment.create({
+        await PaymentModel.create({
           _id: uuidv4(),
           account: accountId,
           period: format(parseISO(date), 'MMMM-yyyy'),
@@ -44,7 +44,7 @@ export async function updatePayment(params: Params) {
           updated_by: userId,
         });
       } else {
-        await Payment.updateOne(
+        await PaymentModel.updateOne(
           { _id: payment._id },
           {
             $set: {

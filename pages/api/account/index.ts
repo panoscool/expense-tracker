@@ -1,10 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import User from '../../../lib/models/user';
 import dbConnect from '../../../lib/config/db-connect';
 import { accountSchema } from '../../../lib/config/yup-schema';
 import { authenticated, getDecodedUserId } from '../helpers';
 import validate from '../../../lib/utils/validate';
 import * as Repository from './repository';
+import * as UserRepository from '../user/repository';
 import { isAccountOwner } from './helpers';
 
 const getAccounts = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -39,7 +39,7 @@ const createAccount = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(400).send({ error: 'You cannot add yourself as a user' });
     }
 
-    const user = await User.findOne({ email });
+    const user = await UserRepository.getUserByEmail(email);
 
     if (user) {
       await Repository.addAccountUserById(account._id, user._id);

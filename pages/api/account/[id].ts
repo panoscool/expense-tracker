@@ -1,11 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import Expense from '../../../lib/models/expense';
-import User from '../../../lib/models/user';
+import ExpenseModel from '../../../lib/models/expense';
 import dbConnect from '../../../lib/config/db-connect';
 import { accountSchema } from '../../../lib/config/yup-schema';
 import { authenticated, hasAccess, getDecodedUserId } from '../helpers';
 import validate from '../../../lib/utils/validate';
 import * as Repository from './repository';
+import * as UserRepository from '../user/repository';
 import { hasAccountAccess, isAccountOwner } from './helpers';
 
 const getAccount = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -59,7 +59,7 @@ const updateAccount = async (req: NextApiRequest, res: NextApiResponse) => {
       description,
     });
 
-    const user = await User.findOne({ email });
+    const user = await UserRepository.getUserByEmail(email);
 
     const accountOwner = await isAccountOwner(user?.id, account.user);
 
@@ -102,7 +102,7 @@ const deleteAccount = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     // delete all expenses associated with the account
-    await Expense.deleteMany({ account: req.query.id });
+    await ExpenseModel.deleteMany({ account: req.query.id });
 
     await Repository.deleteAccountById(account._id);
 

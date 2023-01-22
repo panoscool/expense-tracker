@@ -1,9 +1,9 @@
 import { format, parseISO } from 'date-fns';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import dbConnect from '../../../lib/config/db-connect';
-import Account from '../../../lib/models/account';
-import Payment from '../../../lib/models/payment';
-import User from '../../../lib/models/user';
+import AccountModel from '../../../lib/models/account';
+import PaymentModel from '../../../lib/models/payment';
+import UserModel from '../../../lib/models/user';
 import { authenticated, getDecodedUserId } from '../helpers';
 
 const getPayments = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -11,8 +11,8 @@ const getPayments = async (req: NextApiRequest, res: NextApiResponse) => {
     const { id, period } = req.query;
 
     const userId = await getDecodedUserId(req, res);
-    const user = await User.findById(userId); // this is to initialize the User model for populate, otherwise userId can be used directly
-    const account = await Account.findOne({ _id: id });
+    const user = await UserModel.findById(userId); // this is to initialize the User model for populate, otherwise userId can be used directly
+    const account = await AccountModel.findOne({ _id: id });
 
     if (!user || !account || !account.users.includes(userId as string)) {
       return res.status(401).send({ error: 'Not authorized' });
@@ -24,7 +24,7 @@ const getPayments = async (req: NextApiRequest, res: NextApiResponse) => {
       filters.period = format(parseISO(period as string), 'MMMM-yyyy');
     }
 
-    const payments = await Payment.findOne(filters)
+    const payments = await PaymentModel.findOne(filters)
       .populate({
         path: 'giving_users',
         populate: {
@@ -52,13 +52,13 @@ const getPayments = async (req: NextApiRequest, res: NextApiResponse) => {
 const updatePayment = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const userId = (await getDecodedUserId(req, res)) as string;
-    const payment = await Payment.findById(req.query.id);
+    const payment = await PaymentModel.findById(req.query.id);
 
     if (!payment) {
       return res.status(404).send({ error: 'Payment not found' });
     }
 
-    const account = await Account.findById(payment.account);
+    const account = await AccountModel.findById(payment.account);
     if (!userId || !account || !account.users.includes(userId as string)) {
       return res.status(401).send({ error: 'Not authorized' });
     }
@@ -67,7 +67,7 @@ const updatePayment = async (req: NextApiRequest, res: NextApiResponse) => {
 
     await payment.updateOne({ settled, updated_by: userId });
 
-    const updatedPayment = await Payment.findById(payment._id)
+    const updatedPayment = await PaymentModel.findById(payment._id)
       .populate({
         path: 'giving_users',
         populate: {

@@ -42,6 +42,6 @@ const PaymentSchema: Schema = new Schema(
   },
 );
 
-const Payment: Model<IPayment> = models.Payment || model('Payment', PaymentSchema);
+const PaymentModel: Model<IPayment> = models.Payment || model('Payment', PaymentSchema);
 
-export default Payment;
+export default PaymentModel;
