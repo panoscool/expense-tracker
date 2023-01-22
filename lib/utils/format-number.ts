@@ -5,6 +5,8 @@ export const formatCurrency = (value: number, currency?: string): string => {
     minimumFractionDigits: 0,
   });
 
+  if (isNaN(value)) return CURRENCY_FORMATTER.format(0);
+
   return CURRENCY_FORMATTER.format(value);
 };
 

@@ -1,11 +1,11 @@
 import ListAltOutlinedIcon from '@mui/icons-material/ListAltOutlined';
 import { Box, ListItemIcon, ListItemText, MenuItem, TextField } from '@mui/material';
+import { format } from 'date-fns';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import useAppContext from '../../hooks/use-app-context';
 import { QueryParams } from '../../lib/interfaces/common';
 import { ExpensesFilters } from '../../lib/interfaces/expense';
-import { formatDate } from '../../lib/utils/date';
 import { setParams } from '../../lib/utils/url-params';
 import CategoryIcon from '../shared/category-icon';
 import DateField from '../shared/date-field';
@@ -38,6 +38,8 @@ export const ExpenseFilters: React.FC = () => {
       setFilters({ date: new Date(), user_id: 'all', category: 'all' });
     };
   }, [user_id, date, category]);
+
+  const formatDate = (date: Date) => format(date, 'yyyy-MM-dd');
 
   const handleChangeFilterBy = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFilterBy(event.target.value);

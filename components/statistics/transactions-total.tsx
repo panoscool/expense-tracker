@@ -2,18 +2,17 @@ import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 import useAppContext from '../../hooks/use-app-context';
 import apiRequest from '../../lib/config/axios';
-import { CategoryStatistic } from '../../lib/interfaces/statistics';
 
-const TotalPerCategory = dynamic(() => import('./charts/total-per-category'), { ssr: false });
+const TransactionsPerPeriod = dynamic(() => import('./charts/transactions-per-period'), { ssr: false });
 
-export const CategoryTotal: React.FC<{ accountId?: string }> = ({ accountId }) => {
+export const TransactionsTotal: React.FC<{ accountId?: string }> = ({ accountId }) => {
   const { themeMode } = useAppContext();
   const [period, setPeriod] = useState('month');
-  const [data, setData] = useState<CategoryStatistic[]>([]);
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     if (accountId) {
-      apiRequest('GET', `/statistics/category?account_id=${accountId}&period=${period}`)
+      apiRequest('GET', `/statistics?account_id=${accountId}&period=${period}`)
         .then((resData) => {
           setData(resData as any);
         })
@@ -23,5 +22,5 @@ export const CategoryTotal: React.FC<{ accountId?: string }> = ({ accountId }) =
     }
   }, [accountId, period]);
 
-  return <TotalPerCategory data={data} themeMode={themeMode} />;
+  return <TransactionsPerPeriod data={data} themeMode={themeMode} value={period} setValue={setPeriod} />;
 };

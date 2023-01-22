@@ -97,6 +97,7 @@ export async function getExpensesPerQuarter(accountId: string) {
           },
           year: { $year: '$created_at' },
         },
+        count: { $sum: 1 },
         total_amount: { $sum: '$amount' },
       },
     },

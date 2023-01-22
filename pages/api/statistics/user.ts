@@ -7,9 +7,9 @@ const getStatistics = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const accountId = req.query.account_id as string;
 
-    const month = await Repository.getExpensesPerMonthAndUser(accountId);
+    const data = await Repository.getExpensesPerMonthAndUser(accountId);
 
-    res.status(200).json({ month });
+    res.status(200).json(data);
   } catch (err) {
     console.error(err);
     res.status(500).send({ error: 'Internal server error' });
