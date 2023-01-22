@@ -1,11 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import ExpenseModel from '../../../lib/models/expense';
 import dbConnect from '../../../lib/config/db-connect';
 import { accountSchema } from '../../../lib/config/yup-schema';
 import { authenticated, hasAccess, getDecodedUserId } from '../helpers';
 import validate from '../../../lib/utils/validate';
 import * as Repository from './repository';
 import * as UserRepository from '../user/repository';
+import * as ExpenseRepository from '../expense/repository';
 import { hasAccountAccess, isAccountOwner } from './helpers';
 
 const getAccount = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -88,8 +88,10 @@ const updateAccount = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const deleteAccount = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
+    const { id } = req.query;
+
     const userId = (await getDecodedUserId(req, res)) as string;
-    const account = await Repository.getAccountById(req.query.id as string);
+    const account = await Repository.getAccountById(id as string);
 
     if (!account) {
       return res.status(200).send({ error: 'Account not found' });
@@ -101,8 +103,7 @@ const deleteAccount = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(401).send({ error: 'Unauthorized access' });
     }
 
-    // delete all expenses associated with the account
-    await ExpenseModel.deleteMany({ account: req.query.id });
+    await ExpenseRepository.deleteExpensesByAccountId(id as string);
 
     await Repository.deleteAccountById(account._id);
 

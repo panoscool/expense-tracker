@@ -4,7 +4,8 @@ import CategoryModel from '../../../lib/models/category';
 export async function createCategory(category: { user: string; labels: string[] }) {
   return await CategoryModel.create({
     _id: uuidv4(),
-    ...category,
+    user: category.user,
+    labels: category.labels,
   });
 }
 

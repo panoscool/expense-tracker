@@ -1,5 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import ExpenseModel from '../../../lib/models/expense';
 import dbConnect from '../../../lib/config/db-connect';
 import { trimToLowerCaseString } from '../../../lib/utils/format-text';
 import validate from '../../../lib/utils/validate';
@@ -7,6 +6,7 @@ import { categorySchema } from '../../../lib/config/yup-schema';
 import { authenticated, getDecodedUserId, hasAccess } from '../helpers';
 import * as Repository from './repository';
 import * as AccountRepository from '../account/repository';
+import * as ExpenseRepository from '../expense/repository';
 
 const getCategory = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
@@ -77,7 +77,7 @@ const deleteCategory = async (req: NextApiRequest, res: NextApiResponse) => {
     const { id } = req.query;
 
     const userId = (await getDecodedUserId(req, res)) as string;
-    const account = await AccountRepository.getAccountsPopulatedByUserId(userId);
+    const account = await AccountRepository.getAccountById(userId);
     const category = await Repository.getCategoryById(id as string);
 
     if (!category) {
@@ -92,8 +92,9 @@ const deleteCategory = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const label = trimToLowerCaseString(req.body.label);
 
-    // find all expenses with this category and update them to other
-    await ExpenseModel.updateMany({ account: account, category: label }, { category: 'other' });
+    if (account) {
+      await ExpenseRepository.updateExpensesByAccountId(account._id, label);
+    }
 
     await Repository.removeCategoryById(category._id, label);
 

@@ -1,3 +1,4 @@
+import { endOfMonth, parseISO, startOfMonth } from 'date-fns';
 import { v4 as uuidv4 } from 'uuid';
 import ExpenseModel from '../../../lib/models/expense';
 
@@ -16,8 +17,32 @@ interface ExpenseCreate {
 export async function createExpense(expense: ExpenseCreate) {
   return await ExpenseModel.create({
     _id: uuidv4(),
-    ...expense,
+    user: expense.user,
+    account: expense.account,
+    date: expense.date,
+    category: expense.category,
+    amount: expense.amount,
+    description: expense.description,
+    details: expense.details,
+    created_by: expense.created_by,
+    updated_by: expense.updated_by,
   });
+}
+
+export async function updateExpenseById(id: string, expense: ExpenseCreate) {
+  return ExpenseModel.updateOne(
+    { _id: id },
+    {
+      user: expense.user,
+      account: expense.account,
+      date: expense.date,
+      category: expense.category,
+      amount: expense.amount,
+      description: expense.description,
+      details: expense.details,
+      updated_by: expense.updated_by,
+    },
+  );
 }
 
 export async function getExpenseById(id: string) {
@@ -32,10 +57,27 @@ export async function getExpensePopulatedById(id: string) {
   return await ExpenseModel.findById(id).populate('user', 'name');
 }
 
-export async function updateExpenseById(id: string, expense: ExpenseCreate) {
-  return ExpenseModel.updateOne({ _id: id }, { ...expense });
-}
-
 export async function deleteExpenseById(id: string) {
   return await ExpenseModel.deleteOne({ _id: id });
+}
+
+export async function getExpenseByAccountIdAndDates(accountId: string, date: string) {
+  const startDate = startOfMonth(parseISO(date));
+  const endDate = endOfMonth(parseISO(date));
+
+  return await ExpenseModel.find({
+    account: accountId,
+    date: {
+      $gte: startDate,
+      $lte: endDate,
+    },
+  });
+}
+
+export async function updateExpensesByAccountId(accountId: string, category: string) {
+  return await ExpenseModel.updateMany({ account: accountId, category: category }, { category: 'other' });
+}
+
+export async function deleteExpensesByAccountId(id: string) {
+  return await ExpenseModel.deleteMany({ account: id });
 }
