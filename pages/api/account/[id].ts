@@ -1,24 +1,25 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import Account from '../../../lib/models/account';
 import Expense from '../../../lib/models/expense';
 import User from '../../../lib/models/user';
 import dbConnect from '../../../lib/config/db-connect';
 import { accountSchema } from '../../../lib/config/yup-schema';
 import { authenticated, hasAccess, getDecodedUserId } from '../helpers';
 import validate from '../../../lib/utils/validate';
+import * as Repository from './repository';
+import { hasAccountAccess, isAccountOwner } from './helpers';
 
 const getAccount = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const userId = (await getDecodedUserId(req, res)) as string;
-    const account = await Account.findById(req.query.id).populate('users', 'name email image');
+    const account = await Repository.getAccountPopulatedById(req.query.id as string);
 
     if (!account) {
       return res.status(200).send({ error: 'Account not found' });
     }
 
-    const isUserInAccount = account.users.some((user: any) => user._id?.toString() === userId);
+    const accountAccess = await hasAccountAccess(account, userId);
 
-    if (!isUserInAccount) {
+    if (!accountAccess) {
       return res.status(401).send({ error: 'Unauthorized access' });
     }
 
@@ -32,7 +33,7 @@ const getAccount = async (req: NextApiRequest, res: NextApiResponse) => {
 const updateAccount = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const userId = (await getDecodedUserId(req, res)) as string;
-    const account = await Account.findById(req.query.id);
+    const account = await Repository.getAccountById(req.query.id as string);
 
     if (!account) {
       return res.status(200).send({ error: 'Account not found' });
@@ -52,7 +53,7 @@ const updateAccount = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const { name, currency, description, email } = req.body;
 
-    await account.updateOne({
+    await Repository.updateAccountById(account._id, {
       name,
       currency,
       description,
@@ -60,30 +61,23 @@ const updateAccount = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const user = await User.findOne({ email });
 
-    // if user.id is equal to account.user, then user is the owner of the account and cannot remove himself
-    if (user?._id?.toString() === account.user.toString()) {
+    const accountOwner = await isAccountOwner(user?.id, account.user);
+
+    if (accountOwner) {
       return res.status(400).send({ error: 'You cannot remove yourself from the account' });
     }
 
-    // if user does not exist in the account users array add it
-    if (user && !account.users.includes(user._id)) {
-      await account.updateOne({
-        $push: {
-          users: user._id,
-        },
-      });
+    const accountAccess = await hasAccountAccess(account, user?._id);
+
+    if (user && !accountAccess) {
+      await Repository.addAccountUserById(account._id, user._id);
     }
 
-    // if user exists in the account users array remove it
-    if (user && account.users.includes(user._id)) {
-      await account.updateOne({
-        $pull: {
-          users: user._id,
-        },
-      });
+    if (user && accountAccess) {
+      await Repository.removeAccountUserById(account._id, user._id);
     }
 
-    const updatedAccount = await Account.findById(req.query.id);
+    const updatedAccount = await Repository.getAccountById(req.query.id as string);
 
     res.status(200).json({ data: updatedAccount });
   } catch (err) {
@@ -95,7 +89,7 @@ const updateAccount = async (req: NextApiRequest, res: NextApiResponse) => {
 const deleteAccount = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const userId = (await getDecodedUserId(req, res)) as string;
-    const account = await Account.findById(req.query.id);
+    const account = await Repository.getAccountById(req.query.id as string);
 
     if (!account) {
       return res.status(200).send({ error: 'Account not found' });
@@ -110,7 +104,7 @@ const deleteAccount = async (req: NextApiRequest, res: NextApiResponse) => {
     // delete all expenses associated with the account
     await Expense.deleteMany({ account: req.query.id });
 
-    await account.delete();
+    await Repository.deleteAccountById(account._id);
 
     res.status(200).json({ message: 'Ok' });
   } catch (err) {

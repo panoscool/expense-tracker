@@ -66,6 +66,7 @@ export const AccountForm: React.FC<Props> = ({ open, account, useCase, onClose }
     }
   };
 
+  console.log(values);
   return (
     <Dialog fullWidth maxWidth="sm" open={open} onClose={onClose}>
       <DialogContent>
