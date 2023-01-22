@@ -5,6 +5,7 @@ import { AccountsList } from '../accounts-list';
 import { sxProps } from './drawer-styles';
 import { Title } from '../title';
 import CategoriesList from '../categories-list';
+import { StatisticsButton } from '../statistics-button';
 
 interface Props {
   open: boolean;
@@ -19,6 +20,9 @@ export function TemporaryDrawer({ open, toggleDrawer }: Props) {
       </Box>
       <Divider />
       <AccountsList />
+
+      <Divider />
+      <StatisticsButton />
 
       <Divider />
       <CategoriesList />
