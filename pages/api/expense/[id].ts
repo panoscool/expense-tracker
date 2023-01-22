@@ -2,24 +2,24 @@ import { format, isSameMonth, parseISO } from 'date-fns';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import dbConnect from '../../../lib/config/db-connect';
 import { expenseSchema } from '../../../lib/config/yup-schema';
-import AccountModel from '../../../lib/models/account';
-import ExpenseModel from '../../../lib/models/expense';
-import UserModel from '../../../lib/models/user';
 import validate from '../../../lib/utils/validate';
 import { authenticated, getDecodedUserId, hasAccess } from '../helpers';
 import { updatePayment } from '../payment/helpers';
+import * as Repository from './repository';
+import * as UserRepository from '../user/repository';
+import * as AccountRepository from '../account/repository';
 
 const getExpense = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const userId = await getDecodedUserId(req, res);
-    const user = await UserModel.findById(userId); // this is to initialize the User model for populate, otherwise userId can be used directly
-    const expense = await ExpenseModel.findById(req.query.id).populate('user', 'name');
+    const user = await UserRepository.getUserById(userId as string); // this is to initialize the User model for populate, otherwise userId can be used directly
+    const expense = await Repository.getExpensePopulatedById(req.query.id as string);
 
     if (!expense) {
       return res.status(200).send({ error: 'Expense not found' });
     }
 
-    const account = await AccountModel.findOne({ _id: expense.account });
+    const account = await AccountRepository.getAccountById(expense.account);
 
     if (!user || !account || !account.users.includes(userId as string)) {
       return res.status(401).send({ error: 'Not authorized' });
@@ -34,8 +34,10 @@ const getExpense = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const updateExpense = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
+    const { id } = req.query;
+
     const userId = (await getDecodedUserId(req, res)) as string;
-    const expense = await ExpenseModel.findById(req.query.id);
+    const expense = await Repository.getExpenseById(id as string);
 
     if (!expense) {
       return res.status(200).send({ error: 'Expense not found' });
@@ -55,7 +57,7 @@ const updateExpense = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const { user_id, date, account_id, category, amount, details, description } = req.body;
 
-    await expense.updateOne({
+    await Repository.updateExpenseById(id as string, {
       account: account_id,
       date,
       category,
@@ -98,7 +100,7 @@ const updateExpense = async (req: NextApiRequest, res: NextApiResponse) => {
       date,
     });
 
-    const updatedExpense = await ExpenseModel.findById(req.query.id);
+    const updatedExpense = await Repository.getExpenseById(id as string);
 
     res.status(200).json({ data: updatedExpense });
   } catch (err) {
@@ -109,8 +111,10 @@ const updateExpense = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const deleteExpense = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
+    const { id } = req.query;
+
     const userId = (await getDecodedUserId(req, res)) as string;
-    const expense = await ExpenseModel.findById(req.query.id);
+    const expense = await Repository.getExpenseById(id as string);
 
     if (!expense) {
       return res.status(200).send({ error: 'Expense not found' });
@@ -122,7 +126,7 @@ const deleteExpense = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(401).send({ error: 'Unauthorized access' });
     }
 
-    await expense.delete();
+    await Repository.deleteExpenseById(id as string);
 
     await updatePayment({
       accountId: expense.account,
