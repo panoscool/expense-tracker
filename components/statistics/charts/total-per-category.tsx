@@ -27,12 +27,12 @@ const TotalPerCategory: React.FC<Props> = ({ data, currency, themeMode, month, s
   const series = [
     {
       name: formatDateString(currentMonth, 'MMM-yyyy'),
-      data: groupedByDate[currentMonth].map((category) => category.total_amount),
+      data: groupedByDate[currentMonth]?.map((category) => category.total_amount),
     },
   ];
 
   const options: ApexOptions = {
-    labels: groupedByDate[currentMonth].map((category) => category._id.category),
+    labels: groupedByDate[currentMonth]?.map((category) => category._id.category),
     theme: {
       mode: themeMode,
     },
