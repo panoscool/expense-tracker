@@ -30,7 +30,7 @@ function getLabels(period: string, data: any) {
 }
 
 function getData(data: AccountStatistic[]) {
-  return data.map((expense: AccountStatistic) => expense.total_amount);
+  return data.map((expense: AccountStatistic) => +expense.total_amount.toFixed(2));
 }
 
 const TotalPerAccount: React.FC<Props> = ({ data, currency, themeMode, value, setValue }) => {
