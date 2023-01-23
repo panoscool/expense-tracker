@@ -22,17 +22,26 @@ import { getInitials } from '../../lib/utils/get-initials';
 import { stringToColor } from '../../lib/utils/string-to-color';
 import useHasAccess from '../../hooks/use-has-access';
 import { Tooltip } from '@mui/material';
-import { Account } from '../../lib/interfaces/account';
+import { useEffect, useMemo } from 'react';
 
 type Props = {
   open: boolean;
-  account: Account | null;
+  accountId?: string;
   onClose: () => void;
 };
 
-export const AccountUsers: React.FC<Props> = ({ open, account, onClose }) => {
+export const AccountUsers: React.FC<Props> = ({ open, accountId, onClose }) => {
   const { hasAccess } = useHasAccess();
-  const { dispatch } = useAppContext();
+  const { account, dispatch } = useAppContext();
+
+  const accountOwner = useMemo(() => account?.users.find((u) => u._id === account.user), [account]);
+  const sharedWith = useMemo(() => account?.users.filter((u) => u._id !== account.user), [account]);
+
+  useEffect(() => {
+    if (accountId) {
+      getAccount(dispatch, accountId);
+    }
+  }, [accountId, dispatch]);
 
   const handleDeleteUser = (email: string) => async () => {
     if (window.confirm(`Are you sure you want to delete the user ${email}?`)) {
@@ -58,9 +67,6 @@ export const AccountUsers: React.FC<Props> = ({ open, account, onClose }) => {
 
   if (!account) return null;
 
-  const accountOwner = account.users.find((u) => u._id === account.user);
-  const sharedWith = account.users.filter((u) => u._id !== account.user);
-
   return (
     <Dialog fullWidth maxWidth="xs" open={open} onClose={onClose}>
       <DialogContent>
@@ -79,7 +85,7 @@ export const AccountUsers: React.FC<Props> = ({ open, account, onClose }) => {
 
         {account.users.length > 1 ? (
           <List subheader={<ListSubheader>Shared with:</ListSubheader>}>
-            {sharedWith.map((user: User) => (
+            {sharedWith?.map((user: User) => (
               <ListItem key={user._id} disablePadding>
                 <ListItemAvatar>
                   {user.image ? <Avatar src={user.image} /> : <Avatar {...stringAvatar(user._id, user.name)} />}
