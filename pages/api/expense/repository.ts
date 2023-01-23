@@ -57,8 +57,8 @@ export async function getExpenseById(id: string) {
 export async function getExpensesPopulated(filters: any) {
   const { account_id, date, user_id, category } = filters;
 
-  const monthStart = startOfMonth(parseISO(date as string));
-  const monthEnd = endOfMonth(parseISO(date as string));
+  const monthStart = startOfMonth(parseISO(date));
+  const monthEnd = endOfMonth(parseISO(date));
 
   let query: any = { account: account_id };
 
