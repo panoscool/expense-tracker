@@ -66,7 +66,7 @@ export async function getPaymentsPopulated(filters: any) {
   let query: any = { account: account_id };
 
   if (period) {
-    filters.period = format(parseISO(period as string), 'MMMM-yyyy');
+    query.period = format(parseISO(period as string), 'MMMM-yyyy');
   }
 
   return await PaymentModel.find(query)
@@ -114,7 +114,7 @@ export async function getPaymentPopulatedByAccountAndPeriod(filters: any) {
   let query: any = { account: id };
 
   if (period) {
-    filters.period = format(parseISO(period as string), 'MMMM-yyyy');
+    query.period = format(parseISO(period as string), 'MMMM-yyyy');
   }
 
   return await PaymentModel.findOne(query)

@@ -63,13 +63,13 @@ export async function getExpensesPopulated(filters: any) {
   let query: any = { account: account_id };
 
   if (date) {
-    filters.date = { $gte: monthStart, $lte: monthEnd };
+    query.date = { $gte: monthStart, $lte: monthEnd };
   }
   if (user_id) {
-    filters.user = user_id;
+    query.user = user_id;
   }
   if (category) {
-    filters.category = category;
+    query.category = category;
   }
 
   return await ExpenseModel.find(query).sort({ date: 'asc' }).populate('user', 'name');

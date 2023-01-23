@@ -9,7 +9,6 @@ import Typography from '@mui/material/Typography';
 import { Expense } from '../../../lib/interfaces/expense';
 import { capitalizeFirstLetter } from '../../../lib/utils/format-text';
 import { formatCurrency } from '../../../lib/utils/format-number';
-import { stringToColor } from '../../../lib/utils/string-to-color';
 import { ThemeMode } from '../../../lib/interfaces/common';
 
 type Props = {
@@ -36,7 +35,6 @@ const TotalPerCategory: React.FC<Props> = ({ themeMode, expenses, currency }) =>
 
   const options: ApexOptions = {
     labels: Object.keys(totalPerCategory).map(capitalizeFirstLetter),
-    colors: Object.keys(totalPerCategory).map(stringToColor),
     theme: {
       mode: themeMode,
     },
