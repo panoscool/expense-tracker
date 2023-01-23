@@ -78,6 +78,7 @@ export const ExpenseFilters: React.FC = () => {
       {filterBy === 'date' && (
         <DateField
           disableFuture
+          openTo="month"
           views={['year', 'month']}
           format="MMMM yyyy"
           label="Date"

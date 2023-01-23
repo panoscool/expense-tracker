@@ -12,29 +12,26 @@ type DateFieldProps = {
   error?: boolean;
   format?: string;
   disableFuture?: boolean;
+  openTo?: 'day' | 'month' | 'year';
   onChange: React.Dispatch<any>;
   onBlur?: (inputName: string) => void;
 };
 
 const DateField: React.FC<DateFieldProps> = (props) => {
-  const { label, value, views, helperText, error, format, disableFuture, onChange, onBlur } = props;
+  const { label, value, views, helperText, error, format, disableFuture, openTo, onChange, onBlur } = props;
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <DatePicker
         disableFuture={disableFuture}
         inputFormat={format || 'dd/MM/yyyy'}
+        openTo={openTo}
         views={views}
         label={label}
         value={value}
         onChange={(newValue) => onChange(newValue)}
         renderInput={(params) => (
-          <TextField
-            {...params}
-            error={error}
-            helperText={helperText}
-            onBlur={() => onBlur?.('date')}
-          />
+          <TextField {...params} error={error} helperText={helperText} onBlur={() => onBlur?.('date')} />
         )}
       />
     </LocalizationProvider>

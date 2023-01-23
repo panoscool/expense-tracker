@@ -6,30 +6,33 @@ import { groupBy } from 'lodash';
 import { ApexOptions } from 'apexcharts';
 import { formatCurrency } from '../../../lib/utils/format-number';
 import { ThemeMode } from '../../../lib/interfaces/common';
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { CategoryStatistic } from '../../../lib/interfaces/statistics';
 import { formatDateString } from '../../../lib/utils/date';
+import DateField from '../../shared/date-field';
+import { isSameMonth } from 'date-fns';
 
 type Props = {
   data: CategoryStatistic[];
   currency?: string;
   themeMode: ThemeMode;
+  month: Date;
+  setMonth: React.Dispatch<React.SetStateAction<Date>>;
 };
 
-const TotalPerCategory: React.FC<Props> = ({ data, currency, themeMode }) => {
+const TotalPerCategory: React.FC<Props> = ({ data, currency, themeMode, month, setMonth }) => {
   const groupedByDate = groupBy(data, (d) => d._id.date);
-  const dates = Object.keys(groupedByDate);
-  const series = dates.map((date) => {
-    return {
-      name: formatDateString(date, 'MMM-yyyy'),
-      data: groupedByDate[date].map((category) => category.total_amount),
-    };
-  });
-  const labels = dates.map((date) => groupedByDate[date].map((category) => category._id.category)).flat();
-  const uniqueLabels = [...new Set(labels)];
+  const [currentMonth] = Object.keys(groupedByDate).filter((date) => isSameMonth(new Date(date), month));
+
+  const series = [
+    {
+      name: formatDateString(currentMonth, 'MMM-yyyy'),
+      data: groupedByDate[currentMonth].map((category) => category.total_amount),
+    },
+  ];
 
   const options: ApexOptions = {
-    labels: uniqueLabels,
+    labels: groupedByDate[currentMonth].map((category) => category._id.category),
     theme: {
       mode: themeMode,
     },
@@ -84,9 +87,18 @@ const TotalPerCategory: React.FC<Props> = ({ data, currency, themeMode }) => {
 
   return (
     <Card variant="outlined">
-      <Typography variant="h6" p={2}>
-        Expenses per month/category
-      </Typography>
+      <Box p={2} display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap" gap={2}>
+        <Typography variant="h6">Expenses per category</Typography>
+        <DateField
+          disableFuture
+          openTo="month"
+          views={['year', 'month']}
+          format="MMMM yyyy"
+          label="Date"
+          value={month}
+          onChange={setMonth}
+        />
+      </Box>
       <CardContent>
         <Chart type="area" height="340px" series={series} options={options} />
       </CardContent>

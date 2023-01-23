@@ -53,7 +53,7 @@ const TotalPerDay: React.FC<Props> = ({ themeMode, days, dates, currency }) => {
       labels: {
         show: true,
         formatter: function (val: string) {
-          return val ? format(parseISO(val), 'dd-MM-yyyy') : '';
+          return val ? format(parseISO(val), 'EE dd') : '';
         },
       },
       axisBorder: {
