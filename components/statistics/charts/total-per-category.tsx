@@ -55,8 +55,7 @@ const TotalPerCategory: React.FC<Props> = ({ data, currency, themeMode, month, s
       enabled: true,
     },
     legend: {
-      show: true,
-      position: 'top',
+      show: false,
     },
     plotOptions: {
       bar: {
