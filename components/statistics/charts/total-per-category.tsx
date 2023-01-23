@@ -11,6 +11,7 @@ import { CategoryStatistic } from '../../../lib/interfaces/statistics';
 import { formatDateString } from '../../../lib/utils/date';
 import DateField from '../../shared/date-field';
 import { isSameMonth } from 'date-fns';
+import { stringToColor } from '../../../lib/utils/string-to-color';
 
 type Props = {
   data: CategoryStatistic[];
@@ -27,12 +28,15 @@ const TotalPerCategory: React.FC<Props> = ({ data, currency, themeMode, month, s
   const series = [
     {
       name: formatDateString(currentMonth, 'MMM-yyyy'),
-      data: groupedByDate[currentMonth]?.map((category) => +category.total_amount.toFixed(2)),
+      data: groupedByDate[currentMonth]?.map((category) => +category.total_amount.toFixed(2)) || [],
     },
   ];
 
+  const labels = groupedByDate[currentMonth]?.map((category) => category._id.category) || [];
+
   const options: ApexOptions = {
-    labels: groupedByDate[currentMonth]?.map((category) => category._id.category),
+    labels: labels,
+    colors: labels.map(stringToColor),
     theme: {
       mode: themeMode,
     },
@@ -100,7 +104,7 @@ const TotalPerCategory: React.FC<Props> = ({ data, currency, themeMode, month, s
         />
       </Box>
       <CardContent>
-        <Chart type="area" height="340px" series={series} options={options} />
+        <Chart type="bar" height="340px" series={series} options={options} />
       </CardContent>
     </Card>
   );

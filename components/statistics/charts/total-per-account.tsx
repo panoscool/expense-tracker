@@ -63,13 +63,6 @@ const TotalPerAccount: React.FC<Props> = ({ data, currency, themeMode, value, se
     legend: {
       show: false,
     },
-    plotOptions: {
-      bar: {
-        columnWidth: '90%',
-        barHeight: '100%',
-        distributed: true,
-      },
-    },
     yaxis: {
       labels: {
         show: true,
@@ -104,7 +97,7 @@ const TotalPerAccount: React.FC<Props> = ({ data, currency, themeMode, value, se
     <Card variant="outlined">
       <ChartHeader title="Expenses per period" value={value} setValue={setValue} />
       <CardContent>
-        <Chart type="area" height="240px" series={series} options={options} />
+        <Chart type="area" height="256px" series={series} options={options} />
       </CardContent>
     </Card>
   );
