@@ -18,10 +18,6 @@ interface PaymentUpdate {
   updated_by: string;
 }
 
-const GET_BY_ID = (id: string) => ({
-  $or: [{ _id: id }, { id }],
-});
-
 export async function createPayment(payment: PaymentCreate) {
   const period = format(parseISO(payment.period), 'MMMM-yyyy');
 
@@ -38,13 +34,16 @@ export async function createPayment(payment: PaymentCreate) {
 }
 
 export async function updatePaymentById(id: string, payment: PaymentUpdate) {
-  return await PaymentModel.updateOne(GET_BY_ID(id), {
-    $set: {
-      giving_users: payment.giving_users,
-      receiving_users: payment.receiving_users,
-      updated_by: payment.updated_by,
+  return await PaymentModel.updateOne(
+    { _id: id },
+    {
+      $set: {
+        giving_users: payment.giving_users,
+        receiving_users: payment.receiving_users,
+        updated_by: payment.updated_by,
+      },
     },
-  });
+  );
 }
 
 export async function getPaymentById(id: string) {

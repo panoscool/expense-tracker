@@ -14,14 +14,6 @@ interface ExpenseCreate {
   updated_by: string;
 }
 
-const GET_BY_ID = (id: string) => ({
-  $or: [{ _id: id }, { id }],
-});
-
-// const GET_BY_IDS = (ids: string[]) => ({
-//   $or: [{ _id: { $in: ids } }, { id: { $in: ids } }],
-// });
-
 export async function createExpense(expense: ExpenseCreate) {
   return await ExpenseModel.create({
     _id: uuidv4(),
@@ -38,20 +30,23 @@ export async function createExpense(expense: ExpenseCreate) {
 }
 
 export async function updateExpenseById(id: string, expense: ExpenseCreate) {
-  return ExpenseModel.updateOne(GET_BY_ID(id), {
-    user: expense.user,
-    account: expense.account,
-    date: expense.date,
-    category: expense.category,
-    amount: expense.amount,
-    description: expense.description,
-    details: expense.details,
-    updated_by: expense.updated_by,
-  });
+  return ExpenseModel.updateOne(
+    { _id: id },
+    {
+      user: expense.user,
+      account: expense.account,
+      date: expense.date,
+      category: expense.category,
+      amount: expense.amount,
+      description: expense.description,
+      details: expense.details,
+      updated_by: expense.updated_by,
+    },
+  );
 }
 
 export async function getExpenseById(id: string) {
-  return await ExpenseModel.findOne(GET_BY_ID(id));
+  return await ExpenseModel.findOne({ _id: id });
 }
 
 export async function getExpensesPopulated(filters: any) {
@@ -80,7 +75,7 @@ export async function getExpensePopulatedById(id: string) {
 }
 
 export async function deleteExpenseById(id: string) {
-  return await ExpenseModel.deleteOne(GET_BY_ID(id));
+  return await ExpenseModel.deleteOne({ _id: id });
 }
 
 export async function getExpenseByAccountIdAndDates(accountId: string, date: string) {
@@ -97,10 +92,7 @@ export async function getExpenseByAccountIdAndDates(accountId: string, date: str
 }
 
 export async function updateExpensesByAccountId(accountIds: string[], category: string) {
-  return await ExpenseModel.updateMany(
-    { $or: [{ _id: { $in: accountIds } }, { id: { $in: accountIds } }], category: category },
-    { category: 'other' },
-  );
+  return await ExpenseModel.updateMany({ _id: { $in: accountIds }, category: category }, { category: 'other' });
 }
 
 export async function deleteExpensesByAccountId(id: string) {
