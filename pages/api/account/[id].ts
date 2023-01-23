@@ -22,7 +22,7 @@ const getAccount = async (req: NextApiRequest, res: NextApiResponse) => {
     const accountAccess = await hasAccountAccess(account, userId);
 
     if (!accountAccess) {
-      return res.status(401).send({ error: 'Unauthorized access' });
+      return res.status(401).send({ error: 'Not authorized' });
     }
 
     res.status(200).json({ data: account });
@@ -46,7 +46,7 @@ const updateAccount = async (req: NextApiRequest, res: NextApiResponse) => {
     const authorized = await hasAccess(userId, account?.user);
 
     if (!authorized) {
-      return res.status(401).send({ error: 'Unauthorized access' });
+      return res.status(401).send({ error: 'Not authorized' });
     }
 
     const errors = await validate(accountSchema, req.body);
@@ -104,7 +104,7 @@ const deleteAccount = async (req: NextApiRequest, res: NextApiResponse) => {
     const authorized = await hasAccess(userId, account?.user);
 
     if (!authorized) {
-      return res.status(401).send({ error: 'Unauthorized access' });
+      return res.status(401).send({ error: 'Not authorized' });
     }
 
     await ExpenseRepository.deleteExpensesByAccountId(id as string);

@@ -28,7 +28,7 @@ const uploadImage = async (req: NextApiRequest, res: NextApiResponse) => {
     const authorized = hasAccess(userId, user?._id);
 
     if (!authorized) {
-      return res.status(401).send({ error: 'Unauthorized access' });
+      return res.status(401).send({ error: 'Not authorized' });
     }
 
     const uploaded = await cloudinary.uploader.upload(base64, {
@@ -75,7 +75,7 @@ const deleteImage = async (req: NextApiRequest, res: NextApiResponse) => {
     const authorized = hasAccess(userId, user?._id);
 
     if (!authorized) {
-      return res.status(401).send({ error: 'Unauthorized access' });
+      return res.status(401).send({ error: 'Not authorized' });
     }
 
     await cloudinary.uploader.destroy(`user_images/${userId}`);

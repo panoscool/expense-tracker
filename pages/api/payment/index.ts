@@ -19,7 +19,7 @@ const getPayments = async (req: NextApiRequest, res: NextApiResponse) => {
     const accountAccess = await hasAccountAccess(account, user?._id);
 
     if (!accountAccess) {
-      return res.status(401).send({ error: 'Unauthorized access' });
+      return res.status(401).send({ error: 'Not authorized' });
     }
 
     const payments = await Repository.getPaymentsPopulated(req.query);

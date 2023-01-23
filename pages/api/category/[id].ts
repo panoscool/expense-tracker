@@ -22,7 +22,7 @@ const getCategory = async (req: NextApiRequest, res: NextApiResponse) => {
     const authorized = await hasAccess(userId, category?.user);
 
     if (!authorized) {
-      return res.status(401).send({ error: 'Unauthorized access' });
+      return res.status(401).send({ error: 'Not authorized' });
     }
 
     res.status(200).json({ data: category });
@@ -46,7 +46,7 @@ const updateCategory = async (req: NextApiRequest, res: NextApiResponse) => {
     const authorized = await hasAccess(userId, category?.user);
 
     if (!authorized) {
-      return res.status(401).send({ error: 'Unauthorized access' });
+      return res.status(401).send({ error: 'Not authorized' });
     }
 
     const errors = await validate(categorySchema, req.body);
@@ -87,7 +87,7 @@ const deleteCategory = async (req: NextApiRequest, res: NextApiResponse) => {
     const authorized = await hasAccess(userId, category?.user);
 
     if (!authorized) {
-      return res.status(401).send({ error: 'Unauthorized access' });
+      return res.status(401).send({ error: 'Not authorized' });
     }
 
     const label = trimToLowerCaseString(req.body.label);

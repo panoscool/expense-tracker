@@ -55,7 +55,7 @@ const updateExpense = async (req: NextApiRequest, res: NextApiResponse) => {
     const authorized = await hasAccess(userId, expense?.created_by, expense?.user);
 
     if (!authorized) {
-      return res.status(401).send({ error: 'Unauthorized access' });
+      return res.status(401).send({ error: 'Not authorized' });
     }
 
     const errors = await validate(expenseSchema, req.body);
@@ -107,7 +107,7 @@ const deleteExpense = async (req: NextApiRequest, res: NextApiResponse) => {
     const authorized = await hasAccess(userId, expense?.created_by, expense?.user);
 
     if (!authorized) {
-      return res.status(401).send({ error: 'Unauthorized access' });
+      return res.status(401).send({ error: 'Not authorized' });
     }
 
     await Repository.deleteExpenseById(id as string);
