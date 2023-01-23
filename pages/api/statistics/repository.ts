@@ -1,7 +1,7 @@
-import Expense from '../../../lib/models/expense';
+import ExpenseModel from '../../../lib/models/expense';
 
 export async function getExpensesPerDay(accountId: string) {
-  const data = await Expense.aggregate([
+  const data = await ExpenseModel.aggregate([
     {
       $match: {
         account: accountId,
@@ -24,7 +24,7 @@ export async function getExpensesPerDay(accountId: string) {
 }
 
 export async function getExpensesPerWeek(accountId: string) {
-  const data = await Expense.aggregate([
+  const data = await ExpenseModel.aggregate([
     {
       $match: {
         account: accountId,
@@ -49,7 +49,7 @@ export async function getExpensesPerWeek(accountId: string) {
 }
 
 export async function getExpensesPerMonth(accountId: string) {
-  const data = await Expense.aggregate([
+  const data = await ExpenseModel.aggregate([
     {
       $match: {
         account: accountId,
@@ -71,7 +71,7 @@ export async function getExpensesPerMonth(accountId: string) {
 }
 
 export async function getExpensesPerQuarter(accountId: string) {
-  const data = await Expense.aggregate([
+  const data = await ExpenseModel.aggregate([
     {
       $match: {
         account: accountId,
@@ -110,7 +110,7 @@ export async function getExpensesPerQuarter(accountId: string) {
 }
 
 export async function getExpensesPerMonthAndCategory(accountId: string) {
-  const data = await Expense.aggregate([
+  const data = await ExpenseModel.aggregate([
     {
       $match: {
         account: accountId,
@@ -132,7 +132,7 @@ export async function getExpensesPerMonthAndCategory(accountId: string) {
 }
 
 export async function getExpensesPerMonthAndUser(accountId: string) {
-  const data = await Expense.aggregate([
+  const data = await ExpenseModel.aggregate([
     {
       $match: {
         account: accountId,

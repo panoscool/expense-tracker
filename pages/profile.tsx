@@ -20,11 +20,11 @@ const Profile: NextPage = () => {
     checkAuthStateAndRedirect('/login');
   }, [checkAuthStateAndRedirect]);
 
-  if (!authenticated) return null;
-
   const handleChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
     setExpanded(isExpanded ? panel : false);
   };
+
+  if (!authenticated) return null;
 
   return (
     <div>

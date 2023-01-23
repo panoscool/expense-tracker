@@ -9,8 +9,8 @@ import Typography from '@mui/material/Typography';
 import { Expense } from '../../../lib/interfaces/expense';
 import { capitalizeFirstLetter } from '../../../lib/utils/format-text';
 import { formatCurrency } from '../../../lib/utils/format-number';
-import { stringToColor } from '../../../lib/utils/string-to-color';
 import { ThemeMode } from '../../../lib/interfaces/common';
+import { stringToColor } from '../../../lib/utils/string-to-color';
 
 type Props = {
   themeMode: ThemeMode;

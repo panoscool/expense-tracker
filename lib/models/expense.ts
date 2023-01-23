@@ -54,6 +54,6 @@ const ExpenseSchema: Schema = new Schema(
   },
 );
 
-const Expense: Model<IExpense> = models.Expense || model('Expense', ExpenseSchema);
+const ExpenseModel: Model<IExpense> = models.Expense || model('Expense', ExpenseSchema);
 
-export default Expense;
+export default ExpenseModel;

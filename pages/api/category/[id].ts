@@ -1,26 +1,28 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import Category from '../../../lib/models/category';
-import Expense from '../../../lib/models/expense';
 import dbConnect from '../../../lib/config/db-connect';
 import { trimToLowerCaseString } from '../../../lib/utils/format-text';
 import validate from '../../../lib/utils/validate';
 import { categorySchema } from '../../../lib/config/yup-schema';
 import { authenticated, getDecodedUserId, hasAccess } from '../helpers';
-import Account from '../../../lib/models/account';
+import * as Repository from './repository';
+import * as AccountRepository from '../account/repository';
+import * as ExpenseRepository from '../expense/repository';
 
 const getCategory = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
+    const { id } = req.query;
+
     const userId = (await getDecodedUserId(req, res)) as string;
-    const category = await Category.findById(req.query.id);
+    const category = await Repository.getCategoryById(id as string);
 
     if (!category) {
-      return res.status(200).send({ error: 'Category not found' });
+      return res.status(404).send({ error: 'Category not found' });
     }
 
     const authorized = await hasAccess(userId, category?.user);
 
     if (!authorized) {
-      return res.status(401).send({ error: 'Unauthorized access' });
+      return res.status(401).send({ error: 'Not authorized' });
     }
 
     res.status(200).json({ data: category });
@@ -32,17 +34,19 @@ const getCategory = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const updateCategory = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
+    const { id } = req.query;
+
     const userId = (await getDecodedUserId(req, res)) as string;
-    const category = await Category.findById(req.query.id);
+    const category = await Repository.getCategoryById(id as string);
 
     if (!category) {
-      return res.status(200).send({ error: 'Category not found' });
+      return res.status(404).send({ error: 'Category not found' });
     }
 
     const authorized = await hasAccess(userId, category?.user);
 
     if (!authorized) {
-      return res.status(401).send({ error: 'Unauthorized access' });
+      return res.status(401).send({ error: 'Not authorized' });
     }
 
     const errors = await validate(categorySchema, req.body);
@@ -54,15 +58,12 @@ const updateCategory = async (req: NextApiRequest, res: NextApiResponse) => {
     const label = trimToLowerCaseString(req.body.label);
 
     if (category.labels.includes(label)) {
-      return res.status(200).send({ error: 'Category already exists' });
+      return res.status(400).send({ error: 'Category already exists' });
     }
 
-    // update the labels array with the new label if it is not already in the array
-    await category.updateOne({
-      $push: { labels: label },
-    });
+    await Repository.addCategoryById(category._id, label);
 
-    const updatedCategories = await Category.findById(req.query.id);
+    const updatedCategories = await Repository.getCategoryById(id as string);
 
     res.status(200).json({ data: updatedCategories });
   } catch (err) {
@@ -73,29 +74,30 @@ const updateCategory = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const deleteCategory = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
+    const { id } = req.query;
+
     const userId = (await getDecodedUserId(req, res)) as string;
-    const account = await Account.findOne({ user: userId });
-    const category = await Category.findById(req.query.id);
+    const accounts = await AccountRepository.getAccountsByUserId(userId);
+    const category = await Repository.getCategoryById(id as string);
 
     if (!category) {
-      return res.status(200).send({ error: 'Category not found' });
+      return res.status(404).send({ error: 'Category not found' });
     }
 
     const authorized = await hasAccess(userId, category?.user);
 
     if (!authorized) {
-      return res.status(401).send({ error: 'Unauthorized access' });
+      return res.status(401).send({ error: 'Not authorized' });
     }
 
     const label = trimToLowerCaseString(req.body.label);
 
-    // find all expenses with this category and update them to other
-    await Expense.updateMany({ account: account, category: label }, { category: 'other' });
+    if (accounts.length > 0) {
+      const accountIds = accounts.map((account) => account._id);
+      await ExpenseRepository.updateExpensesByAccountId(accountIds, label);
+    }
 
-    // delete the label inside the category labels array
-    await category.updateOne({
-      $pull: { labels: label },
-    });
+    await Repository.removeCategoryById(category._id, label);
 
     res.status(200).json({ message: 'Ok' });
   } catch (err) {

@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import dbConnect from '../../../lib/config/db-connect';
-import User from '../../../lib/models/user';
+import * as Repository from './repository';
 import { checkHashedPassword, setAccessToken } from '../helpers';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -13,7 +13,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
+    const user = await Repository.getUserByEmail(email);
 
     if (!user) {
       return res.status(401).send({ error: 'Invalid credentials' });

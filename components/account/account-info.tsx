@@ -102,7 +102,7 @@ export function AccountInfo() {
       </List>
 
       <AccountForm open={Boolean(useCase)} useCase={useCase} account={account} onClose={handleClose} />
-      <AccountUsers open={openUser} account={account} onClose={() => setOpenUsers(false)} />
+      <AccountUsers open={openUser} accountId={account?._id} onClose={() => setOpenUsers(false)} />
     </Box>
   );
 }

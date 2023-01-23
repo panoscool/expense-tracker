@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import cloudinary from '../../../../lib/config/cloudinary';
 import dbConnect from '../../../../lib/config/db-connect';
-import User from '../../../../lib/models/user';
 import { getDecodedUserId, hasAccess, authenticated } from '../../helpers';
+import * as Repository from '../repository';
 
 export const config = {
   api: {
@@ -19,7 +19,7 @@ const uploadImage = async (req: NextApiRequest, res: NextApiResponse) => {
     const { base64 } = req.body;
 
     const userId = (await getDecodedUserId(req, res)) as string;
-    const user = await User.findById(userId);
+    const user = await Repository.getUserById(userId);
 
     if (!user) {
       return res.status(404).send('User not found');
@@ -28,7 +28,7 @@ const uploadImage = async (req: NextApiRequest, res: NextApiResponse) => {
     const authorized = hasAccess(userId, user?._id);
 
     if (!authorized) {
-      return res.status(401).send({ error: 'Unauthorized access' });
+      return res.status(401).send({ error: 'Not authorized' });
     }
 
     const uploaded = await cloudinary.uploader.upload(base64, {
@@ -66,7 +66,7 @@ const deleteImage = async (req: NextApiRequest, res: NextApiResponse) => {
     await dbConnect();
 
     const userId = (await getDecodedUserId(req, res)) as string;
-    const user = await User.findById(userId);
+    const user = await Repository.getUserById(userId);
 
     if (!user) {
       return res.status(404).send('User not found');
@@ -75,7 +75,7 @@ const deleteImage = async (req: NextApiRequest, res: NextApiResponse) => {
     const authorized = hasAccess(userId, user?._id);
 
     if (!authorized) {
-      return res.status(401).send({ error: 'Unauthorized access' });
+      return res.status(401).send({ error: 'Not authorized' });
     }
 
     await cloudinary.uploader.destroy(`user_images/${userId}`);

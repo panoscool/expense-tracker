@@ -4,9 +4,9 @@ interface IAccount extends Document {
   _id: string;
   user: Document['_id'];
   name: string;
-  users: string[];
+  users: Document['_id'][];
   description: string | null;
-  currency: string | null;
+  currency: string;
   created_at: Date;
   updated_at: Date;
 }
@@ -28,6 +28,6 @@ const AccountSchema: Schema = new Schema(
   },
 );
 
-const Account: Model<IAccount> = models.Account || model('Account', AccountSchema);
+const AccountModel: Model<IAccount> = models.Account || model('Account', AccountSchema);
 
-export default Account;
+export default AccountModel;

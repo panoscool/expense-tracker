@@ -1,46 +1,28 @@
-import { format, parseISO } from 'date-fns';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import dbConnect from '../../../lib/config/db-connect';
-import Account from '../../../lib/models/account';
-import Payment from '../../../lib/models/payment';
-import User from '../../../lib/models/user';
+import { hasAccountAccess } from '../account/helpers';
+import * as AccountRepository from '../account/repository';
 import { authenticated, getDecodedUserId } from '../helpers';
+import * as UserRepository from '../user/repository';
+import * as Repository from './repository';
 
 const getPayments = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const { id, period } = req.query;
-
     const userId = await getDecodedUserId(req, res);
-    const user = await User.findById(userId); // this is to initialize the User model for populate, otherwise userId can be used directly
-    const account = await Account.findOne({ _id: id });
+    const user = await UserRepository.getUserById(userId as string); // this is to initialize the User model for populate, otherwise userId can be used directly
+    const account = await AccountRepository.getAccountById(req.query.id as string);
 
-    if (!user || !account || !account.users.includes(userId as string)) {
+    if (!account) {
+      return res.status(404).send({ error: 'Account not found' });
+    }
+
+    const accountAccess = await hasAccountAccess(account, user?._id);
+
+    if (!accountAccess) {
       return res.status(401).send({ error: 'Not authorized' });
     }
 
-    let filters: any = { account: id };
-
-    if (period) {
-      filters.period = format(parseISO(period as string), 'MMMM-yyyy');
-    }
-
-    const payments = await Payment.findOne(filters)
-      .populate({
-        path: 'giving_users',
-        populate: {
-          path: 'user',
-          model: 'User',
-          select: 'name email image',
-        },
-      })
-      .populate({
-        path: 'receiving_users',
-        populate: {
-          path: 'user',
-          model: 'User',
-          select: 'name email image',
-        },
-      });
+    const payments = await Repository.getPaymentPopulatedByAccountAndPeriod(req.query);
 
     res.status(200).json({ data: payments });
   } catch (err) {
@@ -52,38 +34,27 @@ const getPayments = async (req: NextApiRequest, res: NextApiResponse) => {
 const updatePayment = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const userId = (await getDecodedUserId(req, res)) as string;
-    const payment = await Payment.findById(req.query.id);
+    const payment = await Repository.getPaymentById(req.query.id as string);
 
     if (!payment) {
       return res.status(404).send({ error: 'Payment not found' });
     }
 
-    const account = await Account.findById(payment.account);
-    if (!userId || !account || !account.users.includes(userId as string)) {
+    const account = await AccountRepository.getAccountById(payment.account);
+
+    if (!account) {
+      return res.status(404).send({ error: 'Account not found' });
+    }
+
+    const accountAccess = await hasAccountAccess(account, userId);
+
+    if (!accountAccess) {
       return res.status(401).send({ error: 'Not authorized' });
     }
 
-    const { settled } = req.body;
+    await payment.updateOne({ settled: req.body.settled, updated_by: userId });
 
-    await payment.updateOne({ settled, updated_by: userId });
-
-    const updatedPayment = await Payment.findById(payment._id)
-      .populate({
-        path: 'giving_users',
-        populate: {
-          path: 'user',
-          model: 'User',
-          select: 'name email',
-        },
-      })
-      .populate({
-        path: 'receiving_users',
-        populate: {
-          path: 'user',
-          model: 'User',
-          select: 'name email',
-        },
-      });
+    const updatedPayment = await Repository.getPaymentPopulatedById(payment._id);
 
     res.status(200).json({ data: updatedPayment });
   } catch (error) {

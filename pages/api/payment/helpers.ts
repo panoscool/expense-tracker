@@ -1,8 +1,8 @@
-import { endOfMonth, format, parseISO, startOfMonth } from 'date-fns';
-import { v4 as uuidv4 } from 'uuid';
-import Expense from '../../../lib/models/expense';
-import Payment from '../../../lib/models/payment';
+import { format, isSameMonth, parseISO } from 'date-fns';
+import { Expense } from '../../../lib/interfaces/expense';
 import { getGivingAndReceivingUsers, getTotalUsers } from '../../../lib/utils/expense-calculations';
+import * as ExpenseRepository from '../expense/repository';
+import * as Repository from './repository';
 
 interface Params {
   accountId: string;
@@ -14,29 +14,19 @@ export async function updatePayment(params: Params) {
   try {
     const { accountId, userId, date } = params;
 
-    const expenses = await Expense.find({
-      account: accountId,
-      date: {
-        $gte: startOfMonth(parseISO(date)),
-        $lte: endOfMonth(parseISO(date)),
-      },
-    });
+    const expenses = await ExpenseRepository.getExpenseByAccountIdAndDates(accountId, date);
 
     const totalUsers = getTotalUsers(expenses);
 
     if (totalUsers > 1) {
       const [giving, receiving] = getGivingAndReceivingUsers(expenses);
 
-      const payment = await Payment.findOne({
-        account: accountId,
-        period: format(parseISO(date), 'MMMM-yyyy'),
-      });
+      const payment = await Repository.getPaymentByAccountIdAndPeriod(accountId, date);
 
       if (!payment) {
-        await Payment.create({
-          _id: uuidv4(),
+        await Repository.createPayment({
           account: accountId,
-          period: format(parseISO(date), 'MMMM-yyyy'),
+          period: date,
           settled: false,
           giving_users: giving,
           receiving_users: receiving,
@@ -44,19 +34,57 @@ export async function updatePayment(params: Params) {
           updated_by: userId,
         });
       } else {
-        await Payment.updateOne(
-          { _id: payment._id },
-          {
-            $set: {
-              giving_users: giving,
-              receiving_users: receiving,
-              updated_by: userId,
-            },
-          },
-        );
+        await Repository.updatePaymentById(payment._id, {
+          giving_users: giving,
+          receiving_users: receiving,
+          updated_by: userId,
+        });
       }
     }
   } catch (error) {
     console.error(error);
   }
+}
+
+interface UpdateExpensePayment {
+  expense: Expense;
+  accountId: string;
+  userId: string;
+  date: string;
+}
+
+export async function updateExpensePayment(params: UpdateExpensePayment) {
+  const { expense, accountId, userId, date } = params;
+
+  const sameAccount = expense.account.toString() === accountId;
+  const sameMonth = isSameMonth(expense.date, parseISO(date));
+  const formattedDate = format(expense.date, 'yyyy-MM-dd');
+
+  if (!sameAccount && !sameMonth) {
+    await updatePayment({
+      accountId: expense.account,
+      userId: userId,
+      date: formattedDate,
+    });
+  }
+  if (!sameAccount && sameMonth) {
+    await updatePayment({
+      accountId: expense.account,
+      userId: userId,
+      date,
+    });
+  }
+  if (sameAccount && !sameMonth) {
+    await updatePayment({
+      accountId: accountId,
+      userId: userId,
+      date: formattedDate,
+    });
+  }
+
+  await updatePayment({
+    accountId: accountId,
+    userId: userId,
+    date,
+  });
 }

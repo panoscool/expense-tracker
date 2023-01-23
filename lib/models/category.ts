@@ -22,6 +22,6 @@ const CategorySchema: Schema = new Schema(
   },
 );
 
-const Category: Model<ICategory> = models.Category || model('Category', CategorySchema);
+const CategoryModel: Model<ICategory> = models.Category || model('Category', CategorySchema);
 
-export default Category;
+export default CategoryModel;

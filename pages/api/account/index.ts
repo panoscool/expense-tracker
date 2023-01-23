@@ -1,16 +1,16 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { v4 as uuidv4 } from 'uuid';
-import Account from '../../../lib/models/account';
-import User from '../../../lib/models/user';
 import dbConnect from '../../../lib/config/db-connect';
 import { accountSchema } from '../../../lib/config/yup-schema';
 import { authenticated, getDecodedUserId } from '../helpers';
 import validate from '../../../lib/utils/validate';
+import * as Repository from './repository';
+import * as UserRepository from '../user/repository';
+import { isAccountOwner } from './helpers';
 
 const getAccounts = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const userId = await getDecodedUserId(req, res);
-    const accounts = await Account.find({ users: userId }).populate('users', 'name email image');
+    const userId = (await getDecodedUserId(req, res)) as string;
+    const accounts = await Repository.getAccountsPopulatedByUserId(userId);
 
     res.status(200).json({ data: accounts });
   } catch (err) {
@@ -21,37 +21,28 @@ const getAccounts = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const createAccount = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
+    const userId = (await getDecodedUserId(req, res)) as string;
+
     const errors = await validate(accountSchema, req.body);
 
     if (errors) {
       return res.status(400).send({ error: errors });
     }
 
-    const userId = await getDecodedUserId(req, res);
-
     const { name, currency, description, email } = req.body;
 
-    const account = await Account.create({
-      _id: uuidv4(),
-      user: userId,
-      name,
-      currency,
-      users: [userId],
-      description,
-    });
+    const account = await Repository.createAccount({ user: userId, name, currency, users: [userId], description });
 
-    const user = await User.findOne({ email });
+    const accountOwner = await isAccountOwner(userId, account.user);
 
-    if (user?._id === account.user) {
+    if (accountOwner) {
       return res.status(400).send({ error: 'You cannot add yourself as a user' });
     }
 
+    const user = await UserRepository.getUserByEmail(email);
+
     if (user) {
-      await account.updateOne({
-        $push: {
-          users: user._id,
-        },
-      });
+      await Repository.addAccountUserById(account._id, user._id);
     }
 
     res.status(200).json({ data: account });

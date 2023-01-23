@@ -8,7 +8,7 @@ export interface Account {
   _id: string;
   name: string;
   currency: string;
-  description: string;
+  description: string | null;
   user: string;
   users: User[];
 }

@@ -30,8 +30,6 @@ const Profile: NextPage = () => {
     checkAuthStateAndRedirect('/login');
   }, [checkAuthStateAndRedirect]);
 
-  if (!authenticated) return null;
-
   const handleChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
     setExpanded(isExpanded ? panel : false);
   };
@@ -49,6 +47,8 @@ const Profile: NextPage = () => {
 
     setOpen(null);
   };
+
+  if (!authenticated) return null;
 
   return (
     <div>
@@ -88,7 +88,7 @@ const Profile: NextPage = () => {
           </Accordion>
 
           <AccountForm open={openAccountForm} useCase={open} account={selectedAccount} onClose={handleClose} />
-          <AccountUsers open={openAccountView} account={selectedAccount} onClose={handleClose} />
+          <AccountUsers open={openAccountView} accountId={selectedAccount?._id} onClose={handleClose} />
           <CategoryForm open={openCategoryForm} onClose={handleClose} />
         </Container>
       </Layout>
