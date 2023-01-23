@@ -1,3 +1,5 @@
+import { format, isSameMonth, parseISO } from 'date-fns';
+import { Expense } from '../../../lib/interfaces/expense';
 import { getGivingAndReceivingUsers, getTotalUsers } from '../../../lib/utils/expense-calculations';
 import * as ExpenseRepository from '../expense/repository';
 import * as Repository from './repository';
@@ -42,4 +44,47 @@ export async function updatePayment(params: Params) {
   } catch (error) {
     console.error(error);
   }
+}
+
+interface UpdateExpensePayment {
+  expense: Expense;
+  accountId: string;
+  userId: string;
+  date: string;
+}
+
+export async function updateExpensePayment(params: UpdateExpensePayment) {
+  const { expense, accountId, userId, date } = params;
+
+  const sameAccount = expense.account.toString() === accountId;
+  const sameMonth = isSameMonth(expense.date, parseISO(date));
+  const formattedDate = format(expense.date, 'yyyy-MM-dd');
+
+  if (!sameAccount && !sameMonth) {
+    await updatePayment({
+      accountId: expense.account,
+      userId: userId,
+      date: formattedDate,
+    });
+  }
+  if (!sameAccount && sameMonth) {
+    await updatePayment({
+      accountId: expense.account,
+      userId: userId,
+      date,
+    });
+  }
+  if (sameAccount && !sameMonth) {
+    await updatePayment({
+      accountId: accountId,
+      userId: userId,
+      date: formattedDate,
+    });
+  }
+
+  await updatePayment({
+    accountId: accountId,
+    userId: userId,
+    date,
+  });
 }

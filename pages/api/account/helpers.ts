@@ -6,5 +6,5 @@ export async function isAccountOwner(userId: string, accountUserId: string) {
 }
 
 export async function hasAccountAccess(account: Account, userId: string) {
-  return account.users.some((user: User) => user._id.toString() === userId);
+  return account.users.some((user: User) => user._id.toString() === userId?.toString());
 }

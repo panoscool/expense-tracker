@@ -8,9 +8,8 @@ import * as Repository from './repository';
 
 const getCategories = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const userId = await getDecodedUserId(req, res);
-
-    const categories = await Repository.getCategoryByUserId(userId as string);
+    const userId = (await getDecodedUserId(req, res)) as string;
+    const categories = await Repository.getCategoryByUserId(userId);
 
     res.status(200).json({ data: categories });
   } catch (err) {
@@ -21,13 +20,13 @@ const getCategories = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const createCategory = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
+    const userId = await getDecodedUserId(req, res);
+
     const errors = await validate(categorySchema, req.body);
 
     if (errors) {
       return res.status(400).send({ error: errors });
     }
-
-    const userId = await getDecodedUserId(req, res);
 
     const category = await Repository.createCategory({
       user: userId as string,

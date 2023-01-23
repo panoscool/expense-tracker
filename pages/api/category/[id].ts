@@ -16,7 +16,7 @@ const getCategory = async (req: NextApiRequest, res: NextApiResponse) => {
     const category = await Repository.getCategoryById(id as string);
 
     if (!category) {
-      return res.status(200).send({ error: 'Category not found' });
+      return res.status(404).send({ error: 'Category not found' });
     }
 
     const authorized = await hasAccess(userId, category?.user);
@@ -40,7 +40,7 @@ const updateCategory = async (req: NextApiRequest, res: NextApiResponse) => {
     const category = await Repository.getCategoryById(id as string);
 
     if (!category) {
-      return res.status(200).send({ error: 'Category not found' });
+      return res.status(404).send({ error: 'Category not found' });
     }
 
     const authorized = await hasAccess(userId, category?.user);
@@ -58,7 +58,7 @@ const updateCategory = async (req: NextApiRequest, res: NextApiResponse) => {
     const label = trimToLowerCaseString(req.body.label);
 
     if (category.labels.includes(label)) {
-      return res.status(200).send({ error: 'Category already exists' });
+      return res.status(400).send({ error: 'Category already exists' });
     }
 
     await Repository.addCategoryById(category._id, label);
@@ -77,11 +77,11 @@ const deleteCategory = async (req: NextApiRequest, res: NextApiResponse) => {
     const { id } = req.query;
 
     const userId = (await getDecodedUserId(req, res)) as string;
-    const account = await AccountRepository.getAccountById(userId);
+    const accounts = await AccountRepository.getAccountsByUserId(userId);
     const category = await Repository.getCategoryById(id as string);
 
     if (!category) {
-      return res.status(200).send({ error: 'Category not found' });
+      return res.status(404).send({ error: 'Category not found' });
     }
 
     const authorized = await hasAccess(userId, category?.user);
@@ -92,8 +92,9 @@ const deleteCategory = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const label = trimToLowerCaseString(req.body.label);
 
-    if (account) {
-      await ExpenseRepository.updateExpensesByAccountId(account._id, label);
+    if (accounts.length > 0) {
+      const accountIds = accounts.map((account) => account._id);
+      await ExpenseRepository.updateExpensesByAccountId(accountIds, label);
     }
 
     await Repository.removeCategoryById(category._id, label);

@@ -10,11 +10,13 @@ import { hasAccountAccess, isAccountOwner } from './helpers';
 
 const getAccount = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
+    const { id } = req.query;
+
     const userId = (await getDecodedUserId(req, res)) as string;
-    const account = await Repository.getAccountPopulatedById(req.query.id as string);
+    const account = await Repository.getAccountPopulatedById(id as string);
 
     if (!account) {
-      return res.status(200).send({ error: 'Account not found' });
+      return res.status(404).send({ error: 'Account not found' });
     }
 
     const accountAccess = await hasAccountAccess(account, userId);
@@ -32,11 +34,13 @@ const getAccount = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const updateAccount = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
+    const { id } = req.query;
+
     const userId = (await getDecodedUserId(req, res)) as string;
-    const account = await Repository.getAccountById(req.query.id as string);
+    const account = await Repository.getAccountById(id as string);
 
     if (!account) {
-      return res.status(200).send({ error: 'Account not found' });
+      return res.status(404).send({ error: 'Account not found' });
     }
 
     const authorized = await hasAccess(userId, account?.user);
@@ -77,7 +81,7 @@ const updateAccount = async (req: NextApiRequest, res: NextApiResponse) => {
       await Repository.removeAccountUserById(account._id, user._id);
     }
 
-    const updatedAccount = await Repository.getAccountById(req.query.id as string);
+    const updatedAccount = await Repository.getAccountById(id as string);
 
     res.status(200).json({ data: updatedAccount });
   } catch (err) {
@@ -94,7 +98,7 @@ const deleteAccount = async (req: NextApiRequest, res: NextApiResponse) => {
     const account = await Repository.getAccountById(id as string);
 
     if (!account) {
-      return res.status(200).send({ error: 'Account not found' });
+      return res.status(404).send({ error: 'Account not found' });
     }
 
     const authorized = await hasAccess(userId, account?.user);

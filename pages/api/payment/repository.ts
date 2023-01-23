@@ -18,6 +18,10 @@ interface PaymentUpdate {
   updated_by: string;
 }
 
+const GET_BY_ID = (id: string) => ({
+  $or: [{ _id: id }, { id }],
+});
+
 export async function createPayment(payment: PaymentCreate) {
   const period = format(parseISO(payment.period), 'MMMM-yyyy');
 
@@ -34,16 +38,13 @@ export async function createPayment(payment: PaymentCreate) {
 }
 
 export async function updatePaymentById(id: string, payment: PaymentUpdate) {
-  return await PaymentModel.updateOne(
-    { _id: id },
-    {
-      $set: {
-        giving_users: payment.giving_users,
-        receiving_users: payment.receiving_users,
-        updated_by: payment.updated_by,
-      },
+  return await PaymentModel.updateOne(GET_BY_ID(id), {
+    $set: {
+      giving_users: payment.giving_users,
+      receiving_users: payment.receiving_users,
+      updated_by: payment.updated_by,
     },
-  );
+  });
 }
 
 export async function getPaymentById(id: string) {
@@ -59,8 +60,16 @@ export async function getPaymentByAccountIdAndPeriod(accountId: string, period: 
   });
 }
 
-export async function getPaymentsPopulated(filters: { account: string; period: string }) {
-  return await await PaymentModel.find(filters)
+export async function getPaymentsPopulated(filters: any) {
+  const { account_id, period } = filters;
+
+  let query: any = { account: account_id };
+
+  if (period) {
+    filters.period = format(parseISO(period as string), 'MMMM-yyyy');
+  }
+
+  return await PaymentModel.find(query)
     .populate({
       path: 'giving_users',
       populate: {
@@ -99,8 +108,16 @@ export async function getPaymentPopulatedById(id: string) {
     });
 }
 
-export async function getPaymentPopulatedByAccountAndPeriod(filters: { account: string; period: string }) {
-  return await PaymentModel.findOne(filters)
+export async function getPaymentPopulatedByAccountAndPeriod(filters: any) {
+  const { id, period } = filters;
+
+  let query: any = { account: id };
+
+  if (period) {
+    filters.period = format(parseISO(period as string), 'MMMM-yyyy');
+  }
+
+  return await PaymentModel.findOne(query)
     .populate({
       path: 'giving_users',
       populate: {

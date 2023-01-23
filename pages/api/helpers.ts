@@ -12,8 +12,8 @@ export async function checkHashedPassword(text: string, hash: string) {
   return compare(text, hash);
 }
 
-export async function hasAccess(userId?: string, creatorId?: string, entityUserId?: string) {
-  return userId === creatorId?.toString() || userId === entityUserId?.toString();
+export async function hasAccess(userId: string, creatorId: string, entityUserId?: string) {
+  return userId?.toString() === creatorId?.toString() || userId?.toString() === entityUserId?.toString();
 }
 
 export async function setAccessToken(user: IUser) {

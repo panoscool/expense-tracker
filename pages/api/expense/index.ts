@@ -1,42 +1,31 @@
-import { endOfMonth, parseISO, startOfMonth } from 'date-fns';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import dbConnect from '../../../lib/config/db-connect';
 import { expenseSchema } from '../../../lib/config/yup-schema';
 import validate from '../../../lib/utils/validate';
+import { hasAccountAccess } from '../account/helpers';
+import * as AccountRepository from '../account/repository';
 import { authenticated, getDecodedUserId } from '../helpers';
 import { updatePayment } from '../payment/helpers';
-import * as Repository from './repository';
 import * as UserRepository from '../user/repository';
-import * as AccountRepository from '../account/repository';
+import * as Repository from './repository';
 
 const getExpenses = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const { account_id, date, user_id, category } = req.query;
+    const userId = (await getDecodedUserId(req, res)) as string;
+    const user = await UserRepository.getUserById(userId); // this is to initialize the User model for populate, otherwise userId can be used directly
+    const account = await AccountRepository.getAccountById(req.query.account_id as string);
 
-    const userId = await getDecodedUserId(req, res);
-    const user = await UserRepository.getUserById(userId as string); // this is to initialize the User model for populate, otherwise userId can be used directly
-    const account = await AccountRepository.getAccountById(account_id as string);
+    if (!account) {
+      return res.status(404).send({ error: 'Account not found' });
+    }
 
-    if (!user || !account || !account.users.includes(userId as string)) {
+    const accountAccess = await hasAccountAccess(account, user?._id);
+
+    if (!accountAccess) {
       return res.status(401).send({ error: 'Not authorized' });
     }
 
-    const monthStart = startOfMonth(parseISO(date as string));
-    const monthEnd = endOfMonth(parseISO(date as string));
-
-    let filters: any = { account: account_id };
-
-    if (date) {
-      filters.date = { $gte: monthStart, $lte: monthEnd };
-    }
-    if (user_id) {
-      filters.user = user_id;
-    }
-    if (category) {
-      filters.category = category;
-    }
-
-    const expenses = await Repository.getExpensesPopulated(filters);
+    const expenses = await Repository.getExpensesPopulated(req.query);
 
     res.status(200).json({ data: expenses });
   } catch (err) {

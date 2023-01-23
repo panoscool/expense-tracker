@@ -28,6 +28,10 @@ export async function getAccountById(id: string) {
   return await AccountModel.findById(id);
 }
 
+export async function getAccountsByUserId(userId: string) {
+  return await AccountModel.find({ user: userId });
+}
+
 export async function getAccountsPopulatedByUserId(userId: string) {
   return await AccountModel.find({ users: userId }).populate('users', 'name email image');
 }
