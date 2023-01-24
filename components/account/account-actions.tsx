@@ -41,7 +41,7 @@ export function AccountActions({ account, onOpen }: Props) {
 
   return (
     <ListItemSecondaryAction>
-      <IconButton color="inherit" {...bindTrigger(popupState)}>
+      <IconButton color="inherit" aria-label="more" {...bindTrigger(popupState)}>
         <MoreVertRounded />
       </IconButton>
 

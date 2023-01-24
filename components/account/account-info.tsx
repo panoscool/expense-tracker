@@ -71,7 +71,7 @@ export function AccountInfo() {
           <ListItemText primary={account?.name} secondary={`Users: ${account.users.length}`} />
 
           <ListItemSecondaryAction>
-            <IconButton color="inherit" {...bindTrigger(popupState)}>
+            <IconButton color="inherit" aria-label="more" {...bindTrigger(popupState)}>
               <MoreVertRounded />
             </IconButton>
 

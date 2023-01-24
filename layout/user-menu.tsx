@@ -26,7 +26,7 @@ export function UserMenu({ user, logout }: Props) {
 
   return (
     <div>
-      <IconButton {...bindTrigger(popupState)} sx={{ p: 0, color: 'inherit' }}>
+      <IconButton {...bindTrigger(popupState)} sx={{ p: 0, color: 'inherit' }} aria-label="user menu">
         {user?.image ? <Avatar src={user.image} alt={user?.name} /> : <AccountCircleRounded fontSize="large" />}
       </IconButton>
       <Menu {...bindMenu(popupState)}>
