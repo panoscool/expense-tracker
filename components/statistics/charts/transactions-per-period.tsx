@@ -9,9 +9,9 @@ import { DayMonth, Quarter, AccountStatistic, Week } from '../../../lib/interfac
 
 type Props = {
   data: AccountStatistic[];
-  value: string;
   themeMode: ThemeMode;
-  setValue: React.Dispatch<React.SetStateAction<string>>;
+  period: string;
+  setPeriod: React.Dispatch<React.SetStateAction<string>>;
 };
 
 function getLabels(period: string, data: any) {
@@ -31,7 +31,7 @@ function getData(data: AccountStatistic[]) {
   return data.map((expense: AccountStatistic) => expense.count);
 }
 
-const TotalPerAccount: React.FC<Props> = ({ data, themeMode, value, setValue }) => {
+const TotalPerAccount: React.FC<Props> = ({ data, themeMode, period, setPeriod }) => {
   const series = [
     {
       name: 'Transactions',
@@ -40,7 +40,7 @@ const TotalPerAccount: React.FC<Props> = ({ data, themeMode, value, setValue }) 
   ];
 
   const options: ApexOptions = {
-    labels: getLabels(value, data),
+    labels: getLabels(period, data),
     theme: {
       mode: themeMode,
     },
@@ -90,7 +90,7 @@ const TotalPerAccount: React.FC<Props> = ({ data, themeMode, value, setValue }) 
 
   return (
     <Card variant="outlined">
-      <ChartHeader title="Transactions per period" value={value} setValue={setValue} />
+      <ChartHeader title="Transactions per period" value={period} setValue={setPeriod} />
       <CardContent>
         <Chart type="area" height="256px" series={series} options={options} />
       </CardContent>

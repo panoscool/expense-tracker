@@ -6,14 +6,14 @@ import { CategoryStatistic } from '../../lib/interfaces/statistics';
 
 const TotalPerCategory = dynamic(() => import('./charts/total-per-category'), { ssr: false });
 
-export const CategoryTotal: React.FC<{ accountId?: string }> = ({ accountId }) => {
-  const { themeMode } = useAppContext();
+export const CategoryTotal: React.FC = () => {
+  const { account, themeMode } = useAppContext();
   const [month, setMonth] = useState(new Date());
   const [data, setData] = useState<CategoryStatistic[]>([]);
 
   useEffect(() => {
-    if (accountId) {
-      apiRequest('GET', `/statistics/category?account_id=${accountId}`)
+    if (account?._id) {
+      apiRequest('GET', `/statistics/category?account_id=${account._id}`)
         .then((resData) => {
           setData(resData as any);
         })
@@ -21,7 +21,15 @@ export const CategoryTotal: React.FC<{ accountId?: string }> = ({ accountId }) =
           console.error(error);
         });
     }
-  }, [accountId]);
+  }, [account?._id]);
 
-  return <TotalPerCategory data={data} themeMode={themeMode} month={month} setMonth={setMonth} />;
+  return (
+    <TotalPerCategory
+      data={data}
+      currency={account?.currency}
+      themeMode={themeMode}
+      month={month}
+      setMonth={setMonth}
+    />
+  );
 };
