@@ -1,5 +1,5 @@
 import dynamic from 'next/dynamic';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import useAppContext from '../../hooks/use-app-context';
 import apiRequest from '../../lib/config/axios';
 
@@ -10,9 +10,11 @@ export const AccountTotal: React.FC = () => {
   const [period, setPeriod] = useState('month');
   const [data, setData] = useState([]);
 
+  const accountId = useMemo(() => account?._id, [account?._id]);
+
   useEffect(() => {
-    if (account?._id) {
-      apiRequest('GET', `/statistics?account_id=${account._id}&period=${period}`)
+    if (accountId) {
+      apiRequest('GET', `/statistics?account_id=${accountId}&period=${period}`)
         .then((resData) => {
           setData(resData as any);
         })
@@ -20,7 +22,7 @@ export const AccountTotal: React.FC = () => {
           console.error(error);
         });
     }
-  }, [account?._id, period]);
+  }, [accountId, period]);
 
   return (
     <TotalPerAccount

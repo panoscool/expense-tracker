@@ -1,4 +1,6 @@
+import { sign } from 'jsonwebtoken';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { v4 as uuidv4 } from 'uuid';
 import dbConnect from '../../../lib/config/db-connect';
 import { forgotPasswordEmail } from '../sendpulse';
 import { getUserByEmail } from './repository';
@@ -14,7 +16,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const user = await getUserByEmail(req.body.email);
 
     if (user) {
-      await forgotPasswordEmail(req.body.email, 'hash', user.name);
+      const sub = user._id.toString();
+      const hash = uuidv4();
+
+      const token = sign({ sub, hash }, process.env.JWT_SECRET!, {
+        expiresIn: '24h',
+      });
+
+      await forgotPasswordEmail(req.body.email, token, user.name);
+
+      user.password_reset_hash = hash;
+
+      user.save();
     }
 
     res.status(200).json({ message: 'Ok' });

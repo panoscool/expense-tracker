@@ -22,13 +22,14 @@ export const ProfileForm: React.FC = () => {
   const [isSaveDisabled, setIsSaveDisabled] = useState(true);
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(userUpdateSchema, {
     name: '',
+    email: '',
     password: '',
     newPassword: '',
     confirmPassword: '',
   });
 
   useEffect(() => {
-    setValues({ name: user?.name });
+    setValues({ name: user?.name, email: user?.email });
   }, [user, setValues]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,6 +76,7 @@ export const ProfileForm: React.FC = () => {
           error={!!hasError('name')}
           helperText={hasError('name')?.message}
         />
+        <TextField disabled name="email" label="Email" value={values.email || ''} />
         <TextField
           type="password"
           name="password"

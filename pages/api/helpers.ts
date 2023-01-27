@@ -31,9 +31,8 @@ export async function setAccessToken(user: IUser) {
 export const getDecodedUserId = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const [_, token] = req.headers.authorization?.split(' ') || [];
-    const secret = process.env.JWT_SECRET || '';
 
-    const decoded = verify(token, secret);
+    const decoded = verify(token, process.env.JWT_SECRET!);
 
     if (decoded) {
       return decoded.sub;

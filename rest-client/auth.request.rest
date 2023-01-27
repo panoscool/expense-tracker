@@ -1,0 +1,17 @@
+POST http://localhost:3000/api/user/forgot-password
+content-type: application/json
+
+{
+    "email": "test@test.com"
+}
+
+###
+
+POST http://localhost:3000/api/user/reset-password
+content-type: application/json
+
+{
+    "token": "string",
+    "password": "string min 8 char",
+    "confirmPassword": "string min 8 char"
+}
