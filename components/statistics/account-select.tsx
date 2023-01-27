@@ -11,7 +11,7 @@ export function StatisticsFilters() {
   const { accounts, dispatch } = useAppContext();
   const [accountId, setAccountId] = useState('');
 
-  const queryAccountId = useMemo(() => router.query?.account_id as string, [router]);
+  const queryAccountId = useMemo(() => router.query.account_id as string, [router.query.account_id]);
 
   useEffect(() => {
     getAccounts(dispatch).then((res) => {

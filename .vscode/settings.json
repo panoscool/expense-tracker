@@ -1,4 +1,5 @@
 {
   "editor.rulers": [100, 120],
-  "prettier.printWidth": 100
+  "prettier.printWidth": 100,
+  "cSpell.words": ["SENDGRID", "SENDPULSE", "uuidv"]
 }

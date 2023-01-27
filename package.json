@@ -19,6 +19,7 @@
     "@mui/lab": "^5.0.0-alpha.115",
     "@mui/material": "^5.11.4",
     "@mui/x-date-pickers": "^5.0.13",
+    "@sendgrid/mail": "^7.7.0",
     "apexcharts": "^3.36.3",
     "axios": "^1.2.2",
     "bcrypt": "^5.1.0",
