@@ -53,7 +53,7 @@ const Profile: NextPage = () => {
   return (
     <div>
       <Head>
-        <title>Expense Tracker - Settings</title>
+        <title>Settings - Expense Tracker</title>
         <meta name="description" content="Accounts and categories settings" />
       </Head>
 

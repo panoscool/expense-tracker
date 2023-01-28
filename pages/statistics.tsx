@@ -35,7 +35,7 @@ const Statistics: NextPage = () => {
   return (
     <div>
       <Head>
-        <title>Expense Tracker</title>
+        <title>Statistics - Expense Tracker</title>
         <meta name="description" content="Keep track of expenses share with others and split" />
       </Head>
 

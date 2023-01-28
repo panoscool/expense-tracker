@@ -3,7 +3,6 @@ import { Box, Container, TextField, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import useAppContext from '../hooks/use-app-context';
@@ -11,8 +10,8 @@ import useAuth from '../hooks/use-auth';
 import useForm from '../hooks/use-form';
 import apiRequest from '../lib/config/axios';
 import { storeSetAccessToken } from '../lib/config/store';
-import { loginSchema } from '../lib/config/yup-schema';
 import { setError, setLoading } from '../lib/services/helpers';
+import { forgotPasswordSchema } from '../lib/config/yup-schema';
 
 const ContainerWrapper = styled(Container)`
   display: flex;
@@ -30,13 +29,12 @@ const Form = styled('form')(({ theme }) => ({
   width: '100%',
 }));
 
-const Login: NextPage = () => {
+const ForgotPassword: NextPage = () => {
   const router = useRouter();
   const { loading, error, dispatch } = useAppContext();
   const { authenticated, checkAuthStateAndRedirect } = useAuth(false);
-  const { values, setValues, onBlur, hasError, canSubmit } = useForm(loginSchema, {
+  const { values, setValues, onBlur, hasError, canSubmit } = useForm(forgotPasswordSchema, {
     email: '',
-    password: '',
   });
 
   useEffect(() => {
@@ -57,7 +55,7 @@ const Login: NextPage = () => {
     if (canSubmit()) {
       try {
         setLoading(dispatch, 'login');
-        const res = await apiRequest('POST', '/user/login', values);
+        const res = await apiRequest('POST', '/user/forgot-password', values);
         storeSetAccessToken(res.data);
         router.push('/');
       } catch (error) {
@@ -73,14 +71,14 @@ const Login: NextPage = () => {
   return (
     <div>
       <Head>
-        <title>Login - Expense Tracker</title>
+        <title>Forgot Password - Expense Tracker</title>
         <meta name="description" content="Login to expense tracker" />
       </Head>
 
       <ContainerWrapper maxWidth="sm">
         <Box textAlign="center">
           <Typography gutterBottom variant="h4">
-            Login
+            Forgot Password
           </Typography>
           <Typography color="error">{typeof error === 'string' && error}</Typography>
         </Box>
@@ -96,28 +94,14 @@ const Login: NextPage = () => {
             error={!!hasError('email')}
             helperText={hasError('email')?.message}
           />
-          <TextField
-            type="password"
-            name="password"
-            label="Password"
-            value={values.password || ''}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            error={!!hasError('password')}
-            helperText={hasError('password')?.message}
-          />
 
           <LoadingButton type="submit" variant="contained" loading={loading.length > 0}>
-            <span>Login</span>
+            <span>Submit</span>
           </LoadingButton>
         </Form>
-
-        <Typography>
-          Don&apos;t have an account? <Link href="/register">Register</Link>
-        </Typography>
       </ContainerWrapper>
     </div>
   );
 };
 
-export default Login;
+export default ForgotPassword;

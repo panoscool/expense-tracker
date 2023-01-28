@@ -75,7 +75,7 @@ const Register: NextPage = () => {
   return (
     <div>
       <Head>
-        <title>Expense Tracker - Register</title>
+        <title>Register - Expense Tracker</title>
         <meta name="description" content="Register to expense tracker" />
       </Head>
 

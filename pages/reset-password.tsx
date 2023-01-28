@@ -11,7 +11,7 @@ import useAuth from '../hooks/use-auth';
 import useForm from '../hooks/use-form';
 import apiRequest from '../lib/config/axios';
 import { storeSetAccessToken } from '../lib/config/store';
-import { loginSchema } from '../lib/config/yup-schema';
+import { resetPasswordSchema } from '../lib/config/yup-schema';
 import { setError, setLoading } from '../lib/services/helpers';
 
 const ContainerWrapper = styled(Container)`
@@ -30,13 +30,13 @@ const Form = styled('form')(({ theme }) => ({
   width: '100%',
 }));
 
-const Login: NextPage = () => {
+const ResetPassword: NextPage = () => {
   const router = useRouter();
   const { loading, error, dispatch } = useAppContext();
   const { authenticated, checkAuthStateAndRedirect } = useAuth(false);
-  const { values, setValues, onBlur, hasError, canSubmit } = useForm(loginSchema, {
-    email: '',
+  const { values, setValues, onBlur, hasError, canSubmit } = useForm(resetPasswordSchema, {
     password: '',
+    confirmPassword: '',
   });
 
   useEffect(() => {
@@ -57,7 +57,7 @@ const Login: NextPage = () => {
     if (canSubmit()) {
       try {
         setLoading(dispatch, 'login');
-        const res = await apiRequest('POST', '/user/login', values);
+        const res = await apiRequest('POST', '/user/reset-password', values);
         storeSetAccessToken(res.data);
         router.push('/');
       } catch (error) {
@@ -73,29 +73,19 @@ const Login: NextPage = () => {
   return (
     <div>
       <Head>
-        <title>Login - Expense Tracker</title>
+        <title>Reset Password - Expense Tracker</title>
         <meta name="description" content="Login to expense tracker" />
       </Head>
 
       <ContainerWrapper maxWidth="sm">
         <Box textAlign="center">
           <Typography gutterBottom variant="h4">
-            Login
+            Reset Password
           </Typography>
           <Typography color="error">{typeof error === 'string' && error}</Typography>
         </Box>
 
         <Form onSubmit={handleSubmit}>
-          <TextField
-            type="text"
-            name="email"
-            label="Email"
-            value={values.email || ''}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            error={!!hasError('email')}
-            helperText={hasError('email')?.message}
-          />
           <TextField
             type="password"
             name="password"
@@ -106,18 +96,24 @@ const Login: NextPage = () => {
             error={!!hasError('password')}
             helperText={hasError('password')?.message}
           />
+          <TextField
+            type="password"
+            name="confirmPassword"
+            label="Confirm Password"
+            value={values.confirmPassword || ''}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            error={!!hasError('confirmPassword')}
+            helperText={hasError('confirmPassword')?.message}
+          />
 
           <LoadingButton type="submit" variant="contained" loading={loading.length > 0}>
-            <span>Login</span>
+            <span>Submit</span>
           </LoadingButton>
         </Form>
-
-        <Typography>
-          Don&apos;t have an account? <Link href="/register">Register</Link>
-        </Typography>
       </ContainerWrapper>
     </div>
   );
 };
 
-export default Login;
+export default ResetPassword;

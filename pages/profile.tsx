@@ -29,7 +29,7 @@ const Profile: NextPage = () => {
   return (
     <div>
       <Head>
-        <title>Expense Tracker - Profile</title>
+        <title>Profile - Expense Tracker</title>
         <meta name="description" content="User profile" />
       </Head>
 
