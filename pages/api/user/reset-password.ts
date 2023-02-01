@@ -1,12 +1,8 @@
-import { JwtPayload, verify } from 'jsonwebtoken';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { resetPasswordSchema } from '../../../lib/config/yup-schema';
+import validate from '../../../lib/utils/validate';
 import { getHashedPassword } from '../helpers';
-import { getUserById } from './repository';
-
-interface JWTDecoded extends JwtPayload {
-  sub: string;
-  hash: string;
-}
+import { getUserByPasswordResetHash } from './repository';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
@@ -14,27 +10,29 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    const { token, password, confirmPassword } = req.body;
+    const { hash, password, confirmPassword } = req.body;
 
-    const decodedToken = verify(token, process.env.JWT_SECRET!) as JWTDecoded;
+    const user = await getUserByPasswordResetHash(hash);
 
-    if (!decodedToken) {
-      return res.status(400).json({ error: 'Invalid token' });
-    }
-    if ((!password || !confirmPassword) && password !== confirmPassword) {
-      return res.status(400).json({ error: 'Passwords should match' });
+    if (!user) {
+      return res.status(400).json({ error: 'The link you used has been expired, please try again.' });
     }
 
-    const user = await getUserById(decodedToken.sub);
+    const errors = await validate(resetPasswordSchema, {
+      password,
+      confirmPassword,
+    });
 
-    if (user && user.password_reset_hash === decodedToken.hash) {
-      const hashedPassword = await getHashedPassword(password);
-
-      user.password = hashedPassword;
-      user.password_reset_hash = null;
-
-      user.save();
+    if (errors) {
+      return res.status(400).send({ error: errors || 'The link you used has been expired, please try again.' });
     }
+
+    const hashedPassword = await getHashedPassword(password);
+
+    user.password = hashedPassword;
+    user.password_reset_hash = null;
+
+    user.save();
 
     res.status(200).json({ message: 'Ok' });
   } catch (err) {

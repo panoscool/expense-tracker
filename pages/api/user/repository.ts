@@ -11,3 +11,7 @@ export async function getUserById(id: string) {
 export async function getUserByEmail(email: string) {
   return await UserModel.findOne({ email });
 }
+
+export async function getUserByPasswordResetHash(hash: string) {
+  return await UserModel.findOne({ password_reset_hash: hash });
+}

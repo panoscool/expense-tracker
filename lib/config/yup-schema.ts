@@ -13,10 +13,7 @@ yup.addMethod(yup.string, 'validatePassword', function (errorMessage) {
     }
 
     const validLength =
-      value?.trim() &&
-      value.trim().length === 0 &&
-      value.trim().length >= 6 &&
-      value.trim().length <= 24;
+      value?.trim() && value.trim().length === 0 && value.trim().length >= 6 && value.trim().length <= 24;
 
     const isValid = value == null || value == undefined || validLength || true;
 
@@ -96,4 +93,21 @@ export const userUpdateSchema = yup.object({
       .required('Confirm password is required')
       .oneOf([yup.ref('newPassword')], 'New and confirm password must match'),
   }),
+});
+
+export const forgotPasswordSchema = yup.object({
+  email: yup.string().email('Email is not valid').required('Email is required'),
+});
+
+export const resetPasswordSchema = yup.object({
+  password: yup
+    .string()
+    .trim()
+    .min(6, 'Password must be at least 6 characters')
+    .max(24, 'Password should not exceed 24 characters')
+    .required('Password is required'),
+  confirmPassword: yup
+    .string()
+    .required('Confirm password is required')
+    .oneOf([yup.ref('password')], 'Passwords must match'),
 });

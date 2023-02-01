@@ -73,7 +73,7 @@ const Login: NextPage = () => {
   return (
     <div>
       <Head>
-        <title>Expense Tracker - Login</title>
+        <title>Login - Expense Tracker</title>
         <meta name="description" content="Login to expense tracker" />
       </Head>
 
@@ -107,13 +107,26 @@ const Login: NextPage = () => {
             helperText={hasError('password')?.message}
           />
 
+          <Typography
+            color="inherit"
+            variant="body2"
+            component={Link}
+            href="/forgot-password"
+            sx={{ textDecoration: 'none' }}
+          >
+            Forgot password?
+          </Typography>
+
           <LoadingButton type="submit" variant="contained" loading={loading.length > 0}>
             <span>Login</span>
           </LoadingButton>
         </Form>
 
         <Typography>
-          Don&apos;t have an account? <Link href="/register">Register</Link>
+          Don&apos;t have an account?{' '}
+          <Typography color="inherit" component={Link} href="/register">
+            Register
+          </Typography>
         </Typography>
       </ContainerWrapper>
     </div>

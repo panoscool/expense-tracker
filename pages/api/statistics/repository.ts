@@ -9,7 +9,7 @@ export async function getExpensesPerDay(accountId: string) {
     },
     {
       $group: {
-        _id: { $dateToString: { format: '%Y-%m-%d', date: '$created_at' } },
+        _id: { $dateToString: { format: '%Y-%m-%d', date: '$date' } },
         count: { $sum: 1 },
         total_amount: { $sum: '$amount' },
       },
@@ -33,8 +33,8 @@ export async function getExpensesPerWeek(accountId: string) {
     {
       $group: {
         _id: {
-          week: { $week: '$created_at' },
-          year: { $year: '$created_at' },
+          week: { $week: '$date' },
+          year: { $year: '$date' },
         },
         count: { $sum: 1 },
         total_amount: { $sum: '$amount' },
@@ -57,7 +57,7 @@ export async function getExpensesPerMonth(accountId: string) {
     },
     {
       $group: {
-        _id: { $dateToString: { format: '%Y-%m', date: '$created_at' } },
+        _id: { $dateToString: { format: '%Y-%m', date: '$date' } },
         count: { $sum: 1 },
         total_amount: { $sum: '$amount' },
       },
@@ -82,20 +82,20 @@ export async function getExpensesPerQuarter(accountId: string) {
         _id: {
           quarter: {
             $cond: [
-              { $lte: [{ $month: '$created_at' }, 3] },
+              { $lte: [{ $month: '$date' }, 3] },
               1,
               {
                 $cond: [
-                  { $lte: [{ $month: '$created_at' }, 6] },
+                  { $lte: [{ $month: '$date' }, 6] },
                   2,
                   {
-                    $cond: [{ $lte: [{ $month: '$created_at' }, 9] }, 3, 4],
+                    $cond: [{ $lte: [{ $month: '$date' }, 9] }, 3, 4],
                   },
                 ],
               },
             ],
           },
-          year: { $year: '$created_at' },
+          year: { $year: '$date' },
         },
         count: { $sum: 1 },
         total_amount: { $sum: '$amount' },
@@ -118,7 +118,7 @@ export async function getExpensesPerMonthAndCategory(accountId: string) {
     },
     {
       $group: {
-        _id: { date: { $dateToString: { format: '%Y-%m', date: '$created_at' } }, category: '$category' },
+        _id: { date: { $dateToString: { format: '%Y-%m', date: '$date' } }, category: '$category' },
         count: { $sum: 1 },
         total_amount: { $sum: '$amount' },
       },
@@ -140,7 +140,7 @@ export async function getExpensesPerMonthAndUser(accountId: string) {
     },
     {
       $group: {
-        _id: { date: { $dateToString: { format: '%Y-%m', date: '$created_at' } }, user: { $toString: '$user' } },
+        _id: { date: { $dateToString: { format: '%Y-%m', date: '$date' } }, user: { $toString: '$user' } },
         count: { $sum: 1 },
         total_amount: { $sum: '$amount' },
       },

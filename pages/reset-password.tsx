@@ -3,15 +3,13 @@ import { Box, Container, TextField, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import useAppContext from '../hooks/use-app-context';
 import useAuth from '../hooks/use-auth';
 import useForm from '../hooks/use-form';
 import apiRequest from '../lib/config/axios';
-import { storeSetAccessToken } from '../lib/config/store';
-import { registerSchema } from '../lib/config/yup-schema';
+import { resetPasswordSchema } from '../lib/config/yup-schema';
 import { setError, setLoading } from '../lib/services/helpers';
 
 const ContainerWrapper = styled(Container)`
@@ -30,13 +28,11 @@ const Form = styled('form')(({ theme }) => ({
   width: '100%',
 }));
 
-const Register: NextPage = () => {
+const ResetPassword: NextPage = () => {
   const router = useRouter();
   const { loading, error, dispatch } = useAppContext();
   const { authenticated, checkAuthStateAndRedirect } = useAuth(false);
-  const { values, setValues, onBlur, hasError, canSubmit } = useForm(registerSchema, {
-    name: '',
-    email: '',
+  const { values, setValues, onBlur, hasError, canSubmit } = useForm(resetPasswordSchema, {
     password: '',
     confirmPassword: '',
   });
@@ -58,14 +54,13 @@ const Register: NextPage = () => {
 
     if (canSubmit()) {
       try {
-        setLoading(dispatch, 'register');
-        const res = await apiRequest('POST', '/user/register', values);
-        storeSetAccessToken(res.data);
-        router.push('/');
+        setLoading(dispatch, 'reset-password');
+        await apiRequest('POST', '/user/reset-password', { ...values, hash: router.query.hash });
+        router.push('/login');
       } catch (error) {
         setError(dispatch, error as string);
       } finally {
-        setLoading(dispatch, 'register');
+        setLoading(dispatch, 'reset-password');
       }
     }
   };
@@ -75,39 +70,19 @@ const Register: NextPage = () => {
   return (
     <div>
       <Head>
-        <title>Register - Expense Tracker</title>
-        <meta name="description" content="Register to expense tracker" />
+        <title>Reset Password - Expense Tracker</title>
+        <meta name="description" content="Reset password for expense tracker" />
       </Head>
 
       <ContainerWrapper maxWidth="sm">
         <Box textAlign="center">
           <Typography gutterBottom variant="h4">
-            Register
+            Reset Password
           </Typography>
-          <Typography color="error">{error}</Typography>
+          <Typography color="error">{typeof error === 'string' && error}</Typography>
         </Box>
 
         <Form onSubmit={handleSubmit}>
-          <TextField
-            type="text"
-            name="name"
-            label="Name"
-            value={values.name || ''}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            error={!!hasError('name')}
-            helperText={hasError('name')?.message}
-          />
-          <TextField
-            type="email"
-            name="email"
-            label="Email"
-            value={values.email || ''}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            error={!!hasError('email')}
-            helperText={hasError('email')?.message}
-          />
           <TextField
             type="password"
             name="password"
@@ -130,19 +105,12 @@ const Register: NextPage = () => {
           />
 
           <LoadingButton type="submit" variant="contained" loading={loading.length > 0}>
-            <span>Register</span>
+            <span>Submit</span>
           </LoadingButton>
         </Form>
-
-        <Typography>
-          Have an account?{' '}
-          <Typography color="inherit" component={Link} href="/login">
-            Login
-          </Typography>
-        </Typography>
       </ContainerWrapper>
     </div>
   );
 };
 
-export default Register;
+export default ResetPassword;

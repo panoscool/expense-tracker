@@ -1,3 +1,3 @@
 export const env = {
-  baseUrl: 'https://hexpense.vercel.app',
+  baseUrl: process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'https://hexpense.vercel.app',
 };
