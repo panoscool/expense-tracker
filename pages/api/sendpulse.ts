@@ -7,11 +7,11 @@ const sendpulse = axios.create({
   baseURL: 'https://events.sendpulse.com',
 });
 
-export const forgotPasswordEmail = async (email: string, token: string, name: string) => {
+export const forgotPasswordEmail = async (email: string, hash: string, name: string) => {
   await sendpulse.post(`${process.env.SENDPULSE_FORGOT_PASSWORD}`, {
     phone: '+306900000000',
     email,
-    url: `${env.baseUrl}/reset-password?${token}`,
+    url: `${env.baseUrl}/reset-password?hash=${hash}`,
     name,
   });
 };

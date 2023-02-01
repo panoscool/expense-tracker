@@ -3,14 +3,12 @@ import { Box, Container, TextField, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import useAppContext from '../hooks/use-app-context';
 import useAuth from '../hooks/use-auth';
 import useForm from '../hooks/use-form';
 import apiRequest from '../lib/config/axios';
-import { storeSetAccessToken } from '../lib/config/store';
 import { resetPasswordSchema } from '../lib/config/yup-schema';
 import { setError, setLoading } from '../lib/services/helpers';
 
@@ -56,14 +54,13 @@ const ResetPassword: NextPage = () => {
 
     if (canSubmit()) {
       try {
-        setLoading(dispatch, 'login');
-        const res = await apiRequest('POST', '/user/reset-password', values);
-        storeSetAccessToken(res.data);
-        router.push('/');
+        setLoading(dispatch, 'reset-password');
+        await apiRequest('POST', '/user/reset-password', { ...values, hash: router.query.hash });
+        router.push('/login');
       } catch (error) {
         setError(dispatch, error as string);
       } finally {
-        setLoading(dispatch, 'login');
+        setLoading(dispatch, 'reset-password');
       }
     }
   };
@@ -74,7 +71,7 @@ const ResetPassword: NextPage = () => {
     <div>
       <Head>
         <title>Reset Password - Expense Tracker</title>
-        <meta name="description" content="Login to expense tracker" />
+        <meta name="description" content="Reset password for expense tracker" />
       </Head>
 
       <ContainerWrapper maxWidth="sm">

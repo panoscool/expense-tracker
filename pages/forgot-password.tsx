@@ -3,15 +3,13 @@ import { Box, Container, TextField, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import useAppContext from '../hooks/use-app-context';
 import useAuth from '../hooks/use-auth';
 import useForm from '../hooks/use-form';
 import apiRequest from '../lib/config/axios';
-import { storeSetAccessToken } from '../lib/config/store';
-import { setError, setLoading } from '../lib/services/helpers';
 import { forgotPasswordSchema } from '../lib/config/yup-schema';
+import { setError, setLoading } from '../lib/services/helpers';
 
 const ContainerWrapper = styled(Container)`
   display: flex;
@@ -30,7 +28,7 @@ const Form = styled('form')(({ theme }) => ({
 }));
 
 const ForgotPassword: NextPage = () => {
-  const router = useRouter();
+  const [resetInfo, setResetInfo] = useState(false);
   const { loading, error, dispatch } = useAppContext();
   const { authenticated, checkAuthStateAndRedirect } = useAuth(false);
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(forgotPasswordSchema, {
@@ -54,14 +52,13 @@ const ForgotPassword: NextPage = () => {
 
     if (canSubmit()) {
       try {
-        setLoading(dispatch, 'login');
-        const res = await apiRequest('POST', '/user/forgot-password', values);
-        storeSetAccessToken(res.data);
-        router.push('/');
+        setLoading(dispatch, 'forgot-password');
+        await apiRequest('POST', '/user/forgot-password', values);
+        setResetInfo(true);
       } catch (error) {
         setError(dispatch, error as string);
       } finally {
-        setLoading(dispatch, 'login');
+        setLoading(dispatch, 'forgot-password');
       }
     }
   };
@@ -72,7 +69,7 @@ const ForgotPassword: NextPage = () => {
     <div>
       <Head>
         <title>Forgot Password - Expense Tracker</title>
-        <meta name="description" content="Login to expense tracker" />
+        <meta name="description" content="Forgot password for expense tracker" />
       </Head>
 
       <ContainerWrapper maxWidth="sm">
@@ -83,22 +80,29 @@ const ForgotPassword: NextPage = () => {
           <Typography color="error">{typeof error === 'string' && error}</Typography>
         </Box>
 
-        <Form onSubmit={handleSubmit}>
-          <TextField
-            type="text"
-            name="email"
-            label="Email"
-            value={values.email || ''}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            error={!!hasError('email')}
-            helperText={hasError('email')?.message}
-          />
+        {resetInfo ? (
+          <Box textAlign="center">
+            <Typography gutterBottom>Email has been sent successfully!</Typography>
+            <Typography>Please check your inbox (spam / junk) folders and follow the instructions.</Typography>
+          </Box>
+        ) : (
+          <Form onSubmit={handleSubmit}>
+            <TextField
+              type="text"
+              name="email"
+              label="Email"
+              value={values.email || ''}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              error={!!hasError('email')}
+              helperText={hasError('email')?.message}
+            />
 
-          <LoadingButton type="submit" variant="contained" loading={loading.length > 0}>
-            <span>Submit</span>
-          </LoadingButton>
-        </Form>
+            <LoadingButton type="submit" variant="contained" loading={loading.length > 0}>
+              <span>Submit</span>
+            </LoadingButton>
+          </Form>
+        )}
       </ContainerWrapper>
     </div>
   );

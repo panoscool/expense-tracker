@@ -135,7 +135,10 @@ const Register: NextPage = () => {
         </Form>
 
         <Typography>
-          Have an account? <Link href="/login">Login</Link>
+          Have an account?{' '}
+          <Typography color="inherit" component={Link} href="/login">
+            Login
+          </Typography>
         </Typography>
       </ContainerWrapper>
     </div>

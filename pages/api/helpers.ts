@@ -30,9 +30,10 @@ export async function setAccessToken(user: IUser) {
 
 export const getDecodedUserId = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
+    const secret = process.env.JWT_SECRET || '';
     const [_, token] = req.headers.authorization?.split(' ') || [];
 
-    const decoded = verify(token, process.env.JWT_SECRET!);
+    const decoded = verify(token, secret);
 
     if (decoded) {
       return decoded.sub;
