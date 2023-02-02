@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import dbConnect from '../../../lib/config/db-connect';
 import { v4 as uuidv4 } from 'uuid';
-import { forgotPasswordEmail } from '../sendpulse';
+import { forgotPasswordEmail } from '../sendgrid';
 import { getUserByEmail } from './repository';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -17,7 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (user) {
       const hash = `${Date.now()}-${uuidv4()}`;
 
-      await forgotPasswordEmail(req.body.email, hash, user.name);
+      await forgotPasswordEmail(req.body.email, user.name, hash);
 
       user.password_reset_hash = hash;
 

@@ -1,21 +1,25 @@
 import sgMail from '@sendgrid/mail';
 import { env } from '../../lib/config/env';
 
-const template = (url: string) => {
+const template = (name: string, hash: string) => {
   return `
-    You are receiving this message because you requested to reset your hexpense account password.
+    Hello ${name}
 
-    To reset your password, please use the following link:
+    <p>You are receiving this message because you requested to reset your password.</p>
 
-    ${url}
+    <p>To reset your password, please use the following link:</p>
 
-    If the link does not work, copy & paste the entire link into your web browser.
+    ${env.baseUrl}/reset-password?hash=${hash}
 
-    If you did not request this email, you can ignore it and no changes will be made to your account.
+    <p>If the link does not work, copy & paste the entire link into your web browser.</p>
+
+    <p>If you did not request this email, you can ignore it and no changes will be made to your account.</p>
+
+    <a href="https://panoscool.com" rel="noopener noreferrer">panoscool.com</a>
 `;
 };
 
-export async function sendEmail(to: string, name: string, token: string) {
+export async function forgotPasswordEmail(to: string, name: string, hash: string) {
   sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
 
   try {
@@ -23,8 +27,7 @@ export async function sendEmail(to: string, name: string, token: string) {
       from: process.env.SENDGRID_SENDER!,
       to,
       subject: 'Password reset',
-      text: `Hello ${name}`,
-      html: template(`${env.baseUrl}/reset-password?token=${token}`),
+      html: template(name, hash),
     });
   } catch (error) {
     console.error(error);
