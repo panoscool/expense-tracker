@@ -33,15 +33,11 @@ const createAccount = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const account = await Repository.createAccount({ user: userId, name, currency, users: [userId], description });
 
-    const accountOwner = await isAccountOwner(userId, account.user);
-
-    if (accountOwner) {
-      return res.status(400).send({ error: 'You cannot add yourself as a user' });
-    }
-
     const user = await UserRepository.getUserByEmail(email);
 
-    if (user) {
+    const accountOwner = await isAccountOwner(userId, user?._id);
+
+    if (user && !accountOwner) {
       await Repository.addAccountUserById(account._id, user._id);
     }
 
