@@ -28,7 +28,7 @@ export function PersistentDrawer({ open, toggleDrawer }: Props) {
   return (
     <Drawer sx={sxProps} variant="persistent" anchor="left" open={open}>
       <DrawerHeader>
-        <Box p={1.5} color="textSecondary">
+        <Box p={1.5}>
           <Title />
         </Box>
 
