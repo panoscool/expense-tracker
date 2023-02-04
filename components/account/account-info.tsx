@@ -13,11 +13,11 @@ import {
 import { Theme } from '@mui/material/styles';
 import { bindMenu, bindTrigger, usePopupState } from 'material-ui-popup-state/hooks';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useAppContext from '../../hooks/use-app-context';
 import useHasAccess from '../../hooks/use-has-access';
 import { UseCaseType } from '../../lib/interfaces/common';
-import { deleteAccount, getAccounts } from '../../lib/services/account';
+import { deleteAccount, getAccount, getAccounts } from '../../lib/services/account';
 import { AccountForm } from './account-form';
 import { AccountUsers } from './account-users';
 
@@ -28,6 +28,12 @@ export function AccountInfo() {
   const popupState = usePopupState({ variant: 'popover', popupId: 'userMenu' });
   const [useCase, setUseCase] = useState<UseCaseType | null>(null);
   const [openUser, setOpenUsers] = useState(false);
+
+  useEffect(() => {
+    if (router.query.account_id) {
+      getAccount(dispatch, router.query.account_id as string);
+    }
+  }, [dispatch, router.query.account_id]);
 
   const handleDeleteAccount = async (e: React.MouseEvent) => {
     e.stopPropagation();

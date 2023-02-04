@@ -3,11 +3,10 @@ import { format } from 'date-fns';
 import { groupBy } from 'lodash';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import useAppContext from '../../hooks/use-app-context';
 import useIsDesktop from '../../hooks/use-is-desktop';
 import { QueryParams } from '../../lib/interfaces/common';
-import { getAccount } from '../../lib/services/account';
 import { getExpenses } from '../../lib/services/expense';
 import { getPayments } from '../../lib/services/payment';
 import { getTotalUsers } from '../../lib/utils/expense-calculations';
@@ -26,15 +25,14 @@ export const ExpensesList: React.FC = () => {
   const isDesktop = useIsDesktop();
   const { expenses, account, themeMode, dispatch } = useAppContext();
 
-  const { account_id, user_id, date, category }: QueryParams = router.query;
+  const query: QueryParams = useMemo(() => router.query, [router.query]);
 
   useEffect(() => {
-    if (account_id) {
+    if (query.account_id) {
       getExpenses(dispatch);
       getPayments(dispatch);
-      getAccount(dispatch, account_id);
     }
-  }, [dispatch, account_id, user_id, date, category]);
+  }, [dispatch, query]);
 
   const groupedByDay = groupBy(expenses, (expense) => format(new Date(expense.date), 'yyyy-MM-dd'));
   const dates = Object.keys(groupedByDay);
