@@ -49,13 +49,6 @@ export interface AppContextType extends AppState {
   dispatch: React.Dispatch<any>;
 }
 
-export interface QueryParams {
-  account_id?: string;
-  user_id?: string;
-  category?: string;
-  date?: string;
-}
-
 export enum UseCaseType {
   account_create = 'account_create',
   account_edit = 'account_edit',

@@ -25,9 +25,9 @@ export function AccountInfo() {
   const router = useRouter();
   const { isCreator } = useHasAccess();
   const { account, dispatch } = useAppContext();
-  const popupState = usePopupState({ variant: 'popover', popupId: 'userMenu' });
   const [useCase, setUseCase] = useState<UseCaseType | null>(null);
   const [openUser, setOpenUsers] = useState(false);
+  const popupState = usePopupState({ variant: 'popover', popupId: 'userMenu' });
 
   useEffect(() => {
     if (router.query.account_id) {

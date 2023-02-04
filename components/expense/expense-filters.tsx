@@ -4,12 +4,18 @@ import { format } from 'date-fns';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import useAppContext from '../../hooks/use-app-context';
-import { QueryParams } from '../../lib/interfaces/common';
 import { ExpensesFilters } from '../../lib/interfaces/expense';
 import { setParams } from '../../lib/utils/url-params';
 import CategoryIcon from '../shared/category-icon';
 import DateField from '../shared/date-field';
 import IconSelectField from '../shared/icon-select-field';
+
+type QueryParams = {
+  account_id?: string;
+  user_id?: string;
+  category?: string;
+  date?: string;
+};
 
 export const ExpenseFilters: React.FC = () => {
   const router = useRouter();
