@@ -1,13 +1,6 @@
 import { Reducer, useReducer } from 'react';
+import { Actions } from '../lib/interfaces/calculator';
 import { evaluate } from '../lib/utils/calculator-operations';
-
-export enum Actions {
-  ADD_DIGIT = 'ADD_DIGIT',
-  DELETE_DIGIT = 'DELETE_DIGIT',
-  OPERATION = 'OPERATION',
-  EVALUATE = 'EVALUATE',
-  CLEAR = 'CLEAR',
-}
 
 type State = {
   currentOperand: string | null;
@@ -35,6 +28,9 @@ const reducer: Reducer<State, { type: Actions; payload?: any }> = (state, { type
       }
       if (payload.digit === '0' && state.currentOperand === '0') {
         return state;
+      }
+      if (payload.digit === '.' && state.currentOperand == null) {
+        return { ...state, currentOperand: '0.' };
       }
       if (payload.digit === '.' && state.currentOperand?.includes('.')) {
         return state;
@@ -70,11 +66,7 @@ const reducer: Reducer<State, { type: Actions; payload?: any }> = (state, { type
       };
 
     case Actions.EVALUATE:
-      if (
-        state.operation == null ||
-        state.currentOperand == null ||
-        state.previousOperand == null
-      ) {
+      if (state.operation == null || state.currentOperand == null || state.previousOperand == null) {
         return state;
       }
       return {

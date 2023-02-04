@@ -3,7 +3,7 @@ import dbConnect from '../../../lib/config/db-connect';
 import { trimToLowerCaseString } from '../../../lib/utils/format-text';
 import { categorySchema } from '../../../lib/config/yup-schema';
 import { authenticated, getDecodedUserId } from '../helpers';
-import validate from '../../../lib/utils/validate';
+import { validate } from '../../../lib/utils/validate';
 import * as Repository from './repository';
 
 const getCategories = async (req: NextApiRequest, res: NextApiResponse) => {

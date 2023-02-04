@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import dbConnect from '../../../lib/config/db-connect';
 import { userUpdateSchema } from '../../../lib/config/yup-schema';
-import validate from '../../../lib/utils/validate';
+import { validate } from '../../../lib/utils/validate';
 import { authenticated, checkHashedPassword, getDecodedUserId, getHashedPassword } from '../helpers';
 import * as Repository from './repository';
 

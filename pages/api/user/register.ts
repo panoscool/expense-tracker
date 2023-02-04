@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import dbConnect from '../../../lib/config/db-connect';
 import { defaultAccount, defaultCategories } from '../../../lib/config/default-values';
 import { registerSchema } from '../../../lib/config/yup-schema';
-import validate from '../../../lib/utils/validate';
+import { validate } from '../../../lib/utils/validate';
 import * as AccountRepository from '../account/repository';
 import * as CategoryRepository from '../category/repository';
 import { getHashedPassword, setAccessToken } from '../helpers';

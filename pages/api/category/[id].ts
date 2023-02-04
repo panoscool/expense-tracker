@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import dbConnect from '../../../lib/config/db-connect';
 import { trimToLowerCaseString } from '../../../lib/utils/format-text';
-import validate from '../../../lib/utils/validate';
+import { validate } from '../../../lib/utils/validate';
 import { categorySchema } from '../../../lib/config/yup-schema';
 import { authenticated, getDecodedUserId, hasAccess } from '../helpers';
 import * as Repository from './repository';
