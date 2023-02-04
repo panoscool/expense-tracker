@@ -2,6 +2,7 @@ import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
 import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
 import MenuIcon from '@mui/icons-material/Menu';
+import Typography from '@mui/material/Typography';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -29,7 +30,6 @@ import { getCategories } from '../lib/services/category';
 import { drawerWidth } from './drawer/drawer-styles';
 import { PersistentDrawer } from './drawer/persistent-drawer';
 import { TemporaryDrawer } from './drawer/temporary-drawer';
-import { Title } from './title';
 import { UserMenu } from './user-menu';
 
 interface AppBarProps extends MuiAppBarProps {
@@ -133,7 +133,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           >
             <MenuIcon />
           </IconButton>
-          <Box flexGrow={1}>{!open && <Title />}</Box>
+          <Box flexGrow={1}>{!open && <Typography>💰</Typography>}</Box>
 
           <Button
             startIcon={<AddRoundedIcon />}
