@@ -1,6 +1,8 @@
 import Button from '@mui/material/Button';
 import { alpha, styled } from '@mui/material/styles';
-import { Actions } from '../../hooks/use-calculator';
+import { useEffect } from 'react';
+import { Actions, KeyPress } from '../../lib/interfaces/calculator';
+import useKeyPress from '../../hooks/use-keypress';
 import { formatOperand } from '../../lib/utils/format-number';
 import { DigitButton } from './digit-button';
 import { OperationButton } from './operation-button';
@@ -53,6 +55,9 @@ type CalculatorViewProps = {
 export const CalculatorView: React.FC<CalculatorViewProps> = (props) => {
   const { currentOperand, previousOperand, operation, dispatch } = props;
 
+  const keyPress: KeyPress | null = useKeyPress();
+  console.log(keyPress);
+
   const handleClear = () => {
     dispatch({ type: Actions.CLEAR });
   };
@@ -64,6 +69,20 @@ export const CalculatorView: React.FC<CalculatorViewProps> = (props) => {
   const handleEvaluate = () => {
     dispatch({ type: Actions.EVALUATE });
   };
+
+  useEffect(() => {
+    if (keyPress && keyPress.code.match(/Digit[0-9]|Numpad[0-9]|NumpadDecimal/)) {
+      dispatch({ type: Actions.ADD_DIGIT, payload: { digit: keyPress.key } });
+    }
+
+    if (keyPress && keyPress.code.match(/Numpad[+*-/]/)) {
+      dispatch({ type: Actions.OPERATION, payload: { operation: keyPress.key } });
+    }
+
+    if (keyPress && keyPress.code.match(/NumpadEnter|Enter/)) {
+      dispatch({ type: Actions.EVALUATE });
+    }
+  }, [dispatch, keyPress]);
 
   return (
     <CalculatorGrid>
