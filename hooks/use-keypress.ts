@@ -8,18 +8,13 @@ function useKeyPress() {
   // Add event listeners
   useEffect(() => {
     function downHandler(event: KeyboardEvent) {
-      const { key, code } = event;
-      // detect combination of shiftKey and set the state with the combination
-      if (event.shiftKey && code.match(/Digit8|Minus|Equal/)) {
-        setKeyCode({ key, code });
-        return;
-      }
-
-      setKeyCode({ key, code });
+      setKeyCode(null);
     }
 
-    const upHandler = () => {
-      setKeyCode(null);
+    const upHandler = (event: KeyboardEvent) => {
+      const { key, code } = event;
+
+      setKeyCode({ key, code });
     };
 
     window.addEventListener('keydown', downHandler);

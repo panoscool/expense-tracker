@@ -2,7 +2,7 @@ import { format } from 'date-fns';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import dbConnect from '../../../lib/config/db-connect';
 import { expenseSchema } from '../../../lib/config/yup-schema';
-import validate from '../../../lib/utils/validate';
+import { validate } from '../../../lib/utils/validate';
 import { hasAccountAccess } from '../account/helpers';
 import * as AccountRepository from '../account/repository';
 import { authenticated, getDecodedUserId, hasAccess } from '../helpers';

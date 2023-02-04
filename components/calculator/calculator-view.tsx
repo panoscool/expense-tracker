@@ -6,6 +6,7 @@ import useKeyPress from '../../hooks/use-keypress';
 import { formatOperand } from '../../lib/utils/format-number';
 import { DigitButton } from './digit-button';
 import { OperationButton } from './operation-button';
+import { isBackspace, isClear, isDigit, isEvaluate, isOperator } from '../../lib/utils/validate';
 
 const CalculatorGrid = styled('div')(({ theme }) => ({
   display: 'inline-grid',
@@ -56,7 +57,28 @@ export const CalculatorView: React.FC<CalculatorViewProps> = (props) => {
   const { currentOperand, previousOperand, operation, dispatch } = props;
 
   const keyPress: KeyPress | null = useKeyPress();
-  console.log(keyPress);
+
+  useEffect(() => {
+    if (keyPress && isDigit(keyPress.key)) {
+      dispatch({ type: Actions.ADD_DIGIT, payload: { digit: keyPress.key } });
+    }
+
+    if (keyPress && isOperator(keyPress.key)) {
+      dispatch({ type: Actions.OPERATION, payload: { operation: keyPress.key } });
+    }
+
+    if (keyPress && isEvaluate(keyPress.key)) {
+      dispatch({ type: Actions.EVALUATE });
+    }
+
+    if (keyPress && isBackspace(keyPress.key)) {
+      dispatch({ type: Actions.DELETE_DIGIT });
+    }
+
+    if (keyPress && isClear(keyPress.key)) {
+      dispatch({ type: Actions.CLEAR });
+    }
+  }, [dispatch, keyPress]);
 
   const handleClear = () => {
     dispatch({ type: Actions.CLEAR });
@@ -69,20 +91,6 @@ export const CalculatorView: React.FC<CalculatorViewProps> = (props) => {
   const handleEvaluate = () => {
     dispatch({ type: Actions.EVALUATE });
   };
-
-  useEffect(() => {
-    if (keyPress && keyPress.code.match(/Digit[0-9]|Numpad[0-9]|NumpadDecimal/)) {
-      dispatch({ type: Actions.ADD_DIGIT, payload: { digit: keyPress.key } });
-    }
-
-    if (keyPress && keyPress.code.match(/Numpad[+*-/]/)) {
-      dispatch({ type: Actions.OPERATION, payload: { operation: keyPress.key } });
-    }
-
-    if (keyPress && keyPress.code.match(/NumpadEnter|Enter/)) {
-      dispatch({ type: Actions.EVALUATE });
-    }
-  }, [dispatch, keyPress]);
 
   return (
     <CalculatorGrid>

@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import dbConnect from '../../../lib/config/db-connect';
 import { accountSchema } from '../../../lib/config/yup-schema';
 import { authenticated, getDecodedUserId } from '../helpers';
-import validate from '../../../lib/utils/validate';
+import { validate } from '../../../lib/utils/validate';
 import * as Repository from './repository';
 import * as UserRepository from '../user/repository';
 import { isAccountOwner } from './helpers';

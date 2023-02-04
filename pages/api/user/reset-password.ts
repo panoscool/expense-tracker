@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { resetPasswordSchema } from '../../../lib/config/yup-schema';
-import validate from '../../../lib/utils/validate';
+import { validate } from '../../../lib/utils/validate';
 import { getHashedPassword } from '../helpers';
 import { getUserByPasswordResetHash } from './repository';
 
