@@ -2,7 +2,6 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { Box, Container, TextField, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import type { NextPage } from 'next';
-import Head from 'next/head';
 import { useEffect, useState } from 'react';
 import useAppContext from '../hooks/use-app-context';
 import useAuth from '../hooks/use-auth';
@@ -66,45 +65,38 @@ const ForgotPassword: NextPage = () => {
   if (authenticated) return null;
 
   return (
-    <div>
-      <Head>
-        <title>Forgot Password - Expense Tracker</title>
-        <meta name="description" content="Forgot password for expense tracker" />
-      </Head>
+    <ContainerWrapper maxWidth="sm">
+      <Box textAlign="center">
+        <Typography gutterBottom variant="h4">
+          Forgot Password
+        </Typography>
+        <Typography color="error">{typeof error === 'string' && error}</Typography>
+      </Box>
 
-      <ContainerWrapper maxWidth="sm">
+      {resetInfo ? (
         <Box textAlign="center">
-          <Typography gutterBottom variant="h4">
-            Forgot Password
-          </Typography>
-          <Typography color="error">{typeof error === 'string' && error}</Typography>
+          <Typography gutterBottom>Email has been sent successfully!</Typography>
+          <Typography>Please check your inbox (spam / junk) folders and follow the instructions.</Typography>
         </Box>
+      ) : (
+        <Form onSubmit={handleSubmit}>
+          <TextField
+            type="text"
+            name="email"
+            label="Email"
+            value={values.email || ''}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            error={!!hasError('email')}
+            helperText={hasError('email')?.message}
+          />
 
-        {resetInfo ? (
-          <Box textAlign="center">
-            <Typography gutterBottom>Email has been sent successfully!</Typography>
-            <Typography>Please check your inbox (spam / junk) folders and follow the instructions.</Typography>
-          </Box>
-        ) : (
-          <Form onSubmit={handleSubmit}>
-            <TextField
-              type="text"
-              name="email"
-              label="Email"
-              value={values.email || ''}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={!!hasError('email')}
-              helperText={hasError('email')?.message}
-            />
-
-            <LoadingButton type="submit" variant="contained" loading={loading.length > 0}>
-              <span>Submit</span>
-            </LoadingButton>
-          </Form>
-        )}
-      </ContainerWrapper>
-    </div>
+          <LoadingButton type="submit" variant="contained" loading={loading.length > 0}>
+            <span>Submit</span>
+          </LoadingButton>
+        </Form>
+      )}
+    </ContainerWrapper>
   );
 };
 

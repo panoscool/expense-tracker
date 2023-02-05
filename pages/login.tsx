@@ -2,7 +2,6 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { Box, Container, TextField, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import type { NextPage } from 'next';
-import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
@@ -71,65 +70,58 @@ const Login: NextPage = () => {
   if (authenticated) return null;
 
   return (
-    <div>
-      <Head>
-        <title>Login - Expense Tracker</title>
-        <meta name="description" content="Login to expense tracker" />
-      </Head>
-
-      <ContainerWrapper maxWidth="sm">
-        <Box textAlign="center">
-          <Typography gutterBottom variant="h4">
-            Login
-          </Typography>
-          <Typography color="error">{typeof error === 'string' && error}</Typography>
-        </Box>
-
-        <Form onSubmit={handleSubmit}>
-          <TextField
-            type="text"
-            name="email"
-            label="Email"
-            value={values.email || ''}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            error={!!hasError('email')}
-            helperText={hasError('email')?.message}
-          />
-          <TextField
-            type="password"
-            name="password"
-            label="Password"
-            value={values.password || ''}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            error={!!hasError('password')}
-            helperText={hasError('password')?.message}
-          />
-
-          <Typography
-            color="inherit"
-            variant="body2"
-            component={Link}
-            href="/forgot-password"
-            sx={{ textDecoration: 'none' }}
-          >
-            Forgot password?
-          </Typography>
-
-          <LoadingButton type="submit" variant="contained" loading={loading.length > 0}>
-            <span>Login</span>
-          </LoadingButton>
-        </Form>
-
-        <Typography>
-          Don&apos;t have an account?{' '}
-          <Typography color="inherit" component={Link} href="/register">
-            Register
-          </Typography>
+    <ContainerWrapper maxWidth="sm">
+      <Box textAlign="center">
+        <Typography gutterBottom variant="h4">
+          Login
         </Typography>
-      </ContainerWrapper>
-    </div>
+        <Typography color="error">{typeof error === 'string' && error}</Typography>
+      </Box>
+
+      <Form onSubmit={handleSubmit}>
+        <TextField
+          type="text"
+          name="email"
+          label="Email"
+          value={values.email || ''}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          error={!!hasError('email')}
+          helperText={hasError('email')?.message}
+        />
+        <TextField
+          type="password"
+          name="password"
+          label="Password"
+          value={values.password || ''}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          error={!!hasError('password')}
+          helperText={hasError('password')?.message}
+        />
+
+        <Typography
+          color="inherit"
+          variant="body2"
+          component={Link}
+          href="/forgot-password"
+          sx={{ textDecoration: 'none' }}
+        >
+          Forgot password?
+        </Typography>
+
+        <LoadingButton type="submit" variant="contained" loading={loading.length > 0}>
+          <span>Login</span>
+        </LoadingButton>
+      </Form>
+
+      <Typography>
+        Don&apos;t have an account?{' '}
+        <Typography color="inherit" component={Link} href="/register">
+          Register
+        </Typography>
+      </Typography>
+    </ContainerWrapper>
   );
 };
 

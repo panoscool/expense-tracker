@@ -1,6 +1,5 @@
 import { Box, Container } from '@mui/material';
 import type { NextPage } from 'next';
-import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo } from 'react';
 import { AccountTotal } from '../components/statistics/account-total';
@@ -33,24 +32,17 @@ const Statistics: NextPage = () => {
   if (!authenticated) return null;
 
   return (
-    <div>
-      <Head>
-        <title>Statistics - Expense Tracker</title>
-        <meta name="description" content="Keep track of expenses share with others and split" />
-      </Head>
-
-      <Layout>
-        <Container maxWidth="xl" sx={{ pt: 2 }}>
-          <StatisticsFilters />
-          <Box display="flex" flexDirection="column" gap={2}>
-            <AccountTotal />
-            <TransactionsTotal />
-            <CategoryTotal />
-            {/* <UserTotal /> */}
-          </Box>
-        </Container>
-      </Layout>
-    </div>
+    <Layout>
+      <Container maxWidth="xl" sx={{ pt: 2 }}>
+        <StatisticsFilters />
+        <Box display="flex" flexDirection="column" gap={2}>
+          <AccountTotal />
+          <TransactionsTotal />
+          <CategoryTotal />
+          {/* <UserTotal /> */}
+        </Box>
+      </Container>
+    </Layout>
   );
 };
 

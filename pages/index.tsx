@@ -1,6 +1,5 @@
 import { Container } from '@mui/material';
 import type { NextPage } from 'next';
-import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { ExpensesList } from '../components/expense';
@@ -19,16 +18,9 @@ const Home: NextPage = () => {
   if (!authenticated) return null;
 
   return (
-    <div>
-      <Head>
-        <title>Expense Tracker</title>
-        <meta name="description" content="Keep track of expenses share with others and split" />
-      </Head>
-
-      <Layout>
-        <Container maxWidth="xl">{router.query?.account_id ? <ExpensesList /> : <NoAccountId />}</Container>
-      </Layout>
-    </div>
+    <Layout>
+      <Container maxWidth="xl">{router.query?.account_id ? <ExpensesList /> : <NoAccountId />}</Container>
+    </Layout>
   );
 };
 

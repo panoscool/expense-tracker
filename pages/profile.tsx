@@ -5,7 +5,6 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import type { NextPage } from 'next';
-import Head from 'next/head';
 import { useEffect, useState } from 'react';
 import { ProfileForm } from '../components/profile/profile-form';
 import { UploadForm } from '../components/profile/upload-form';
@@ -27,34 +26,27 @@ const Profile: NextPage = () => {
   if (!authenticated) return null;
 
   return (
-    <div>
-      <Head>
-        <title>Profile - Expense Tracker</title>
-        <meta name="description" content="User profile" />
-      </Head>
+    <Layout>
+      <Container maxWidth="md" sx={{ pt: 2 }}>
+        <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
+          <AccordionSummary expandIcon={<ExpandMoreRounded />} aria-controls="panel1bh-content" id="panel1bh-header">
+            <Typography>Profile</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <ProfileForm />
+          </AccordionDetails>
+        </Accordion>
 
-      <Layout>
-        <Container maxWidth="md" sx={{ pt: 2 }}>
-          <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
-            <AccordionSummary expandIcon={<ExpandMoreRounded />} aria-controls="panel1bh-content" id="panel1bh-header">
-              <Typography>Profile</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <ProfileForm />
-            </AccordionDetails>
-          </Accordion>
-
-          <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
-            <AccordionSummary expandIcon={<ExpandMoreRounded />} aria-controls="panel2bh-content" id="panel2bh-header">
-              <Typography>Image</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <UploadForm />
-            </AccordionDetails>
-          </Accordion>
-        </Container>
-      </Layout>
-    </div>
+        <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
+          <AccordionSummary expandIcon={<ExpandMoreRounded />} aria-controls="panel2bh-content" id="panel2bh-header">
+            <Typography>Image</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <UploadForm />
+          </AccordionDetails>
+        </Accordion>
+      </Container>
+    </Layout>
   );
 };
 

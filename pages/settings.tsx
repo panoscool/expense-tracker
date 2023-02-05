@@ -1,7 +1,6 @@
 import { AddRounded, ExpandMoreRounded } from '@mui/icons-material';
 import { Box, Typography, Accordion, AccordionSummary, AccordionDetails, Container, IconButton } from '@mui/material';
 import type { NextPage } from 'next';
-import Head from 'next/head';
 import { useEffect, useMemo, useState } from 'react';
 import { AccountForm } from '../components/account/account-form';
 import { AccountList } from '../components/account/account-list';
@@ -51,48 +50,41 @@ const Profile: NextPage = () => {
   if (!authenticated) return null;
 
   return (
-    <div>
-      <Head>
-        <title>Settings - Expense Tracker</title>
-        <meta name="description" content="Accounts and categories settings" />
-      </Head>
+    <Layout>
+      <Container maxWidth="md" sx={{ pt: 2 }}>
+        <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
+          <AccordionSummary expandIcon={<ExpandMoreRounded />} aria-controls="panel1bh-content" id="panel1bh-header">
+            <Box display="flex" justifyContent="space-between" alignItems="center" flex={1}>
+              <Typography>Accounts</Typography>
+              <IconButton sx={{ mr: 2 }} onClick={handleOpen(UseCaseType.account_create)}>
+                <AddRounded />
+              </IconButton>
+            </Box>
+          </AccordionSummary>
+          <AccordionDetails>
+            <AccountList onAccountSelect={handleOpen} />
+          </AccordionDetails>
+        </Accordion>
 
-      <Layout>
-        <Container maxWidth="md" sx={{ pt: 2 }}>
-          <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
-            <AccordionSummary expandIcon={<ExpandMoreRounded />} aria-controls="panel1bh-content" id="panel1bh-header">
-              <Box display="flex" justifyContent="space-between" alignItems="center" flex={1}>
-                <Typography>Accounts</Typography>
-                <IconButton sx={{ mr: 2 }} onClick={handleOpen(UseCaseType.account_create)}>
-                  <AddRounded />
-                </IconButton>
-              </Box>
-            </AccordionSummary>
-            <AccordionDetails>
-              <AccountList onAccountSelect={handleOpen} />
-            </AccordionDetails>
-          </Accordion>
+        <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
+          <AccordionSummary expandIcon={<ExpandMoreRounded />} aria-controls="panel2bh-content" id="panel2bh-header">
+            <Box display="flex" justifyContent="space-between" alignItems="center" flex={1}>
+              <Typography>Categories</Typography>
+              <IconButton sx={{ mr: 2 }} onClick={handleOpen(UseCaseType.category_create)}>
+                <AddRounded />
+              </IconButton>
+            </Box>
+          </AccordionSummary>
+          <AccordionDetails>
+            <CategoryList />
+          </AccordionDetails>
+        </Accordion>
 
-          <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
-            <AccordionSummary expandIcon={<ExpandMoreRounded />} aria-controls="panel2bh-content" id="panel2bh-header">
-              <Box display="flex" justifyContent="space-between" alignItems="center" flex={1}>
-                <Typography>Categories</Typography>
-                <IconButton sx={{ mr: 2 }} onClick={handleOpen(UseCaseType.category_create)}>
-                  <AddRounded />
-                </IconButton>
-              </Box>
-            </AccordionSummary>
-            <AccordionDetails>
-              <CategoryList />
-            </AccordionDetails>
-          </Accordion>
-
-          <AccountForm open={openAccountForm} useCase={open} account={selectedAccount} onClose={handleClose} />
-          <AccountUsers open={openAccountView} accountId={selectedAccount?._id} onClose={handleClose} />
-          <CategoryForm open={openCategoryForm} onClose={handleClose} />
-        </Container>
-      </Layout>
-    </div>
+        <AccountForm open={openAccountForm} useCase={open} account={selectedAccount} onClose={handleClose} />
+        <AccountUsers open={openAccountView} accountId={selectedAccount?._id} onClose={handleClose} />
+        <CategoryForm open={openCategoryForm} onClose={handleClose} />
+      </Container>
+    </Layout>
   );
 };
 
