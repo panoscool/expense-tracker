@@ -11,6 +11,7 @@ import Layout from '../layout';
 import { TransactionsTotal } from '../components/statistics/transactions-total';
 import useAppContext from '../hooks/use-app-context';
 import { getAccount } from '../lib/services/account';
+import PageTitle from '../components/page-title';
 
 const Statistics: NextPage = () => {
   const router = useRouter();
@@ -32,17 +33,21 @@ const Statistics: NextPage = () => {
   if (!authenticated) return null;
 
   return (
-    <Layout>
-      <Container maxWidth="xl" sx={{ pt: 2 }}>
-        <StatisticsFilters />
-        <Box display="flex" flexDirection="column" gap={2}>
-          <AccountTotal />
-          <TransactionsTotal />
-          <CategoryTotal />
-          {/* <UserTotal /> */}
-        </Box>
-      </Container>
-    </Layout>
+    <div>
+      <PageTitle />
+
+      <Layout>
+        <Container maxWidth="xl" sx={{ pt: 2 }}>
+          <StatisticsFilters />
+          <Box display="flex" flexDirection="column" gap={2}>
+            <AccountTotal />
+            <TransactionsTotal />
+            <CategoryTotal />
+            {/* <UserTotal /> */}
+          </Box>
+        </Container>
+      </Layout>
+    </div>
   );
 };
 

@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { ExpensesList } from '../components/expense';
 import { NoAccountId } from '../components/no-account-id';
+import PageTitle from '../components/page-title';
 import useAuth from '../hooks/use-auth';
 import Layout from '../layout';
 
@@ -18,9 +19,13 @@ const Home: NextPage = () => {
   if (!authenticated) return null;
 
   return (
-    <Layout>
-      <Container maxWidth="xl">{router.query?.account_id ? <ExpensesList /> : <NoAccountId />}</Container>
-    </Layout>
+    <div>
+      <PageTitle />
+
+      <Layout>
+        <Container maxWidth="xl">{router.query?.account_id ? <ExpensesList /> : <NoAccountId />}</Container>
+      </Layout>
+    </div>
   );
 };
 

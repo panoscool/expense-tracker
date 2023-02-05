@@ -4,6 +4,7 @@ import { styled } from '@mui/material/styles';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
+import PageTitle from '../components/page-title';
 import useAppContext from '../hooks/use-app-context';
 import useAuth from '../hooks/use-auth';
 import useForm from '../hooks/use-form';
@@ -67,41 +68,45 @@ const ResetPassword: NextPage = () => {
   if (authenticated) return null;
 
   return (
-    <ContainerWrapper maxWidth="sm">
-      <Box textAlign="center">
-        <Typography gutterBottom variant="h4">
-          Reset Password
-        </Typography>
-        <Typography color="error">{typeof error === 'string' && error}</Typography>
-      </Box>
+    <div>
+      <PageTitle />
 
-      <Form onSubmit={handleSubmit}>
-        <TextField
-          type="password"
-          name="password"
-          label="Password"
-          value={values.password || ''}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          error={!!hasError('password')}
-          helperText={hasError('password')?.message}
-        />
-        <TextField
-          type="password"
-          name="confirmPassword"
-          label="Confirm Password"
-          value={values.confirmPassword || ''}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          error={!!hasError('confirmPassword')}
-          helperText={hasError('confirmPassword')?.message}
-        />
+      <ContainerWrapper maxWidth="sm">
+        <Box textAlign="center">
+          <Typography gutterBottom variant="h4">
+            Reset Password
+          </Typography>
+          <Typography color="error">{typeof error === 'string' && error}</Typography>
+        </Box>
 
-        <LoadingButton type="submit" variant="contained" loading={loading.length > 0}>
-          <span>Submit</span>
-        </LoadingButton>
-      </Form>
-    </ContainerWrapper>
+        <Form onSubmit={handleSubmit}>
+          <TextField
+            type="password"
+            name="password"
+            label="Password"
+            value={values.password || ''}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            error={!!hasError('password')}
+            helperText={hasError('password')?.message}
+          />
+          <TextField
+            type="password"
+            name="confirmPassword"
+            label="Confirm Password"
+            value={values.confirmPassword || ''}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            error={!!hasError('confirmPassword')}
+            helperText={hasError('confirmPassword')?.message}
+          />
+
+          <LoadingButton type="submit" variant="contained" loading={loading.length > 0}>
+            <span>Submit</span>
+          </LoadingButton>
+        </Form>
+      </ContainerWrapper>
+    </div>
   );
 };
 

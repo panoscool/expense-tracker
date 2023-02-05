@@ -7,6 +7,7 @@ import { AccountList } from '../components/account/account-list';
 import { AccountUsers } from '../components/account/account-users';
 import { CategoryForm } from '../components/category/category-form';
 import { CategoryList } from '../components/category/category-list';
+import PageTitle from '../components/page-title';
 import useAuth from '../hooks/use-auth';
 import Layout from '../layout';
 import { Account } from '../lib/interfaces/account';
@@ -50,41 +51,45 @@ const Profile: NextPage = () => {
   if (!authenticated) return null;
 
   return (
-    <Layout>
-      <Container maxWidth="md" sx={{ pt: 2 }}>
-        <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
-          <AccordionSummary expandIcon={<ExpandMoreRounded />} aria-controls="panel1bh-content" id="panel1bh-header">
-            <Box display="flex" justifyContent="space-between" alignItems="center" flex={1}>
-              <Typography>Accounts</Typography>
-              <IconButton sx={{ mr: 2 }} onClick={handleOpen(UseCaseType.account_create)}>
-                <AddRounded />
-              </IconButton>
-            </Box>
-          </AccordionSummary>
-          <AccordionDetails>
-            <AccountList onAccountSelect={handleOpen} />
-          </AccordionDetails>
-        </Accordion>
+    <div>
+      <PageTitle />
 
-        <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
-          <AccordionSummary expandIcon={<ExpandMoreRounded />} aria-controls="panel2bh-content" id="panel2bh-header">
-            <Box display="flex" justifyContent="space-between" alignItems="center" flex={1}>
-              <Typography>Categories</Typography>
-              <IconButton sx={{ mr: 2 }} onClick={handleOpen(UseCaseType.category_create)}>
-                <AddRounded />
-              </IconButton>
-            </Box>
-          </AccordionSummary>
-          <AccordionDetails>
-            <CategoryList />
-          </AccordionDetails>
-        </Accordion>
+      <Layout>
+        <Container maxWidth="md" sx={{ pt: 2 }}>
+          <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
+            <AccordionSummary expandIcon={<ExpandMoreRounded />} aria-controls="panel1bh-content" id="panel1bh-header">
+              <Box display="flex" justifyContent="space-between" alignItems="center" flex={1}>
+                <Typography>Accounts</Typography>
+                <IconButton sx={{ mr: 2 }} onClick={handleOpen(UseCaseType.account_create)}>
+                  <AddRounded />
+                </IconButton>
+              </Box>
+            </AccordionSummary>
+            <AccordionDetails>
+              <AccountList onAccountSelect={handleOpen} />
+            </AccordionDetails>
+          </Accordion>
 
-        <AccountForm open={openAccountForm} useCase={open} account={selectedAccount} onClose={handleClose} />
-        <AccountUsers open={openAccountView} accountId={selectedAccount?._id} onClose={handleClose} />
-        <CategoryForm open={openCategoryForm} onClose={handleClose} />
-      </Container>
-    </Layout>
+          <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
+            <AccordionSummary expandIcon={<ExpandMoreRounded />} aria-controls="panel2bh-content" id="panel2bh-header">
+              <Box display="flex" justifyContent="space-between" alignItems="center" flex={1}>
+                <Typography>Categories</Typography>
+                <IconButton sx={{ mr: 2 }} onClick={handleOpen(UseCaseType.category_create)}>
+                  <AddRounded />
+                </IconButton>
+              </Box>
+            </AccordionSummary>
+            <AccordionDetails>
+              <CategoryList />
+            </AccordionDetails>
+          </Accordion>
+
+          <AccountForm open={openAccountForm} useCase={open} account={selectedAccount} onClose={handleClose} />
+          <AccountUsers open={openAccountView} accountId={selectedAccount?._id} onClose={handleClose} />
+          <CategoryForm open={openCategoryForm} onClose={handleClose} />
+        </Container>
+      </Layout>
+    </div>
   );
 };
 

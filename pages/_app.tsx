@@ -4,7 +4,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { CacheProvider, EmotionCache } from '@emotion/react';
 import createEmotionCache from '../styles/createEmotionCache';
 import AppProvider from '../context/app-context';
-import Metatags from '../components/metatags';
+import Metatags from '../components/meta-tags';
 import { getMetatagsByPage } from '../lib/utils/get-metatags-by-page';
 
 interface MyAppProps extends AppProps {
