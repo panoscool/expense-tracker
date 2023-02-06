@@ -2,41 +2,41 @@
   "home": {
     "title": "Expenses",
     "description": "Keep track of expenses, share with others, split expenses, view analytics and more",
-    "image": "/images/money-emoji.png"
+    "image": "/money-emoji.png"
   },
   "profile": {
     "title": "Profile",
     "description": "User profile, update your account details",
-    "image": "/images/money-emoji.png"
+    "image": "/money-emoji.png"
   },
   "settings": {
     "title": "Settings",
     "description": "User settings, manage your accounts and categories",
-    "image": "/images/money-emoji.png"
+    "image": "/money-emoji.png"
   },
   "statistics": {
     "title": "Statistics",
     "description": "View statistics by period, categories, etc",
-    "image": "/images/money-emoji.png"
+    "image": "/money-emoji.png"
   },
   "login": {
     "title": "Login",
     "description": "Welcome to expense tracker",
-    "image": "/images/money-emoji.png"
+    "image": "/money-emoji.png"
   },
   "register": {
     "title": "Register",
     "description": "Register and start tracking your expenses, view statistics and more",
-    "image": "/images/money-emoji.png"
+    "image": "/money-emoji.png"
   },
   "forgot-password": {
     "title": "Forgot Password",
     "description": "Recover your lost account password",
-    "image": "/images/money-emoji.png"
+    "image": "/money-emoji.png"
   },
   "reset-password": {
     "title": "Reset Password",
     "description": "Get access back to your account and keep track of your expenses",
-    "image": "/images/money-emoji.png"
+    "image": "/money-emoji.png"
   }
 }

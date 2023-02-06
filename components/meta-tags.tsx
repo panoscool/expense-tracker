@@ -14,7 +14,7 @@ const Metatags = ({ title, description, image, path }: Props) => {
 
   return (
     <Fragment>
-      <meta name="title" content={`${title} - Expenses`} key="title" />
+      <meta name="title" content={title} key="title" />
       <meta name="description" content={description} key="description" />
 
       {/* <!-- Open Graph / Facebook --> */}
