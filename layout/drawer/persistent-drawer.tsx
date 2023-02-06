@@ -32,7 +32,7 @@ export function PersistentDrawer({ open, toggleDrawer }: Props) {
           <Title />
         </Box>
 
-        <IconButton onClick={toggleDrawer}>
+        <IconButton aria-label="close drawer" onClick={toggleDrawer}>
           <ChevronLeftIcon />
         </IconButton>
       </DrawerHeader>

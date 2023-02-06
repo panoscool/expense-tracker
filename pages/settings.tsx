@@ -60,7 +60,11 @@ const Profile: NextPage = () => {
             <AccordionSummary expandIcon={<ExpandMoreRounded />} aria-controls="panel1bh-content" id="panel1bh-header">
               <Box display="flex" justifyContent="space-between" alignItems="center" flex={1}>
                 <Typography>Accounts</Typography>
-                <IconButton sx={{ mr: 2 }} onClick={handleOpen(UseCaseType.account_create)}>
+                <IconButton
+                  sx={{ mr: 2 }}
+                  aria-label="create new account"
+                  onClick={handleOpen(UseCaseType.account_create)}
+                >
                   <AddRounded />
                 </IconButton>
               </Box>
@@ -74,7 +78,11 @@ const Profile: NextPage = () => {
             <AccordionSummary expandIcon={<ExpandMoreRounded />} aria-controls="panel2bh-content" id="panel2bh-header">
               <Box display="flex" justifyContent="space-between" alignItems="center" flex={1}>
                 <Typography>Categories</Typography>
-                <IconButton sx={{ mr: 2 }} onClick={handleOpen(UseCaseType.category_create)}>
+                <IconButton
+                  sx={{ mr: 2 }}
+                  aria-label="create new category"
+                  onClick={handleOpen(UseCaseType.category_create)}
+                >
                   <AddRounded />
                 </IconButton>
               </Box>

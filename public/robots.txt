@@ -1,0 +1,13 @@
+# Block all crawlers
+User-agent: *
+Disallow: /settings
+Disallow: /profile
+Disallow: /statistics
+
+# Allow all crawlers
+User-agent: *
+Allow: /index
+Allow: /register
+Allow: /login
+Allow: /forgot-password
+Allow: /reset-password
