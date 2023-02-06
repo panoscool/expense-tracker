@@ -5,8 +5,8 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import type { NextPage } from 'next';
-import Head from 'next/head';
 import { useEffect, useState } from 'react';
+import PageTitle from '../components/page-title';
 import { ProfileForm } from '../components/profile/profile-form';
 import { UploadForm } from '../components/profile/upload-form';
 import useAuth from '../hooks/use-auth';
@@ -28,10 +28,7 @@ const Profile: NextPage = () => {
 
   return (
     <div>
-      <Head>
-        <title>Profile - Expense Tracker</title>
-        <meta name="description" content="User profile" />
-      </Head>
+      <PageTitle />
 
       <Layout>
         <Container maxWidth="md" sx={{ pt: 2 }}>

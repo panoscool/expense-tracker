@@ -1,13 +1,13 @@
 import { AddRounded, ExpandMoreRounded } from '@mui/icons-material';
 import { Box, Typography, Accordion, AccordionSummary, AccordionDetails, Container, IconButton } from '@mui/material';
 import type { NextPage } from 'next';
-import Head from 'next/head';
 import { useEffect, useMemo, useState } from 'react';
 import { AccountForm } from '../components/account/account-form';
 import { AccountList } from '../components/account/account-list';
 import { AccountUsers } from '../components/account/account-users';
 import { CategoryForm } from '../components/category/category-form';
 import { CategoryList } from '../components/category/category-list';
+import PageTitle from '../components/page-title';
 import useAuth from '../hooks/use-auth';
 import Layout from '../layout';
 import { Account } from '../lib/interfaces/account';
@@ -52,10 +52,7 @@ const Profile: NextPage = () => {
 
   return (
     <div>
-      <Head>
-        <title>Settings - Expense Tracker</title>
-        <meta name="description" content="Accounts and categories settings" />
-      </Head>
+      <PageTitle />
 
       <Layout>
         <Container maxWidth="md" sx={{ pt: 2 }}>

@@ -2,9 +2,9 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { Box, Container, TextField, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import type { NextPage } from 'next';
-import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
+import PageTitle from '../components/page-title';
 import useAppContext from '../hooks/use-app-context';
 import useAuth from '../hooks/use-auth';
 import useForm from '../hooks/use-form';
@@ -69,10 +69,7 @@ const ResetPassword: NextPage = () => {
 
   return (
     <div>
-      <Head>
-        <title>Reset Password - Expense Tracker</title>
-        <meta name="description" content="Reset password for expense tracker" />
-      </Head>
+      <PageTitle />
 
       <ContainerWrapper maxWidth="sm">
         <Box textAlign="center">

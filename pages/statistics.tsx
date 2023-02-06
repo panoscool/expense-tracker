@@ -1,6 +1,5 @@
 import { Box, Container } from '@mui/material';
 import type { NextPage } from 'next';
-import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo } from 'react';
 import { AccountTotal } from '../components/statistics/account-total';
@@ -12,6 +11,7 @@ import Layout from '../layout';
 import { TransactionsTotal } from '../components/statistics/transactions-total';
 import useAppContext from '../hooks/use-app-context';
 import { getAccount } from '../lib/services/account';
+import PageTitle from '../components/page-title';
 
 const Statistics: NextPage = () => {
   const router = useRouter();
@@ -34,10 +34,7 @@ const Statistics: NextPage = () => {
 
   return (
     <div>
-      <Head>
-        <title>Statistics - Expense Tracker</title>
-        <meta name="description" content="Keep track of expenses share with others and split" />
-      </Head>
+      <PageTitle />
 
       <Layout>
         <Container maxWidth="xl" sx={{ pt: 2 }}>
