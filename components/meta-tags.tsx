@@ -7,7 +7,7 @@ type MetaKeys = keyof typeof metatags;
 const Metatags = ({ path }: { path: string }) => {
   const page = path.replace('/', '') as MetaKeys;
 
-  const { title, description, image } = metatags[page];
+  const { title, description, image } = metatags[page || 'home'];
 
   const url = `${env.baseUrl}${path}`;
   const imageUrl = `${env.baseUrl}${image}`;
