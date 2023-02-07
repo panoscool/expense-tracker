@@ -67,7 +67,7 @@ const ForgotPassword: NextPage = () => {
 
   return (
     <div>
-      <PageTitle />
+      <PageTitle page="forgot-password" />
 
       <ContainerWrapper maxWidth="sm">
         <Box textAlign="center">

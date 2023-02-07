@@ -20,7 +20,7 @@ const Home: NextPage = () => {
 
   return (
     <div>
-      <PageTitle />
+      <PageTitle page="home" />
 
       <Layout>
         <Container maxWidth="xl">{router.query?.account_id ? <ExpensesList /> : <NoAccountId />}</Container>

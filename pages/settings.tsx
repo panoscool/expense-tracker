@@ -52,7 +52,7 @@ const Profile: NextPage = () => {
 
   return (
     <div>
-      <PageTitle />
+      <PageTitle page="settings" />
 
       <Layout>
         <Container maxWidth="md" sx={{ pt: 2 }}>

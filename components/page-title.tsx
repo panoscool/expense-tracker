@@ -1,16 +1,12 @@
 import Head from 'next/head';
-import { useRouter } from 'next/router';
-import { useMemo } from 'react';
-import { getMetatagsByPage } from '../lib/utils/get-metatags-by-page';
+import metatags from '../lib/data/metatags.json';
 
-export default function PageTitle() {
-  const router = useRouter();
+type MetaKeys = keyof typeof metatags;
 
-  const meta = useMemo(() => getMetatagsByPage(router.pathname), [router.pathname]);
-
+export default function PageTitle({ page }: { page: MetaKeys }) {
   return (
     <Head>
-      <title>{meta.title}</title>
+      <title>{metatags[page].title}</title>
     </Head>
   );
 }

@@ -74,7 +74,7 @@ const Register: NextPage = () => {
 
   return (
     <div>
-      <PageTitle />
+      <PageTitle page="register" />
 
       <ContainerWrapper maxWidth="sm">
         <Box textAlign="center">

@@ -5,7 +5,6 @@ import { CacheProvider, EmotionCache } from '@emotion/react';
 import createEmotionCache from '../styles/createEmotionCache';
 import AppProvider from '../context/app-context';
 import Metatags from '../components/meta-tags';
-import { getMetatagsByPage } from '../lib/utils/get-metatags-by-page';
 
 interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache;
@@ -17,8 +16,6 @@ const clientSideEmotionCache = createEmotionCache();
 function MyApp(props: MyAppProps) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps, router } = props;
 
-  const meta = getMetatagsByPage(router.pathname);
-
   return (
     <CacheProvider value={emotionCache}>
       <Head>
@@ -26,7 +23,7 @@ function MyApp(props: MyAppProps) {
         <meta name="viewport" content="initial-scale=1, width=device-width, minimum-scale=1, maximum-scale=5.0" />
         <link rel="icon" href="/favicon.ico" />
 
-        <Metatags title={meta.title} description={meta.description} image={meta.image} path={router.pathname} />
+        <Metatags path={router.pathname} />
       </Head>
 
       <AppProvider>

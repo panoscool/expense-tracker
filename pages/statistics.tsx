@@ -34,7 +34,7 @@ const Statistics: NextPage = () => {
 
   return (
     <div>
-      <PageTitle />
+      <PageTitle page="statistics" />
 
       <Layout>
         <Container maxWidth="xl" sx={{ pt: 2 }}>

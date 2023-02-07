@@ -1,14 +1,14 @@
-import { env } from '../lib/config/env';
 import { Fragment } from 'react';
+import { env } from '../lib/config/env';
+import metatags from '../lib/data/metatags.json';
 
-interface Props {
-  title: string;
-  description: string;
-  path: string;
-  image?: string;
-}
+type MetaKeys = keyof typeof metatags;
 
-const Metatags = ({ title, description, image, path }: Props) => {
+const Metatags = ({ path }: { path: string }) => {
+  const page = path.replace('/', '') as MetaKeys;
+
+  const { title, description, image } = metatags[page];
+
   const url = `${env.baseUrl}${path}`;
   const imageUrl = `${env.baseUrl}${image}`;
 

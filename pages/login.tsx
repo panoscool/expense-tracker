@@ -72,7 +72,7 @@ const Login: NextPage = () => {
 
   return (
     <div>
-      <PageTitle />
+      <PageTitle page="login" />
 
       <ContainerWrapper maxWidth="sm">
         <Box textAlign="center">

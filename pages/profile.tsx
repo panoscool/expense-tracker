@@ -28,7 +28,7 @@ const Profile: NextPage = () => {
 
   return (
     <div>
-      <PageTitle />
+      <PageTitle page="profile" />
 
       <Layout>
         <Container maxWidth="md" sx={{ pt: 2 }}>

@@ -69,7 +69,7 @@ const ResetPassword: NextPage = () => {
 
   return (
     <div>
-      <PageTitle />
+      <PageTitle page="reset-password" />
 
       <ContainerWrapper maxWidth="sm">
         <Box textAlign="center">
