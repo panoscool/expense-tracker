@@ -26,10 +26,11 @@ const TotalAmount = styled(Typography)`
 type Props = {
   day: Expense[];
   date: string;
+  users: number;
   currency?: string;
 };
 
-export const ExpenseCard: React.FC<Props> = ({ day, date, currency }) => {
+export const ExpenseCard: React.FC<Props> = ({ day, date, currency, users }) => {
   const router = useRouter();
 
   const handleExpenseClick = (id: string) => {
@@ -73,7 +74,7 @@ export const ExpenseCard: React.FC<Props> = ({ day, date, currency }) => {
                   </ListItemIcon>
                   <ListItemText
                     primary={expense.description}
-                    secondary={expense.user.name}
+                    secondary={users > 1 ? expense.user.name : expense.category}
                     sx={{ textTransform: 'capitalize' }}
                   />
                   <ListItemSecondaryAction>

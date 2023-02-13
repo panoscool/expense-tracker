@@ -66,7 +66,9 @@ export const ExpensesList: React.FC = () => {
         <Divider />
       </Box>
       {days?.length > 0 ? (
-        days.map((day, index) => <ExpenseCard key={index} date={dates[index]} day={day} currency={account?.currency} />)
+        days.map((day, index) => (
+          <ExpenseCard key={index} date={dates[index]} day={day} currency={account?.currency} users={totalUsers} />
+        ))
       ) : (
         <EmptyList />
       )}
