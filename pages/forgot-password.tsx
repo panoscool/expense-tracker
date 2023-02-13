@@ -30,13 +30,13 @@ const Form = styled('form')(({ theme }) => ({
 const ForgotPassword: NextPage = () => {
   const [resetInfo, setResetInfo] = useState(false);
   const { loading, error, dispatch } = useAppContext();
-  const { authenticated, checkAuthStateAndRedirect } = useAuth(false);
+  const { authenticated, checkAuthStateAndRedirect } = useAuth();
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(forgotPasswordSchema, {
     email: '',
   });
 
   useEffect(() => {
-    checkAuthStateAndRedirect('/');
+    checkAuthStateAndRedirect();
   }, [checkAuthStateAndRedirect]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

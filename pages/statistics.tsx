@@ -16,12 +16,12 @@ import PageTitle from '../components/page-title';
 const Statistics: NextPage = () => {
   const router = useRouter();
   const { dispatch } = useAppContext();
-  const { authenticated, checkAuthStateAndRedirect } = useAuth(true);
+  const { authenticated, checkAuthStateAndRedirect } = useAuth();
 
   const accountId = useMemo(() => router.query.account_id, [router.query.account_id]);
 
   useEffect(() => {
-    checkAuthStateAndRedirect('/login');
+    checkAuthStateAndRedirect();
   }, [checkAuthStateAndRedirect]);
 
   useEffect(() => {

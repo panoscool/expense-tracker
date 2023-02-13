@@ -33,14 +33,14 @@ const Form = styled('form')(({ theme }) => ({
 const Login: NextPage = () => {
   const router = useRouter();
   const { loading, error, dispatch } = useAppContext();
-  const { authenticated, checkAuthStateAndRedirect } = useAuth(false);
+  const { authenticated, checkAuthStateAndRedirect } = useAuth();
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(loginSchema, {
     email: '',
     password: '',
   });
 
   useEffect(() => {
-    checkAuthStateAndRedirect('/');
+    checkAuthStateAndRedirect();
   }, [checkAuthStateAndRedirect]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

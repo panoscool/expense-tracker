@@ -14,7 +14,7 @@ import { Account } from '../lib/interfaces/account';
 import { UseCaseType } from '../lib/interfaces/common';
 
 const Profile: NextPage = () => {
-  const { authenticated, checkAuthStateAndRedirect } = useAuth(true);
+  const { authenticated, checkAuthStateAndRedirect } = useAuth();
   const [expanded, setExpanded] = useState<string | false>('panel1');
   const [open, setOpen] = useState<UseCaseType | null>(null);
   const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
@@ -27,7 +27,7 @@ const Profile: NextPage = () => {
   const openAccountView = useMemo(() => open === UseCaseType.account_view, [open]);
 
   useEffect(() => {
-    checkAuthStateAndRedirect('/login');
+    checkAuthStateAndRedirect();
   }, [checkAuthStateAndRedirect]);
 
   const handleChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {

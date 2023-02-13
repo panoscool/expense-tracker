@@ -13,11 +13,11 @@ import useAuth from '../hooks/use-auth';
 import Layout from '../layout';
 
 const Profile: NextPage = () => {
-  const { authenticated, checkAuthStateAndRedirect } = useAuth(true);
+  const { authenticated, checkAuthStateAndRedirect } = useAuth();
   const [expanded, setExpanded] = useState<string | false>('panel1');
 
   useEffect(() => {
-    checkAuthStateAndRedirect('/login');
+    checkAuthStateAndRedirect();
   }, [checkAuthStateAndRedirect]);
 
   const handleChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {

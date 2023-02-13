@@ -10,10 +10,10 @@ import Layout from '../layout';
 
 const Home: NextPage = () => {
   const router = useRouter();
-  const { authenticated, checkAuthStateAndRedirect } = useAuth(true);
+  const { authenticated, checkAuthStateAndRedirect } = useAuth();
 
   useEffect(() => {
-    checkAuthStateAndRedirect('/login');
+    checkAuthStateAndRedirect();
   }, [checkAuthStateAndRedirect]);
 
   if (!authenticated) return null;

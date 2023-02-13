@@ -15,21 +15,15 @@ export async function validate<T>(schema: AnyObjectSchema, data: T): Promise<str
 }
 
 export const isDigit = (value: string) => {
-  const digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.'];
-
-  return digits.includes(value);
+  return ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.'].includes(value);
 };
 
 export const isOperator = (value: string) => {
-  const operators = ['+', '-', '*', '/'];
-
-  return operators.includes(value);
+  return ['+', '-', '*', '/'].includes(value);
 };
 
 export const isEvaluate = (value: string) => {
-  const evaluations = ['=', 'Enter'];
-
-  return evaluations.includes(value);
+  return ['Enter'].includes(value);
 };
 
 export const isBackspace = (value: string) => {

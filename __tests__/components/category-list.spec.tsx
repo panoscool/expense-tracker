@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import CategoryList from '../../components/category/category-list';
+import { CategoryList } from '../../components/category/category-list';
 
 test('category list component', async () => {
   render(<CategoryList />);

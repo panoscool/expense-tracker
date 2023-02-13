@@ -33,7 +33,7 @@ const Form = styled('form')(({ theme }) => ({
 const Register: NextPage = () => {
   const router = useRouter();
   const { loading, error, dispatch } = useAppContext();
-  const { authenticated, checkAuthStateAndRedirect } = useAuth(false);
+  const { authenticated, checkAuthStateAndRedirect } = useAuth();
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(registerSchema, {
     name: '',
     email: '',
@@ -42,7 +42,7 @@ const Register: NextPage = () => {
   });
 
   useEffect(() => {
-    checkAuthStateAndRedirect('/');
+    checkAuthStateAndRedirect();
   }, [checkAuthStateAndRedirect]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
