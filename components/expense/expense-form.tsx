@@ -153,6 +153,7 @@ export const ExpenseForm: React.FC = () => {
       <Form onSubmit={handleSubmit} noValidate>
         <DateField
           label="Date"
+          views={['day']}
           disableFuture
           value={values.date}
           onChange={(value) => handleChange(value, 'date')}

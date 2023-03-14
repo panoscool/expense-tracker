@@ -1,7 +1,7 @@
 import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
 import MoveToInboxRoundedIcon from '@mui/icons-material/MoveToInboxRounded';
 import OutboxRoundedIcon from '@mui/icons-material/OutboxRounded';
-import { Alert, Button } from '@mui/material';
+import { Alert, Button, Typography } from '@mui/material';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -12,11 +12,9 @@ import Grid from '@mui/material/Grid';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import { styled } from '@mui/material/styles';
-import Typography from '@mui/material/Typography';
 import useAppContext from '../../hooks/use-app-context';
 import { updatePayment } from '../../lib/services/payment';
 import { formatCurrency } from '../../lib/utils/format-number';
-import { stringToColor } from '../../lib/utils/string-to-color';
 
 const Item = styled(ListItem)({
   display: 'flex',
@@ -33,10 +31,6 @@ export const UserPayable: React.FC = () => {
     }
   };
 
-  function userColor(string: string) {
-    return { color: stringToColor(string) };
-  }
-
   return (
     <Accordion variant="outlined">
       <AccordionSummary expandIcon={<ExpandMoreRoundedIcon />} aria-controls="panel1a-content" id="panel1a-header">
@@ -47,8 +41,8 @@ export const UserPayable: React.FC = () => {
           sx={{ mb: 3 }}
           severity={payments?.settled ? 'success' : 'info'}
           action={
-            <Button color="inherit" onClick={handleUpdateSettled}>
-              Mark {payments?.settled ? 'unsettled' : 'settled'}
+            <Button variant="outlined" color="inherit" size="small" onClick={handleUpdateSettled}>
+              {payments?.settled ? 'unsettle' : 'settle'}
             </Button>
           }
         >
@@ -69,8 +63,8 @@ export const UserPayable: React.FC = () => {
               <List>
                 {payments?.giving_users.map((giv) => (
                   <Item key={giv.user._id}>
-                    <Typography variant="body1" textTransform="capitalize" {...userColor(giv.user._id)}>
-                      <strong>{giv.user.name}</strong>
+                    <Typography variant="body1" textTransform="capitalize">
+                      {giv.user.name}
                     </Typography>
                     <Typography variant="body1">{formatCurrency(giv.amount, account?.currency)}</Typography>
                   </Item>
@@ -92,8 +86,8 @@ export const UserPayable: React.FC = () => {
               <List>
                 {payments?.receiving_users.map((rec) => (
                   <Item key={rec.user._id}>
-                    <Typography variant="body1" textTransform="capitalize" {...userColor(rec.user._id)}>
-                      <strong>{rec.user.name}</strong>
+                    <Typography variant="body1" textTransform="capitalize">
+                      {rec.user.name}
                     </Typography>
                     <Typography variant="body1">{formatCurrency(Math.abs(rec.amount), account?.currency)}</Typography>
                   </Item>
