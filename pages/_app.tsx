@@ -2,6 +2,7 @@ import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import CssBaseline from '@mui/material/CssBaseline';
 import { CacheProvider, EmotionCache } from '@emotion/react';
+import { Analytics } from '@vercel/analytics/react';
 import createEmotionCache from '../styles/createEmotionCache';
 import AppProvider from '../context/app-context';
 import Metatags from '../components/meta-tags';
@@ -32,6 +33,7 @@ function MyApp(props: MyAppProps) {
       <AppProvider>
         <CssBaseline />
         <Component {...pageProps} />
+        <Analytics />
       </AppProvider>
     </CacheProvider>
   );
