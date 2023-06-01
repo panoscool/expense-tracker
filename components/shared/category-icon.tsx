@@ -12,6 +12,7 @@ import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import WaterOutlinedIcon from '@mui/icons-material/WaterOutlined';
 import TravelExploreOutlinedIcon from '@mui/icons-material/TravelExploreOutlined';
+import PaymentsOutlinedIcon from '@mui/icons-material/PaymentsOutlined';
 
 type Props = {
   icon: string;
@@ -28,6 +29,7 @@ const CategoryIcon: React.FC<Props> = ({ icon, size }) => {
     electricity: <ElectricBoltOutlinedIcon fontSize={size} />,
     telecommunication: <LocalPhoneOutlinedIcon fontSize={size} />,
     subscription: <RepeatOutlinedIcon fontSize={size} />,
+    rent: <PaymentsOutlinedIcon fontSize={size} />,
     trips: <TravelExploreOutlinedIcon fontSize={size} />,
     education: <SchoolOutlinedIcon fontSize={size} />,
     beauty: <MoodOutlinedIcon fontSize={size} />,
