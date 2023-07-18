@@ -30,7 +30,7 @@
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
     "material-ui-popup-state": "^5.0.4",
-    "mongoose": "^6.8.3",
+    "mongoose": "^6.11.3",
     "next": "13.1.2",
     "notistack": "^2.0.8",
     "query-string": "^8.1.0",
