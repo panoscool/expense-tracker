@@ -9,9 +9,9 @@ export async function getUserById(id: string) {
 }
 
 export async function getUserByEmail(email: string) {
-  return await UserModel.findOne({ email });
+  return await UserModel.findOne({ email: { $eq: email } });
 }
 
 export async function getUserByPasswordResetHash(hash: string) {
-  return await UserModel.findOne({ password_reset_hash: hash });
+  return await UserModel.findOne({ password_reset_hash: { $eq: hash } });
 }

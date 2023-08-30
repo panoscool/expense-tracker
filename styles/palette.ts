@@ -1,6 +1,7 @@
-import { purple, grey } from '@mui/material/colors';
+import { teal, grey } from '@mui/material/colors';
 import { ThemeMode } from '../lib/interfaces/common';
 
+/** @returns PaletteOptions from '@mui/material' */
 export const palette = (themeMode: ThemeMode = 'light') => ({
   mode: themeMode,
   common: {
@@ -8,9 +9,9 @@ export const palette = (themeMode: ThemeMode = 'light') => ({
     white: '#fff',
   },
   primary: {
-    light: purple[500],
-    main: purple[700],
-    dark: purple[900],
+    light: teal[500],
+    main: teal[700],
+    dark: teal[900],
     contrastText: '#fff',
   },
   secondary: {

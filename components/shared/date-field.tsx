@@ -1,13 +1,11 @@
-import TextField from '@mui/material/TextField';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { CalendarPickerView } from '@mui/x-date-pickers';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 type DateFieldProps = {
   label: string;
   value: Date | null;
-  views?: CalendarPickerView[];
+  views?: Array<'day' | 'month' | 'year'>;
   helperText?: string;
   error?: boolean;
   format?: string;
@@ -24,15 +22,19 @@ const DateField: React.FC<DateFieldProps> = (props) => {
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <DatePicker
         disableFuture={disableFuture}
-        inputFormat={format || 'dd/MM/yyyy'}
+        format={format || 'dd/MM/yyyy'}
         openTo={openTo}
         views={views}
         label={label}
         value={value}
+        slotProps={{
+         textField: {
+          helperText: helperText,
+          error: error,
+          onBlur: () => onBlur?.("date")
+         }
+        }}
         onChange={(newValue) => onChange(newValue)}
-        renderInput={(params) => (
-          <TextField {...params} error={error} helperText={helperText} onBlur={() => onBlur?.('date')} />
-        )}
       />
     </LocalizationProvider>
   );

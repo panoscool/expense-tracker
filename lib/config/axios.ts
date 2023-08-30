@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosRequestHeaders } from 'axios';
 import { storeGetAccessToken } from './store';
 
 const axiosInstance = axios.create({
@@ -13,7 +13,7 @@ axiosInstance.interceptors.request.use(
     const accessToken = storeGetAccessToken();
 
     if (accessToken) {
-      config.headers = { Authorization: `Bearer ${accessToken}` };
+      config.headers = { Authorization: `Bearer ${accessToken}` } as AxiosRequestHeaders;
     }
     return config;
   },

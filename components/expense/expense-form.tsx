@@ -7,24 +7,25 @@ import InputAdornment from '@mui/material/InputAdornment';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
-import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
+import { styled } from '@mui/material/styles';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 import useAppContext from '../../hooks/use-app-context';
 import useForm from '../../hooks/use-form';
+import useHasAccess from '../../hooks/use-has-access';
+import { expenseSchema } from '../../lib/config/yup-schema';
 import { Account } from '../../lib/interfaces/account';
 import { ExpenseCreate } from '../../lib/interfaces/expense';
 import { createExpense, deleteExpense, getExpense, getExpenses, updateExpense } from '../../lib/services/expense';
-import { expenseSchema } from '../../lib/config/yup-schema';
+import { getPayments } from '../../lib/services/payment';
+import { convertStringToDate } from '../../lib/utils/date';
 import { CalculatorDialog } from '../calculator/calculator-dialog';
 import CategoryIcon from '../shared/category-icon';
 import DateField from '../shared/date-field';
 import IconSelectField from '../shared/icon-select-field';
-import useHasAccess from '../../hooks/use-has-access';
-import { getPayments } from '../../lib/services/payment';
 
 const Form = styled('form')`
   display: flex;
@@ -155,7 +156,7 @@ export const ExpenseForm: React.FC = () => {
           label="Date"
           views={['day']}
           disableFuture
-          value={values.date}
+          value={convertStringToDate(values.date)}
           onChange={(value) => handleChange(value, 'date')}
           onBlur={onBlur}
           error={!!hasError('date')}
