@@ -19,3 +19,9 @@ export const formatDateString = (date: string, fmt: string) => {
 
   return isValid(newDate) ? format(newDate, fmt) : date;
 };
+
+export const convertStringToDate = (date: string) => {
+  const newDate = new Date(date);
+
+  return isValid(newDate) ? newDate : null;
+}
