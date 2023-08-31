@@ -15,7 +15,7 @@ export async function createAccount(account: Partial<AccountCreate> & { user: st
 
 export async function updateAccountById(id: string, account: Partial<AccountCreate>) {
   return await AccountModel.updateOne(
-    { _id: id },
+    { _id: { $eq: id } },
     {
       name: account.name,
       currency: account.currency,

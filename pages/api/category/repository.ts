@@ -22,5 +22,5 @@ export async function addCategoryById(id: string, label: string) {
 }
 
 export async function removeCategoryById(id: string, label: string) {
-  return await CategoryModel.updateOne({ _id: id }, { $pull: { labels: label } });
+  return await CategoryModel.updateOne({ _id: { $eq: id } }, { $pull: { labels: label } });
 }
