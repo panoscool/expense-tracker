@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
-import useAppContext from '../../hooks/use-app-context';
+import { useAppContext } from '../../context/app-context';
 import apiRequest from '../../lib/config/axios';
 
 const TotalPerUser = dynamic(() => import('./charts/total-per-user'), { ssr: false });

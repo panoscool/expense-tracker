@@ -4,7 +4,7 @@ import { groupBy } from 'lodash';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import useAppContext from '../../hooks/use-app-context';
+import { useAppContext } from '../../context/app-context';
 import useIsDesktop from '../../hooks/use-is-desktop';
 import { getExpenses } from '../../lib/services/expense';
 import { getPayments } from '../../lib/services/payment';

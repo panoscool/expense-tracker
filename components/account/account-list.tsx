@@ -3,7 +3,7 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import useAppContext from '../../hooks/use-app-context';
+import { useAppContext } from '../../context/app-context';
 import { Account } from '../../lib/interfaces/account';
 import { UseCaseType } from '../../lib/interfaces/common';
 import { AccountActions } from './account-actions';

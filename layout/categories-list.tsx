@@ -9,7 +9,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { useState } from 'react';
 import CategoryIcon from '../components/shared/category-icon';
-import useAppContext from '../hooks/use-app-context';
+import { useAppContext } from '../context/app-context';
 import { styled } from '@mui/material';
 
 const StyledListItemIcon = styled(ListItemIcon)(({ theme }) => ({

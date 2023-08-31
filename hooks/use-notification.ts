@@ -1,6 +1,6 @@
 import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
-import useAppContext from '../hooks/use-app-context';
+import { useAppContext } from '../context/app-context';
 import { removeNotification } from '../lib/services/helpers';
 
 export function useNotification() {

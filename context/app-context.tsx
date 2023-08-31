@@ -1,9 +1,9 @@
-import { createContext, useEffect, useMemo, useRef, useState } from 'react';
+import { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { createTheme, responsiveFontSizes, ThemeProvider } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import { SnackbarKey, SnackbarProvider } from 'notistack';
-import useAppState from '../hooks/use-app-state';
+import useAppState, { initialState } from '../hooks/use-app-state';
 import { AppContextType, ThemeMode } from '../lib/interfaces/common';
 import { palette } from '../styles/palette';
 import { components } from '../styles/components';
@@ -14,24 +14,17 @@ import { User } from '../lib/interfaces/user';
 const initState: AppContextType = {
   themeMode: 'light',
   user: null,
-  loading: [],
-  error: null,
-  accounts: null,
-  account: null,
-  expenses: null,
-  expense: null,
-  categories: null,
-  payments: null,
-  notifications: [],
   authenticated: false,
+  ...initialState,
   dispatch: () => {},
   setUser: () => {},
   setThemeMode: () => {},
 };
 
 export const AppContext = createContext(initState);
+export const useAppContext = () => useContext(AppContext);
 
-const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const storedThemeMode = storeGetThemeMode(prefersDarkMode ? 'dark' : 'light');
 
@@ -97,4 +90,4 @@ const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   );
 };
 
-export default AppProvider;
+export default AppContextProvider;

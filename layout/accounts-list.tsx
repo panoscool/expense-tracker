@@ -7,7 +7,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import Link from 'next/link';
-import useAppContext from '../hooks/use-app-context';
+import { useAppContext } from '../context/app-context';
 
 export function AccountsList() {
   const { accounts } = useAppContext();

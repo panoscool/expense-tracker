@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
-import useAppContext from '../../hooks/use-app-context';
+import { useAppContext } from '../../context/app-context';
 import useForm from '../../hooks/use-form';
 import useHasAccess from '../../hooks/use-has-access';
 import { expenseSchema } from '../../lib/config/yup-schema';

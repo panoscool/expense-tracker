@@ -1,7 +1,7 @@
 import { Box, Button, Typography } from '@mui/material';
 import Link from 'next/link';
 import { useMemo } from 'react';
-import useAppContext from '../hooks/use-app-context';
+import { useAppContext } from '../context/app-context';
 
 export function NoAccountId() {
   const { loading, accounts } = useAppContext();

@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic';
 import { useEffect, useMemo, useState } from 'react';
-import useAppContext from '../../hooks/use-app-context';
+import { useAppContext } from '../../context/app-context';
 import apiRequest from '../../lib/config/axios';
 
 const TransactionsPerPeriod = dynamic(() => import('./charts/transactions-per-period'), { ssr: false });

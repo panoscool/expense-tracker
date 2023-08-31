@@ -16,7 +16,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 import { ExpenseForm } from '../components/expense/expense-form';
 import Loading from '../components/shared/loading';
-import useAppContext from '../hooks/use-app-context';
+import { useAppContext } from '../context/app-context';
 import useIsDesktop from '../hooks/use-is-desktop';
 import { useNotification } from '../hooks/use-notification';
 import {

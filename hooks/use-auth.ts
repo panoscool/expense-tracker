@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo } from 'react';
 import { storeGetDecodedToken } from '../lib/config/store';
 import { DecodedToken } from '../lib/interfaces/user';
-import useAppContext from './use-app-context';
+import { useAppContext } from '../context/app-context';
 
 // TODO: Move auth check into next middleware using cookies with iron-session
 // https://www.npmjs.com/package/iron-session

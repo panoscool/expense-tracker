@@ -1,7 +1,7 @@
 import { Box, Button, TextField, Typography, Dialog, DialogContent } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useEffect, useMemo } from 'react';
-import useAppContext from '../../hooks/use-app-context';
+import { useAppContext } from '../../context/app-context';
 import useForm from '../../hooks/use-form';
 import { accountSchema } from '../../lib/config/yup-schema';
 import { Account, AccountCreate } from '../../lib/interfaces/account';

@@ -8,7 +8,7 @@ import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import Image from 'next/image';
 import { useState } from 'react';
-import useAppContext from '../../hooks/use-app-context';
+import { useAppContext } from '../../context/app-context';
 import { setError } from '../../lib/services/helpers';
 import { deleteUserImage, uploadUserImage } from '../../lib/services/user';
 
