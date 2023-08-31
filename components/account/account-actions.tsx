@@ -2,7 +2,7 @@ import { DeleteRounded, EditRounded, MoreVertRounded, VisibilityOutlined } from 
 import { IconButton, ListItemIcon, ListItemSecondaryAction, ListItemText, Menu, MenuItem } from '@mui/material';
 import { Theme } from '@mui/material/styles';
 import { bindMenu, bindTrigger, usePopupState } from 'material-ui-popup-state/hooks';
-import useAppContext from '../../hooks/use-app-context';
+import { useAppContext } from '../../context/app-context';
 import useHasAccess from '../../hooks/use-has-access';
 import { Account } from '../../lib/interfaces/account';
 import { UseCaseType } from '../../lib/interfaces/common';

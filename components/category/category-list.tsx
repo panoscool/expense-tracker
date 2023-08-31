@@ -5,7 +5,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import ListItemText from '@mui/material/ListItemText';
-import useAppContext from '../../hooks/use-app-context';
+import { useAppContext } from '../../context/app-context';
 import { defaultCategories } from '../../lib/config/default-values';
 import { deleteCategory, getCategories } from '../../lib/services/category';
 import CategoryIcon from '../shared/category-icon';

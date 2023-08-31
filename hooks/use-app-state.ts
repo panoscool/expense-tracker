@@ -1,7 +1,7 @@
 import { Reducer, useReducer } from 'react';
 import { Actions, AppState } from '../lib/interfaces/common';
 
-const initState: AppState = {
+export const initialState: AppState = {
   accounts: null,
   account: null,
   expenses: null,
@@ -84,7 +84,7 @@ const reducer: Reducer<AppState, { type: Actions; payload?: any }> = (state, { t
 };
 
 const useAppState = () => {
-  const [state, dispatch] = useReducer(reducer, initState);
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   return { state, dispatch };
 };

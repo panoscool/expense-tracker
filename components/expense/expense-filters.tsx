@@ -3,7 +3,7 @@ import { Box, ListItemIcon, ListItemText, MenuItem, TextField } from '@mui/mater
 import { format } from 'date-fns';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import useAppContext from '../../hooks/use-app-context';
+import { useAppContext } from '../../context/app-context';
 import { ExpensesFilters } from '../../lib/interfaces/expense';
 import { setParams } from '../../lib/utils/url-params';
 import CategoryIcon from '../shared/category-icon';

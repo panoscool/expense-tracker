@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import useAppContext from './use-app-context';
+import { useAppContext } from '../context/app-context';
 
 function useHasAccess() {
   const { user } = useAppContext();

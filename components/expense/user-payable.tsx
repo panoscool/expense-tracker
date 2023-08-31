@@ -12,7 +12,7 @@ import Grid from '@mui/material/Grid';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import { styled } from '@mui/material/styles';
-import useAppContext from '../../hooks/use-app-context';
+import { useAppContext } from '../../context/app-context';
 import { updatePayment } from '../../lib/services/payment';
 import { formatCurrency } from '../../lib/utils/format-number';
 

@@ -14,7 +14,7 @@ import { Theme } from '@mui/material/styles';
 import { bindMenu, bindTrigger, usePopupState } from 'material-ui-popup-state/hooks';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import useAppContext from '../../hooks/use-app-context';
+import { useAppContext } from '../../context/app-context';
 import useHasAccess from '../../hooks/use-has-access';
 import { UseCaseType } from '../../lib/interfaces/common';
 import { deleteAccount, getAccount, getAccounts } from '../../lib/services/account';

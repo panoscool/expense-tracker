@@ -5,7 +5,7 @@ import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { useEffect, useState } from 'react';
-import useAppContext from '../../hooks/use-app-context';
+import { useAppContext } from '../../context/app-context';
 import useForm from '../../hooks/use-form';
 import { userUpdateSchema } from '../../lib/config/yup-schema';
 import { setError } from '../../lib/services/helpers';

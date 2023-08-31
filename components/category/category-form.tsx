@@ -1,5 +1,5 @@
 import { styled } from '@mui/material/styles';
-import useAppContext from '../../hooks/use-app-context';
+import { useAppContext } from '../../context/app-context';
 import useForm from '../../hooks/use-form';
 import { createCategory, getCategories } from '../../lib/services/category';
 import { categorySchema } from '../../lib/config/yup-schema';

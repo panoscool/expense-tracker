@@ -5,7 +5,7 @@ import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import PageTitle from '../components/page-title';
-import useAppContext from '../hooks/use-app-context';
+import { useAppContext } from '../context/app-context';
 import useAuth from '../hooks/use-auth';
 import useForm from '../hooks/use-form';
 import apiRequest from '../lib/config/axios';

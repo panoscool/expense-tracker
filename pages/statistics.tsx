@@ -9,7 +9,7 @@ import useAuth from '../hooks/use-auth';
 import Layout from '../layout';
 // import { UserTotal } from '../components/statistics/user-total';
 import { TransactionsTotal } from '../components/statistics/transactions-total';
-import useAppContext from '../hooks/use-app-context';
+import { useAppContext } from '../context/app-context';
 import { getAccount } from '../lib/services/account';
 import PageTitle from '../components/page-title';
 

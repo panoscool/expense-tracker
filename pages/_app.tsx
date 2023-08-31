@@ -4,7 +4,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { CacheProvider, EmotionCache } from '@emotion/react';
 import { Analytics } from '@vercel/analytics/react';
 import createEmotionCache from '../styles/createEmotionCache';
-import AppProvider from '../context/app-context';
+import AppContextProvider from '../context/app-context';
 import Metatags from '../components/meta-tags';
 import { getMetatagsByPage } from '../lib/utils/get-metatags-by-page';
 
@@ -30,11 +30,11 @@ function MyApp(props: MyAppProps) {
         <Metatags title={meta.title} description={meta.description} image={meta.image} path={router.pathname} />
       </Head>
 
-      <AppProvider>
+      <AppContextProvider>
         <CssBaseline />
         <Component {...pageProps} />
         <Analytics />
-      </AppProvider>
+      </AppContextProvider>
     </CacheProvider>
   );
 }

@@ -15,7 +15,7 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListSubheader from '@mui/material/ListSubheader';
 import Typography from '@mui/material/Typography';
-import useAppContext from '../../hooks/use-app-context';
+import { useAppContext } from '../../context/app-context';
 import { User } from '../../lib/interfaces/user';
 import { getAccount, updateAccount } from '../../lib/services/account';
 import { getInitials } from '../../lib/utils/get-initials';
