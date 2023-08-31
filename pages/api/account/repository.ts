@@ -15,7 +15,7 @@ export async function createAccount(account: Partial<AccountCreate> & { user: st
 
 export async function updateAccountById(id: string, account: Partial<AccountCreate>) {
   return await AccountModel.updateOne(
-    { _id: id },
+    { _id: { $eq: id } },
     {
       name: account.name,
       currency: account.currency,
@@ -29,11 +29,11 @@ export async function getAccountById(id: string) {
 }
 
 export async function getAccountsByUserId(userId: string) {
-  return await AccountModel.find({ user: userId });
+  return await AccountModel.find({ user: { $eq: userId } });
 }
 
 export async function getAccountsPopulatedByUserId(userId: string) {
-  return await AccountModel.find({ users: userId }).populate('users', 'name email image');
+  return await AccountModel.find({ users: { $eq: userId } }).populate('users', 'name email image');
 }
 
 export async function getAccountPopulatedById(id: string) {
@@ -41,13 +41,13 @@ export async function getAccountPopulatedById(id: string) {
 }
 
 export async function addAccountUserById(id: string, userId: string) {
-  return await AccountModel.updateOne({ _id: id }, { $push: { users: userId } });
+  return await AccountModel.updateOne({ _id: { $eq: id } }, { $push: { users: userId } });
 }
 
 export async function removeAccountUserById(id: string, userId: string) {
-  return await AccountModel.updateOne({ _id: id }, { $pull: { users: userId } });
+  return await AccountModel.updateOne({ _id: { $eq: id } }, { $pull: { users: userId } });
 }
 
 export async function deleteAccountById(id: string) {
-  return await AccountModel.deleteOne({ _id: id });
+  return await AccountModel.deleteOne({ _id: { $eq: id } });
 }

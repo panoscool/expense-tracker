@@ -31,7 +31,7 @@ export async function createExpense(expense: ExpenseCreate) {
 
 export async function updateExpenseById(id: string, expense: ExpenseCreate) {
   return ExpenseModel.updateOne(
-    { _id: id },
+    { _id: { $eq: id } },
     {
       user: expense.user,
       account: expense.account,
@@ -46,7 +46,7 @@ export async function updateExpenseById(id: string, expense: ExpenseCreate) {
 }
 
 export async function getExpenseById(id: string) {
-  return await ExpenseModel.findOne({ _id: id });
+  return await ExpenseModel.findOne({ _id: { $eq: id } });
 }
 
 export async function getExpensesPopulated(filters: any) {
@@ -55,16 +55,16 @@ export async function getExpensesPopulated(filters: any) {
   const monthStart = startOfMonth(parseISO(date));
   const monthEnd = endOfMonth(parseISO(date));
 
-  let query: any = { account: account_id };
+  let query: Record<string, unknown> = { account: { $eq: account_id } };
 
   if (date) {
     query.date = { $gte: monthStart, $lte: monthEnd };
   }
   if (user_id) {
-    query.user = user_id;
+    query.user = { $eq: user_id };
   }
   if (category) {
-    query.category = category;
+    query.category = { $eq: category };
   }
 
   return await ExpenseModel.find(query).sort({ date: 'asc' }).populate('user', 'name');
@@ -75,7 +75,7 @@ export async function getExpensePopulatedById(id: string) {
 }
 
 export async function deleteExpenseById(id: string) {
-  return await ExpenseModel.deleteOne({ _id: id });
+  return await ExpenseModel.deleteOne({ _id: { $eq: id } });
 }
 
 export async function getExpenseByAccountIdAndDates(accountId: string, date: string) {
@@ -83,7 +83,7 @@ export async function getExpenseByAccountIdAndDates(accountId: string, date: str
   const endDate = endOfMonth(parseISO(date));
 
   return await ExpenseModel.find({
-    account: accountId,
+    account: { $eq: accountId },
     date: {
       $gte: startDate,
       $lte: endDate,
@@ -96,5 +96,5 @@ export async function updateExpensesByAccountId(accountIds: string[], category: 
 }
 
 export async function deleteExpensesByAccountId(id: string) {
-  return await ExpenseModel.deleteMany({ account: id });
+  return await ExpenseModel.deleteMany({ account: { $eq: id } });
 }

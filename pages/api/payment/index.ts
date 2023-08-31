@@ -22,7 +22,7 @@ const getPayments = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(401).send({ error: 'Not authorized' });
     }
 
-    const payments = await Repository.getPaymentsPopulated(req.query);
+    const payments = await Repository.getPaymentsPopulated(req.query as any);
 
     res.status(200).json({ data: payments });
   } catch (err) {
