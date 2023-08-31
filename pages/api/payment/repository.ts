@@ -35,7 +35,7 @@ export async function createPayment(payment: PaymentCreate) {
 
 export async function updatePaymentById(id: string, payment: PaymentUpdate) {
   return await PaymentModel.updateOne(
-    { _id: id },
+    { _id: { $eq: id } },
     {
       $set: {
         giving_users: payment.giving_users,
@@ -54,18 +54,18 @@ export async function getPaymentByAccountIdAndPeriod(accountId: string, period: 
   const date = format(parseISO(period), 'MMMM-yyyy');
 
   return await PaymentModel.findOne({
-    account: accountId,
-    period: date,
+    account: { $eq: accountId },
+    period: { $eq: date },
   });
 }
 
-export async function getPaymentsPopulated(filters: any) {
+export async function getPaymentsPopulated(filters: { account_id: string; period: string }) {
   const { account_id, period } = filters;
 
-  let query: any = { account: account_id };
+  let query: Record<string, unknown> = { account: { $eq: account_id } };
 
   if (period) {
-    query.period = format(parseISO(period as string), 'MMMM-yyyy');
+    query.period = { $eq: format(parseISO(period), 'MMMM-yyyy') };
   }
 
   return await PaymentModel.find(query)
@@ -107,13 +107,13 @@ export async function getPaymentPopulatedById(id: string) {
     });
 }
 
-export async function getPaymentPopulatedByAccountAndPeriod(filters: any) {
+export async function getPaymentPopulatedByAccountAndPeriod(filters: { id: string; period: string }) {
   const { id, period } = filters;
 
-  let query: any = { account: id };
+  let query: Record<string, unknown> = { account: { $eq: id } };
 
   if (period) {
-    query.period = format(parseISO(period as string), 'MMMM-yyyy');
+    query.period = { $eq: format(parseISO(period), 'MMMM-yyyy') };
   }
 
   return await PaymentModel.findOne(query)
