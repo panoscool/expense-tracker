@@ -1,26 +1,5 @@
 import * as yup from 'yup';
 
-/** @description this function makes the password optional based on conditions */
-yup.addMethod(yup.string, 'validatePassword', function (errorMessage) {
-  return this.test(`validate-password`, errorMessage, function (value) {
-    const { path, createError } = this;
-
-    if (value?.trim() && value.trim().length < 6) {
-      return createError({ path, message: 'Password must be at least 6 characters' });
-    }
-    if (value?.trim() && value.trim().length > 24) {
-      return createError({ path, message: 'Password should not exceed 24 characters' });
-    }
-
-    const validLength =
-      value?.trim() && value.trim().length === 0 && value.trim().length >= 6 && value.trim().length <= 24;
-
-    const isValid = value == null || value == undefined || validLength || true;
-
-    return isValid || createError({ path, message: errorMessage });
-  });
-});
-
 export const loginSchema = yup.object({
   email: yup.string().email('Email is not valid').required('Email is required'),
   password: yup.string().required('Password is required'),
@@ -39,6 +18,55 @@ export const registerSchema = yup.object({
     .string()
     .required('Confirm password is required')
     .oneOf([yup.ref('password')], 'Passwords must match'),
+});
+
+export const forgotPasswordSchema = yup.object({
+  email: yup.string().email('Email is not valid').required('Email is required'),
+});
+
+export const resetPasswordSchema = yup.object({
+  password: yup
+    .string()
+    .trim()
+    .min(6, 'Password must be at least 6 characters')
+    .max(24, 'Password should not exceed 24 characters')
+    .required('Password is required'),
+  confirmPassword: yup
+    .string()
+    .required('Confirm password is required')
+    .oneOf([yup.ref('password')], 'Passwords must match'),
+});
+
+export const userUpdateSchema = yup.object({
+  name: yup.string().trim().required('Name is required'),
+  password: yup
+    .string()
+    .trim()
+    .nullable()
+    .test('password', 'Password must be between 6 and 24 characters', (value) => {
+      if (!value) return true;
+
+      const trimmedValue = value.trim();
+      return trimmedValue.length >= 6 && trimmedValue.length <= 24;
+    }),
+  newPassword: yup
+    .string()
+    .trim()
+    .min(6, 'New password must be at least 6 characters')
+    .max(24, 'New password should not exceed 24 characters')
+    .when('password', {
+      is: (password: string | null) => !!password,
+      then: (schema) => schema.required('New password is required'),
+      otherwise: (schema) => schema.nullable(),
+    }),
+  confirmPassword: yup.string().when('newPassword', {
+    is: (newPassword: string | null) => !!newPassword,
+    then: (schema) =>
+      schema
+        .required('Confirm password is required')
+        .oneOf([yup.ref('newPassword')], 'New and confirm password must match'),
+    otherwise: (schema) => schema.nullable(),
+  }),
 });
 
 export const accountSchema = yup.object({
@@ -64,50 +92,4 @@ export const expenseSchema = yup.object({
   user_id: yup.string().trim().nullable(),
   description: yup.string().trim().nullable(),
   details: yup.string().trim().nullable(),
-});
-
-export const userUpdateSchema = yup.object({
-  name: yup.string().trim().required('Name is required'),
-  password: yup
-    .string()
-    .trim()
-    .nullable()
-    // @ts-ignore
-    .validatePassword('Password is required'),
-  newPassword: yup
-    .string()
-    .trim()
-    .when('password', {
-      is: (password: string | null) => password && password.length > 0,
-      then: yup
-        .string()
-        .trim()
-        .min(6, 'New password must be at least 6 characters')
-        .max(24, 'New password should not exceed 24 characters')
-        .required('New password is required'),
-    }),
-  confirmPassword: yup.string().when('newPassword', {
-    is: (newPassword: string | null) => newPassword && newPassword.length > 0,
-    then: yup
-      .string()
-      .required('Confirm password is required')
-      .oneOf([yup.ref('newPassword')], 'New and confirm password must match'),
-  }),
-});
-
-export const forgotPasswordSchema = yup.object({
-  email: yup.string().email('Email is not valid').required('Email is required'),
-});
-
-export const resetPasswordSchema = yup.object({
-  password: yup
-    .string()
-    .trim()
-    .min(6, 'Password must be at least 6 characters')
-    .max(24, 'Password should not exceed 24 characters')
-    .required('Password is required'),
-  confirmPassword: yup
-    .string()
-    .required('Confirm password is required')
-    .oneOf([yup.ref('password')], 'Passwords must match'),
 });
