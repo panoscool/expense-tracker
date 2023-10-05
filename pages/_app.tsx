@@ -25,7 +25,7 @@ function MyApp(props: MyAppProps) {
       <Head>
         <meta name="keywords" content="expense tracker, money tracking, split expenses, money statistics" />
         <meta name="viewport" content="initial-scale=1, width=device-width, minimum-scale=1, maximum-scale=5.0" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
         <Metatags title={meta.title} description={meta.description} image={meta.image} path={router.pathname} />
       </Head>
