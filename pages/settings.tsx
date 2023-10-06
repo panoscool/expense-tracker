@@ -1,7 +1,7 @@
 import { AddRounded, ExpandMoreRounded } from '@mui/icons-material';
-import { Box, Typography, Accordion, AccordionSummary, AccordionDetails, Container, IconButton } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Box, Container, IconButton, Typography } from '@mui/material';
 import type { NextPage } from 'next';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AccountForm } from '../components/account/account-form';
 import { AccountList } from '../components/account/account-list';
 import { AccountUsers } from '../components/account/account-users';
@@ -19,12 +19,9 @@ const Profile: NextPage = () => {
   const [open, setOpen] = useState<UseCaseType | null>(null);
   const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
 
-  const openAccountForm = useMemo(
-    () => open === UseCaseType.account_create || open === UseCaseType.account_edit,
-    [open],
-  );
-  const openCategoryForm = useMemo(() => open === UseCaseType.category_create, [open]);
-  const openAccountView = useMemo(() => open === UseCaseType.account_view, [open]);
+  const openCategoryForm = open === UseCaseType.category_create;
+  const openAccountView = open === UseCaseType.account_view;
+  const openAccountForm = open === UseCaseType.account_create || open === UseCaseType.account_edit;
 
   useEffect(() => {
     checkAuthStateAndRedirect();

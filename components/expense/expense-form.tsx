@@ -50,8 +50,8 @@ export const ExpenseForm: React.FC = () => {
   const { user, accounts, categories, dispatch } = useAppContext();
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(expenseSchema, initialValues);
 
-  const accountId: string | undefined = useMemo(() => router.query?.account_id as string, [router.query?.account_id]);
-  const expenseId: string | undefined = useMemo(() => router.query?.expense_id as string, [router.query?.expense_id]);
+  const accountId: string | undefined = router.query?.account_id as string;
+  const expenseId: string | undefined = router.query?.expense_id as string;
   const selectedAccount: Account | undefined = useMemo(
     () => accounts?.find((acc) => acc._id === values.account_id),
     [accounts, values.account_id],
@@ -124,10 +124,7 @@ export const ExpenseForm: React.FC = () => {
     }
   };
 
-  const disableSave = useMemo(
-    () => (expenseId && !hasAccess(values?.user_id, values?.created_by)) || false,
-    [expenseId, hasAccess, values?.user_id, values?.created_by],
-  );
+  const disableSave = (expenseId && !hasAccess(values?.user_id, values?.created_by)) || false;
 
   return (
     <Box m={2} p={2}>

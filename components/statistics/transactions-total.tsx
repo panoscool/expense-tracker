@@ -1,5 +1,5 @@
 import dynamic from 'next/dynamic';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAppContext } from '../../context/app-context';
 import apiRequest from '../../lib/config/axios';
 
@@ -10,11 +10,9 @@ export const TransactionsTotal: React.FC = () => {
   const [period, setPeriod] = useState('month');
   const [data, setData] = useState([]);
 
-  const accountId = useMemo(() => account?._id, [account?._id]);
-
   useEffect(() => {
-    if (accountId) {
-      apiRequest('GET', `/statistics?account_id=${accountId}&period=${period}`)
+    if (account?._id) {
+      apiRequest('GET', `/statistics?account_id=${account._id}&period=${period}`)
         .then((resData) => {
           setData(resData as any);
         })
@@ -22,7 +20,7 @@ export const TransactionsTotal: React.FC = () => {
           console.error(error);
         });
     }
-  }, [accountId, period]);
+  }, [account?._id, period]);
 
   return <TransactionsPerPeriod data={data} themeMode={themeMode} period={period} setPeriod={setPeriod} />;
 };

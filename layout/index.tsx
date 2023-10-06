@@ -2,18 +2,18 @@ import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
 import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
 import MenuIcon from '@mui/icons-material/Menu';
-import Typography from '@mui/material/Typography';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import { styled } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import { styled } from '@mui/material/styles';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ExpenseForm } from '../components/expense/expense-form';
 import Loading from '../components/shared/loading';
 import { useAppContext } from '../context/app-context';
@@ -118,7 +118,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     router.push('/login');
   };
 
-  const [_, hash] = useMemo(() => router.asPath.split('#'), [router.asPath]);
+  const [_, hash] = router.asPath.split('#');
 
   return (
     <Box height="100%">

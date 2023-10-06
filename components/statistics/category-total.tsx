@@ -1,5 +1,5 @@
 import dynamic from 'next/dynamic';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAppContext } from '../../context/app-context';
 import apiRequest from '../../lib/config/axios';
 import { CategoryStatistic } from '../../lib/interfaces/statistics';
@@ -11,11 +11,9 @@ export const CategoryTotal: React.FC = () => {
   const [month, setMonth] = useState(new Date());
   const [data, setData] = useState<CategoryStatistic[]>([]);
 
-  const accountId = useMemo(() => account?._id, [account?._id]);
-
   useEffect(() => {
-    if (accountId) {
-      apiRequest('GET', `/statistics/category?account_id=${accountId}`)
+    if (account?._id) {
+      apiRequest('GET', `/statistics/category?account_id=${account._id}`)
         .then((resData) => {
           setData(resData as any);
         })
@@ -23,7 +21,7 @@ export const CategoryTotal: React.FC = () => {
           console.error(error);
         });
     }
-  }, [accountId]);
+  }, [account?._id]);
 
   return (
     <TotalPerCategory

@@ -1,12 +1,11 @@
 import { Box, Button, Typography } from '@mui/material';
 import Link from 'next/link';
-import { useMemo } from 'react';
 import { useAppContext } from '../context/app-context';
 
 export function NoAccountId() {
   const { loading, accounts } = useAppContext();
 
-  const hasAccounts = useMemo(() => accounts && accounts.length > 0, [accounts]);
+  const hasAccounts = accounts && accounts.length > 0;
 
   if (loading.length > 0) return null;
 

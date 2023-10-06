@@ -1,6 +1,6 @@
-import { Box, Button, TextField, Typography, Dialog, DialogContent } from '@mui/material';
+import { Box, Button, Dialog, DialogContent, TextField, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import { useAppContext } from '../../context/app-context';
 import useForm from '../../hooks/use-form';
 import { accountSchema } from '../../lib/config/yup-schema';
@@ -33,7 +33,7 @@ export const AccountForm: React.FC<Props> = ({ open, account, useCase, onClose }
   const { dispatch } = useAppContext();
   const { values, setValues, onBlur, hasError, canSubmit } = useForm(accountSchema, initialValues);
 
-  const isEditCase = useMemo(() => useCase === UseCaseType.account_edit, [useCase]);
+  const isEditCase = useCase === UseCaseType.account_edit;
 
   useEffect(() => {
     if (isEditCase) {

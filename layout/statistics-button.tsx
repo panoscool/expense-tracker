@@ -6,12 +6,11 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useMemo } from 'react';
 
 export function StatisticsButton() {
   const router = useRouter();
 
-  const accountId = useMemo(() => router.query?.account_id, [router]);
+  const accountId = router.query?.account_id;
 
   return (
     <List disablePadding>
