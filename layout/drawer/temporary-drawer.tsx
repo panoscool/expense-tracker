@@ -1,11 +1,11 @@
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
-import { AccountsList } from '../accounts-list';
+import { AccountsList } from './accounts';
 import { sxProps } from './drawer-styles';
-import { Title } from '../title';
-import CategoriesList from '../categories-list';
-import { StatisticsButton } from '../statistics-button';
+import { Title } from './title';
+import CategoriesList from './categories';
+import { StatisticsButton } from './statistics';
 
 interface Props {
   open: boolean;

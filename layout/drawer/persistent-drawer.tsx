@@ -4,11 +4,11 @@ import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import { styled } from '@mui/material/styles';
-import { AccountsList } from '../accounts-list';
+import { AccountsList } from './accounts';
 import { sxProps } from './drawer-styles';
-import { Title } from '../title';
-import CategoriesList from '../categories-list';
-import { StatisticsButton } from '../statistics-button';
+import { Title } from './title';
+import CategoriesList from './categories';
+import { StatisticsButton } from './statistics';
 
 const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
