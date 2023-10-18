@@ -9,7 +9,7 @@ const template = (name: string, hash: string) => {
 
     <p>To reset your password, please use the following link:</p>
 
-    ${env.baseUrl}/reset-password?hash=${hash}
+    ${env.APP_URL}/reset-password?hash=${hash}
 
     <p>If the link does not work, copy & paste the entire link into your web browser.</p>
 
@@ -20,11 +20,11 @@ const template = (name: string, hash: string) => {
 };
 
 export async function forgotPasswordEmail(to: string, name: string, hash: string) {
-  sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
+  sgMail.setApiKey(env.SENDGRID_API_KEY);
 
   try {
     await sgMail.send({
-      from: process.env.SENDGRID_SENDER!,
+      from: env.SENDGRID_SENDER,
       to,
       subject: 'Password reset',
       html: template(name, hash),

@@ -1,8 +1,9 @@
 import axios, { AxiosRequestHeaders } from 'axios';
 import { storeGetAccessToken } from './store';
+import { env } from './env';
 
 const axiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || '/api',
+  baseURL: env.API_URL,
   headers: {},
   responseType: 'json',
   withCredentials: true,

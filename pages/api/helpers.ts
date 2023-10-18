@@ -2,6 +2,7 @@ import { sign, verify } from 'jsonwebtoken';
 import { hash, compare } from 'bcrypt';
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
 import { IUser } from '../../lib/models/user';
+import { env } from '../../lib/config/env';
 
 export async function getHashedPassword(text: string) {
   const saltRounds = 10;
@@ -17,11 +18,10 @@ export async function hasAccess(userId: string, creatorId: string, entityUserId?
 }
 
 export async function setAccessToken(user: IUser) {
-  const secret = process.env.JWT_SECRET || '';
   const expires = 1000 * 60 * 60 * 24 * 7;
   const claims = { sub: user._id, name: user.name, email: user.email, image: user.image };
 
-  const accessToken = sign(claims, secret, {
+  const accessToken = sign(claims, env.JWT_SECRET, {
     expiresIn: expires,
   });
 
@@ -30,10 +30,9 @@ export async function setAccessToken(user: IUser) {
 
 export const getDecodedUserId = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const secret = process.env.JWT_SECRET || '';
     const [_, token] = req.headers.authorization?.split(' ') || [];
 
-    const decoded = verify(token, secret);
+    const decoded = verify(token, env.JWT_SECRET);
 
     if (decoded) {
       return decoded.sub;

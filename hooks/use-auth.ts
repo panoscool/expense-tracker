@@ -16,22 +16,18 @@ function useAuth() {
   const authData: DecodedToken | null = useMemo(() => storeGetDecodedToken(), []);
 
   useEffect(() => {
-    if (authData) {
-      setUser({ ...authData, _id: authData.sub });
-    } else {
-      setUser(null);
-    }
+    setUser(authData ? { ...authData, _id: authData.sub } : null);
   }, [authData, setUser]);
 
   const checkAuthStateAndRedirect = useCallback(() => {
-    // redirect for public pages
-    if (publicRoutes.includes(router.pathname) && authData) {
-      router.push('/');
-    }
-
-    // redirect for private pages
-    if (privateRoutes.includes(router.pathname) && (authData == undefined || authData == null)) {
-      router.push('/login');
+    if (authData) {
+      if (publicRoutes.includes(router.pathname)) {
+        router.push('/');
+      }
+    } else {
+      if (privateRoutes.includes(router.pathname)) {
+        router.push('/login');
+      }
     }
   }, [authData, router]);
 
