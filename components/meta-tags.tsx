@@ -9,8 +9,8 @@ interface Props {
 }
 
 const Metatags = ({ title, description, image, path }: Props) => {
-  const url = `${env.baseUrl}${path}`;
-  const imageUrl = `${env.baseUrl}${image}`;
+  const url = `${env.APP_URL}${path}`;
+  const imageUrl = `${env.APP_URL}${image}`;
 
   return (
     <Fragment>
