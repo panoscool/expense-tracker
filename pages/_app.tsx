@@ -7,6 +7,7 @@ import createEmotionCache from '../styles/createEmotionCache';
 import AppContextProvider from '../context/app-context';
 import Metatags from '../components/meta-tags';
 import { getMetatagsByPage } from '../lib/utils/get-metatags-by-page';
+import GoogleAnalytics from '@/components/google-analytics';
 
 interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache;
@@ -28,6 +29,7 @@ function MyApp(props: MyAppProps) {
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
         <Metatags title={meta.title} description={meta.description} image={meta.image} path={router.pathname} />
+        <GoogleAnalytics />
       </Head>
 
       <AppContextProvider>
