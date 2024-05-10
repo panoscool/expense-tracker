@@ -1,5 +1,5 @@
 import store from 'store';
-import jwt_decode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { DecodedToken } from '../interfaces/user';
 import { ThemeMode } from '../interfaces/common';
 
@@ -20,7 +20,7 @@ export const storeGetAccessToken = (): string | null => {
 };
 
 export const storeGetDecodedToken = (): DecodedToken | null => {
-  return store.get(AUTH_KEY, null) ? jwt_decode(store.get(AUTH_KEY, null)) : null;
+  return store.get(AUTH_KEY, null) ? jwtDecode(store.get(AUTH_KEY, null)) : null;
 };
 
 export const storeSetDrawerState = (state: boolean) => store.set(DRAWER_STATE, state);
