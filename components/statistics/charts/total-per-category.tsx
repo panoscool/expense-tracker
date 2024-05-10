@@ -1,17 +1,17 @@
+import { Box, Typography } from '@mui/material';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
+import { ApexOptions } from 'apexcharts';
+import { isSameMonth } from 'date-fns';
 import React from 'react';
 import Chart from 'react-apexcharts';
-import { groupBy } from 'lodash';
-import { ApexOptions } from 'apexcharts';
-import { formatCurrency } from '../../../lib/utils/format-number';
 import { ThemeMode } from '../../../lib/interfaces/common';
-import { Box, Typography } from '@mui/material';
 import { CategoryStatistic } from '../../../lib/interfaces/statistics';
 import { formatDateString } from '../../../lib/utils/date';
-import DateField from '../../shared/date-field';
-import { isSameMonth } from 'date-fns';
+import { getStatisticsGroupedByDay } from '../../../lib/utils/expense-calculations';
+import { formatCurrency } from '../../../lib/utils/format-number';
 import { stringToColor } from '../../../lib/utils/string-to-color';
+import DateField from '../../shared/date-field';
 
 type Props = {
   data: CategoryStatistic[];
@@ -22,7 +22,7 @@ type Props = {
 };
 
 const TotalPerCategory: React.FC<Props> = ({ data, currency, themeMode, month, setMonth }) => {
-  const groupedByDate = groupBy(data, (d) => d._id.date);
+  const groupedByDate = getStatisticsGroupedByDay(data);
   const [currentMonth] = Object.keys(groupedByDate).filter((date) => isSameMonth(new Date(date), month));
 
   const series = [

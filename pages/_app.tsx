@@ -1,13 +1,15 @@
-import type { AppProps } from 'next/app';
-import Head from 'next/head';
-import CssBaseline from '@mui/material/CssBaseline';
 import { CacheProvider, EmotionCache } from '@emotion/react';
+import CssBaseline from '@mui/material/CssBaseline';
+import { GoogleAnalytics } from '@next/third-parties/google';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
-import createEmotionCache from '../styles/createEmotionCache';
-import AppContextProvider from '../context/app-context';
+import type { AppProps } from 'next/app';
+import Head from 'next/head';
 import Metatags from '../components/meta-tags';
+import AppContextProvider from '../context/app-context';
 import { getMetatagsByPage } from '../lib/utils/get-metatags-by-page';
+import createEmotionCache from '../styles/createEmotionCache';
+import { env } from '../lib/config/env';
 
 interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache;
@@ -35,6 +37,7 @@ function MyApp(props: MyAppProps) {
         <CssBaseline />
         <Component {...pageProps} />
         <Analytics />
+        <GoogleAnalytics gaId={env.GOOGLE_ANALYTICS_ID} />
         <SpeedInsights />
       </AppContextProvider>
     </CacheProvider>

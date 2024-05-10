@@ -1,4 +1,6 @@
+import { format } from 'date-fns';
 import { Expense } from '../interfaces/expense';
+import { CategoryStatistic } from '../interfaces/statistics';
 
 export const getTotalExpenses = (expenses: Expense[]): number => {
   return expenses.reduce((acc, curr) => {
@@ -35,6 +37,19 @@ export const getTotalAmountPerUser = (expenses: Expense[]): { [key: string]: num
   }, {});
 
   return userExpenses;
+};
+
+export const getExpensesGroupedByDay = (expenses: Expense[]): { [key: string]: Expense[] } => {
+  return expenses.reduce((acc: any, expense) => {
+    const date = format(new Date(expense.date), 'yyyy-MM-dd');
+
+    if (acc[date]) {
+      acc[date].push(expense);
+    } else {
+      acc[date] = [expense];
+    }
+    return acc;
+  }, {});
 };
 
 export const getAverageExpensesPerUser = (expenses: Expense[]): number => {
@@ -84,4 +99,17 @@ export const getGivingAndReceivingUsers = (expenses: Expense[]): [string[], stri
   );
 
   return [giving, receiving];
+};
+
+export const getStatisticsGroupedByDay = (expenses: CategoryStatistic[]): { [key: string]: CategoryStatistic[] } => {
+  return expenses.reduce((acc: any, expense) => {
+    const date = expense._id.date;
+
+    if (acc[date]) {
+      acc[date].push(expense);
+    } else {
+      acc[date] = [expense];
+    }
+    return acc;
+  }, {});
 };

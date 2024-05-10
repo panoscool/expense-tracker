@@ -1,6 +1,4 @@
 import { Box, Divider, Grid, Typography } from '@mui/material';
-import { format } from 'date-fns';
-import { groupBy } from 'lodash';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
@@ -8,7 +6,7 @@ import { useAppContext } from '../../context/app-context';
 import useIsDesktop from '../../hooks/use-is-desktop';
 import { getExpenses } from '../../lib/services/expense';
 import { getPayments } from '../../lib/services/payment';
-import { getTotalUsers } from '../../lib/utils/expense-calculations';
+import { getExpensesGroupedByDay, getTotalUsers } from '../../lib/utils/expense-calculations';
 import { AccountInfo } from '../account/account-info';
 import EmptyList from '../shared/empty-list';
 import { ExpenseCard } from './expense-card';
@@ -31,7 +29,7 @@ export const ExpensesList: React.FC = () => {
     }
   }, [dispatch, router.query]);
 
-  const groupedByDay = groupBy(expenses, (expense) => format(new Date(expense.date), 'yyyy-MM-dd'));
+  const groupedByDay = getExpensesGroupedByDay(expenses || []);
   const dates = Object.keys(groupedByDay);
   const days = dates.map((day) => groupedByDay[day]);
   const totalUsers = getTotalUsers(expenses || []);
