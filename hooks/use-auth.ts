@@ -7,7 +7,7 @@ import { useAppContext } from '../context/app-context';
 // TODO: Move auth check into next middleware using cookies with iron-session
 // https://www.npmjs.com/package/iron-session
 
-const privateRoutes = ['/', '/profile', '/settings', '/statistics'];
+const privateRoutes = ['/expenses', '/profile', '/settings', '/statistics'];
 const publicRoutes = ['/login', '/register', '/forgot-password', '/reset-password'];
 
 function useAuth() {
@@ -22,7 +22,7 @@ function useAuth() {
   const checkAuthStateAndRedirect = useCallback(() => {
     if (authData) {
       if (publicRoutes.includes(router.pathname)) {
-        router.push('/');
+        router.push('/expenses');
       }
     } else {
       if (privateRoutes.includes(router.pathname)) {
