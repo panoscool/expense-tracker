@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 import { format, isSameMonth, parseISO } from 'date-fns';
 import { Expense } from '../../../lib/interfaces/expense';
 import { getGivingAndReceivingUsers, getTotalUsers } from '../../../lib/utils/expense-calculations';

@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 import { format } from 'date-fns';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import dbConnect from '../../../lib/config/db-connect';

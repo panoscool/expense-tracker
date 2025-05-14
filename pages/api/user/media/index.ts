@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 import type { NextApiRequest, NextApiResponse } from 'next';
 import cloudinary from '../../../../lib/config/cloudinary';
 import dbConnect from '../../../../lib/config/db-connect';

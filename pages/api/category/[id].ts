@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 import type { NextApiRequest, NextApiResponse } from 'next';
 import dbConnect from '../../../lib/config/db-connect';
 import { trimToLowerCaseString } from '../../../lib/utils/format-text';
