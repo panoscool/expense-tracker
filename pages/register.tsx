@@ -61,7 +61,7 @@ const Register: NextPage = () => {
         setLoading(dispatch, 'register');
         const res = await apiRequest('POST', '/user/register', values);
         storeSetAccessToken(res.data);
-        router.push('/');
+        router.push('/expenses');
       } catch (error) {
         setError(dispatch, error as string);
       } finally {

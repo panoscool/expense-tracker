@@ -16,7 +16,7 @@ export function AccountsList() {
     <List disablePadding>
       {accounts?.map((account) => (
         <ListItem key={account._id} disablePadding disableGutters>
-          <ListItemButton component={Link} href={`/?account_id=${account._id}`}>
+          <ListItemButton component={Link} href={`/expenses?account_id=${account._id}`}>
             <ListItemIcon>{account.users.length > 1 ? <GroupsRounded /> : <LockOutlined />}</ListItemIcon>
             <ListItemText primary={account.name} />
             <Typography variant="caption" color="textSecondary" pt={0.5}>

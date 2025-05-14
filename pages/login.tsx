@@ -59,7 +59,7 @@ const Login: NextPage = () => {
         setLoading(dispatch, 'login');
         const res = await apiRequest('POST', '/user/login', values);
         storeSetAccessToken(res.data);
-        router.push('/');
+        router.push('/expenses');
       } catch (error) {
         setError(dispatch, error as string);
       } finally {
