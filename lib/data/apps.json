@@ -1,0 +1,19 @@
+[
+  {
+    "id": 1,
+    "title": "Cash Cash Hero",
+    "description": "Track expenses, split bills, and analyze your spending patterns all in one place. The smart way to manage money with friends, family, or roommates.",
+    "icon": "https://www.cchero.net/logo.png",
+    "versions": [
+      { "name": "Current", "url": "https://www.cchero.net", "isCurrent": true },
+      { "name": "Legacy", "url": "https://www.panoscool.com/login", "isCurrent": false }
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Truth Or Dare",
+    "description": "Play the classic Truth or Dare game and take turns answering revealing questions or completing bold dares, with categories from funny to uncensored. Add your own questions, challenge friends, and keep the fun lighthearted and respectful.",
+    "icon": "https://tord.vercel.app/logo512.png",
+    "versions": [{ "name": "Launch App", "url": "https://tord.vercel.app/", "isCurrent": true }]
+  }
+]
