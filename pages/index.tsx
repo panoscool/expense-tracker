@@ -37,7 +37,7 @@ const AppIcon = styled(Avatar)(({ theme }) => ({
   width: 72,
   height: 72,
   fontSize: 36,
-  padding: 16,
+  padding: 10,
   background: 'linear-gradient(135deg, rgba(255,107,107,0.1), rgba(238,90,36,0.3))',
   boxShadow: '0 8px 20px rgba(0,0,0,0.08)',
   marginBottom: theme.spacing(2),
