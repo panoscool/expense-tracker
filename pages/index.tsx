@@ -58,11 +58,12 @@ type VersionButtonProps = {
 const VersionButton = styled(Button, {
   shouldForwardProp: (prop) => prop !== 'current',
 })<VersionButtonProps>(({ theme, current }) => ({
-  borderRadius: 20,
+  color: '#fff',
   fontWeight: 600,
   fontSize: '0.95rem',
+  textTransform: 'none',
   padding: '6px 18px',
-  color: '#fff',
+  borderRadius: 20,
   background: current ? 'linear-gradient(135deg, #e74c3c, #c0392b)' : 'linear-gradient(135deg, #3498db, #2980b9)',
   boxShadow: current ? '0 4px 15px rgba(231, 76, 60, 0.19)' : '0 4px 15px rgba(52,152,219,0.18)',
   '&:hover': {
@@ -76,11 +77,12 @@ type SingleVersionBtnProps = {
 };
 
 const SingleVersionBtn = styled(Button)<SingleVersionBtnProps>(() => ({
-  borderRadius: 20,
+  color: '#fff',
   fontWeight: 700,
   fontSize: '1.05rem',
   padding: '8px 20px',
-  color: '#fff',
+  borderRadius: 20,
+  textTransform: 'none',
   background: 'linear-gradient(135deg, #2ecc71, #27ae60)',
   boxShadow: '0 6px 20px rgba(46,204,113,0.23)',
   '&:hover': {
@@ -89,7 +91,7 @@ const SingleVersionBtn = styled(Button)<SingleVersionBtnProps>(() => ({
   },
 }));
 
-export default function AppsShowcase() {
+export default function Home() {
   const { themeMode, setThemeMode } = useAppContext();
 
   const colorMode = useMemo(
@@ -101,7 +103,7 @@ export default function AppsShowcase() {
     [setThemeMode],
   );
 
-  // Optional: Parallax background effect
+  // Parallax background effect
   useEffect(() => {
     const setBg = (x = 0.5, y = 0.5) => {
       document.body.style.background =
