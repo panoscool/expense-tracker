@@ -3,7 +3,7 @@
     "id": 1,
     "title": "Cash Cash Hero",
     "description": "Track expenses, split bills, and analyze your spending patterns all in one place. The smart way to manage money with friends, family, or roommates.",
-    "icon": "https://www.cchero.net/android-chrome-512x512.png",
+    "icon": "https://www.cchero.net/logo.png",
     "versions": [
       { "name": "Current", "url": "https://www.cchero.net", "isCurrent": true },
       { "name": "Legacy", "url": "https://www.panoscool.com/login", "isCurrent": false }

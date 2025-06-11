@@ -37,10 +37,17 @@ const AppIcon = styled(Avatar)(({ theme }) => ({
   width: 72,
   height: 72,
   fontSize: 36,
-  padding: 10,
   background: 'linear-gradient(135deg, rgba(255,107,107,0.1), rgba(238,90,36,0.3))',
   boxShadow: '0 8px 20px rgba(0,0,0,0.08)',
   marginBottom: theme.spacing(2),
+
+  '& img': {
+    width: '80%',
+    height: '80%',
+    objectFit: 'contain',
+    display: 'block',
+    margin: 'auto',
+  },
 }));
 
 type VersionButtonProps = {
@@ -151,8 +158,8 @@ export default function AppsShowcase() {
               >
                 PanosCool
               </Typography>
-              <Typography variant="subtitle1" sx={{ color: '#fff' }}>
-                Explore a variety of applications
+              <Typography variant="subtitle1" sx={{ color: '#d4d4d4' }}>
+                Welcome, explore and enjoy!
               </Typography>
             </Box>
             <Tooltip title={themeMode === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'} arrow>
