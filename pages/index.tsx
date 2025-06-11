@@ -1,5 +1,6 @@
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
+import GitHubIcon from '@mui/icons-material/GitHub';
 import {
   Avatar,
   Box,
@@ -160,21 +161,36 @@ export default function Home() {
               >
                 PanosCool
               </Typography>
-              <Typography variant="subtitle1" sx={{ color: '#d4d4d4' }}>
+              <Typography variant="subtitle1" sx={{ color: '#d4d4d4', display: { xs: 'none', sm: 'block' } }}>
                 Welcome, explore and enjoy!
               </Typography>
             </Box>
-            <Tooltip title={themeMode === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'} arrow>
-              <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
-                {themeMode === 'dark' ? (
-                  <Brightness7Icon sx={{ color: '#fff' }} />
-                ) : (
-                  <Brightness4Icon sx={{ color: '#ffd600' }} />
-                )}
+            <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'nowrap' }}>
+              <IconButton href="https://github.com/panoscool" target="_blank" rel="noopener" color="inherit">
+                <GitHubIcon sx={{ color: '#fff' }} />
               </IconButton>
-            </Tooltip>
+              <IconButton href="https://buymeacoffee.com/panoscool" target="_blank" rel="noopener" color="inherit">
+                <Avatar src="/bmc-logo-no-background.png" sx={{ width: '1.1em', height: '1.1em' }} />
+              </IconButton>
+              <Tooltip title={themeMode === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'} arrow>
+                <IconButton onClick={colorMode.toggleColorMode} color="inherit">
+                  {themeMode === 'dark' ? (
+                    <Brightness7Icon sx={{ color: '#fff' }} />
+                  ) : (
+                    <Brightness4Icon sx={{ color: '#ffd600' }} />
+                  )}
+                </IconButton>
+              </Tooltip>
+            </Box>
           </Box>
         </Box>
+
+        <Typography
+          variant="subtitle1"
+          sx={{ color: '#d4d4d4', textAlign: 'center', mb: 3, display: { xs: 'block', sm: 'none' } }}
+        >
+          Welcome, explore and enjoy!
+        </Typography>
 
         <Grid container spacing={3}>
           {apps.map((app, idx) => (

@@ -1,7 +1,12 @@
 {
   "home": {
+    "title": "PanosCool",
+    "description": "Welcome to this corner of the web, where you can explore my work and projects.",
+    "image": "/alien-code-no-background.png"
+  },
+  "expenses": {
     "title": "Expenses",
-    "description": "Keep track of expenses, share with others, split expenses, view analytics and more",
+    "description": "View, add, edit and delete your expenses",
     "image": "/money-emoji.png"
   },
   "profile": {
