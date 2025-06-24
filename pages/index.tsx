@@ -1,5 +1,6 @@
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
+import GitHubIcon from '@mui/icons-material/GitHub';
 import {
   Avatar,
   Box,
@@ -37,10 +38,17 @@ const AppIcon = styled(Avatar)(({ theme }) => ({
   width: 72,
   height: 72,
   fontSize: 36,
-  padding: 16,
   background: 'linear-gradient(135deg, rgba(255,107,107,0.1), rgba(238,90,36,0.3))',
   boxShadow: '0 8px 20px rgba(0,0,0,0.08)',
   marginBottom: theme.spacing(2),
+
+  '& img': {
+    width: '80%',
+    height: '80%',
+    objectFit: 'contain',
+    display: 'block',
+    margin: 'auto',
+  },
 }));
 
 type VersionButtonProps = {
@@ -51,11 +59,12 @@ type VersionButtonProps = {
 const VersionButton = styled(Button, {
   shouldForwardProp: (prop) => prop !== 'current',
 })<VersionButtonProps>(({ theme, current }) => ({
-  borderRadius: 20,
+  color: '#fff',
   fontWeight: 600,
   fontSize: '0.95rem',
+  textTransform: 'none',
   padding: '6px 18px',
-  color: '#fff',
+  borderRadius: 20,
   background: current ? 'linear-gradient(135deg, #e74c3c, #c0392b)' : 'linear-gradient(135deg, #3498db, #2980b9)',
   boxShadow: current ? '0 4px 15px rgba(231, 76, 60, 0.19)' : '0 4px 15px rgba(52,152,219,0.18)',
   '&:hover': {
@@ -69,11 +78,12 @@ type SingleVersionBtnProps = {
 };
 
 const SingleVersionBtn = styled(Button)<SingleVersionBtnProps>(() => ({
-  borderRadius: 20,
+  color: '#fff',
   fontWeight: 700,
   fontSize: '1.05rem',
   padding: '8px 20px',
-  color: '#fff',
+  borderRadius: 20,
+  textTransform: 'none',
   background: 'linear-gradient(135deg, #2ecc71, #27ae60)',
   boxShadow: '0 6px 20px rgba(46,204,113,0.23)',
   '&:hover': {
@@ -82,7 +92,7 @@ const SingleVersionBtn = styled(Button)<SingleVersionBtnProps>(() => ({
   },
 }));
 
-export default function AppsShowcase() {
+export default function Home() {
   const { themeMode, setThemeMode } = useAppContext();
 
   const colorMode = useMemo(
@@ -94,7 +104,7 @@ export default function AppsShowcase() {
     [setThemeMode],
   );
 
-  // Optional: Parallax background effect
+  // Parallax background effect
   useEffect(() => {
     const setBg = (x = 0.5, y = 0.5) => {
       document.body.style.background =
@@ -151,21 +161,36 @@ export default function AppsShowcase() {
               >
                 PanosCool
               </Typography>
-              <Typography variant="subtitle1" sx={{ color: '#fff' }}>
-                Explore a variety of applications
+              <Typography variant="subtitle1" sx={{ color: '#d4d4d4', display: { xs: 'none', sm: 'block' } }}>
+                Welcome, explore and enjoy!
               </Typography>
             </Box>
-            <Tooltip title={themeMode === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'} arrow>
-              <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
-                {themeMode === 'dark' ? (
-                  <Brightness7Icon sx={{ color: '#fff' }} />
-                ) : (
-                  <Brightness4Icon sx={{ color: '#ffd600' }} />
-                )}
+            <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'nowrap' }}>
+              <IconButton href="https://github.com/panoscool" target="_blank" rel="noopener" color="inherit">
+                <GitHubIcon sx={{ color: '#fff' }} />
               </IconButton>
-            </Tooltip>
+              <IconButton href="https://buymeacoffee.com/panoscool" target="_blank" rel="noopener" color="inherit">
+                <Avatar src="/bmc-logo-no-background.png" sx={{ width: '1.1em', height: '1.1em' }} />
+              </IconButton>
+              <Tooltip title={themeMode === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'} arrow>
+                <IconButton onClick={colorMode.toggleColorMode} color="inherit">
+                  {themeMode === 'dark' ? (
+                    <Brightness7Icon sx={{ color: '#fff' }} />
+                  ) : (
+                    <Brightness4Icon sx={{ color: '#ffd600' }} />
+                  )}
+                </IconButton>
+              </Tooltip>
+            </Box>
           </Box>
         </Box>
+
+        <Typography
+          variant="subtitle1"
+          sx={{ color: '#d4d4d4', textAlign: 'center', mb: 3, display: { xs: 'block', sm: 'none' } }}
+        >
+          Welcome, explore and enjoy!
+        </Typography>
 
         <Grid container spacing={3}>
           {apps.map((app, idx) => (
