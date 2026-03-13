@@ -19,6 +19,7 @@ import { styled } from '@mui/material/styles';
 import { useAppContext } from 'context/app-context';
 import React, { useEffect, useMemo } from 'react';
 import apps from '../lib/data/apps.json';
+import { BUY_ME_A_COFFEE_URL, GITHUB_URL } from 'lib/config/constants';
 
 const AnimatedCard = styled(Card)(({ theme }) => ({
   borderRadius: 20,
@@ -166,10 +167,10 @@ export default function Home() {
               </Typography>
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'nowrap' }}>
-              <IconButton href="https://github.com/panoscool" target="_blank" rel="noopener" color="inherit">
+              <IconButton href={GITHUB_URL} target="_blank" rel="noopener" color="inherit">
                 <GitHubIcon sx={{ color: '#fff' }} />
               </IconButton>
-              <IconButton href="https://buymeacoffee.com/panoscool" target="_blank" rel="noopener" color="inherit">
+              <IconButton href={BUY_ME_A_COFFEE_URL} target="_blank" rel="noopener" color="inherit">
                 <Avatar src="/bmc-logo-no-background.png" sx={{ width: '1.1em', height: '1.1em' }} />
               </IconButton>
               <Tooltip title={themeMode === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'} arrow>

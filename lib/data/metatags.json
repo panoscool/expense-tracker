@@ -34,6 +34,11 @@
     "description": "Register and start tracking your expenses, view statistics and more",
     "image": "/money-emoji.png"
   },
+  "donate": {
+    "title": "Support My Work",
+    "description": "Support Panos' open source projects and practical apps with Buy Me a Coffee or PayPal.",
+    "image": "/alien-code-no-background.png"
+  },
   "forgot-password": {
     "title": "Forgot Password",
     "description": "Recover your lost account password",
