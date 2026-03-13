@@ -42,12 +42,12 @@ export const ExpensesList: React.FC = () => {
 
       <Grid container spacing={1} sx={{ mb: 2 }}>
         {isDesktop && (
-          <Grid item xs={12} md={9}>
+          <Grid size={{ xs: 12, md: 9 }}>
             <TotalPerDay days={days} dates={dates} currency={account?.currency} themeMode={themeMode} />
           </Grid>
         )}
 
-        <Grid item xs={12} md={3}>
+        <Grid size={{ xs: 12, md: 3 }}>
           <TotalPerUser expenses={expenses || []} currency={account?.currency} themeMode={themeMode} />
         </Grid>
       </Grid>

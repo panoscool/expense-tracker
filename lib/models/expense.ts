@@ -1,16 +1,16 @@
-import { model, Schema, Model, Document, SchemaTypes, models } from 'mongoose';
+import { model, Schema, Model, SchemaTypes, models, Types } from 'mongoose';
 
 interface IHistory {
   date: Date;
   amount: number;
   details: string;
   description: string;
-  user: Document['_id'];
+  user: Types.ObjectId | string;
 }
 
-interface IExpense extends Document {
+interface IExpense {
   _id: string;
-  user: Document['_id'];
+  user: Types.ObjectId | string;
   account: string;
   category: string;
   date: Date;
@@ -18,8 +18,8 @@ interface IExpense extends Document {
   details: string;
   description: string;
   history: IHistory[];
-  created_by: Document['_id'];
-  updated_by: Document['_id'];
+  created_by: Types.ObjectId | string;
+  updated_by: Types.ObjectId | string;
   created_at: Date;
   updated_at: Date;
 }

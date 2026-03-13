@@ -1,14 +1,14 @@
-import { Document, model, Model, models, Schema, SchemaTypes } from 'mongoose';
+import { model, Model, models, Schema, SchemaTypes, Types } from 'mongoose';
 
-interface IPayment extends Document {
+interface IPayment {
   _id: string;
   account: string;
   period: string;
   settled: boolean;
-  giving_users: { amount: number; user: Document['_id'] }[];
-  receiving_users: { amount: number; user: Document['_id'] }[];
-  created_by: Document['_id'];
-  updated_by: Document['_id'];
+  giving_users: { amount: number; user: Types.ObjectId | string }[];
+  receiving_users: { amount: number; user: Types.ObjectId | string }[];
+  created_by: Types.ObjectId | string;
+  updated_by: Types.ObjectId | string;
   created_at: Date;
   updated_at: Date;
 }

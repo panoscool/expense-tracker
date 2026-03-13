@@ -49,7 +49,7 @@ export const UserPayable: React.FC = () => {
           The period {payments?.period} {payments?.settled ? 'is settled' : 'is unsettled'}.
         </Alert>
         <Grid container spacing={3}>
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <Card variant="outlined">
               <CardHeader
                 avatar={
@@ -72,7 +72,7 @@ export const UserPayable: React.FC = () => {
               </List>
             </Card>
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <Card variant="outlined">
               <CardHeader
                 avatar={

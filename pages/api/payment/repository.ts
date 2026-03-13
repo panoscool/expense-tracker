@@ -2,19 +2,24 @@ import { v4 as uuidv4 } from 'uuid';
 import { format, parseISO } from 'date-fns';
 import PaymentModel from '../../../lib/models/payment';
 
+interface PayableUserInput {
+  amount: number;
+  user: string;
+}
+
 interface PaymentCreate {
   account: string;
   period: string;
   settled: boolean;
-  giving_users: string[];
-  receiving_users: string[];
+  giving_users: PayableUserInput[];
+  receiving_users: PayableUserInput[];
   created_by: string;
   updated_by: string;
 }
 
 interface PaymentUpdate {
-  giving_users: string[];
-  receiving_users: string[];
+  giving_users: PayableUserInput[];
+  receiving_users: PayableUserInput[];
   updated_by: string;
 }
 

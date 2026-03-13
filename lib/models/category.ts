@@ -1,8 +1,8 @@
-import { model, Schema, Model, Document, models, SchemaTypes } from 'mongoose';
+import { model, Schema, Model, models, SchemaTypes, Types } from 'mongoose';
 
-interface ICategory extends Document {
+interface ICategory {
   _id: string;
-  user: Document['_id'];
+  user: Types.ObjectId | string;
   labels: string[];
   created_at: Date;
   updated_at: Date;

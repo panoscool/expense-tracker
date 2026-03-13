@@ -13,6 +13,7 @@ import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import WaterOutlinedIcon from '@mui/icons-material/WaterOutlined';
 import TravelExploreOutlinedIcon from '@mui/icons-material/TravelExploreOutlined';
 import PaymentsOutlinedIcon from '@mui/icons-material/PaymentsOutlined';
+import type { ReactElement } from 'react';
 
 type Props = {
   icon: string;
@@ -20,7 +21,7 @@ type Props = {
 };
 
 const CategoryIcon: React.FC<Props> = ({ icon, size }) => {
-  const component: Record<string, JSX.Element> = {
+  const component: Record<string, ReactElement> = {
     transportation: <EmojiTransportationOutlinedIcon fontSize={size} />,
     entertainment: <InterestsOutlinedIcon fontSize={size} />,
     supermarket: <ShoppingCartOutlinedIcon fontSize={size} />,

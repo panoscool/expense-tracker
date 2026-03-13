@@ -77,7 +77,9 @@ export const getPayableAmountPerUser = (expenses: Expense[]): { [key: string]: n
   return payableAmountPerUser;
 };
 
-export const getGivingAndReceivingUsers = (expenses: Expense[]): [string[], string[]] => {
+export const getGivingAndReceivingUsers = (
+  expenses: Expense[],
+): [{ amount: number; user: string }[], { amount: number; user: string }[]] => {
   const payable = getPayableAmountPerUser(expenses);
   const payableAmountPerUser = Object.keys(payable).map((key) => {
     return {

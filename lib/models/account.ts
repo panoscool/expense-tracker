@@ -1,10 +1,10 @@
-import { Document, model, Model, models, Schema, SchemaTypes } from 'mongoose';
+import { model, Model, models, Schema, SchemaTypes, Types } from 'mongoose';
 
-interface IAccount extends Document {
+interface IAccount {
   _id: string;
-  user: Document['_id'];
+  user: Types.ObjectId | string;
   name: string;
-  users: Document['_id'][];
+  users: Array<Types.ObjectId | string>;
   description: string | null;
   currency: string;
   created_at: Date;

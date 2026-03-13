@@ -1,11 +1,14 @@
-import { model, Schema, Model, Document, models } from 'mongoose';
+import { model, Schema, Model, models, Types } from 'mongoose';
 
-export interface IUser extends Document {
+export interface IUser {
+  _id: Types.ObjectId;
   name: string;
   email: string;
   password: string;
   image: string | null;
   password_reset_hash: string | null;
+  created_at?: Date;
+  updated_at?: Date;
 }
 
 const UserSchema: Schema = new Schema(

@@ -17,7 +17,7 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useAppContext } from 'context/app-context';
-import React, { useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import apps from '../lib/data/apps.json';
 import { BUY_ME_A_COFFEE_URL, GITHUB_URL } from 'lib/config/constants';
 
@@ -195,7 +195,7 @@ export default function Home() {
 
         <Grid container spacing={3}>
           {apps.map((app, idx) => (
-            <Grid key={app.id} item xs={12} sm={6} md={4} alignItems="stretch">
+            <Grid key={app.id} size={{ xs: 12, sm: 6, md: 4 }} sx={{ display: 'flex' }}>
               <Fade in timeout={500 + idx * 70}>
                 <AnimatedCard sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
                   <CardContent sx={{ pb: 0, flexGrow: 1 }}>
@@ -230,42 +230,9 @@ export default function Home() {
                       pt: 0,
                     }}
                   >
-                    {app.versions.length === 1 ? (
-                      <SingleVersionBtn href={app.versions[0].url} target="_blank" rel="noopener" fullWidth>
-                        {app.versions[0].name}
-                      </SingleVersionBtn>
-                    ) : (
-                      <Box sx={{ width: '100%', mt: 1 }}>
-                        <Typography
-                          sx={{
-                            fontSize: '0.9rem',
-                            fontWeight: 600,
-                            mb: 0.5,
-                          }}
-                        >
-                          Available Versions:
-                        </Typography>
-                        <Box
-                          sx={{
-                            display: 'flex',
-                            flexWrap: 'wrap',
-                            gap: 1,
-                          }}
-                        >
-                          {app.versions.map((ver, i) => (
-                            <VersionButton
-                              key={i}
-                              href={ver.url}
-                              current={ver.isCurrent}
-                              target="_blank"
-                              rel="noopener"
-                            >
-                              {ver.name}
-                            </VersionButton>
-                          ))}
-                        </Box>
-                      </Box>
-                    )}
+                    <SingleVersionBtn href={app.url} target="_blank" rel="noopener" fullWidth>
+                      Launch App
+                    </SingleVersionBtn>
                   </CardActions>
                 </AnimatedCard>
               </Fade>
